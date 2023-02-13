@@ -1,0 +1,53 @@
+\section{Definitions}
+
+\begin{definition}
+	A ""protocol"" is a tuple $(Q, \D, q_0)$ over an alphabet $\S$ with $Q$ a finite set of states, $q_0 \in Q$ an initial state, and $\D \subseteq Q \times \set{\br, \rec(*), \rec(\cp), \rec(\testeq)} \times Q$.
+\end{definition}
+
+\begin{definition}
+	Let $(Q,\D, q_0)$ be a protocol.
+	A ""configuration"" is a pair $(A, L)$ with $A$ a finite set of \emph{agents}   and $L : A \to Q \times \nats$  a labelling function, associating a state and a register value to each agent. We write $L_Q$ for the state component of $L$ and $L_R$ for its register component.
+	An \emph{initial configuration} $(A, L)$ is one where for all $a \in A$, $L_Q(a) = q_0$.
+	
+	\AP Given two configurations $\g = (A, L)$ and $\g = (A', L')$, a ""transition"" $\g 
+	\act{m} \g'$ between two configurations is defined when $A = A'$ and there exists $a_0 \in A$ such that $L_Q(a_0) \act{\br} L'_Q(a_0) \in \D$, $L_R(a_0) = L'_R(a_0)$ and for all $a \in A\setminus \set{a_0}$,  
+	\begin{itemize}
+		\item either $L'(a) = L(a)$
+		
+		\item or $L'(a)$ is such that $L_Q(a) \act{\rec(\a)} L'_Q(a) \in \D$ with either
+		\begin{itemize}
+			\item $\a = *$ and $L'_R(a) = L_{R}(a)$
+			\item $\a = \cp$ and $L'_R(a) = m$
+			\item $\a = \testeq$ and $L'_R(a) = L_R(a) =m$
+		\end{itemize}
+	\end{itemize}
+
+	\AP A ""run"" is a sequence of transitions $\g_0 \act{m_0} \g_1 \act{m_1} \cdots \act{m_k} g_k$. We say that it is \emph{initial} if $g_0$ is an initial configuration.
+\end{definition}
+
+\begin{definition}
+	A ""query"" is a conjunction of formulas of the form $q(z)$, $R(z) = R(z')$, $R(z) \neq R(z')$, with $z, z'$ taken in a set of variables $Var$.
+	It is \emph{satisfied} by a "configuration" $(A, L)$ if there is a valuation $\nu : Var \to A$ such that:
+	\begin{itemize}
+		\item for all conjuncts $q(z)$, $L_Q(\nu(z)) = q$
+		
+		\item for all conjuncts $R(z) = R(z')$, $L_R(\nu(z)) = L_R(\nu(z'))$
+		
+		\item for all conjuncts $R(z) \neq R(z')$, $L_R(\nu(z)) \neq L_R(\nu(z'))$
+	\end{itemize}
+
+	\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is an "initial run" of this protocol whose last "configuration" satisfies the query.
+\end{definition}
+
+\begin{ex}
+	In some cases a protocol may require a "run" of exponential length (in the number of states) to reach a configuration satisfying a "query".
+	\cortoin{TODO}
+\end{ex}
+
+\begin{proposition}
+	The "query coverability problem" is \np-hard.
+\end{proposition}
+
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
