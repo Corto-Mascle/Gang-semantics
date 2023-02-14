@@ -26,6 +26,15 @@
 
 %\newenvironment{proofsketch}{\noindent\emph{Proof sketch.}}{\hfill$\square$}
 
+%%% Basic Math
+
+\newcommand{\nats}{\mathbb{N}}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\pow}[1]{2^{#1}}
+\newcommand{\act}[1]{\xrightarrow{#1}}
+
+%%% Complexity classes
+
 \newcommand{\poly}{\text{\sc{P}}\xspace}
 \newcommand{\np}{\text{\sc{NP}}\xspace}
 \newcommand{\conp}{\textsc{coNP}\xspace}
@@ -34,19 +43,26 @@
 \newcommand{\nexpt}{\textsc{NExpTime}\xspace}
 \newcommand{\exps}{\textsc{ExpSpace}\xspace}
 
+
+%%% Greek letters
+
 \newcommand{\D}{\Delta}
 \renewcommand{\S}{\Sigma}
+
 \renewcommand{\a}{\alpha}
 \newcommand{\g}{\gamma}
+\renewcommand{\r}{\rho}
 
+
+%%% BNRA syntax
 
 \newcommand{\br}{\textbf{b}}
 \newcommand{\rec}{\textbf{r}}
 \newcommand{\cp}{\downarrow}
 \newcommand{\testeq}{?}
 
-\newcommand{\nats}{\mathbb{N}}
-\newcommand{\set}[1]{\{#1\}}
+%%% Gang semantics
+
+\newcommand{\gangsem}[1]{[\![#1]\!]_G} 
 
 
-\newcommand{\act}[1]{\xrightarrow{#1}}

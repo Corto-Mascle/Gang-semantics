@@ -1,0 +1,7 @@
+*.diagnose
+*.aux
+*.kaux
+*.log
+*.out
+*.pdf
+*.gz

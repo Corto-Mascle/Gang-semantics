@@ -5,20 +5,20 @@
 \end{definition}
 
 \begin{definition}
-	Let $(Q,\D, q_0)$ be a protocol.
-	A ""configuration"" is a pair $(A, L)$ with $A$ a finite set of \emph{agents}   and $L : A \to Q \times \nats$  a labelling function, associating a state and a register value to each agent. We write $L_Q$ for the state component of $L$ and $L_R$ for its register component.
-	An \emph{initial configuration} $(A, L)$ is one where for all $a \in A$, $L_Q(a) = q_0$.
+	Let $(Q,\D, q_0)$ be a protocol, and $A$ a finite set of \emph{agents}.
+	A ""configuration"" is a labelling function $\g : A \to Q \times \nats$, associating a state and a register value to each agent. We write $\g^Q$ for the state component of $\g$ and $\g^R$ for its register component.
+	An \emph{initial configuration} $\g$ is one where for all $a \in A$, $\g^Q(a) = q_0$.
 	
-	\AP Given two configurations $\g = (A, L)$ and $\g = (A', L')$, a ""transition"" $\g 
-	\act{m} \g'$ between two configurations is defined when $A = A'$ and there exists $a_0 \in A$ such that $L_Q(a_0) \act{\br} L'_Q(a_0) \in \D$, $L_R(a_0) = L'_R(a_0)$ and for all $a \in A\setminus \set{a_0}$,  
+	\AP Given two configurations $\g$ and $\g'$, a ""transition"" $\g 
+	\act{m} \g'$ between two configurations is defined when there exists $a_0 \in A$ such that $\g^Q(a_0) \act{\br} \g'^Q(a_0) \in \D$, $\g^R(a_0) = \g'^R(a_0)$ and for all $a \in A\setminus \set{a_0}$,  
 	\begin{itemize}
-		\item either $L'(a) = L(a)$
+		\item either $\g'(a) = \g(a)$
 		
-		\item or $L'(a)$ is such that $L_Q(a) \act{\rec(\a)} L'_Q(a) \in \D$ with either
+		\item or $\g'(a)$ is such that $\g^Q(a) \act{\rec(\a)} \g'^Q(a) \in \D$ with either
 		\begin{itemize}
-			\item $\a = *$ and $L'_R(a) = L_{R}(a)$
-			\item $\a = \cp$ and $L'_R(a) = m$
-			\item $\a = \testeq$ and $L'_R(a) = L_R(a) =m$
+			\item $\a = *$ and $\g'^R(a) = \g^{R}(a)$
+			\item $\a = \cp$ and $\g'^R(a) = m$
+			\item $\a = \testeq$ and $\g'^R(a) = \g^R(a) =m$
 		\end{itemize}
 	\end{itemize}
 
@@ -42,7 +42,11 @@
 \begin{ex}
 	In some cases a protocol may require a "run" of exponential length (in the number of states) to reach a configuration satisfying a "query".
 	
-	\input{Figures/fig-exp-run}
+	\begin{figure}
+		\input{Figures/fig-exp-run}
+		\label{fig:exp-run}
+		\caption{Example of a "protocol" with a state that requires an exponentially long "run" to be covered.}
+	\end{figure}
 	
 	\cortoin{TODO}
 \end{ex}
@@ -52,6 +56,34 @@
 \end{proposition}
 
 \begin{proof}
+	\begin{figure}
+		\input{Figures/fig-np-hard}
+		\label{fig:np-hard}
+		\caption{The "protocol" used for the \np-hardness proof.}
+	\end{figure}
+	
+	We reduce from the 3SAT problem.
+	Let $x_1, \ldots, x_n$ be variables and $\phi = \bigwedge_{j=1}^m C_j$ with, for all $j$, $C_j = \ell_j^1 \lor \ell_j^2 \lor \ell_j^3$ and $\ell_j^1, \ell_j^2, \ell_j^3 \in \set{x_i, \neg x_i \mid 1 \leq i \leq n}$. 
+	
 	\cortoin{TODO}
 \end{proof}
+
+\begin{definition}
+	Let $(Q,\D, q_0)$ be a protocol, and $A$ a finite set of agents.
+	
+	A ""gang"" is a pair $(b, K) \in (A \cup \set{\bot}) \times \pow{A}$.
+	Intuitively, $b$ represents some particular process and $K$ the set of states of processes who copied the value of the register of $b$. If the original owner of this shared value has taken another one, then $b = \bot$.
+	
+	Formally, let $\r = \g_0 \act{m_0} \g_1 \act{m_1} \cdots \g_k$ be an "initial run" and $n \in \nats$ such that $n \in \g_0^R(A)$.
+	we define their \emph{gang semantics} and a value $n \in \nats$ as follows:
+	Let $a_0 \in A, b_0 \in Q$ be such that $\g_0(a_0) = (b_0,n)$, and let $(b', n') = \g_k(a)$.
+	Let $K = \set{q \in Q \mid \exists a \in A\setminus \set{a_0}, \g_k(a) = (q,n)}$
+	\[
+		\gangsem{\r,n}= 
+		\begin{cases}
+			(b,K) \text{ if } n'=n\\
+			(\bot, K) \text{ if } n'\neq n.
+		\end{cases} 
+	\]
+\end{definition} 
  
