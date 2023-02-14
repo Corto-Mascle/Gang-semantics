@@ -1,0 +1,51 @@
+\begin{tikzpicture}[xscale=0.5,AUT style,node distance=1.8cm,auto,>= triangle
+	45]
+	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+	distance=.7cm]
+%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+%	distance=.7cm,accepting where =right]
+	
+	\node[state,initial, minimum width=0.1pt] (0a) at (0,0) {0};
+	\node[state] [below of=0a] (0b) {};
+	\node[state] [below of=0b] (0c) {};
+	\node[state] [right of=0a] (0') {};
+	
+	\node[state] [right of=0'] (1a) {1};
+	\node[state] [below of=1a] (1b) {};
+	\node[state] [below of=1b] (1c) {};
+	
+	\node [right of=1a, xshift=-20pt] (token1) {};
+	\node [right of=token1, xshift=-30pt] (dots) {\huge $\cdots$};
+	\node [right of=dots, xshift=-30pt] (token2) {};
+	
+	\node[state] [right of=token2, xshift=-20pt] (Na) {N};
+	\node[state] [below of=Na] (Nb) {};
+	\node[state] [below of=Nb] (Nc) {};
+	
+	\node[state] [right of=Na] (N') {};
+	\node[state] [right of=N'] (end) {end};
+	
+	\path[->, bend left=20] 	
+	;
+	\path[->, bend right=20] 
+	;
+	\path[->]
+	(0a) edge node[right] {$\rec(m_0, *)$} (0b)
+	(0b) edge node[right] {$\br(m'_0)$} (0c)
+	
+	(1a) edge node[right] {$\rec(m_1, *)$} (1b)
+	(1b) edge node[right] {$\br(m'_1)$} (1c)
+	
+	(Na) edge node[right] {$\rec(m_N, *)$} (Nb)
+	(Nb) edge node[right] {$\br(m'_N)$} (Nc)
+	
+	(0a) edge node {$\br(m_0)$} (0')
+	(0') edge node {$\rec(m'_0)$} (1a)
+	
+	(Na) edge node {$\br(m_N)$} (N')
+	(N') edge node {$\rec(m'_N)$} (end)
+	
+	(1a) edge node {} (token1)
+	(token2) edge node {} (Na)
+	;
+\end{tikzpicture}

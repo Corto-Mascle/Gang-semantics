@@ -3,12 +3,15 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{xspace}
-%\usepackage{tikz}
+\usepackage{tikz}
 %\usepackage{array}
 %\usepackage{changepage}
 %\usepackage{enumitem}
 \usepackage[capitalise]{cleveref}
 \usepackage{cite}
+
+\usetikzlibrary{arrows,calc,automata,shapes,positioning}
+\tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append style={thick},every state/.style={minimum size=20,inner sep=2}}}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
