@@ -1,0 +1,73 @@
+\begin{lemma}[Copycat]\label{lem:copycat}
+	Let $\r, \r'$ be "initial runs" of a "protocol" over sets of agents $A, A'$, $\g, \g'$ their final "configurations".
+	Then there exist $X, X'$ disjoint sets of agents, bijections $g_x: X\to A, g_{X'} : X' \to A'$ and a run $\r$ over $X \sqcup X'$ whose final configuration $\g_f$ is such that $\g^Q_f|_X = \g^Q \circ g_X$, $\g^Q_f|_{X'} = \g'^Q \circ g_{X'}$ for all $x, y \in X$ (resp., $\in X'$), $\g_f^R(x) = \g_f^R(y)$ if and only if $\g^R(g_X(x)) = \g^R(g_X(y))$ (resp. $\g'^R(g_{X'}(x)) = \g'^R(g_{X'}(y))$), and for all $x \in X$, $x' \in X'$, $\g_f^R(x) \neq \g_f^R(x')$.
+	\cortoin{TODO : find a good formulation}
+\end{lemma}
+
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
+
+\begin{definition}
+	Given a set of states $K \subseteq Q$, we say that a "configuration" $\g$ over a set of agents $A$ satisfies $K$ if there exists $n \in \nats$ such that for all $q \in K$, there exists $a \in A$ such that $\g(a) = (q,n)$.
+	A "run" satisfies $K$ if its final configuration does.
+\end{definition}
+
+\begin{lemma}
+	We say that a "query" $\phi$ is ""contradictory"" if either:
+	\begin{itemize}
+		\item there exists $z$ and $q \neq q' \in Q$ such that $q(z), q'(z) \in \phi$
+		
+		\item there exist $z_1, \ldots, z_k$ distinct variables with $k>1$ such that $R(z_{i}) = R(z_{i+1}) \in \phi$ for all $i \in \set{1,\ldots,k-1}$ and $R(z_k) \neq R(z_1) \in \phi$.
+	\end{itemize}
+	 
+	
+	Given a "query" $\phi$, one can check in polynomial time whether it is contradictory and, if it is not, compute sets of states $K_1, \ldots, K_p \subseteq Q$ with $p \leq \size{\phi}$ such that there exists a "run" satisfying $\phi$ if and only if for all $i \in \set{1,\ldots, p}$, there is a run satisfying $K_i$. 
+\end{lemma}
+
+\begin{proof}
+	We consider the graph $G$ whose vertices are variables of $\phi$ and with an edge between $z$ and $z'$ if and only if $R(z) = R(z') \in \phi$.
+	
+	Checking if $\phi$ is "contradictory" is immediate: we look for pairs $z, z'$ in the same connected component of $G$ and with $R(z) \neq R(z') \in \phi$.
+	Then we look for a variable $z$ labelled with two distinct states in $\phi$. The "query" is contradictory if and only if one of the two searches is successful.
+	
+	Then, if $\phi$ is not contradictory, we decompose $G$ into connected components $C_1, \ldots, C_p$.
+	Then for each $C_i$ we define $K_i = \set{q \in Q \mid \exists z \in C_i, q(z) \in \phi}$.  
+	
+	Suppose there is a run satisfying $\phi$, let $\g$ be its final configuration, let $\nu$ be a valuation witnessing the satisfaction of $\phi$ by $\g$.
+	Let $i \in \set{1,\ldots, p}$, we show that $\g$ satisfies $K_i$. For all $z \in C_i$, let $(q_z,n_z) = \g(\nu(z))$. As $C_i$ is a connected component of $G$ and $\g$ satisfies $\phi$, all $\nu(z)$ with $z \in C_i$ have the same register value, which we call $n$. 
+	For all $q \in K_i$, there exists $z \in C_i$ such that $q(z) \in \phi$ and thus $q_z =q$ and $n_z =n$, thus $C_i$ is satisfied.
+	
+	For the converse implication, suppose for all $i$ we have a run $\r_i$ over a set of agents $A_i$ satisfying $K_i$. We rename agents so that the $A_i$ are pairwise disjoint, we introduce fresh agents $a_1, \ldots, a_n$ and we set $A = \set{a_1, \ldots, a_n} \sqcup \bigsqcup_{i=1}^n A_i$. We then execute consecutively each $\r_i$ over $A_i$ to form a run $\r$. Let $\g$ be the configuration obtained at the end, we show that $\g$ satisfies $\phi$. Note that for all $i$ $\g|_{A_i}$ is the final configuration of $\r_i$, and thus satisfies $K_i$. Let $n_i \in \nats$, and for all $q \in K_i$, $a_q^i \in A_i$ be such that $\g(a_q^i) = (q, n_i)$
+	
+	We define a valuation $\nu$ as follows: Let $z$ be a variable, $i$ so that $C_i$ is the connected component of $z$ in $G$. If $q(z) \in \phi$ for some $q$, then this $q$ is unique as $\phi$ is not "contradictory". We set $\nu(z) = a_q^i$.
+	If there is no $q(z)$ for any $q \in Q$ in $\phi$ but there is one of the form $q'(z')$ with $z' \in C_i$, then we set $\nu(z) = \nu(z')$.
+	Otherwise we set $\nu(z) = a_i$.
+	This fully defines our valuation $\nu$.
+	
+	Clearly all formulas of the form $q(z)$ or $R(z) = R(z')$ are satisfied.
+	For the formulas of the form $R(z) \neq R(z')$, we observe that as $\phi$ is not "contradictory", $z$ and $z'$ are not in the same connected component of $G$. 
+	Hence there exist $i \neq j$ such that $z \in A_i\cup \set{a_i}$ and $z' \in A_j\cup \set{a_j}$. As the run we executed is made of separate executions over each $A_i$, we have $\g^R(\nu(z)) \in \g_0^R(A_i\cup\set{a_i})$ and $\g^R(\nu(z')) \in \g_0^R(A_j\cup\set{a_j})$, where $\g_0$ is its first configuration. Furthermore as it is an "initial run" we have that $\g_0^R(A_i\cup\set{a_i})$ and $\g_0^R(A_j\cup\set{a_j})$ are disjoint.
+	
+	Hence $\g^R(\nu(z)) \neq \g^R(\nu(z'))$. As a result, $\phi$ is satisfied by $\r$.
+\end{proof}
+
+\begin{definition}
+	Let $(Q,\D, q_0)$ be a protocol, and $A$ a finite set of agents.
+	
+	A ""gang"" is a pair $(b, K) \in (A \cup \set{\bot}) \times \pow{A}$.
+	Intuitively, $b$ (the \emph{boss}) represents some particular process and $K$ (the \emph{clique}) the set of states of processes who copied the value of the register of $b$. If the original owner of this shared value has taken another one, then $b = \bot$.
+	
+	Formally, let $\r = \g_0 \act{m_0} \g_1 \act{m_1} \cdots \g_k$ be an "initial run" and $n \in \nats$ such that $n \in \g_0^R(A)$.
+	we define their \emph{gang semantics} and a value $n \in \nats$ as follows:
+	Let $a_0 \in A, b_0 \in Q$ be such that $\g_0(a_0) = (b_0,n)$, and let $(b', n') = \g_k(a)$.
+	Let $K = \set{q \in Q \mid \exists a \in A\setminus \set{a_0}, \g_k(a) = (q,n)}$
+	\[
+	\gangsem{\r,n}= 
+	\begin{cases}
+		(b,K) \text{ if } n'=n\\
+		(\bot, K) \text{ if } n'\neq n.
+	\end{cases} 
+	\]
+\end{definition} 
+

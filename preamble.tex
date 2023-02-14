@@ -11,7 +11,7 @@
 \usepackage{cite}
 
 \usetikzlibrary{arrows,calc,automata,shapes,positioning}
-\tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append style={thick},every state/.style={minimum size=20,inner sep=2}}}
+\tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append,every state/.style={minimum size=20,inner sep=2}}}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -32,6 +32,7 @@
 \newcommand{\set}[1]{\{#1\}}
 \newcommand{\pow}[1]{2^{#1}}
 \newcommand{\act}[1]{\xrightarrow{#1}}
+\newcommand{\size}[1]{|#1|}
 
 %%% Complexity classes
 

@@ -7,7 +7,7 @@
 \begin{definition}
 	Let $(Q,\D, q_0)$ be a protocol, and $A$ a finite set of \emph{agents}.
 	A ""configuration"" is a labelling function $\g : A \to Q \times \nats$, associating a state and a register value to each agent. We write $\g^Q$ for the state component of $\g$ and $\g^R$ for its register component.
-	An \emph{initial configuration} $\g$ is one where for all $a \in A$, $\g^Q(a) = q_0$.
+	An \emph{initial configuration} $\g$ is one where for all $a \in A$, $\g^Q(a) = q_0$ and for all $a, a' \in A$, if $\g(a) = \g(a')$ then $a=a'$.
 	
 	\AP Given two configurations $\g$ and $\g'$, a ""transition"" $\g 
 	\act{m} \g'$ between two configurations is defined when there exists $a_0 \in A$ such that $\g^Q(a_0) \act{\br} \g'^Q(a_0) \in \D$, $\g^R(a_0) = \g'^R(a_0)$ and for all $a \in A\setminus \set{a_0}$,  
@@ -26,14 +26,14 @@
 \end{definition}
 
 \begin{definition}
-	A ""query"" is a conjunction of formulas of the form $q(z)$, $R(z) = R(z')$, $R(z) \neq R(z')$, with $z, z'$ taken in a set of variables $Var$.
-	It is \emph{satisfied} by a "configuration" $(A, L)$ if there is a valuation $\nu : Var \to A$ such that:
+	A ""query"" is a set of formulas of the form $q(z)$, $R(z) = R(z')$, $R(z) \neq R(z')$, with $z, z'$ taken in a set of variables $Var$.
+	It is \emph{satisfied} by a "configuration" $\g$ over a set of agents $A$ if there is a valuation $\nu : Var \to A$ such that:
 	\begin{itemize}
-		\item for all conjuncts $q(z)$, $L_Q(\nu(z)) = q$
+		\item for all $q(z) \in \phi$, $\g_Q(\nu(z)) = q$
 		
-		\item for all conjuncts $R(z) = R(z')$, $L_R(\nu(z)) = L_R(\nu(z'))$
+		\item for all $R(z) = R(z') \in \phi$, $\g_R(\nu(z)) = \g_R(\nu(z'))$
 		
-		\item for all conjuncts $R(z) \neq R(z')$, $L_R(\nu(z)) \neq L_R(\nu(z'))$
+		\item for all $R(z) \neq R(z') \in \phi$, $\g_R(\nu(z)) \neq \g_R(\nu(z'))$
 	\end{itemize}
 
 	\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is an "initial run" of this protocol whose last "configuration" satisfies the query.
@@ -42,7 +42,7 @@
 \begin{ex}
 	In some cases a protocol may require a "run" of exponential length (in the number of states) to reach a configuration satisfying a "query".
 	
-	\begin{figure}
+	\begin{figure}[h]
 		\input{Figures/fig-exp-run}
 		\label{fig:exp-run}
 		\caption{Example of a "protocol" with a state that requires an exponentially long "run" to be covered.}
@@ -56,7 +56,7 @@
 \end{proposition}
 
 \begin{proof}
-	\begin{figure}
+	\begin{figure}[h]
 		\input{Figures/fig-np-hard}
 		\label{fig:np-hard}
 		\caption{The "protocol" used for the \np-hardness proof.}
@@ -68,22 +68,4 @@
 	\cortoin{TODO}
 \end{proof}
 
-\begin{definition}
-	Let $(Q,\D, q_0)$ be a protocol, and $A$ a finite set of agents.
-	
-	A ""gang"" is a pair $(b, K) \in (A \cup \set{\bot}) \times \pow{A}$.
-	Intuitively, $b$ represents some particular process and $K$ the set of states of processes who copied the value of the register of $b$. If the original owner of this shared value has taken another one, then $b = \bot$.
-	
-	Formally, let $\r = \g_0 \act{m_0} \g_1 \act{m_1} \cdots \g_k$ be an "initial run" and $n \in \nats$ such that $n \in \g_0^R(A)$.
-	we define their \emph{gang semantics} and a value $n \in \nats$ as follows:
-	Let $a_0 \in A, b_0 \in Q$ be such that $\g_0(a_0) = (b_0,n)$, and let $(b', n') = \g_k(a)$.
-	Let $K = \set{q \in Q \mid \exists a \in A\setminus \set{a_0}, \g_k(a) = (q,n)}$
-	\[
-		\gangsem{\r,n}= 
-		\begin{cases}
-			(b,K) \text{ if } n'=n\\
-			(\bot, K) \text{ if } n'\neq n.
-		\end{cases} 
-	\]
-\end{definition} 
- 
+
