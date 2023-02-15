@@ -1,0 +1,46 @@
+\begin{ex}
+	In some cases a protocol may require a "run" of exponential length (in the number of states) to reach a configuration satisfying a "query".
+	
+	\begin{figure}[h]
+		\input{Figures/fig-exp-run}
+		\label{fig:exp-run}
+		\caption{Example of a "protocol" with a state that requires an exponentially long "run" to be covered.}
+	\end{figure}
+	
+	\cortoin{TODO}
+\end{ex}
+
+\begin{proposition}
+	The "query coverability problem" is \np-hard.
+\end{proposition}
+
+\begin{proof}
+	\begin{figure}[h]
+		\input{Figures/fig-np-hard}
+		\label{fig:np-hard}
+		\caption{The "protocol" used for the \np-hardness proof.}
+	\end{figure}
+	
+	We reduce from the 3SAT problem.
+	Let $x_1, \ldots, x_n$ be variables and $\phi = \bigwedge_{j=1}^m C_j$ with, for all $j$, $C_j = \ell_j^1 \lor \ell_j^2 \lor \ell_j^3$ and $\ell_j^1, \ell_j^2, \ell_j^3 \in \set{x_i, \neg x_i \mid 1 \leq i \leq n}$. 
+
+	Consider the "protocol" displayed in Figure~\ref{fig:np-hard}.
+	Our alphabet of messages is the set of literals $\set{x_i, \neg x_i \mid 1 \leq i \leq n}$.
+	Each agent may either receive a message, and repeat it forever or it may broadcast one of $x_i, \neg x_i$ for each $i$ with and then try to receive a message one of $\ell_j^1, \ell_j^2, \ell_j^3$ for each $j$, with its own register value.
+	
+	Suppose $\phi$ is satisfiable, let $\nu$ be a satisfying assignment, then we set $A = \set{a, a_1, \ldots, a_n}$ as our set of agents. First for each $i$ we make $a$ broadcast $x_i$ if $\nu(x_i)= \top$ and $\neg x_i$ otherwise, and $a_i$ only receive it (and go to the corresponding state).
+	Then for each $j$ we select some $\ell_j^p$ satisfied by $\nu$. There exists $i$ such that $a_i$ is in state $\ell_j^p$. It broadcasts $\ell_j^p$ along with the initial register value of $a$, allowing $a$ to go to the next state.
+	
+	As a result, there is an execution in which agent $a$ reaches $m'$.
+	
+	Now suppose there is an execution $\r$ over some set of agents $A$ such that some agent $a \in A$ is in state $m'$ in the final configuration.
+	For each $i$ $a$ has broadcast either $x_i$ or $\neg x_i$, but not both.
+	Let $\nu$ be the valuation assigning $\top$ to $x_i$ if and only if $a$ has broadcast it.
+	The register of $a$ cannot have changed its value throughout the run. 
+	For each $j$ it has received one of $\ell_j^1, \ell_j^2, \ell_j^3$ along with its own initial register value (which we call $r$). Let $p_j$ be such that $a$ has received $\ell_j^{p_j}$.
+	Hence for all $j$ there exists an agent $a_j \in A$ such that at some point in the run the register value of $a_j$ is $r$ and $a_j$ broadcasts $\ell_j^{p_j}$.
+	This agent $a_j$ must be in state $\ell_j^{p_j}$ after receiving the broadcast $\br(\ell_j^{p_j})$ from $a$ (as all agents start with different register values).
+	Hence $\ell_j^{p_j}$ is satisfied by $\nu$. 
+	
+	As a result, $\nu$ satisfies a literal of each clause of $\phi$, and thus satisfies $\phi$. This concludes our reduction
+\end{proof}

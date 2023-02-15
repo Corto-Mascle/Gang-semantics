@@ -39,33 +39,5 @@
 	\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is an "initial run" of this protocol whose last "configuration" satisfies the query.
 \end{definition}
 
-\begin{ex}
-	In some cases a protocol may require a "run" of exponential length (in the number of states) to reach a configuration satisfying a "query".
-	
-	\begin{figure}[h]
-		\input{Figures/fig-exp-run}
-		\label{fig:exp-run}
-		\caption{Example of a "protocol" with a state that requires an exponentially long "run" to be covered.}
-	\end{figure}
-	
-	\cortoin{TODO}
-\end{ex}
-
-\begin{proposition}
-	The "query coverability problem" is \np-hard.
-\end{proposition}
-
-\begin{proof}
-	\begin{figure}[h]
-		\input{Figures/fig-np-hard}
-		\label{fig:np-hard}
-		\caption{The "protocol" used for the \np-hardness proof.}
-	\end{figure}
-	
-	We reduce from the 3SAT problem.
-	Let $x_1, \ldots, x_n$ be variables and $\phi = \bigwedge_{j=1}^m C_j$ with, for all $j$, $C_j = \ell_j^1 \lor \ell_j^2 \lor \ell_j^3$ and $\ell_j^1, \ell_j^2, \ell_j^3 \in \set{x_i, \neg x_i \mid 1 \leq i \leq n}$. 
-	
-	\cortoin{TODO}
-\end{proof}
 
 

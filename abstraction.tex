@@ -1,6 +1,20 @@
+%\begin{definition}
+%	Given two runs $\r, \r'$ over sets of agents $A, A'$ respectively, we define their ""parallel composition"" as the run over $A\times \set{0} \cup A'\times \set{1}$ defined as follows: 
+%\end{definition}
+
+
 \begin{lemma}[Copycat]\label{lem:copycat}
-	Let $\r, \r'$ be "initial runs" of a "protocol" over sets of agents $A, A'$, $\g, \g'$ their final "configurations".
-	Then there exist $X, X'$ disjoint sets of agents, bijections $g_x: X\to A, g_{X'} : X' \to A'$ and a run $\r$ over $X \sqcup X'$ whose final configuration $\g_f$ is such that $\g^Q_f|_X = \g^Q \circ g_X$, $\g^Q_f|_{X'} = \g'^Q \circ g_{X'}$ for all $x, y \in X$ (resp., $\in X'$), $\g_f^R(x) = \g_f^R(y)$ if and only if $\g^R(g_X(x)) = \g^R(g_X(y))$ (resp. $\g'^R(g_{X'}(x)) = \g'^R(g_{X'}(y))$), and for all $x \in X$, $x' \in X'$, $\g_f^R(x) \neq \g_f^R(x')$.
+%	Let $\r$ be an initial run over a set of agents $A$, for all $n$ we can define an initial run $\r'$ over $A \times \set{1,\ldots, n}$ such that:
+%	\begin{itemize}
+%		\item   
+%		
+%		\item
+%	\end{itemize}
+	
+	
+	
+%	Let $\r, \r'$ be "initial runs" of a "protocol" over sets of agents $A, A'$, $\g, \g'$ their final "configurations".
+%	Then there exist $X, X'$ disjoint sets of agents, bijections $g_x: X\to A, g_{X'} : X' \to A'$ and a run $\r$ over $X \sqcup X'$ whose final configuration $\g_f$ is such that $\g^Q_f|_X = \g^Q \circ g_X$, $\g^Q_f|_{X'} = \g'^Q \circ g_{X'}$ for all $x, y \in X$ (resp., $\in X'$), $\g_f^R(x) = \g_f^R(y)$ if and only if $\g^R(g_X(x)) = \g^R(g_X(y))$ (resp. $\g'^R(g_{X'}(x)) = \g'^R(g_{X'}(y))$), and for all $x \in X$, $x' \in X'$, $\g_f^R(x) \neq \g_f^R(x')$.
 	\cortoin{TODO : find a good formulation}
 \end{lemma}
 
@@ -52,6 +66,8 @@
 	Hence $\g^R(\nu(z)) \neq \g^R(\nu(z'))$. As a result, $\phi$ is satisfied by $\r$.
 \end{proof}
 
+
+
 \begin{definition}
 	Let $(Q,\D, q_0)$ be a protocol, and $A$ a finite set of agents.
 	
@@ -70,4 +86,5 @@
 	\end{cases} 
 	\]
 \end{definition} 
+
 

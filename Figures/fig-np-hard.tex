@@ -28,14 +28,14 @@
 	\node[state] [right of=m-1] (m) {m'};
 	
 	\coordinate[below of=1] (stop);
-	\node[state] [below right of=stop] (r1) {};
+	\node[state] [below right of=stop] (r1) {$x_1$};
 	\node [above left of=r1, yshift=-20pt, xshift=10pt] (r1') {$\rec(x_1, \cp)$};
-	\node[state] [right of=r1] (r1b) {};
+	\node[state] [right of=r1] (r1b) {$\neg x_1$};
 	\node [above left of=r1b, yshift=-20pt, xshift=10pt] (r1b') {$\rec(\neg x_1, \cp)$};
 	\node [right of= r1b] (dots3) {\huge $\cdots$};
-	\node[state] [right of=dots3] (rn) {};
+	\node[state] [right of=dots3] (rn) {$x_n$};
 	\node [above left of=rn, yshift=-20pt, xshift=10pt] (rn') {$\rec(\neg x_n, \cp)$};
-	\node[state] [right of=rn] (rnb) {};
+	\node[state] [right of=rn] (rnb) {$\neg x_n$};
 	\node [above left of=rnb, yshift=-20pt, xshift=10pt] (rnb') {$\rec(\neg x_n, \cp)$};
 	
 	\draw (0) .. controls +(0,-2) and +(-1,0) .. (stop);
