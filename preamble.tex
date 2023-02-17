@@ -1,3 +1,9 @@
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{todonotes}
+\usepackage[notion, quotation, silent]{knowledge}
+%remove silent to have knowledge warnings
 \usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{amsmath}
@@ -31,9 +37,9 @@
 \newcommand{\nats}{\mathbb{N}}
 \newcommand{\set}[1]{\{#1\}}
 \newcommand{\pow}[1]{2^{#1}}
-\newcommand{\act}[1]{\xrightarrow{#1}}
+\newcommand{\step}[1]{\xrightarrow{#1}}
 \newcommand{\size}[1]{|#1|}
-
+\newcommand{\nset}[2]{\{#1,\dots,#2\}} %interval of natural numbers
 %%% Complexity classes
 
 \newcommand{\poly}{\text{\sc{P}}\xspace}
@@ -45,25 +51,71 @@
 \newcommand{\exps}{\textsc{ExpSpace}\xspace}
 
 
-%%% Greek letters
+%%% Genral definition
+\newcommand{\prot}{\mathcal{P}} %protocol
+\newcommand{\transitions}{\Delta} % transitions
 
-\newcommand{\D}{\Delta}
-\renewcommand{\S}{\Sigma}
-
+% greek letters
 \renewcommand{\a}{\alpha}
-\newcommand{\g}{\gamma}
-\renewcommand{\r}{\rho}
+\newcommand{\config}{\gamma}
 
 
 %%% BNRA syntax
 
-\newcommand{\br}{\textbf{b}}
-\newcommand{\rec}{\textbf{r}}
-\newcommand{\cp}{\downarrow}
-\newcommand{\testeq}{?}
+\newcommand{\br}[1]{\textbf{b}(#1)}
+% for reception, first argument is message type and second is operation made with the register
+\newcommand{\rec}[2]{\textbf{r}(#1, #2)}
+\newcommand{\brsymb}{\textbf{b}}
+\newcommand{\recsymb}{\textbf{r}}
+\newcommand{\actions}{\mathsf{Actions}}
+\newcommand{\anact}{\alpha}
+\newcommand{\enregact}{\downarrow}
+\newcommand{\dummyact}{{*}}
+\newcommand{\diseqtestact}{{\ne}}
+\newcommand{\eqtestact}{{=}}
 
-%%% Gang semantics
+%quotes in math mode
+\DeclareMathSymbol{\mlq}{\mathord}{operators}{``}
+\DeclareMathSymbol{\mrq}{\mathord}{operators}{`'}
+\newcommand{\quotemarks}[1]{\mlq #1 \mrq}
 
-\newcommand{\gangsem}[1]{[\![#1]\!]_G} 
 
+% projection of a configuration on state part and register part
+\newcommand{\st}[1]{\mathsf{st}(#1)}
+\newcommand{\data}[1]{\mathsf{data}(#1)}
 
+% a register value
+\newcommand{\aval}{v}
+%messages
+\newcommand{\messages}{\mathcal{M}}
+\newcommand{\amessage}{m}
+
+%font for variables in queries
+\newcommand{\var}[1]{\mathsf{#1}}
+\newcommand{\varz}{\var{z}}
+\newcommand{\varset}{\mathsf{Var}}
+
+\newcommand{\query}{\phi}
+
+\newcommand{\run}{\rho}
+
+\newcommand{\agents}{\mathcal{A}}
+\newcommand{\agentsof}[1]{\mathsf{ag}(#1)}
+\newcommand{\configs}[1]{\Gamma(#1)}
+\newcommand{\allconfigs}{\Gamma}
+
+\newcommand{\lessthan}{\trianglelefteq}
+
+%gangs
+\newcommand{\boss}{\mathsf{b}}
+\newcommand{\clique}{\mathsf{K}}
+\newcommand{\gang}{\mathsf{G}}
+\newcommand{\gangconfigs}{\mathcal{G}}
+\newcommand{\gangof}[2]{\mathsf{gang}(#1,#2)}
+\newcommand{\noboss}{\bot}
+
+% abstract semantics
+\newcommand{\covset}{S}
+\newcommand{\aconfig}{\sigma}
+\newcommand{\aconfigs}[1]{\Sigma_{#1}}
+\newcommand{\allaconfigs}{\Sigma}

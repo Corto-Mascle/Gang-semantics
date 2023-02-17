@@ -1,90 +1,189 @@
+The following lemma formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
+\begin{lemma}
+\label{lem:run_no_new_register_values}
+For all "runs" $\run: \config_0 \step{*} \config_f$, for all $a \in \agentsof{\run}$, there exists $a' \in \agentsof{\run}$ such that $\data{\config_f}(a) = \data{\config_0}(a')$.  
+\end{lemma}
+
+
+A "run" $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when there exists $a \in \agents$ such that $\st{\config_f}(a) = q$. 
+
 %\begin{definition}
-%	Given two runs $\r, \r'$ over sets of agents $A, A'$ respectively, we define their ""parallel composition"" as the run over $A\times \set{0} \cup A'\times \set{1}$ defined as follows: 
+%	Given two runs $\run, \run'$ over sets of agents $\agents, \agents'$ respectively, we define their ""parallel composition"" as the run over $\agents\times \set{0} \cup \agents'\times \set{1}$ defined as follows: 
 %\end{definition}
 
 
 \begin{lemma}[Copycat]\label{lem:copycat}
-%	Let $\r$ be an initial run over a set of agents $A$, for all $n$ we can define an initial run $\r'$ over $A \times \set{1,\ldots, n}$ such that:
-%	\begin{itemize}
-%		\item   
-%		
-%		\item
-%	\end{itemize}
+Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ an "initial" "run"  that covers $q$. Write $\agents := \agentsof{\run}$. There exists $A' \subseteq \nats$ finite, a "run" $\run': \config_0' \step{*} \config_f'$ over $A \cup A'$ and $a' \in \agents'$ such that:
+\begin{itemize}
+\item for all $a \in \agents$, $\config_f'(a) = \config_f(a)$ (agents of $\agents$ behave the same in $\run$ and $\run'$),
+\item $\st{\config_f'}(a') = q$,
+\item for all $a \in \agents$, $\data{\config_f}(a) \ne \data{\config_f'}(a')$.
+\end{itemize}
+	% Let $\run$ be an initial run over a set of agents $\agents$, for all $n$ we can define an initial run $\run'$ over $\agents \times \set{1,\ldots, n}$ such that:
+	% \begin{itemize}
+	% 	\item   
+		
+	% 	\item
+	% \end{itemize}
 	
 	
 	
-%	Let $\r, \r'$ be "initial runs" of a "protocol" over sets of agents $A, A'$, $\g, \g'$ their final "configurations".
-%	Then there exist $X, X'$ disjoint sets of agents, bijections $g_x: X\to A, g_{X'} : X' \to A'$ and a run $\r$ over $X \sqcup X'$ whose final configuration $\g_f$ is such that $\g^Q_f|_X = \g^Q \circ g_X$, $\g^Q_f|_{X'} = \g'^Q \circ g_{X'}$ for all $x, y \in X$ (resp., $\in X'$), $\g_f^R(x) = \g_f^R(y)$ if and only if $\g^R(g_X(x)) = \g^R(g_X(y))$ (resp. $\g'^R(g_{X'}(x)) = \g'^R(g_{X'}(y))$), and for all $x \in X$, $x' \in X'$, $\g_f^R(x) \neq \g_f^R(x')$.
-	\cortoin{TODO : find a good formulation}
+	% Let $\run, \run'$ be "initial runs" of a "protocol" over sets of agents $\agents, \agents'$, $\config, \config'$ their final "configurations".
+	% Then there exist $X, X'$ disjoint sets of agents, bijections $g_x: X\to \agents, g_{X'} : X' \to \agents'$ and a run $\run$ over $X \sqcup X'$ whose final configuration $\config_f$ is such that $\st{\config}_f|_X = \st{\config} \circ g_X$, $\st{\config}_f|_{X'} = \st{\config'} \circ g_{X'}$ for all $x, y \in X$ (resp., $\in X'$), $\data{\config_f}(x) = \data{\config_f}(y)$ if and only if $\data{\config}(g_X(x)) = \data{\config}(g_X(y))$ (resp. $\data{\config'}(g_{X'}(x)) = \data{\config'}(g_{X'}(y))$), and for all $x \in X$, $x' \in X'$, $\data{\config_f}(x) \neq \data{\config_f}(x')$.
+	% \cortoin{TODO : find a good formulation}
 \end{lemma}
 
 \begin{proof}
-	\cortoin{TODO}
+Let $A' \subseteq \nats$ such that $|A'|= |A|$ and $A \cap A' = \emptyset$. 
+There exists a bijection $\psi: A \mapsto A'$. Let $\config_0'$ an initial configuration over $\agents \cup \agents'$ which is equal to $\config_0$ on every agent of $\agents$. 
+The constructed "run" $\run'$ over $\agents \cup \agents'$ starts on configuration $\config_0'$ and is composed of two parts. 
+The first part consists in mimicking the sequence of steps of $\run$ with agents of $A$, while agents in $A'$ remain idle. 
+The second part consists in replicating this sequence of actions, but whenever an agent $z \in \agents$ moves in $\run$, 
+$\psi(a)$ moves in $\run'$ instead. In this second part, agents of $A$ are left idle. Write $\config_f'$ the final configuration of $\run'$. Since agents of $\agents$ behave the same in $\run$ and $\run'$, for all $a \in \agents$, $\config_f(a) = \config_f'(a')$.
+Since $\run$ covers $q$, 
+there exists $a_q \in \agents$ such that $\st{\config_f}(a_q) = q$;
+because $\psi(a_q)$ mimicks the behavior of $a_q$, $\st{\config_f'}(\psi(a_q)) = q$. Finally, thanks to Lemma~\ref{lem:run_no_new_register_values}, the register value of $a'_q := \psi(a_q)$ in $\config_f'$ was the register value of some agent of $\agents'$ in $\config_0'$. Meanwhile, for all $a \in \agents$, the register value of $a$ in $\config_f'$ was the register value of some agent of $\agents$ in $\config_0'$. Since $\config_0'$ is an initial configuration, no register value appears twice in $\config_0'$ hence for all $a \in \agents$, $\data{\config_f'}(a) \ne \data{\config_f'}(a'_q)$.
 \end{proof}
 
+\begin{corollary}
+\label{cor:removing_diseq_tests}
+Let $(\prot, \query)$ an instance of the "query reachability problem". This istance is positive if and only if $(\tilde{\prot}, \query)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
+\end{corollary}
+\begin{proof}
+First, if $(\prot, \query)$ is positive then so is $(\tilde{\prot}, \query)$, as one can easily lift any "run" in $\prot$ to an equivalent "run" in $\tilde{\prot}$ (transitions are less guarded  in $\tilde{\prot}$ that in $\prot$). 
+
+Suppose now that $(\tilde{\prot}, \query)$ is a positive instance of the "query reachability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that satisfies $\query$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (Remark~\ref{rem:bigger_config_query} then allows us to conclude). 
+
+If $\config = \config_0$ then $\run = \tilde{\run}$ suffices. Suppose that $\tilde{\run}$ has length $k \geq 1$, and that the result if true for "runs" of length $k-1$. Decompose $\tilde{\run}$ into $\tilde{\run_{k-1}}: \tilde{\config_0} \step{*} \tilde{\config_{k-1}}$ of length $k-1$ and a final step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. 
+By induction hypothesis, there exists $\run_{k-1}: \config_0 \step{*} \config_{k-1}$ such that $\tilde{\config_{k-1}} \lessthan \config_{k-1}$: there exists an injective function $\pi : \tilde{\agents} \rightarrow \agents$
+ such that, for all $a \in \tilde{\agents}$, $\tilde{\config_{k-1}}(a) = \config_{k-1}(\pi(a))$, where $\tilde{\agents} := \agentsof{\tilde{\run}}$ and $\agents := \agentsof{\run}$. If $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ involves no reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$, then we directly lift this step into a step appended at the end of $\run_{k-1}$ (making $\pi(a)$ take a transition whenever $a$ does so in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$). Otherwise, write $\tilde{\agents}_{\diseqtestact}$ the subset of $\tilde{agents}$ corresponding to agents taking in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ a reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$ . Write $(q, \br{m}, q') \in \transitions$ the broadcast transition used in this step.  Using Lemma~\ref{lem:copycat}, we add to $\config_{k-1}$ a fresh agent $a_{\mathsf{new}}$ with state $q$ and a register value that do not appear in $\config_{k-1}$. 
+We first mimick this broadcast step at the end of $\run_{k-1}$, making any agent $\pi(a) \in \pi(\tilde{\agents} \setminus \tilde{\agents}_{\diseqtestact})$ take the transition that $a$ takes in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. We then make a new step where $a_{\mathsf{new}}$ broadcasts using transition $(q, \br{m}, q')$, and every agent $\pi(a) \in \pi(\tilde{\agents}_{\diseqtestact})$ take the transition corresponding to the transition taken by $a$ in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. Such a transition is a reception with action $\quotemarks{\diseqtestact}$ in $\prot$; however, because $a_{\mathsf{new}}$ does not share its register value with any process from $\tilde{\agents}$, all disequality conditions are satisfied and this step is valid. In this end, every agent $\pi(a) \in \pi(\tilde{\agents})$ has taken the transition in $\prot$ corresponding to the one $a$ took in $\tilde{\prot}$ in step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$, hence the configuration $\config_k$ reached by the constructed run is such that $\tilde{\config_k} \lessthan \config_k$. 
+\end{proof}
+
+Thanks to Corollary~\ref{cor:removing_diseq_tests}, we shall from now on suppose that all considered protocols have no disequality tests. 
+
 \begin{definition}
-	Given a set of states $K \subseteq Q$, we say that a "configuration" $\g$ over a set of agents $A$ satisfies $K$ if there exists $n \in \nats$ such that for all $q \in K$, there exists $a \in A$ such that $\g(a) = (q,n)$.
+	Given a set of states $K \subseteq Q$, we say that a "configuration" $\config$ over a set of agents $\agents$ satisfies $K$ if there exists $n \in \nats$ such that for all $q \in K$, there exists $a \in \agents$ such that $\config(a) = (q,n)$.
 	A "run" satisfies $K$ if its final configuration does.
 \end{definition}
+Note that a "run" satisfies $K$, then it covers every state in $K$. The converse is not true as, in order to satisfy $K$, one needs to have agents of every state of $K$ that all share the same register value. 
+\nicoin{interesting example}
+
+\begin{definition}
+We say that a "query" $\query$ is ""contradictory"" if either:
+	\begin{itemize}
+		\item there exists $\varz$ and $q \neq q' \in Q$ such that $\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$ or
+		
+		\item there exist $\var{z_1}, \ldots, \var{z_k} \in \varset$ with $k\geq 1$ such that $\quotemarks{R(\varz_{i}) = R(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R(\varz_k) \neq R(\varz_1)} \in \query$.
+	\end{itemize}
+\end{definition}
+
+\begin{proposition}
+A "query" $\query$ is "contradictory" if and only if there exists no configuration satisfying $\query$. Additionnaly, one may decide whether $\query$ is contradictory in time polynomial in $\size{\prot} + \size{\query}$. 
+\end{proposition}
+\begin{proof}
+Suppose first that $\query$ is "contradictory". If there exist $q \ne q'$ such that
+ $\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$,  then a "configuration" satisfying $\query$ would need to have a single agent in two distinct states. If there exist $\var{z_1}, \ldots, \var{z_k}$ distinct variables with $k>1$ such that $\quotemarks{R(\varz_{i}) = R(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R(\varz_k) \neq R(\varz_1)} \in \query$, then in any configuration satisfying $\query$, $\varz_k$ and $\varz_1$ must have the same register value but also distinct register values, which is a contradiction. 
+
+Suppose now that the $\query$ is not "contradictory" and show that there exists some configuration satisfying $\query$.
+
+We consider the graph $G$ whose vertices are variables of $\varset$ appearing in $\query$ and with an edge between $\varz$ and $\varz'$ if and only if $R(\varz) = R(\varz') \in \query$. Since $\query$ is not "contradictory", for any $\varz, \varz'$ in the same connected component of $G$, $\quotemarks{R(\varz) \ne R(\varz')} \notin \query$. We construct a configuration satisfying $\query$ with an agent $a_\varz$ for every $\varz$ such that:
+\begin{itemize}
+\item if $\quotemarks{q(\varz)} \in \query$ then $a_\varz$ is in state $q$,
+\item the agents of the variables of a connected component of $G$ have all the same register value.  
+\end{itemize}
+The built configuration satisfies $\query$, which concludes the proof. 
+\end{proof}
 
 \begin{lemma}
-	We say that a "query" $\phi$ is ""contradictory"" if either:
-	\begin{itemize}
-		\item there exists $z$ and $q \neq q' \in Q$ such that $q(z), q'(z) \in \phi$
-		
-		\item there exist $z_1, \ldots, z_k$ distinct variables with $k>1$ such that $R(z_{i}) = R(z_{i+1}) \in \phi$ for all $i \in \set{1,\ldots,k-1}$ and $R(z_k) \neq R(z_1) \in \phi$.
-	\end{itemize}
-	 
-	
-	Given a "query" $\phi$, one can check in polynomial time whether it is contradictory and, if it is not, compute sets of states $K_1, \ldots, K_p \subseteq Q$ with $p \leq \size{\phi}$ such that there exists a "run" satisfying $\phi$ if and only if for all $i \in \set{1,\ldots, p}$, there is a run satisfying $K_i$. 
+Let $\query$ a  non-"contradictory" "query". There exist $K_1, \ldots, K_p \subseteq Q$ with $p \leq \size{\query}$ with the following property: there exists a "run" satisfying $\query$ if and only if for all $i \in \set{1,\ldots, p}$, there is a run satisfying $K_i$. Moreover,such sets $K_1, \dots, K_p$ may be computed in time polynomial in $\size{\prot}$. 
 \end{lemma}
 
 \begin{proof}
-	We consider the graph $G$ whose vertices are variables of $\phi$ and with an edge between $z$ and $z'$ if and only if $R(z) = R(z') \in \phi$.
+
+	We consider the same graph $G$ as in the previous proof. We decompose $G$ into connected components $C_1, \ldots, C_p$. 
+For each $C_i$ we define $K_i = \set{q \in Q \mid \exists \varz \in C_i, q(\varz) \in \query}$. Note that $K_i$ may be empty when there is no constraints on the states of the variables in $C_i$. An empty set is satisfied by any "run". This is coherent with the fact that, when $K_i = \emptyset$, it suffices to assign all variables in $C_i$ to an agent that stays in $q_0$ for the whole "run".
+
+	Suppose there is a "run" satisfying $\query$, let $\config$ be its final configuration, let $\nu$ be a valuation witnessing the satisfaction of $\query$ by $\config$.
+	Let $i \in \set{1,\ldots, p}$, we show that $\config$ satisfies $K_i$. For all $\varz \in C_i$, let $(q_\varz,\aval_\varz) = \config(\nu(\varz))$. As $C_i$ is a connected component of $G$ and $\config$ satisfies $\query$, all $\nu(\varz)$ with $\varz \in C_i$ have the same register value, which we call $\aval$. 
+	For all $q \in K_i$, there exists $\varz \in C_i$ such that $q(\varz) \in \query$ and thus $q_\varz =q$ and $\aval_\varz =\aval$, thus $C_i$ is satisfied.
 	
-	Checking if $\phi$ is "contradictory" is immediate: we look for pairs $z, z'$ in the same connected component of $G$ and with $R(z) \neq R(z') \in \phi$.
-	Then we look for a variable $z$ labelled with two distinct states in $\phi$. The "query" is contradictory if and only if one of the two searches is successful.
+	For the converse implication, suppose for all $i$ we have a run $\run_i$ over a set of agents $\agents_i$ satisfying $K_i$. We rename agents so that the $\agents_i$ are pairwise disjoint, we introduce fresh agents $a_1, \ldots, a_p$ and we set $\agents = \set{a_1, \ldots, a_p} \sqcup \bigsqcup_{i=1}^p \agents_i$. We consider $\run: \config_0 \step{*} \config$ a "run" in which the sequences of actions of each $\run_i$ are executed sequently by agents from $\agents_i$. In $\run$, agents $a_1$ to $a_p$ are left idle on $q_0$. We build the valuation $\nu$ witnessing that $\run$ satisfies $\query$ as follows. Let $i \in \nset{1}{p}$. If $K_i = \emptyset$ then $\nu$ assigns $a_i$ to every variable of $C_i$. Otherwise, we know that $\config|_{\agents_i}$ satisfies $K_i$ because the final configuration of $\run_i$ does: there exists $\aval_i \in \nats$ such that, for all $q \in K_i$, some agent $a_{i,q}$ has state $q$ and register value $\aval_i$ in $\config$. Let $\varz \in C_i$. If, for some $q \in Q$, $\quotemarks{q(\varz)} \in \query$, $\nu$ assigns agent $a_{i,q}$ to $\varz$ ($q$ is unique as $\query$ is not "contradictory"). If $\query$ has no constraint about the state of $\varz$, $\nu$ assigns to $\varz$ some $a_{i,q}$ with $q \in k_i$ arbitrary. 
 	
-	Then, if $\phi$ is not contradictory, we decompose $G$ into connected components $C_1, \ldots, C_p$.
-	Then for each $C_i$ we define $K_i = \set{q \in Q \mid \exists z \in C_i, q(z) \in \phi}$.  
+	% We define a valuation $\nu$ as follows. Let $\varz \in \varset$ and $i$ so that $C_i$ is the connected component of $\varz$ in $G$. If  for some $q$, then this $q$ is unique as $\query$ is not "contradictory". We set $\nu(\varz) = a_q^i$.
+	% If there is no $q(\varz)$ for any $q \in Q$ in $\query$ but there is one of the form $q'(\varz')$ with $\varz' \in C_i$, then we set $\nu(\varz) = \nu(\varz')$.
+	% Otherwise we set $\nu(\varz) = a_i$.
+	% This fully defines our valuation $\nu$.
 	
-	Suppose there is a run satisfying $\phi$, let $\g$ be its final configuration, let $\nu$ be a valuation witnessing the satisfaction of $\phi$ by $\g$.
-	Let $i \in \set{1,\ldots, p}$, we show that $\g$ satisfies $K_i$. For all $z \in C_i$, let $(q_z,n_z) = \g(\nu(z))$. As $C_i$ is a connected component of $G$ and $\g$ satisfies $\phi$, all $\nu(z)$ with $z \in C_i$ have the same register value, which we call $n$. 
-	For all $q \in K_i$, there exists $z \in C_i$ such that $q(z) \in \phi$ and thus $q_z =q$ and $n_z =n$, thus $C_i$ is satisfied.
-	
-	For the converse implication, suppose for all $i$ we have a run $\r_i$ over a set of agents $A_i$ satisfying $K_i$. We rename agents so that the $A_i$ are pairwise disjoint, we introduce fresh agents $a_1, \ldots, a_n$ and we set $A = \set{a_1, \ldots, a_n} \sqcup \bigsqcup_{i=1}^n A_i$. We then execute consecutively each $\r_i$ over $A_i$ to form a run $\r$. Let $\g$ be the configuration obtained at the end, we show that $\g$ satisfies $\phi$. Note that for all $i$ $\g|_{A_i}$ is the final configuration of $\r_i$, and thus satisfies $K_i$. Let $n_i \in \nats$, and for all $q \in K_i$, $a_q^i \in A_i$ be such that $\g(a_q^i) = (q, n_i)$
-	
-	We define a valuation $\nu$ as follows: Let $z$ be a variable, $i$ so that $C_i$ is the connected component of $z$ in $G$. If $q(z) \in \phi$ for some $q$, then this $q$ is unique as $\phi$ is not "contradictory". We set $\nu(z) = a_q^i$.
-	If there is no $q(z)$ for any $q \in Q$ in $\phi$ but there is one of the form $q'(z')$ with $z' \in C_i$, then we set $\nu(z) = \nu(z')$.
-	Otherwise we set $\nu(z) = a_i$.
-	This fully defines our valuation $\nu$.
-	
-	Clearly all formulas of the form $q(z)$ or $R(z) = R(z')$ are satisfied.
-	For the formulas of the form $R(z) \neq R(z')$, we observe that as $\phi$ is not "contradictory", $z$ and $z'$ are not in the same connected component of $G$. 
-	Hence there exist $i \neq j$ such that $z \in A_i\cup \set{a_i}$ and $z' \in A_j\cup \set{a_j}$. As the run we executed is made of separate executions over each $A_i$, we have $\g^R(\nu(z)) \in \g_0^R(A_i\cup\set{a_i})$ and $\g^R(\nu(z')) \in \g_0^R(A_j\cup\set{a_j})$, where $\g_0$ is its first configuration. Furthermore as it is an "initial run" we have that $\g_0^R(A_i\cup\set{a_i})$ and $\g_0^R(A_j\cup\set{a_j})$ are disjoint.
-	
-	Hence $\g^R(\nu(z)) \neq \g^R(\nu(z'))$. As a result, $\phi$ is satisfied by $\r$.
+	Clearly all formulas of the form $q(\varz)$ or $R(\varz) = R(\varz')$ are satisfied.
+	For the formulas of the form $R(\varz) \neq R(\varz')$, we observe that as $\query$ is not "contradictory", $\varz$ and $\varz'$ are not in the same connected component of $G$. Because the runs $\run_i$ worked with disjoint sets of register values ($\config_0$ is initial), the agents assigned to $\varz$ and $\varz'$ end the run with distinct register values.
+	Hence $\data{\config}(\nu(\varz)) \neq \data{\config}(\nu(\varz'))$. As a result, $\query$ is satisfied by $\run$.
 \end{proof}
 
 
 
 \begin{definition}
-	Let $(Q,\D, q_0)$ be a protocol, and $A$ a finite set of agents.
-	
-	A ""gang"" is a pair $(b, K) \in (A \cup \set{\bot}) \times \pow{A}$.
-	Intuitively, $b$ (the \emph{boss}) represents some particular process and $K$ (the \emph{clique}) the set of states of processes who copied the value of the register of $b$. If the original owner of this shared value has taken another one, then $b = \bot$.
-	
-	Formally, let $\r = \g_0 \act{m_0} \g_1 \act{m_1} \cdots \g_k$ be an "initial run" and $n \in \nats$ such that $n \in \g_0^R(A)$.
-	we define their \emph{gang semantics} and a value $n \in \nats$ as follows:
-	Let $a_0 \in A, b_0 \in Q$ be such that $\g_0(a_0) = (b_0,n)$, and let $(b', n') = \g_k(a)$.
-	Let $K = \set{q \in Q \mid \exists a \in A\setminus \set{a_0}, \g_k(a) = (q,n)}$
-	\[
-	\gangsem{\r,n}= 
-	\begin{cases}
-		(b,K) \text{ if } n'=n\\
-		(\bot, K) \text{ if } n'\neq n.
-	\end{cases} 
-	\]
+	Let $(Q,\transitions, q_0)$ be a protocol, and $\agents$ a finite set of agents.
+
+	A ""gang"" over $\agents$ is a pair $\gang = (\boss, \clique) \in (\agents \cup \set{\noboss}) \times \pow{\agents}$. The element $\boss$ is the ""boss"" and the set $\clique$ is the ""clique"" of the "gang". %We write $\gangconfigs$ the set of "gangs". 
+
+	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \data{\config_0}(\agents)$. The "gang" of value $\aval$ in $\run$, written $\gangof{\run}{\aval}$, is the "gang" $(\boss, \clique)$ such that, by writing $a_0 \in A$ the (unique) agent such that $\data{\config_0}(a_0) = \aval$:
+	\begin{itemize}
+	\item if $\data{\config_k}(a_0) = \aval$ then $\boss := a_0$
+	\item if $\data{\config_k}(a_0) \ne \aval$ then $\boss := \noboss$,
+	\item $\clique := \set{q \in Q \mid \exists a \in \agents\setminus \set{a_0}, \config_k(a) = (q,\aval)}$.
+	\end{itemize}
 \end{definition} 
 
+Intuitively, a "gang" corresponds to the set of agents with a given "register value". The "boss" $\boss$ represents the process that had this value at the beginning and the "clique" $\clique$ the set of states of processes who receive and stored this register value. If the original owner of this value no longer has it, then $\boss = \noboss$.
 
+We now define an abstract semantics based on gangs: intuitively, an abstract configuration is composed of a gang along with a set of states which are known to be coverable.
+
+\begin{definition}
+An ""abstract configuration"" over $\agents$ is a tuple of $2^Q \times \gang$ where $\gang$ is a "gang". We write $\aconfigs{\agents}$ the set of "abstract configurations" over $\agents$ and $\allaconfigs := \cup_{\agents \subseteq \nats \text{ finite }\aconfigs{\agents}}$ the set of all abstract configurations. 
+
+Given two abstract configurations $\aconfig = (\covset, \boss, \clique), \aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denotes $\aconfig \step{} \aconfig'$, when one of the following cases is satisfied.
+\begin{enumerate}
+	\item[Broadcast from "boss":] $\boss, \boss' \ne \noboss$. There exists $\amessage \in \messages$ such that $(\boss, \br{m}, \boss') \in \transitions$. 
+
+	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+	\begin{itemize}
+		\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
+		\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
+	\end{itemize}
+	
+	$\covset \subseteq \covset'$ and, for all $q' \in \covset' \setminus \covset$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+	\begin{itemize}
+		\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
+		\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
+	\end{itemize}
+
+	\item[Broadcast from "clique":] There exists $\amessage \in \messages$ and $q_{\brsymb} \in \clique, q'_{\brsymb} \in \clique'$ s.t. $(q_{\brsymb}, \br{m}, q'_{\brsymb}) \in \transitions$. 
+	
+	Either $\boss = \boss'$ or there exists $(\boss, \rec{\amessage}{\anact}, \boss') \in \transitions$ for some action $\anact$.
+
+	$(\clique \cup \set{q'_{\brsymb}}) \subseteq \clique'$ and, for all $q' \in \clique' \setminus (\clique \cup \set{q'_{\brsymb}})$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+	\begin{itemize}
+		\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
+		\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
+	\end{itemize}
+	
+	 $(\covset \cup \set{q'_{\brsymb}}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{q'_{\brsymb}})$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+	\begin{itemize}
+		\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
+		\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
+	\end{itemize}
+	\item[External broadcast:] There exists $\amessage \in \messages$ and $q_{\brsymb} \in \covset, q'_{\brsymb} \in \covset'$ s.t. $(q_{\brsymb}, \br{m}, q'_{\brsymb}) \in \transitions$. 
+	
+	Either $\boss = \boss'$ or:
+	\begin{itemize} 
+		\item $\boss' \ne \noboss$ and there exists $(\boss, \rec{\amessage}{\dummyact}, \boss') \in \transitions$, 
+		\item $\boss' = \noboss$ and there exists $(\boss, \rec{\amessage}{\enregact}, \boss') \in \transitions$.
+	\end{itemize}
+
+	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q$ s.t. $(q, \rec{\amessage}{\dummyact}, q') \in \transitions$.
+	
+	 $(\covset \cup \set{q'_{\brsymb}}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{q'_{\brsymb}})$, there exists $q \in \covset$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\dummyact}$ or $\anact = \quotemarks{\dummyact}$.
+	\item[Gang reset] $S' = S$, $\clique' = \emptyset$, $\boss' \in S' \cup \set{\noboss}$
+\end{enumerate}
+\end{definition}

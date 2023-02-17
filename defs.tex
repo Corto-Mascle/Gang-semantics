@@ -1,43 +1,60 @@
 \section{Definitions}
 
 \begin{definition}
-	A ""protocol"" is a tuple $(Q, \D, q_0)$ over an alphabet $\S$ with $Q$ a finite set of states, $q_0 \in Q$ an initial state, and $\D \subseteq Q \times \set{\br, \rec(*), \rec(\cp), \rec(\testeq)} \times Q$.
+	A ""protocol"" is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times \set{\br{\amessage}, \rec{\amessage}{\dummyact}, \rec{\amessage}{\enregact}, \rec{\amessage}{\eqtestact}, \rec{\amessage}{\diseqtestact} \mid \amessage \in \messages} \times Q$. Transitions labelled with $\brsymb$ are ""broadcasts"" and transitions labelled with $\recsymb$ are ""receptions"".
+Given a "reception" $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$ is the ""action"" of the reception.
 \end{definition}
 
 \begin{definition}
-	Let $(Q,\D, q_0)$ be a protocol, and $A$ a finite set of \emph{agents}.
-	A ""configuration"" is a labelling function $\g : A \to Q \times \nats$, associating a state and a register value to each agent. We write $\g^Q$ for the state component of $\g$ and $\g^R$ for its register component.
-	An \emph{initial configuration} $\g$ is one where for all $a \in A$, $\g^Q(a) = q_0$ and for all $a, a' \in A$, if $\g(a) = \g(a')$ then $a=a'$.
+	Let $(Q,\transitions, q_0)$ be a protocol, and $\agents \subseteq \nats$ a finite set of \emph{agents}.
+	A ""configuration"" over set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats$, associating a state and a register value to each agent. We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component. 
+	An \emph{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and for all $a, a' \in \agents$, if $\data{\config}(a) = \data{\config}(a')$ then $a=a'$.
 	
-	\AP Given two configurations $\g$ and $\g'$, a ""transition"" $\g 
-	\act{m} \g'$ between two configurations is defined when there exists $a_0 \in A$ such that $\g^Q(a_0) \act{\br} \g'^Q(a_0) \in \D$, $\g^R(a_0) = \g'^R(a_0)$ and for all $a \in A\setminus \set{a_0}$,  
+	\AP We denote by $\configs{\agents}$ the set of configurations over $\agents$, and by $\allconfigs := \cup_{\agents \subseteq \nats \text{ finite }} \configs{\agents}$ the set of all configurations. Given a configuration $\config$, we denote by $\agentsof{\config}$ the set of agents of $\config$.
+
+	\AP Given two configurations $\config, \config' \in \configs{\agents}$, a ""step"" $\config \step{} \config'$ is defined when there exists $\amessage \in \messages$ and $a_0 \in \agents$ such that $(\st{\config}(a_0),\br{\amessage}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and for all $a \in \agents\setminus \set{a_0}$,  
 	\begin{itemize}
-		\item either $\g'(a) = \g(a)$
+		\item either $\config'(a) = \config(a)$
 		
-		\item or $\g'(a)$ is such that $\g^Q(a) \act{\rec(\a)} \g'^Q(a) \in \D$ with either
+		\item or $\config'(a)$ is such that $(\st{\config}(a), \rec{\amessage}{\anact}, \st{\config'}(a)) \in \transitions$ with either
 		\begin{itemize}
-			\item $\a = *$ and $\g'^R(a) = \g^{R}(a)$
-			\item $\a = \cp$ and $\g'^R(a) = m$
-			\item $\a = \testeq$ and $\g'^R(a) = \g^R(a) =m$
+			\item $\anact = \quotemarks{\dummyact}$ 
+			and $\data{\config'}(a) = \data{\config}(a)$
+			\item $\anact = \quotemarks{\enregact}$ and $\data{\config'}(a) = m$
+			\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a) = \data{\config}(a) =m$
+			\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a) = \data{\config}(a) \ne m$
 		\end{itemize}
 	\end{itemize}
 
-	\AP A ""run"" is a sequence of transitions $\g_0 \act{m_0} \g_1 \act{m_1} \cdots \act{m_k} g_k$. We say that it is \emph{initial} if $g_0$ is an initial configuration.
+	\AP A ""run"" is a sequence of steps $\run : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ such that $\config_0$ is an ""initial configuration"". We write $\config_0 \step{*} \config_k$ the existence of such a "run". Given a "run" $\run$, we write $\agentsof{\run}$ its set of agents.  
+% with current definition, every run is initial
+
+%We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
 
 \begin{definition}
-	A ""query"" is a set of formulas of the form $q(z)$, $R(z) = R(z')$, $R(z) \neq R(z')$, with $z, z'$ taken in a set of variables $Var$.
-	It is \emph{satisfied} by a "configuration" $\g$ over a set of agents $A$ if there is a valuation $\nu : Var \to A$ such that:
+We define an order over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if the exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
+\end{definition}
+
+\begin{definition}
+	A ""query"" $\query$ is a finite set of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R(\var{z}) = R(\var{z}')}$, $\quotemarks{R(\var{z}) \neq R(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$.
+	It is \emph{satisfied} by a "configuration" $\config$ if there is a valuation $\nu : \varset \to \agentsof{\config}$ such that:
 	\begin{itemize}
-		\item for all $q(z) \in \phi$, $\g_Q(\nu(z)) = q$
+		\item for all $\quotemarks{q(\var{z})} \in \query$, $\st{\config}(\nu(\var{z})) = q$,
 		
-		\item for all $R(z) = R(z') \in \phi$, $\g_R(\nu(z)) = \g_R(\nu(z'))$
+		\item for all $\quotemarks{R(\var{z}) = R(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z})) = \data{\config}(\nu(\var{z'}))$,
 		
-		\item for all $R(z) \neq R(z') \in \phi$, $\g_R(\nu(z)) \neq \g_R(\nu(z'))$
+		\item for all $\quotemarks{R(\var{z}) \neq R(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z})) \neq \data{\config}(\nu(\var{z'}))$.
 	\end{itemize}
 
-	\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is an "initial run" of this protocol whose last "configuration" satisfies the query.
+	\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is a "run" of this protocol whose last "configuration" satisfies the query.
 \end{definition}
+
+\begin{remark}
+\label{rem:bigger_config_query}
+If some "configuration" $\config$ satisfies a "query" $\query$, then every configuration $\config'$ such that $\config \lessthan \config'$ satisfies $\query$. 
+\end{remark}
+
 
 
 
