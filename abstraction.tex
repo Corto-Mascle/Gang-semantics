@@ -127,13 +127,13 @@ For each $C_i$ we define $K_i = \set{q \in Q \mid \exists \varz \in C_i, q(\varz
 
 	A ""gang"" is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. The element $\boss$ is the ""boss"" and the set $\clique$ is the ""clique"" of the "gang". %We write $\gangconfigs$ the set of "gangs". 
 
-	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \data{\config_0}(\agents)$. The "gang" of value $\aval$ in $\run$, written $\gangof{\run}{\aval}$, is the "gang" $(\boss, \clique)$ such that, by writing $a_0 \in \agentsof{\run}$ the (unique) agent such that $\data{\config_0}(a_0) = \aval$:
+	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \data{\config_0}(\agents)$. The "gang" of value $\aval$ in $\run$, written $\gangof{\aval}{\run}$, is the "gang" $(\boss, \clique)$ such that, 
 	\begin{itemize}
-	\item if $\data{\config_k}(a_0) = \aval$ then $\boss := a_0$
-	\item if $\data{\config_k}(a_0) \ne \aval$ then $\boss := \noboss$,
-	\item $\clique := \set{q \in Q \mid \exists a \in \agents\setminus \set{a_0}, \config_k(a) = (q,\aval)}$ %\\
-	\item \nicoin{def concurrente: $\clique := \set{q \in Q \mid \exists i \leq k, \exists a \in \agents\setminus \set{a_0}, \config_i(a) = (q,\aval)}$}
+	\item if there exists $a_0 \in \agentsof{\run}$ such that $\data{\config_0}(a_0) = \data{\config_k}(a_0) = \aval$ then $\boss := a_0$, otherwise $\boss := \noboss$,
+	\item  $\clique := \set{q \in Q \mid \exists i \leq k, \exists a \in \agents\setminus \set{\boss}, \config_i(a) = (q,\aval)}$ %\\
+\nico{j'ai changé la def pour que ça soit plus facile: ancienne def $\clique := \set{q \in Q \mid \exists a \in \agents\setminus \set{\boss}, \config_k(a) = (q,\aval)}$}
 	\end{itemize}
+Note that, if such an agent $a_0$ exists, then it is unique as $\config_0$ is initial hence this definition is sound. If there exists no agents with value $\aval$ in $\config_0$, then trivially $\gangof{\aval}{\run} = (\noboss, \emptyset)$. 
 \end{definition} 
 
 Intuitively, a "gang" corresponds to the set of agents with a given "register value". The "boss" $\boss$ represents the process that had this value at the beginning and the "clique" $\clique$ the set of states of processes who receive and stored this register value. If the original owner of this value no longer has it, then $\boss = \noboss$.
@@ -189,19 +189,69 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 \end{enumerate}
 
 
-Given a concrete run $\run: \config_0 \step{*} \config_k$, we write $\absproj{\run}{\aval}$ the "abstract configuration" $(\covset, \gangof{\run}{\aval})$ where $\covset$ is the set of all states appearing in $\run$. 
+Given a concrete run $\run: \config_0 \step{*} \config_k$, we write \AP  $\intro*\absproj{\aval}{\run}$ the "abstract configuration" $(\covset, \gangof{\aval}{\run})$ where $\covset$ is the set of all states appearing in $\run$. 
 
 The set of "initial abstract configurations" is $\aconfiginitset := \set{(\set{q_0}, \boss, \clique)  \mid \boss \in \set{q_0, \noboss}, \clique \subseteq \set{q_0}}$.  
-As in the concrete case, an "abstract run" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 \in \aconfiginitset$ and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. 
+As in the concrete case, an "abstract run" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 \in \aconfiginitset$ and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Simiarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
 \end{definition}
 
 
 \begin{proposition}
-For every $\aconfig_0 \in \aconfiginitset$, $\aconfig' \in \allaconfigs$ such that $\aconfig \step{*} \aconfig'$, there exists an abstract run $\arun: \aconfig \step{} \aconfig'$ of less that $XX$ steps.
+For every $\aconfig_0 \in \aconfiginitset$, $\aconfig' \in \allaconfigs$ such that $\aconfig \step{*} \aconfig'$, there exists an abstract run $\arun: \aconfig \step{*} \aconfig'$ of less that $(|Q|+2)^3$ steps.
 % note: this bound is not optimal and is chosen to keep the proof simple
 \end{proposition}
 \begin{proof}
 Note that $\covset$ may never decrease along an abstract execution and that $\clique$ may only decrease at "gang resets".
 
-We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the boss may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the execution with no "reset" has at most $(|Q|+2) |Q| $
+We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the boss may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the execution with no "reset" has at most $(|Q|+2)(|Q|+1)$ steps. This yields the bound of the proposition. 
+\end{proof}
+
+We now prove that our abstraction is sound and complete for our problem of interest. 
+
+\subsection{Completeness}
+
+\begin{lemma}
+\label{lem:abstraction_complete}
+Let $\run: \config_0 \step{} \config_1 \step{} \dots \step{} \config_k$ and $\aval \in \nats$. There exists $\aconfig_0 \in \aconfiginitset$ such that $\aconfig_0 \step{*} \absproj{\aval}{\run}$. 
+\end{lemma}
+The rest of this subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
+
+The following lemma shall later be useful:
+\begin{lemma}
+\label{lem:adding_states_in_covset}
+If $\aconfig = (\covset, \gang), \aconfig' = (\covset, \gang') \in \allaconfigs$ are such that $\aconfig \step{*} \aconfig'$ then $\covset \subseteq \covset'$ and, for all $T \subseteq Q$, $(\covset \cup T, \gang) \step{*} (\covset' \cup T, \gang')$. 
+\end{lemma}
+\begin{proof}
+To prove the first statement, in suffices to observe that, in a step of the abstract semantics, the set $\covset$ may not decrease.
+To prove the second statement, it suffices to notice in the abstract semantics that a larger $\covset$ may never hinder a step. 
+\end{proof}
+
+\begin{lemma}
+For all $\run: \aconfig_0 \step{*} \aconfig$ and $\aval \in \nats$, one has $(\statesin{\run}, \emptyset, \noboss) \step{*} \absproj{\aval}{\run}$. 
+\end{lemma}
+\begin{proof}
+Let $\covset := \statesin{\run}$ and $\agents = \agentsof{\run}$.
+First, if $\aval$ does not appear in $\aconfig_0$ then $\absproj{\aval}{\run} = (\covset, \emptyset, \noboss)$ and the statement is true.
+
+Suppose now that $\aval$ does appear in $\aconfig_0$; let $a_0$ the (unique) agent such that $\data{\aconfig_0}{a_0} = \aval$. We write $\run : \aconfig_0 \step{} \aconfig_1 \step{} \dots \step{} \aconfig_k = \aconfig$. For every $i \leq k$, let $\run_i : \config_0 \step{*} \config_i$ the prefix of $\run$ of length $i$, and write $\aconfig_i := (\covset, \gangof{\aval}{\run_i})$. 
+
+We prove by induction on $i$ that $(\covset, \emptyset, \noboss) \step{*} \aconfig_i$.
+
+First, $\gangof{\aval}{\run_0} = (\st{\config_0}(a_0), \emptyset)$ and $\st{\config_0}(a_0) \in \covset$ by definition of $\covset$ therefore $\aconfig_i$ may be reached from $(\covset, \emptyset, \noboss)$ by a simple "gang reset".
+
+Suppose now that $(\covset, \emptyset, \noboss) \step{*} \aconfig_i$. 
+If suffices to prove that $\aconfig_i \step{} \aconfig_{i+1}$. Consider the last step of $\run_{i+1}$, which is referred to under the name $s_{i+1}$ in the following. Also, we write $(\covset, \boss_i, \clique_i) := \aconfig_i$. Let $a_{\brsymb}$ the agent making the broadcast transition in $s_{i+1}$ and $A_{\recsymb}$ the set of agents receiving this broadcast in $s_{i+1}$. 
+
+We now make the following case distinction to decide of the type of the abstract step $\aconfig_i \step{} \aconfig_{i+1}$:
+\begin{enumerate}
+\item\label{proof_soundess:case_broadcast_boss} if $\data{\aconfig_0}(a_{\brsymb}) = \data{\aconfig_{i}}(a_{\brsymb}) = \aval$ then it is a ``broadcast from boss'',
+\item\label{proof_soundess:case_broadcast_clique} if $\data{\aconfig_{i}}(a_{\brsymb}) = \aval$ but $\data{\aconfig_{i}}(a_{\brsymb}) \ne \aval$ then it is a ``broadcast from clique'',
+\item\label{proof_soundess:case_external_broadcast} otherwise it is an ``external broadcast''. 
+\end{enumerate}
+
+Case~\ref{proof_soundess:case_broadcast_boss}:  We claim that $\aconfig_i \step{} \aconfig_{i+1}$ is a valid ``broadcast from boss'' step in the abstract semantics.
+$a_{\brsymb}$ may not change its register value in $s_{i+1}$ as it is broadcasting. Since $\data{\aconfig_0}(a_{\brsymb}) = \data{\aconfig_{i}}(a_{\brsymb}) = \data{\aconfig_{i+1}}(a_{\brsymb}) = \aval$, 
+one has $\boss_i = \st{\config_i}(a_{\brsymb})$ and $\boss_{i+1} =  \st{\config_{i+1}}(a_{\brsymb})$. Write $(\boss_i, \br{\amessage}, \boss_{i+1})$ the transition taken by $a_{\brsymb}$ in $s_{i+1}$. 
+One has $\clique_i \subseteq \clique_{i+1}$ as $\run_{i+1}$ is a prefix of $\run_i$. Moreover, let $q \in \clique_{i+1} \setminus \clique_i$. 
+There exists $a \in \agents \setminus a_{\brsymb}$ such that $\st{\config_{i+1}}(a) = q$, $\st{\config_{i}}(a) \ne q$ and $\data_{\config_{i+1}}(a) = \aval$. \nico{to be continued}
 \end{proof}

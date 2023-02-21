@@ -65,7 +65,7 @@
 \newcommand{\br}[1]{\textbf{b}(#1)}
 % for reception, first argument is message type and second is operation made with the register
 \newcommand{\rec}[2]{\textbf{r}(#1, #2)}
-\newcommand{\brsymb}{\textbf{b}}
+\newcommand{\brsymb}{\textbf{br}}
 \newcommand{\recsymb}{\textbf{r}}
 \newcommand{\actions}{\mathsf{Actions}}
 \newcommand{\anact}{\alpha}
@@ -98,9 +98,10 @@
 \newcommand{\query}{\phi}
 
 \newcommand{\run}{\rho}
-
+\newcommand{\statesin}[1]{\mathsf{cov}(#1)}
 \newcommand{\agents}{\mathcal{A}}
 \newcommand{\agentsof}[1]{\mathsf{ag}(#1)}
+
 \newcommand{\configs}[1]{\Gamma(#1)}
 \newcommand{\allconfigs}{\Gamma}
 
@@ -112,7 +113,7 @@
 \newcommand{\gang}{\mathsf{G}}
 \newcommand{\gangset}{\mathcal{G}}
 \newcommand{\gangconfigs}{\mathcal{G}}
-\newcommand{\gangof}[2]{\mathsf{gang}(#1,#2)}
+\newcommand{\gangof}[2]{\mathsf{gang}_{#1}(#2)}
 \newcommand{\noboss}{\bot}
 
 % abstract semantics
