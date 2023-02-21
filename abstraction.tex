@@ -123,15 +123,16 @@ For each $C_i$ we define $K_i = \set{q \in Q \mid \exists \varz \in C_i, q(\varz
 
 
 \begin{definition}
-	Let $(Q,\transitions, q_0)$ be a protocol, and $\agents$ a finite set of agents.
+	Let $(Q,\transitions, q_0)$ be a protocol.
 
-	A ""gang"" over $\agents$ is a pair $\gang = (\boss, \clique) \in (\agents \cup \set{\noboss}) \times \pow{\agents}$. The element $\boss$ is the ""boss"" and the set $\clique$ is the ""clique"" of the "gang". %We write $\gangconfigs$ the set of "gangs". 
+	A ""gang"" is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. The element $\boss$ is the ""boss"" and the set $\clique$ is the ""clique"" of the "gang". %We write $\gangconfigs$ the set of "gangs". 
 
-	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \data{\config_0}(\agents)$. The "gang" of value $\aval$ in $\run$, written $\gangof{\run}{\aval}$, is the "gang" $(\boss, \clique)$ such that, by writing $a_0 \in A$ the (unique) agent such that $\data{\config_0}(a_0) = \aval$:
+	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \data{\config_0}(\agents)$. The "gang" of value $\aval$ in $\run$, written $\gangof{\run}{\aval}$, is the "gang" $(\boss, \clique)$ such that, by writing $a_0 \in \agentsof{\run}$ the (unique) agent such that $\data{\config_0}(a_0) = \aval$:
 	\begin{itemize}
 	\item if $\data{\config_k}(a_0) = \aval$ then $\boss := a_0$
 	\item if $\data{\config_k}(a_0) \ne \aval$ then $\boss := \noboss$,
-	\item $\clique := \set{q \in Q \mid \exists a \in \agents\setminus \set{a_0}, \config_k(a) = (q,\aval)}$.
+	\item $\clique := \set{q \in Q \mid \exists a \in \agents\setminus \set{a_0}, \config_k(a) = (q,\aval)}$ %\\
+	\item \nicoin{def concurrente: $\clique := \set{q \in Q \mid \exists i \leq k, \exists a \in \agents\setminus \set{a_0}, \config_i(a) = (q,\aval)}$}
 	\end{itemize}
 \end{definition} 
 
@@ -140,9 +141,9 @@ Intuitively, a "gang" corresponds to the set of agents with a given "register va
 We now define an abstract semantics based on gangs: intuitively, an abstract configuration is composed of a gang along with a set of states which are known to be coverable.
 
 \begin{definition}
-An ""abstract configuration"" over $\agents$ is a tuple of $2^Q \times \gang$ where $\gang$ is a "gang". We write $\aconfigs{\agents}$ the set of "abstract configurations" over $\agents$ and $\allaconfigs := \cup_{\agents \subseteq \nats \text{ finite }\aconfigs{\agents}}$ the set of all abstract configurations. 
+An ""abstract configuration"" over $\agents$ is a tuple of $2^Q \times \gangset$ where $\gangset$ designates the set of all "gangs". We write $\aconfigs{\agents}$ the set of "abstract configurations" over $\agents$ and $\allaconfigs := \bigcup_{\agents \subseteq \nats \text{ finite }}\aconfigs{\agents}$ the set of all abstract configurations. 
 
-Given two abstract configurations $\aconfig = (\covset, \boss, \clique), \aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denotes $\aconfig \step{} \aconfig'$, when one of the following cases is satisfied.
+Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denotes $\aconfig \step{} \aconfig'$, when one of the following cases is satisfied.
 \begin{enumerate}
 	\item[Broadcast from "boss":] $\boss, \boss' \ne \noboss$. There exists $\amessage \in \messages$ such that $(\boss, \br{m}, \boss') \in \transitions$. 
 
@@ -181,9 +182,26 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique), \aconfi
 		\item $\boss' = \noboss$ and there exists $(\boss, \rec{\amessage}{\enregact}, \boss') \in \transitions$.
 	\end{itemize}
 
-	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q$ s.t. $(q, \rec{\amessage}{\dummyact}, q') \in \transitions$.
+	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q \in \clique$ s.t. $(q, \rec{\amessage}{\dummyact}, q') \in \transitions$.
 	
 	 $(\covset \cup \set{q'_{\brsymb}}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{q'_{\brsymb}})$, there exists $q \in \covset$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\dummyact}$ or $\anact = \quotemarks{\dummyact}$.
-	\item[Gang reset] $S' = S$, $\clique' = \emptyset$, $\boss' \in S' \cup \set{\noboss}$
+	\item[Gang reset:] $S' = S$, $\clique' = \emptyset$, $\boss' \in S' \cup \set{\noboss}$
 \end{enumerate}
+
+
+Given a concrete run $\run: \config_0 \step{*} \config_k$, we write $\absproj{\run}{\aval}$ the "abstract configuration" $(\covset, \gangof{\run}{\aval})$ where $\covset$ is the set of all states appearing in $\run$. 
+
+The set of "initial abstract configurations" is $\aconfiginitset := \set{(\set{q_0}, \boss, \clique)  \mid \boss \in \set{q_0, \noboss}, \clique \subseteq \set{q_0}}$.  
+As in the concrete case, an "abstract run" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 \in \aconfiginitset$ and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. 
 \end{definition}
+
+
+\begin{proposition}
+For every $\aconfig_0 \in \aconfiginitset$, $\aconfig' \in \allaconfigs$ such that $\aconfig \step{*} \aconfig'$, there exists an abstract run $\arun: \aconfig \step{} \aconfig'$ of less that $XX$ steps.
+% note: this bound is not optimal and is chosen to keep the proof simple
+\end{proposition}
+\begin{proof}
+Note that $\covset$ may never decrease along an abstract execution and that $\clique$ may only decrease at "gang resets".
+
+We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the boss may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the execution with no "reset" has at most $(|Q|+2) |Q| $
+\end{proof}
