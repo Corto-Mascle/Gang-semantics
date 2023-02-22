@@ -145,47 +145,57 @@ An ""abstract configuration"" over $\agents$ is a tuple of $2^Q \times \gangset$
 
 Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denotes $\aconfig \step{} \aconfig'$, when one of the following cases is satisfied.
 \begin{enumerate}
-	\item[Broadcast from "boss":] $\boss, \boss' \ne \noboss$. There exists $\amessage \in \messages$ such that $(\boss, \br{m}, \boss') \in \transitions$. 
+\item[Broadcast from "clique":] 
+	\begin{enumerate}[label=(\roman*)]
+		\item\label{item:broadcast_from_clique_broadcast} There exists $\amessage \in \messages$ and $\statebr \in \clique, \statebr' \in \clique'$ s.t. $(\statebr, \br{m}, \statebr') \in \transitions$. 
+		
+		\item\label{item:broadcast_from_clique_boss} Either $\boss = \boss'$ or there exists $(\boss, \rec{\amessage}{\anact}, \boss') \in \transitions$ for some action $\anact$.
 
-	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
-	\begin{itemize}
-		\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
-		\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
-	\end{itemize}
-	
-	$\covset \subseteq \covset'$ and, for all $q' \in \covset' \setminus \covset$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
-	\begin{itemize}
-		\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
-		\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
-	\end{itemize}
+		\item\label{item:broadcast_from_clique_clique}$(\clique \cup \set{\statebr'}) \subseteq \clique'$ and, for all $q' \in \clique' \setminus (\clique \cup \set{\statebr'})$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+		\begin{itemize}
+			\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
+			\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
+		\end{itemize}
+		
+		\item\label{item:broadcast_from_clique_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+		\begin{itemize}
+			\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
+			\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
+		\end{itemize}
+	\end{enumerate}
+	\item[Broadcast from "boss":] 
+	\begin{enumerate}[label=(\roman*)]
+		\item \label{item:broadcast_from_boss_broadcast} there exists $\amessage \in \messages$ such that $(\boss, \br{m}, \boss') \in \transitions$
+		
+		\item\label{item:broadcast_from_boss_boss} $\boss, \boss' \ne \noboss$ (technically implies by \ref{item:broadcast_from_boss_broadcast} but written here to match other cases)
 
-	\item[Broadcast from "clique":] There exists $\amessage \in \messages$ and $q_{\brsymb} \in \clique, q'_{\brsymb} \in \clique'$ s.t. $(q_{\brsymb}, \br{m}, q'_{\brsymb}) \in \transitions$. 
+		\item\label{item:broadcast_from_boss_clique} 	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+		\begin{itemize}
+			\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
+			\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
+		\end{itemize}
+				
+		\item\label{item:broadcast_from_boss_covset} $\covset \subseteq \covset'$ and, for all $q' \in \covset' \setminus \covset$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+		\begin{itemize}
+			\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
+			\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
+		\end{itemize}
+	\end{enumerate}
+	\item[External broadcast:] 
+	\begin{enumerate}[label=(\roman*)]
+		\item\label{item:external_broadcast_broadcast} There exists $\amessage \in \messages$ and $\statebr \in \covset, \statebr' \in \covset'$ s.t. $(\statebr, \br{m}, \statebr') \in \transitions$. 
 	
-	Either $\boss = \boss'$ or there exists $(\boss, \rec{\amessage}{\anact}, \boss') \in \transitions$ for some action $\anact$.
+		\item\label{item:external_broadcast_boss}Either $\boss = \boss'$ or:
+		\begin{itemize} 
+			\item $\boss' \ne \noboss$ and there exists $(\boss, \rec{\amessage}{\dummyact}, \boss') \in \transitions$, or
+			\item $\boss' = \noboss$ and there exists $(\boss, \rec{\amessage}{\enregact}, \boss') \in \transitions$.
+		\end{itemize}
 
-	$(\clique \cup \set{q'_{\brsymb}}) \subseteq \clique'$ and, for all $q' \in \clique' \setminus (\clique \cup \set{q'_{\brsymb}})$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
-	\begin{itemize}
-		\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
-		\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
-	\end{itemize}
-	
-	 $(\covset \cup \set{q'_{\brsymb}}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{q'_{\brsymb}})$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
-	\begin{itemize}
-		\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
-		\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
-	\end{itemize}
-	\item[External broadcast:] There exists $\amessage \in \messages$ and $q_{\brsymb} \in \covset, q'_{\brsymb} \in \covset'$ s.t. $(q_{\brsymb}, \br{m}, q'_{\brsymb}) \in \transitions$. 
-	
-	Either $\boss = \boss'$ or:
-	\begin{itemize} 
-		\item $\boss' \ne \noboss$ and there exists $(\boss, \rec{\amessage}{\dummyact}, \boss') \in \transitions$, 
-		\item $\boss' = \noboss$ and there exists $(\boss, \rec{\amessage}{\enregact}, \boss') \in \transitions$.
-	\end{itemize}
-
-	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q \in \clique$ s.t. $(q, \rec{\amessage}{\dummyact}, q') \in \transitions$.
-	
-	 $(\covset \cup \set{q'_{\brsymb}}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{q'_{\brsymb}})$, there exists $q \in \covset$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\dummyact}$ or $\anact = \quotemarks{\dummyact}$.
-	\item[Gang reset:] $S' = S$, $\clique' = \emptyset$, $\boss' \in S' \cup \set{\noboss}$
+		\item\label{item:external_broadcast_clique}$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q \in \clique$ s.t. $(q, \rec{\amessage}{\dummyact}, q') \in \transitions$.
+		
+		\item\label{item:external_broadcast_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q \in \covset$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\dummyact}$ or $\anact = \quotemarks{\dummyact}$.
+	\end{enumerate}
+	\item[Gang reset:] $S' = S$, $\clique' = \emptyset$ and $\boss' \in S' \cup \set{\noboss}$.
 \end{enumerate}
 
 
@@ -212,7 +222,7 @@ We now prove that our abstraction is sound and complete for our problem of inter
 
 \begin{lemma}
 \label{lem:abstraction_complete}
-Let $\run: \config_0 \step{} \config_1 \step{} \dots \step{} \config_k$ and $\aval \in \nats$. There exists $\aconfig_0 \in \aconfiginitset$ such that $\aconfig_0 \step{*} \absproj{\aval}{\run}$. 
+Let $\run$ a run and $\aval \in \nats$. There exists $\aconfig_0 \in \aconfiginitset$ such that $\aconfig_0 \step{*} \absproj{\aval}{\run}$. 
 \end{lemma}
 The rest of this subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
 
@@ -227,31 +237,53 @@ To prove the second statement, it suffices to notice in the abstract semantics t
 \end{proof}
 
 \begin{lemma}
-For all $\run: \aconfig_0 \step{*} \aconfig$ and $\aval \in \nats$, one has $(\statesin{\run}, \emptyset, \noboss) \step{*} \absproj{\aval}{\run}$. 
+\label{lem:proof_completeness_covset_constant}
+For all $\run: \config_0 \step{*} \config$ and $\aval \in \nats$, one has $(\statesin{\run}, \emptyset, \noboss) \step{*} \absproj{\aval}{\run}$. 
 \end{lemma}
 \begin{proof}
 Let $\covset := \statesin{\run}$ and $\agents = \agentsof{\run}$.
 First, if $\aval$ does not appear in $\aconfig_0$ then $\absproj{\aval}{\run} = (\covset, \emptyset, \noboss)$ and the statement is true.
 
-Suppose now that $\aval$ does appear in $\aconfig_0$; let $a_0$ the (unique) agent such that $\data{\aconfig_0}{a_0} = \aval$. We write $\run : \aconfig_0 \step{} \aconfig_1 \step{} \dots \step{} \aconfig_k = \aconfig$. For every $i \leq k$, let $\run_i : \config_0 \step{*} \config_i$ the prefix of $\run$ of length $i$, and write $\aconfig_i := (\covset, \gangof{\aval}{\run_i})$. 
+Suppose now that $\aval$ does appear in $\aconfig_0$; let $a_0$ the (unique) agent such that $\data{\aconfig_0}(a_0) = \aval$. We write $\run : \aconfig_0 \step{} \aconfig_1 \step{} \dots \step{} \aconfig_k = \aconfig$. For every $i \leq k$, let $\run_i : \config_0 \step{*} \config_i$ the prefix of $\run$ of length $i$, and write $\aconfig_i := (\covset, \gangof{\aval}{\run_i})$. 
 
 We prove by induction on $i$ that $(\covset, \emptyset, \noboss) \step{*} \aconfig_i$.
 
 First, $\gangof{\aval}{\run_0} = (\st{\config_0}(a_0), \emptyset)$ and $\st{\config_0}(a_0) \in \covset$ by definition of $\covset$ therefore $\aconfig_i$ may be reached from $(\covset, \emptyset, \noboss)$ by a simple "gang reset".
 
 Suppose now that $(\covset, \emptyset, \noboss) \step{*} \aconfig_i$. 
-If suffices to prove that $\aconfig_i \step{} \aconfig_{i+1}$. Consider the last step of $\run_{i+1}$, which is referred to under the name $s_{i+1}$ in the following. Also, we write $(\covset, \boss_i, \clique_i) := \aconfig_i$. Let $a_{\brsymb}$ the agent making the broadcast transition in $s_{i+1}$ and $A_{\recsymb}$ the set of agents receiving this broadcast in $s_{i+1}$. 
+If suffices to prove that $\aconfig_i \step{} \aconfig_{i+1}$. Consider the last step of $\run_{i+1}$, which is referred to under the name $s_{i+1}$ in the following. Also, we write $(\covset, \boss_i, \clique_i) := \aconfig_i$. Let $\agentbr$ the agent making the broadcast transition in $s_{i+1}$ and $A_{\recsymb}$ the set of agents receiving this broadcast in $s_{i+1}$. Write $(\statebr, \br{\amessage}, \statebr') \in \transitions$ the transition taken by $\agentbr$ in $s_{i+1}$.
 
 We now make the following case distinction to decide of the type of the abstract step $\aconfig_i \step{} \aconfig_{i+1}$:
 \begin{enumerate}
-\item\label{proof_soundess:case_broadcast_boss} if $\data{\aconfig_0}(a_{\brsymb}) = \data{\aconfig_{i}}(a_{\brsymb}) = \aval$ then it is a ``broadcast from boss'',
-\item\label{proof_soundess:case_broadcast_clique} if $\data{\aconfig_{i}}(a_{\brsymb}) = \aval$ but $\data{\aconfig_{i}}(a_{\brsymb}) \ne \aval$ then it is a ``broadcast from clique'',
-\item\label{proof_soundess:case_external_broadcast} otherwise it is an ``external broadcast''. 
+\item\label{proof_completeness:case_broadcast_clique} if $\data{\aconfig_{i}}(\agentbr) = \aval$ but $\data{\aconfig_{0}}(\agentbr) \ne \aval$ then it is a ``broadcast from clique'',
+\item\label{proof_completeness:case_broadcast_boss} if $\data{\aconfig_0}(\agentbr) = \data{\aconfig_{i}}(\agentbr) = \aval$ then it is a ``broadcast from boss'',
+\item\label{proof_completeness:case_external_broadcast} otherwise it is an ``external broadcast''. 
+\end{enumerate}
+Note that $\agentbr$ may not change its register value in $s_{i+1}$ hence $\data{\config_i}(\agentbr) = \data{\config_{i+1}}(\agentbr)$. 
+
+Let $\agentboss$ the agent such that $\data{\config_0}{\agentboss} = \aval$. In case~\ref{proof_completeness:case_broadcast_boss}, $\agentboss = \agentbr$; in the other two cases, $\agentboss \ne \agentbr$. 
+
+We now prove the three other conditions:
+\begin{enumerate}[label = (\roman*)]
+\item In case~\ref{proof_completeness:case_broadcast_clique}, since $\agentbr$ has value $\aval$ in $\config_i$ and $\config_{i+1}$ but not in $\config_0$, we directly have $\statebr \in \clique_i$ and $\statebr' \in \clique_{i+1}$. In case~\ref{proof_completeness:case_broadcast_boss}, it suffices to note that $\boss_i = \st{\config}{\agentbr}$ and $\boss_i{i+1} = \st{\config_{i+1}}{\agentbr}$. In case~\ref{proof_completeness:case_external_broadcast}, it suffices to note that $\statebr, \statebr' \in \covset$ as both states appear in $\run$.
+\item In case~\ref{proof_completeness:case_broadcast_boss}, this condition is automatically satisfied. In the other two cases, we look at what $\agentboss$ does in $s_{i+1}$. If it remains idle then we have $\boss_i = \boss_{i+1}$. Otherwise it takes a reception transition as $\agentbr \ne \agentboss$. 
+In case~\ref{proof_completeness:case_external_broadcast}, this reception may not have action $\quotemarks{\eqtestact}$ as the broadcast has a value $\ne \aval$. If this reception has action $\quotemarks{\enregact}$ then $\boss_{i+1}= \noboss$ as the broadcast is from an agent with register value $\ne \aval$. If this reception has action $\quotemarks{\dummyact}$ and $\boss_i \ne \noboss$ then $\boss_{i+1} \ne \noboss$ as $\agentboss$ keeps value $\aval$.
+\item We have $\clique_i \subseteq \clique_{i+1}$ because $\run_{i}$ is a prefix of $\run_{i+1}$; also, in case~\ref{proof_completeness:case_broadcast_clique}, $\statebr' \in \clique_{i+1}$. Let $q' \in \clique_{i+1} \setminus \clique_i$ with, in case~\ref{proof_completeness:case_broadcast_clique}, $q' \ne \statebr'$. There exist $q\in \covset$ and an agent $a$ that takes a reception transition $(q, \rec{\amessage}{\anact}, q')$ in $s_{i+1}$ and has value $\aval$ in $\config_{i+1}$. In cases~\ref{proof_completeness:case_broadcast_clique} and \ref{proof_completeness:case_broadcast_boss}, the broadcast has value $\aval$ hence if $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ then $a$ has value $\aval$ in $\config_i$ and $q \in \clique_i$. In case~\ref{proof_completeness:case_external_broadcast}, the broadcast has value $\ne \aval$ hence $a$ may have value $\aval$ in $\config_{i+1}$ only when $\anact = \quotemarks{\dummyact}$ and $a$ had value $\aval$ in $\config_i$, which implies $q \in \clique_i$. 
+\item It suffices to note that the first components of $\aconfig_i$ and $\aconfig_{i+1}$ are equal to $\covset$ and $\statebr' \in \covset$. 
 \end{enumerate}
 
-Case~\ref{proof_soundess:case_broadcast_boss}:  We claim that $\aconfig_i \step{} \aconfig_{i+1}$ is a valid ``broadcast from boss'' step in the abstract semantics.
-$a_{\brsymb}$ may not change its register value in $s_{i+1}$ as it is broadcasting. Since $\data{\aconfig_0}(a_{\brsymb}) = \data{\aconfig_{i}}(a_{\brsymb}) = \data{\aconfig_{i+1}}(a_{\brsymb}) = \aval$, 
-one has $\boss_i = \st{\config_i}(a_{\brsymb})$ and $\boss_{i+1} =  \st{\config_{i+1}}(a_{\brsymb})$. Write $(\boss_i, \br{\amessage}, \boss_{i+1})$ the transition taken by $a_{\brsymb}$ in $s_{i+1}$. 
-One has $\clique_i \subseteq \clique_{i+1}$ as $\run_{i+1}$ is a prefix of $\run_i$. Moreover, let $q \in \clique_{i+1} \setminus \clique_i$. 
-There exists $a \in \agents \setminus a_{\brsymb}$ such that $\st{\config_{i+1}}(a) = q$, $\st{\config_{i}}(a) \ne q$ and $\data_{\config_{i+1}}(a) = \aval$. \nico{to be continued}
+Overall, we have proven that $\aconfig_i \step{} \aconfig_{i+1}$, which concludes the induction step. Appyling the result with $i = k$ proves Lemma~\ref{lem:proof_completeness_covset_constant}. 
+
+\end{proof}
+
+We may now prove Lemma~\ref{lem:abstraction_complete}. 
+
+\begin{proof}[Proof of Lemma~\ref{lem:abstraction_complete}]
+Let $\run$ a run and $\aval \in \nats$.
+We proceed by induction on the size of the set $\statesin{\run}$. 
+
+First, if $\statesin{\run}$ is of size $1$ then the only state in $\run$ is $q_0$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} directly gives $(\set{q_0}, \emptyset, \noboss) \step{*} \absproj{\aval}{\run}$, and it suffices to note that $(\set{q_0}, \emptyset, \noboss) \in \aconfiginitset$. 
+
+Suppose now that the statement is true when $\statesin{\run}$ is of size $k$, and suppose that $\statesin{\run}$ is of size $k+1$. Decompose $\run$ into $\run_k: \config_0 \step{*} \config_k$ and $\config_k \step{*} \config_{k+1}$ where $\config_k \step{*} \config_{k+1}$ starts with a step $s_{k+1}$ that covers the $k+1$-th state of $\statesin{\run}$. 
+\nicoin{apply the induction on $\run_k$, then mimick step $s_k$ in the abstract semantics, and finish the abstract run using Lemma~\ref{lem:proof_completeness_covset_constant}}
 \end{proof}

@@ -12,9 +12,11 @@
 \usepackage{tikz}
 %\usepackage{array}
 %\usepackage{changepage}
-%\usepackage{enumitem}
+\usepackage{enumitem}
 \usepackage[capitalise]{cleveref}
 \usepackage{cite}
+
+
 
 \usetikzlibrary{arrows,calc,automata,shapes,positioning}
 \tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append,every state/.style={minimum size=20,inner sep=2}}}
@@ -62,7 +64,7 @@
 
 %%% BNRA syntax
 
-\newcommand{\br}[1]{\textbf{b}(#1)}
+\newcommand{\br}[1]{\textbf{br}(#1)}
 % for reception, first argument is message type and second is operation made with the register
 \newcommand{\rec}[2]{\textbf{r}(#1, #2)}
 \newcommand{\brsymb}{\textbf{br}}
@@ -102,6 +104,7 @@
 \newcommand{\agents}{\mathcal{A}}
 \newcommand{\agentsof}[1]{\mathsf{ag}(#1)}
 
+
 \newcommand{\configs}[1]{\Gamma(#1)}
 \newcommand{\allconfigs}{\Gamma}
 
@@ -125,3 +128,8 @@
 \newcommand{\arun}{\nu}
 
 \newcommand{\absproj}[2]{\mathsf{abs}_{#1}(#2)}
+
+% some standard names useful in rpoofs
+\newcommand{\agentbr}{a_{\brsymb}} %agent broadcasting
+\newcommand{\agentboss}{a_{\mathsf{boss}}}
+\newcommand{\statebr}{q_{\brsymb}}
