@@ -13,7 +13,7 @@ A "run" $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when t
 
 
 \begin{lemma}[Copycat]\label{lem:copycat}
-Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ an "initial" "run"  that covers $q$. Write $\agents := \agentsof{\run}$. There exists $\agents' \subseteq \nats$ finite, a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ and $a' \in \agents'$ such that:
+Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ an "initial run"  that covers $q$. Write $\agents := \agentsof{\run}$. There exists $\agents' \subseteq \nats$ finite, a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ and $a' \in \agents'$ such that:
 \begin{itemize}
 \item for all $a \in \agents$, $\config_f'(a) = \config_f(a)$ (agents of $\agents$ behave the same in $\run$ and $\run'$),
 \item $\st{\config_f'}(a') = q$,
@@ -47,12 +47,12 @@ because $\psi(a_q)$ mimicks the behavior of $a_q$, $\st{\config_f'}(\psi(a_q)) =
 
 \begin{corollary}
 \label{cor:removing_diseq_tests}
-Let $(\prot, \query)$ an instance of the "query reachability problem". This instance is positive if and only if $(\tilde{\prot}, \query)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
+Let $(\prot, \query)$ an instance of the "query coverability problem". This instance is positive if and only if $(\tilde{\prot}, \query)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
 \end{corollary}
 \begin{proof}
 First, if $(\prot, \query)$ is positive then so is $(\tilde{\prot}, \query)$, as one can easily lift any "run" in $\prot$ to an equivalent "run" in $\tilde{\prot}$ (transitions are less guarded  in $\tilde{\prot}$ that in $\prot$). 
 
-Suppose now that $(\tilde{\prot}, \query)$ is a positive instance of the "query reachability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that satisfies $\query$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (Remark~\ref{rem:bigger_config_query} then allows us to conclude). 
+Suppose now that $(\tilde{\prot}, \query)$ is a positive instance of the "query coverability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that satisfies $\query$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (Remark~\ref{rem:bigger_config_query} then allows us to conclude). 
 
 If $\config = \config_0$ then $\run = \tilde{\run}$ suffices. Suppose that $\tilde{\run}$ has length $k \geq 1$, and that the result if true for "runs" of length $k-1$. Decompose $\tilde{\run}$ into $\tilde{\run_{k-1}}: \tilde{\config_0} \step{*} \tilde{\config_{k-1}}$ of length $k-1$ and a final step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. 
 By induction hypothesis, there exists $\run_{k-1}: \config_0 \step{*} \config_{k-1}$ such that $\tilde{\config_{k-1}} \lessthan \config_{k-1}$: there exists an injective function $\pi : \tilde{\agents} \rightarrow \agents$
@@ -66,7 +66,7 @@ Thanks to Corollary~\ref{cor:removing_diseq_tests}, we shall from now on suppose
 	Given a set of states $K \subseteq Q$, we say that a "configuration" $\config$ over a set of agents $\agents$ satisfies $K$ if there exists $n \in \nats$ such that for all $q \in K$, there exists $a \in \agents$ such that $\config(a) = (q,n)$.
 	A "run" satisfies $K$ if its final configuration does.
 \end{definition}
-Note that a "run" satisfies $K$, then it covers every state in $K$. The converse is not true as, in order to satisfy $K$, one needs to have agents of every state of $K$ that all share the same register value. 
+Note that if a "run" satisfies $K$, then it covers every state in $K$. The converse is not true as, in order to satisfy $K$, one needs to have agents of every state of $K$ that all share the same register value. 
 \nicoin{interesting example}
 
 \begin{definition}
@@ -96,7 +96,7 @@ The built configuration satisfies $\query$, which concludes the proof.
 \end{proof}
 
 \begin{lemma}
-Let $\query$ a  non-"contradictory" "query". There exist $K_1, \ldots, K_p \subseteq Q$ with $p \leq \size{\query}$ with the following property: there exists a "run" satisfying $\query$ if and only if for all $i \in \set{1,\ldots, p}$, there is a run satisfying $K_i$. Moreover,such sets $K_1, \dots, K_p$ may be computed in time polynomial in $\size{\prot}$. 
+Let $\query$ a  "non-contradictory" "query". There exist $K_1, \ldots, K_p \subseteq Q$ with $p \leq \size{\query}$ with the following property: there exists a "run" satisfying $\query$ if and only if for all $i \in \set{1,\ldots, p}$, there is a run satisfying $K_i$. Moreover,such sets $K_1, \dots, K_p$ may be computed in time polynomial in $\size{\prot}$. 
 \end{lemma}
 
 \begin{proof}
@@ -189,10 +189,10 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 \end{enumerate}
 
 
-Given a concrete run $\run: \config_0 \step{*} \config_k$, we write \AP  $\intro*\absproj{\aval}{\run}$ the "abstract configuration" $(\covset, \gangof{\aval}{\run})$ where $\covset$ is the set of all states appearing in $\run$. 
+Given a concrete run $\run: \config_0 \step{*} \config_k$, we write \AP  $\intro*\absproj{\aval}{\run}$ for the "abstract configuration" $(\covset, \gangof{\aval}{\run})$ where $\covset$ is the set of all states appearing in $\run$. 
 
-The set of "initial abstract configurations" is $\aconfiginitset := \set{(\set{q_0}, \boss, \clique)  \mid \boss \in \set{q_0, \noboss}, \clique \subseteq \set{q_0}}$.  
-As in the concrete case, an "abstract run" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 \in \aconfiginitset$ and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Simiarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
+The set of \emph{initial abstract configurations} is $\aconfiginitset := \set{(\set{q_0}, \boss, \clique)  \mid \boss \in \set{q_0, \noboss}, \clique \subseteq \set{q_0}}$.  
+As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 \in \aconfiginitset$ and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Simiarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
 \end{definition}
 
 

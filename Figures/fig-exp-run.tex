@@ -30,20 +30,20 @@
 	\path[->, bend right=20] 
 	;
 	\path[->]
-	(0a) edge node[right] {$\rec(m_0, \enregact)$} (0b)
-	(0b) edge node[right] {$\br(m'_0)$} (0c)
+	(0a) edge node[right] {$\rec{m_0}{\enregact}$} (0b)
+	(0b) edge node[right] {$\br{m'_0}$} (0c)
 	
-	(1a) edge node[right] {$\rec(m_1, \enregact)$} (1b)
-	(1b) edge node[right] {$\br(m'_1)$} (1c)
+	(1a) edge node[right] {$\rec{m_1}{\enregact}$} (1b)
+	(1b) edge node[right] {$\br{m'_1}$} (1c)
 	
-	(Na) edge node[right] {$\rec(m_N, \enregact)$} (Nb)
-	(Nb) edge node[right] {$\br(m'_N)$} (Nc)
+	(Na) edge node[right] {$\rec{m_N}{\enregact}$} (Nb)
+	(Nb) edge node[right] {$\br{m'_N}$} (Nc)
 	
-	(0a) edge node {$\br(m_0)$} (0')
-	(0') edge node {$\rec(m'_0, \eqtestact)$} (1a)
+	(0a) edge node {$\br{m_0}$} (0')
+	(0') edge node {$\rec{m'_0}{\eqtestact}$} (1a)
 	
-	(Na) edge node {$\br(m_N)$} (N')
-	(N') edge node {$\rec(m'_N, \eqtestact)$} (end)
+	(Na) edge node {$\br{m_N}$} (N')
+	(N') edge node {$\rec{m'_N}{\eqtestact}$} (end)
 	
 	(1a) edge node {} (token1)
 	(token2) edge node {} (Na)
