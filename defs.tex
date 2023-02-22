@@ -1,13 +1,15 @@
 \section{Definitions}
 
 \begin{definition}
-	A ""protocol"" is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times \set{\br{\amessage}, \rec{\amessage}{\dummyact}, \rec{\amessage}{\enregact}, \rec{\amessage}{\eqtestact}, \rec{\amessage}{\diseqtestact} \mid \amessage \in \messages} \times Q$. Transitions labelled with $\brsymb$ are ""broadcasts"" and transitions labelled with $\recsymb$ are ""receptions"".
-Given a "reception" $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$ is the ""action"" of the reception.
+	A ""protocol"" is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times \set{\br{\amessage}, \rec{\amessage}{\dummyact}, \rec{\amessage}{\enregact}, \rec{\amessage}{\eqtestact}, \rec{\amessage}{\diseqtestact} \mid \amessage \in \messages} \times Q$.
+	
+	Transitions labelled with $\brsymb$ are ""broadcasts"" and transitions labelled with $\recsymb$ are ""receptions"".
+Given a reception $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$ is the ""action"" of the reception.
 \end{definition}
 
 \begin{definition}
-	Let $(Q,\transitions, q_0)$ be a protocol, and $\agents \subseteq \nats$ a finite set of \emph{agents}.
-	A ""configuration"" over set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats$, associating a state and a register value to each agent. We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component. 
+	Let $(Q,\messages, \transitions, q_0)$ be a protocol, and $\agents \subseteq \nats$ a finite set of \emph{agents}.
+	A ""configuration"" over a set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats$, associating a state and a ""register value"" to each agent. We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component. 
 	An \emph{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and for all $a, a' \in \agents$, if $\data{\config}(a) = \data{\config}(a')$ then $a=a'$.
 	
 	\AP We denote by $\configs{\agents}$ the set of configurations over $\agents$, and by $\allconfigs := \cup_{\agents \subseteq \nats \text{ finite }} \configs{\agents}$ the set of all configurations. Given a configuration $\config$, we denote by $\agentsof{\config}$ the set of agents of $\config$.
@@ -26,14 +28,14 @@ Given a "reception" $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$
 		\end{itemize}
 	\end{itemize}
 
-	\AP A ""run"" is a sequence of steps $\run : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ such that $\config_0$ is an ""initial configuration"". We write $\config_0 \step{*} \config_k$ the existence of such a "run". Given a "run" $\run$, we write $\agentsof{\run}$ its set of agents and $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}{a} = q}$ the set of states appearing in $\run$.  
+	\AP A ""run"" is a sequence of steps $\run : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ such that $\config_0$ is an "initial configuration". We write $\config_0 \step{*} \config_k$ the existence of such a "run". Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents and $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$.  
 % with current definition, every run is initial
 
 %We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
 
 \begin{definition}
-We define an order over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if the exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
+We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
 \end{definition}
 
 \begin{definition}

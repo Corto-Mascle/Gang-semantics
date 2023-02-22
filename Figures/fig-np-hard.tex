@@ -29,14 +29,14 @@
 	
 	\coordinate[below of=1] (stop);
 	\node[state] [below right of=stop] (r1) {$x_1$};
-	\node [above left of=r1, yshift=-20pt, xshift=10pt] (r1') {$\rec(x_1, \enregact)$};
+	\node [above left of=r1, yshift=-20pt, xshift=10pt] (r1') {$\rec{x_1}{\enregact}$};
 	\node[state] [right of=r1] (r1b) {$\neg x_1$};
-	\node [above left of=r1b, yshift=-20pt, xshift=10pt] (r1b') {$\rec(\neg x_1, \enregact)$};
+	\node [above left of=r1b, yshift=-20pt, xshift=10pt] (r1b') {$\rec{\neg x_1}{\enregact}$};
 	\node [right of= r1b] (dots3) {\huge $\cdots$};
 	\node[state] [right of=dots3] (rn) {$x_n$};
-	\node [above left of=rn, yshift=-20pt, xshift=10pt] (rn') {$\rec(\neg x_n, \enregact)$};
+	\node [above left of=rn, yshift=-20pt, xshift=10pt] (rn') {$\rec{x_n}{\enregact}$};
 	\node[state] [right of=rn] (rnb) {$\neg x_n$};
-	\node [above left of=rnb, yshift=-20pt, xshift=10pt] (rnb') {$\rec(\neg x_n, \enregact)$};
+	\node [above left of=rnb, yshift=-20pt, xshift=10pt] (rnb') {$\rec{\neg x_n}{\enregact}$};
 	
 	\draw (0) .. controls +(0,-2) and +(-1,0) .. (stop);
 	\draw[->] (stop) .. controls +(2,0) and +(0,1) .. (r1);
@@ -44,29 +44,29 @@
 	\draw[->] (stop) .. controls +(14,0) and +(0,1) .. (rn);
 	\draw[->] (stop) .. controls +(18,0) and +(0,1) .. (rnb);
 	\path[->, bend left=20]
-	(0) edge node[above] {$\br(x_1)$} (1)
-	(N-1) edge node[above] {$\br(x_N)$} (N) 	
+	(0) edge node[above] {$\br{x_1}$} (1)
+	(N-1) edge node[above] {$\br{x_N}$} (N) 	
 	;
 	\path[->, bend left=40]
-	(N) edge node[above] {$\rec(\ell_1^1, \eqtestact)$} (1')
-	(m-1) edge node[above] {$\rec(\ell_m^1, \eqtestact)$} (m) 	
+	(N) edge node[above] {$\rec{\ell_1^1}{\eqtestact}$} (1')
+	(m-1) edge node[above] {$\rec{\ell_m^1}{\eqtestact}$} (m) 	
 	;
 	\path[->, bend right=20] 
-	(0) edge node[below] {$\br(\neg x_1)$} (1)
-	(N-1) edge node[below] {$\br(\neg x_N)$} (N) 
+	(0) edge node[below] {$\br{\neg x_1}$} (1)
+	(N-1) edge node[below] {$\br{\neg x_N}$} (N) 
 	;
 	\path[->, bend right=30] 
-	(N) edge node[below] {$\rec(\ell_1^3, \eqtestact)$} (1')
-	(m-1) edge node[below] {$\rec(\ell_m^3, \eqtestact)$} (m)	
+	(N) edge node[below] {$\rec{\ell_1^3}{\eqtestact}$} (1')
+	(m-1) edge node[below] {$\rec{\ell_m^3}{\eqtestact}$} (m)	
 	;
 	\path[->]
-	(N) edge node[above] {$\rec(\ell_1^2, \eqtestact)$} (1')
-	(m-1) edge node[above] {$\rec(\ell_m^2, \eqtestact)$} (m) 	
+	(N) edge node[above] {$\rec{\ell_1^2}{\eqtestact}$} (1')
+	(m-1) edge node[above] {$\rec{\ell_m^2}{\eqtestact}$} (m) 	
 	;
 	\path[->, loop below]
-	(r1) edge node[below] {$\br(x_1)$} (r1)
-	(r1b) edge node[below] {$\br(\neg x_1)$} (r1b) 	
-	(rn) edge node[below] {$\br(x_n)$} (rn)
-	(rnb) edge node[below] {$\br(\neg x_n)$} (rnb) 	
+	(r1) edge node[below] {$\br{x_1}$} (r1)
+	(r1b) edge node[below] {$\br{\neg x_1}$} (r1b) 	
+	(rn) edge node[below] {$\br{x_n}$} (rn)
+	(rnb) edge node[below] {$\br{\neg x_n}$} (rnb) 	
 	;
 \end{tikzpicture}
