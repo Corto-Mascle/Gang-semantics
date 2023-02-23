@@ -11,7 +11,7 @@
 	For all $n \in \set{0, \ldots, N+1}$ we call \emph{future} of $n$ the set of states accessible from state $n$ by a path in the protocol.
 	
 	There is an initial run covering $N+1$: we start with $2^{N+1}$ agents, which we pair two by two. We make each agent broadcast $m_0$ while its partner receives it, storing its register value and broadcasts $m'_0$, which the first one receives. After doing that with all pairs of agents we have $2^{N}$ agents in state $1$.
-	We repeat this process to put $2^{N+1-i}$ agents in state $n$ for each $n$, one after the other. In the end we have an agent in state $N+1$.
+	We repeat this process to put $2^{N+1-n}$ agents in state $n$ for each $n$, one after the other. In the end we have an agent in state $N+1$.
 	
 	We show by induction on $n$ that for all $k \in \nats$, any reachable configuration with at least $k$ agents in states of the future of $n$ has at least $k(2^n-1)$ agents in states $\set{q_i \mid i<n}$.
 	
@@ -37,7 +37,7 @@
 
 	Consider the "protocol" displayed in Figure~\ref{fig:np-hard}.
 	Our alphabet of messages is the set of literals $\set{x_i, \neg x_i \mid 1 \leq i \leq n}$.
-	Each agent may either receive a message, and repeat it forever or it may broadcast one of $x_i, \neg x_i$ for each $i$ with and then try to receive a message one of $\ell_j^1, \ell_j^2, \ell_j^3$ for each $j$, with its own register value.
+	Each agent may either receive a message, and repeat it forever or it may broadcast one of $x_i, \neg x_i$ for each $i$ and then try to receive a message one of $\ell_j^1, \ell_j^2, \ell_j^3$ for each $j$, with its own register value.
 	
 	Suppose $\query$ is satisfiable, let $\nu$ be a satisfying assignment, then we set $\agents = \set{a, a_1, \ldots, a_n}$ as our set of agents. First for each $i$ we make $a$ broadcast $x_i$ if $\nu(x_i)= \top$ and $\neg x_i$ otherwise, and $a_i$ only receive it (and go to the corresponding state).
 	Then for each $j$ we select some $\ell_j^p$ satisfied by $\nu$. There exists $i$ such that $a_i$ is in state $\ell_j^p$. It broadcasts $\ell_j^p$ along with the initial register value of $a$, allowing $a$ to go to the next state.
