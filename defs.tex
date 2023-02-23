@@ -28,7 +28,7 @@ Given a reception $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$ i
 		\end{itemize}
 	\end{itemize}
 
-	\AP A ""run"" is a sequence of steps $\run : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ such that $\config_0$ is an "initial configuration". We write $\config_0 \step{*} \config_k$ the existence of such a "run". Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents and $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$.  
+	\AP A ""run"" is a sequence of steps $\run : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. If additionally $\config_0$ is an "initial configuration", then $\run$ is ""initial@@run"". We write $\config_0 \step{*} \config_k$ the existence of such a "run". Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents and $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$.  
 % with current definition, every run is initial
 
 %We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
@@ -49,7 +49,7 @@ We define a preorder over the set of configurations $\allconfigs$ as follows: $\
 		\item for all $\quotemarks{R(\var{z}) \neq R(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z})) \neq \data{\config}(\nu(\var{z'}))$.
 	\end{itemize}
 
-	\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is a "run" of this protocol whose last "configuration" satisfies the query.
+	\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is an "initial run" of this protocol whose last "configuration" satisfies the query.
 \end{definition}
 
 \begin{remark}
@@ -60,3 +60,4 @@ If some "configuration" $\config$ satisfies a "query" $\query$, then every confi
 
 
 
+\nico{remettre la def de run initial ou pas initial ou une def équivalente}
