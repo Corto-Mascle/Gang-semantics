@@ -279,11 +279,15 @@ Overall, we have proven that $\aconfig_i \step{} \aconfig_{i+1}$, which conclude
 We may now prove Lemma~\ref{lem:abstraction_complete}. 
 
 \begin{proof}[Proof of Lemma~\ref{lem:abstraction_complete}]
-Let $\run$ a run and $\aval \in \nats$.
+Let $\run$ a run.
 We proceed by induction on the size of the set $\statesin{\run}$. 
 
 First, if $\statesin{\run}$ is of size $1$ then the only state in $\run$ is $q_0$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} directly gives $(\set{q_0}, \emptyset, \noboss) \step{*} \absproj{\aval}{\run}$, and it suffices to note that $(\set{q_0}, \emptyset, \noboss) \in \aconfiginitset$. 
 
-Suppose now that the statement is true when $\statesin{\run}$ is of size $k$, and suppose that $\statesin{\run}$ is of size $k+1$. Decompose $\run$ into $\run_k: \config_0 \step{*} \config_k$ and $\config_k \step{*} \config_{k+1}$ where $\config_k \step{*} \config_{k+1}$ starts with a step $s_{k+1}$ that covers the $k+1$-th state of $\statesin{\run}$. 
-\nicoin{apply the induction on $\run_k$, then mimick step $s_k$ in the abstract semantics, and finish the abstract run using Lemma~\ref{lem:proof_completeness_covset_constant}}
+Suppose now that the statement is true when $\statesin{\run}$ is of size $k$, and suppose that $\statesin{\run}$ is of size $k+1$. Let $\aval \in \nats$. Let $\run_p: \config_0 \step{*}\config_p$ the longest suffix of $\run$ such that $\statesin{\run} \not \subset \statesin{\run_p}$. By induction hypothesis, we know that for all $\aval \in \nats$, there exists $\aconfig_0 \in \aconfiginitset$ such that $\aconfig_0 \step{*} \absproj{\aval}{\run_p}$.
+
+Let $\covset_f = \set{q_1,\dots, q_k}$. 
+Write $\agentbr$ the agent broadcasting in $s$ and $(\statebr, \br{\amessage}, \statebr')$ the corresponding transition. Let $\avalbr$ the broadcasted register value. By induction hypothesis applied to $\run_p$ and $\avalbr$, there exists $\aconfig_0 \in \aconfiginitset$ such that $\aconfig_0 \step{*} \absproj{\avalbr}{\run_p}$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} on $\run$ and $\aval$ gives that $(\statesin{\run}, \emptyset, \noboss) \step{*} \absproj{\aval}{\run}$. Therefore, it remains to prove that $\absproj{\aval}{\run_p} \step{*} (\statesin{\run}, \emptyset, \noboss)$.
+
+ One may do the same case disjunction as in the proof of Lemma~\ref{lem:proof_completeness_covset_constant} to prove that this broadcast may be detected in the abstraction. For every state in $\covset_f$ that is not the destination of the broadcast transition, there exists an agent $a$ that takes a reception transition in $s$. However, some of these reception may have action $\quotemarks{\eqtestact}$, which we may only detect in the abstraction if the right value $\aval$ has been picked. For this reason, we may need to add as many steps in the abstract \nico{a completer}
 \end{proof}
