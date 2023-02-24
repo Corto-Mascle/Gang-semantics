@@ -1,3 +1,6 @@
+\section{Abstraction}
+\label{sec:abstraction}
+
 The following lemma formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
 \begin{lemma}
 \label{lem:run_no_new_register_values}
@@ -176,7 +179,7 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 			\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
 		\end{itemize}
 		
-		\item\label{item:broadcast_from_clique_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+		\item\label{item:broadcast_from_clique_covset}$(\covset \cup \set{\statebr', b'}) \subseteq \covset'$ \corto{changed, needs to include new boss. Todo : check if proof of completeness is accepted.} and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
 		\begin{itemize}
 			\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
 			\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
@@ -194,7 +197,7 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 			\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
 		\end{itemize}
 				
-		\item\label{item:broadcast_from_boss_covset} $\covset \subseteq \covset'$ \corto{needs to include boss} and, for all $q' \in \covset' \setminus \covset$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+		\item\label{item:broadcast_from_boss_covset} $\covset \cup \set{b'} \subseteq \covset'$ and, for all $q' \in \covset' \setminus \covset$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
 		\begin{itemize}
 			\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
 			\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
@@ -212,7 +215,7 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 
 		\item\label{item:external_broadcast_clique}$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q \in \clique$ s.t. $(q, \rec{\amessage}{\dummyact}, q') \in \transitions$.
 		
-		\item\label{item:external_broadcast_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q \in \covset$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\dummyact}$ or $\anact = \quotemarks{\dummyact}$.
+		\item\label{item:external_broadcast_covset}$(\covset \cup \set{\statebr', b'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q \in \covset$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\dummyact}$ or $\anact = \quotemarks{\dummyact}$.
 	\end{enumerate}
 	\item[Gang reset:] $S' = S$, $\clique' = \emptyset$ and $\boss' \in S' \cup \set{\noboss}$. \corto{to be changed to $b = q_0$}
 	\item[] \nicoin{faire un unique reset vers $q_0$}
