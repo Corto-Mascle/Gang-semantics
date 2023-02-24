@@ -122,6 +122,7 @@ This concludes our induction.
 
 
 \begin{corollary}
+	\label{cor:soundness}
 	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ satisfying $K \cup \set{b}$ if $b \neq \bot$ and $K$ otherwise.
 \end{corollary}
 
@@ -129,3 +130,4 @@ This concludes our induction.
 	We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$.
 	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \bot$, then there is an agent in state $b$ with value $v_n$.  
 \end{proof}
+
