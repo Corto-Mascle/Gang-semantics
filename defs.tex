@@ -29,6 +29,7 @@ Given a reception $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$ i
 	\end{itemize}
 
 	\AP A ""run"" is a sequence of steps $\run : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. If additionally $\config_0$ is an "initial configuration", then $\run$ is ""initial@@run"". We write $\config_0 \step{*} \config_k$ the existence of such a "run". Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents and $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$.  
+\nicoin{mettre path et run}
 % with current definition, every run is initial
 
 %We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.

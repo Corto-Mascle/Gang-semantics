@@ -13,12 +13,17 @@ A "run" $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when t
 
 
 \begin{lemma}[Copycat]\label{lem:copycat}
-Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ an "initial run"  that covers $q$. Write $\agents := \agentsof{\run}$. There exists $\agents' \subseteq \nats$ finite, a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ and $a' \in \agents'$ such that:
+Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ an "initial run"  involving some agent $a$. Write $\agents := \agentsof{\run}$. There exists $\agents' \subseteq \nats$ finite, a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ and $a' \in \agents'$ such that:
 \begin{itemize}
 \item for all $a \in \agents$, $\config_f'(a) = \config_f(a)$ (agents of $\agents$ behave the same in $\run$ and $\run'$),
-\item $\st{\config_f'}(a') = q$,
-\item for all $a \in \agents$, $\data{\config_f}(a) \ne \data{\config_f'}(a')$.
+\item $\st{\config_f'}(a') = \st{\config_f'}(a)$.
+\item for all $a \in \agents \setminus a$, $\data{\config_f}(a) \ne \data{\config_f'}(a')$.
 \end{itemize}
+Additionally:
+\begin{enumerate}
+\item if $\data{\config_0}(a) \ne \data{\config_f}(a)$ then one might impose $\data{\config_f'}(a') = \data{\config_f}(a)$,
+\item one might always impose $\data{\config_f}(a) \ne \data{\config_f'}(a')$
+\end{enumerate}
 	% Let $\run$ be an initial run over a set of agents $\agents$, for all $n$ we can define an initial run $\run'$ over $\agents \times \set{1,\ldots, n}$ such that:
 	% \begin{itemize}
 	% 	\item   
@@ -210,6 +215,7 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 		\item\label{item:external_broadcast_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q \in \covset$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\dummyact}$ or $\anact = \quotemarks{\dummyact}$.
 	\end{enumerate}
 	\item[Gang reset:] $S' = S$, $\clique' = \emptyset$ and $\boss' \in S' \cup \set{\noboss}$. \corto{to be changed to $b = q_0$}
+	\item[] \nicoin{faire un unique reset vers $q_0$}
 \end{enumerate}
 
 
