@@ -150,6 +150,7 @@ Note that, if such an agent $a_0$ exists, then it is unique as $\config_0$ is in
 
 Intuitively, a "gang" corresponds to the set of agents with a given "register value". The "boss" $\boss$ represents the process that had this value at the beginning and the "clique" $\clique$ the set of states of processes who receive and stored this register value. If the original owner of this value no longer has it, then $\boss = \noboss$.
 
+
 We now define an abstract semantics based on gangs: intuitively, an abstract configuration is composed of a gang along with a set of states which are known to be coverable.
 
 \begin{definition}
@@ -180,7 +181,7 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 	\begin{enumerate}[label=(\roman*)]
 		\item \label{item:broadcast_from_boss_broadcast} there exists $\amessage \in \messages$ such that $(\boss, \br{m}, \boss') \in \transitions$
 		
-		\item\label{item:broadcast_from_boss_boss} $\boss, \boss' \ne \noboss$ (technically implies by \ref{item:broadcast_from_boss_broadcast} but written here to match other cases)
+		\item\label{item:broadcast_from_boss_boss} $\boss, \boss' \ne \noboss$ (technically implied by \ref{item:broadcast_from_boss_broadcast} but written here to match other cases)
 
 		\item\label{item:broadcast_from_boss_clique} 	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
 		\begin{itemize}
@@ -188,7 +189,7 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 			\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
 		\end{itemize}
 				
-		\item\label{item:broadcast_from_boss_covset} $\covset \subseteq \covset'$ and, for all $q' \in \covset' \setminus \covset$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
+		\item\label{item:broadcast_from_boss_covset} $\covset \subseteq \covset'$ \corto{needs to include boss} and, for all $q' \in \covset' \setminus \covset$, there exists $q$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where:
 		\begin{itemize}
 			\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
 			\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
@@ -216,7 +217,7 @@ Given a concrete run $\run: \config_0 \step{*} \config_k$, we write \AP  $\intro
 
 %The set of \emph{initial abstract configurations} is $\aconfiginitset := \set{(\set{q_0}, \boss, \clique)  \mid \boss \in \set{q_0, \noboss}, \clique \subseteq \set{q_0}}$.
 The set of \emph{initial abstract configurations} is $\aconfiginitset := \set{(\set{q_0}, q_0, \set{q_0}), (\set{q_0}, \bot, \emptyset)}$.  \corto{changed for other direction.}
-As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 \in \aconfiginitset$ and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Simiarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
+As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 \in \aconfiginitset$ and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Similarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
 \end{definition}
 
 

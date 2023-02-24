@@ -47,7 +47,7 @@
 		
 		\item for all $s \in K_i$, there are at least $M^{n-i}$ agents (different from $a_i$) in state $s$ with value $v_i$
 		
-		\item if $b \neq \bot$, then $a_i$ is in state $b_i$ with value $v_i$ and its initial value was $v_i$.
+		\item if $b \neq \bot$, then $a_i$ is in state $b_i$ with value $v_i$.
 	\end{itemize}
 \end{lemma}
 
@@ -56,20 +56,44 @@ We set $\agents = \set{1, \ldots, \size{\Delta}^n}$, and we set $\config_0(a) = 
 
 Now assume we constructed $\config_0 \step{*} \cdots \step{*} \config_{i}$ satisfying the conditions of the lemma, we construct $\config_{i+1}$ using a case distinction on the form of the transition $\sigma_i \to \sigma_{i+1}$.
 For each $s \in S\setminus K$ we define $\agents_s$ as the set of agents in state $s$ in $\config_{i}$. We have $\size{\agents_s} \geq M^{n-i}$ thus we can extract $\size{\Delta}+1$ disjoint sets of agents $(\agents_s^d)_{d \in \Delta\cup\set{\epsilon}}$ from it.
-Similarly, for each $s \in K$ we define $\agents_s$ as the set of agents in state $s$ \textbf{with value $v_i$} in $\config_{i}$. We have $\size{\agents_s} \geq \size{\Delta}^{n-i}$ thus we can extract $\size{\Delta}+1$ disjoint sets of agents $(\agents_s^d)_{d \in \Delta\cup\set{\epsilon}}$ from it.
+Similarly, for each $s \in K$ we define $\agents_s$ as the set of agents in state $s$ \textbf{with value $\mathbf{v_i}$} in $\config_{i}$. We have $\size{\agents_s} \geq \size{\Delta}^{n-i}$ thus we can extract $\size{\Delta}+1$ disjoint sets of agents $(\agents_s^d)_{d \in \Delta\cup\set{\epsilon}}$ from it.
 
 
-\paragraph{Case 1: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the clique} $d = (q, \br{m}, q')$ with $q \in K_i$, then we make all agents $a \in \agents_q^{d}$ (who all have value $v_i$) execute that transition one by one. None of those broadcasts are received by any other agent, except for the last one:
-If $b \neq b'$ then there is a transition $(b, \rec{m}{\alpha}, b')$ and we make $a_i$ execute it upon receiving the broadcast. 
+\paragraph{Case 1: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the clique} $d = (q, \br{m}, q')$ with $q \in K_i$, then we make all agents $a \in \agents_q^{d}$ (who all have value $v_i$) execute that transition one by one.
+None of those broadcasts are received by any other agent, except for the last one:
+If $b \neq b'$ then there is a transition $(b, \rec{m}{\alpha}, b')$ and we make $a_i$ execute it upon receiving the broadcast. We set $a_{i+1} = a_i$. 
 For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}{\alpha}, k')$ such that either $\alpha$ is $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
 In both cases we make all agents of $\agents_k^{d'}$ take that transition.
 
 For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition $d'=(s,\rec{m}{*},s')$ (the operation cannot be $\enregact$ or $\eqtestact$ as otherwise $s$ would be in $K_{i+1}$). We then make all agents of $\agents_s^{d'}$ follow that transition. 
 
-\paragraph{Case 2: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the boss} $d = (b_i, \br{m}, b_{i+1})$, then we make $a_i$ (which has value $v_i$) execute that transition. The agents receiving that message are as follows:
+We set $v_{i+1} = v_i$.
 
-If $b \neq b'$ then there is a transition $(b, \rec{m}{\alpha}, b')$ and we make $a_i$ execute it upon receiving the broadcast. 
-For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}{\alpha}, k')$ such that either $\alpha$ is $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
+\paragraph{Case 2: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the boss} $d = (b_i, \br{m}, b_{i+1})$, then we make $a_i$ (which has value $v_i$) execute that transition, and we set $a_{i+1} = a_i$. The agents receiving that message are as follows:
+
+For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}{\alpha}, k')$ such that $\alpha$ is either $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
 In both cases we make all agents of $\agents_k^{d'}$ take that transition.
 
 For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition $d'=(s,\rec{m}{*},s')$ (the operation cannot be $\enregact$ or $\eqtestact$ as otherwise $s$ would be in $K_{i+1}$). We then make all agents of $\agents_s^{d'}$ follow that transition. 
+
+We set $v_{i+1} = v_i$.
+\cortoin{Les cas précédents sont très similaires, à factoriser ?}
+
+\paragraph{Case 3: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{external broadcast} $d = (q, \br{m}, q')$ , then we make all agents $a \in \agents_q^{d}$ execute that transition one by one. None of those broadcasts are received by any other agent, except for the last one:
+If $b_i \neq b_{i+1}$ then there is a transition $(b, \rec{m}{\alpha}, b'')$ and either $b_{i+1} = b'' \neq \bot$ and $\alpha = *$ or $b_{i+1} = \bot$ and $\alpha=\enregact$. In both cases we make $a_i$ execute that transition, and we set $a_{i+1} = a_i$.
+
+For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}{*}, k')$ with $k \in K_i$. We make all agents of $\agents_k^{d'}$ take that transition.
+
+For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition $d'=(s,\rec{m}{\alpha},s')$ with $\alpha \in \set{*, \enregact}$. We then make all agents of $\agents_s^{d'}$ follow that transition. 
+
+We set $v_{i+1} = v_i$.
+
+\paragraph{Case 4: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{gang reset} with $b_{i+1} = \bot$ then no agent moves and we take arbitrary values for $a_{i+1}$ and $v_{i+1}$. If $b_{i+1}= q_0$ then we select some $a_{i+1}$ in $\agents_{q_0}$ and set $v_{i+1}$ to be its value.
+
+
+Throughout the case distinction we have ensured that:
+\begin{itemize}
+	\item If $b_{i+1} \neq \bot$ then $a_{i+1}$ is an agent of value $v_{i+1}$.
+	
+	\item For all $k \in K_{i}$, the agents of $\agents_k^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $k$ and value $v_{i+1}$ in $\config_{i+1}$.
+\end{itemize}
