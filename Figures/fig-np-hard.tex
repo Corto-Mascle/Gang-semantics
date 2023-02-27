@@ -9,22 +9,18 @@
 	
 	\node[state] [right of=0] (1) {1};
 	
-	\node [right of=1, xshift=-20pt] (token1) {};
-	\node [right of=token1, xshift=-50pt] (dots) {\huge $\cdots$};
-	\node [right of=dots, xshift=-50pt] (token2) {};
+	\node [right of=1, xshift=-30pt] (dots) {\huge $\cdots$};
 	
 	
-	\node[state] [right of=token2, xshift=-20pt] (N-1) {N-1};
+	\node[state] [right of=dots, xshift=-30pt] (N-1) {N-1};
 	\node[state] [right of=N-1] (N) {N};
 	
 	\node[state] [right of=N] (1') {1'};
 	
-	\node [right of=1', xshift=-20pt] (token3) {};
-	\node [right of=token3, xshift=-50pt] (dots2) {\huge $\cdots$};
-	\node [right of=dots2, xshift=-20pt] (token4) {};
+	\node [right of=1', xshift=-30pt] (dots2) {\huge $\cdots$};
 	
 	
-	\node[state] [right of=token4, xshift=-40pt] (m-1) {m-1'};
+	\node[state] [right of=dots2, xshift=-30pt] (m-1) {m-1'};
 	\node[state] [right of=m-1] (m) {m'};
 	
 	\coordinate[below of=1] (stop);
