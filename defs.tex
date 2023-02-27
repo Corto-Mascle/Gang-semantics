@@ -23,17 +23,27 @@ Given a reception $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$ i
 			\item $\anact = \quotemarks{\dummyact}$ 
 			and $\data{\config'}(a) = \data{\config}(a)$
 			\item $\anact = \quotemarks{\enregact}$ and $\data{\config'}(a) = \data{\config'}(a_0)$
-			\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a) = \data{\config}(a) =\data{\config'}(a_0)$
-			\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a) = \data{\config}(a) \ne \data{\config'}(a_0)$
+			\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a) = \data{\config}(a) =\data{\config}(a_0)$
+			\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a) = \data{\config}(a) \ne \data{\config}(a_0)$
 		\end{itemize}
 	\end{itemize}
 
-	\AP A ""run"" is a sequence of steps $\run : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. If additionally $\config_0$ is an "initial configuration", then $\run$ is ""initial@@run"". We write $\config_0 \step{*} \config_k$ the existence of such a "run". Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents and $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$.  
-\nicoin{mettre path et run}
+	\AP A ""path"" is a sequence of steps $\path : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. 
+We write $\config_0 \step{*} \config_k$ the existence of such a "path".
+ A ""run"" is a "path" whose first configuration is an "initial configuration"; runs are denoted using letter $\run$.  
+Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents, $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\valsof{\run} := \set{\aval \in \nats \mid \exists i, \exists a, \data{\config_i}(a) = \aval}$.  
 % with current definition, every run is initial
+
+A "run" $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when there exists $a \in \agents$ such that $\st{\config_f}(a) = q$. 
 
 %We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
+
+The following lemma formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
+\begin{proposition}
+\label{prop:run_no_new_register_values}
+For all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
+\end{proposition}
 
 \begin{definition}
 We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
@@ -50,7 +60,7 @@ We define a preorder over the set of configurations $\allconfigs$ as follows: $\
 		\item for all $\quotemarks{R(\var{z}) \neq R(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z})) \neq \data{\config}(\nu(\var{z'}))$.
 	\end{itemize}
 
-	\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is an "initial run" of this protocol whose last "configuration" satisfies the query.
+	\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is a "run" of this protocol whose last "configuration" satisfies the query.
 \end{definition}
 
 \begin{remark}
@@ -58,7 +68,3 @@ We define a preorder over the set of configurations $\allconfigs$ as follows: $\
 If some "configuration" $\config$ satisfies a "query" $\query$, then every configuration $\config'$ such that $\config \lessthan \config'$ satisfies $\query$. 
 \end{remark}
 
-
-
-
-\nico{remettre la def de run initial ou pas initial ou une def équivalente}
