@@ -31,11 +31,19 @@ Given a reception $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$ i
 	\AP A ""path"" is a sequence of steps $\path : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. 
 We write $\config_0 \step{*} \config_k$ the existence of such a "path".
  A ""run"" is a "path" whose first configuration is an "initial configuration"; runs are denoted using letter $\run$.  
-Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents and $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$.  
+Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents, $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\valsof{\run} := \set{\aval \in \nats \mid \exists i, \exists a, \data{\config_i}(a) = \aval}$.  
 % with current definition, every run is initial
+
+A "run" $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when there exists $a \in \agents$ such that $\st{\config_f}(a) = q$. 
 
 %We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
+
+The following lemma formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
+\begin{proposition}
+\label{prop:run_no_new_register_values}
+For all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
+\end{proposition}
 
 \begin{definition}
 We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 

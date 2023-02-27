@@ -49,7 +49,7 @@
 		
 		\item for all $s \in K_i$, there are at least $M^{n-i}$ agents (different from $a_i$) in state $s$ with value $v_i$
 		
-		\item if $b \neq \bot$, then $a_i$ is in state $b_i$ with value $v_i$.
+		\item if $b \neq \noboss$, then $a_i$ is in state $b_i$ with value $v_i$.
 	\end{itemize}
 \end{lemma}
 
@@ -86,7 +86,7 @@ We set $v_{i+1} = v_i$.
 \cortoin{Les cas précédents sont très similaires, à factoriser ?}
 
 \paragraph{Case 3: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{external broadcast} $d = (q, \br{m}, q')$ , then we make all agents $a \in \agents_q^{d}$ execute that transition one by one. None of those broadcasts are received by any other agent, except for the last one:
-If $b_i \neq b_{i+1}$ then there is a transition $(b, \rec{m}{\alpha}, b'')$ and either $b_{i+1} = b'' \neq \bot$ and $\alpha = *$ or $b_{i+1} = \bot$ and $\alpha=\enregact$. In both cases we make $a_i$ execute that transition, and we set $a_{i+1} = a_i$.
+If $b_i \neq b_{i+1}$ then there is a transition $(b, \rec{m}{\alpha}, b'')$ and either $b_{i+1} = b'' \neq \noboss$ and $\alpha = *$ or $b_{i+1} = \noboss$ and $\alpha=\enregact$. In both cases we make $a_i$ execute that transition, and we set $a_{i+1} = a_i$.
 
 For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}{*}, k')$ with $k \in K_i$. We make all agents of $\agents_k^{d'}$ take that transition.
 
@@ -94,13 +94,13 @@ For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition 
 
 We set $v_{i+1} = v_i$.
 
-\paragraph{Case 4: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{gang reset} with $b_{i+1} = \bot$ then no agent moves and we take arbitrary values for $a_{i+1}$ and $v_{i+1}$. If $b_{i+1}= q_0$ then we select some $a_{i+1}$ in $\agents_{q_0}$ and set $v_{i+1}$ to be its value.
+\paragraph{Case 4: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{gang reset} with $b_{i+1} = \noboss$ then no agent moves and we take arbitrary values for $a_{i+1}$ and $v_{i+1}$. If $b_{i+1}= q_0$ then we select some $a_{i+1}$ in $\agents_{q_0}$ and set $v_{i+1}$ to be its value.
 
-\paragraph{In all cases:} After applying the given transitions, we use the copycat property: we add to $\agents_i$ $M^{n-i-1}$ disjoint copies of itself to obtain $\agents_{i+1}$, and repeat the run constructed thus far over each copy separately. This is to ensure that there are $M^{n-i-1}$ agents in $b_{i+1}$ (if it is not $\bot$) after this step.
+\paragraph{In all cases:} After applying the given transitions, we use the copycat property: we add to $\agents_i$ $M^{n-i-1}$ disjoint copies of itself to obtain $\agents_{i+1}$, and repeat the run constructed thus far over each copy separately. This is to ensure that there are $M^{n-i-1}$ agents in $b_{i+1}$ (if it is not $\noboss$) after this step.
 
 Throughout the case distinction we have ensured that:
 \begin{itemize}
-	\item If $b_{i+1} \neq \bot$ then $a_{i+1}$ is an agent of value $v_{i+1}$.
+	\item If $b_{i+1} \neq \noboss$ then $a_{i+1}$ is an agent of value $v_{i+1}$.
 	
 	\item For all $k \in K_{i}$, the agents of $\agents_{i,k}^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $k$ and value $v_{i+1}$ in $\config_{i+1}$.
 	
@@ -109,7 +109,7 @@ Throughout the case distinction we have ensured that:
 	
 	\item For all $s \in S_{i}$, the agents of $\agents_{i,s}^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $s$ in $\config_{i+1}$.
 	
-	\item By the last step using the copycat property, we ensured that there were at least $M^{n-i-1}$ agents in state $b_{i+1}$ (if $b_{i+1} \neq \bot$).
+	\item By the last step using the copycat property, we ensured that there were at least $M^{n-i-1}$ agents in state $b_{i+1}$ (if $b_{i+1} \neq \noboss$).
 	
 	\item If the step is not a gang reset, for all $s' \in S_{i+1} \setminus (S_i \cup \set{b_{i+1}})$, there exists $d \in \Delta$ from some $s \in S_i$ to $s'$ such that all agents of $\agents_{i,s}^d$ take that transition.
 	
@@ -123,11 +123,11 @@ This concludes our induction.
 
 \begin{corollary}
 	\label{cor:soundness}
-	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ satisfying $K \cup \set{b}$ if $b \neq \bot$ and $K$ otherwise.
+	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
 \end{corollary}
 
 \begin{proof}
 	We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$.
-	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \bot$, then there is an agent in state $b$ with value $v_n$.  
+	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
 \end{proof}
 
