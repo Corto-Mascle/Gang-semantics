@@ -39,7 +39,7 @@ A "run" $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when t
 %We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
 
-The following lemma formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
+The following proposition formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
 \begin{proposition}
 \label{prop:run_no_new_register_values}
 For all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.

@@ -1,6 +1,6 @@
-# Borne inf
+# Bornes inf
 
-## Pour 2EXPTIME :
+<!-- ## Pour 2EXPTIME :
 
 2EXPTIME = AEXPSPACE, on va donc réduire la terminaison d'une machine de Turing alternante en espace exponentiel.
 Une telle machine a des états existentiels et universels.
@@ -44,9 +44,31 @@ Ensuite il reçoit de la part de ce processus une séquence de T(n) bits nuls.
 Puis il  reçoit un identifiant d'un processus auxiliaire et son numéro, qui doit être T(n)-1 aussi. Il reçoit T(n) bits du premier et du deuxième en parallèle et vérifie que le deuxième est bien l'incrément du premier. Il continue ainsi jusqu'à recevoir une séquence de T(n) bits tous à 1.
 À ce stade il aura fait T(n+1) incrémentations.
 
+En fait il est incorrect de dire que les processus ont un accès libre à un compteur T(n) : 
+-->
+
+## Les RBNA à 2 registres sont équivalents aux Lossy Channel Systems
+
+Par [ChambartSchnoebelenLICS2008] on sait qu'il existe une réduction polynomiale des Lossy Channel Systems à plusieurs files vers ceux à une file.
+Nous allons donc chercher à simuler un LCS à une file avec un RBNA à deux registres.
+
+La réduction se construit ainsi : 
+
+Le protocole utilise deux registres. Le premier (r1) ne sera jamais modifié et servira d'identifiant à chaque processus. Le second servira à stocker l'identifiant d'un autre processus (r2).
+
+Il y a deux types de processus **start** et **next**.
+Au début de son exécution un processus **start** broadcaste un message *id*, puis broadcaste l'état initial du LCS, les deux avec son identifiant *r1*. 
+
+Un processus **next** commence par recevoir *id* et stocker la valeur v associée dans r2. Puis il devine une transition du LCS $q \xrightarrow{op} q'$. Si $op=pop(a)$ 
+il reçoit (a,v). Puis il reçoit une suite de lettres (chacune avec la valeur v), qu'il broadcaste une à une avec son identifiant (r1). Si $op=push(a)$ alors il broadcaste $a$ avec son identifiant (r1). 
+
+Enfin, il reçoit $q,v$, et broadcaste $q', r1$. Si $q'$ est un état final du LCS alors il va dans un état spécial $end$. 
+
+Il y a un isomorphisme entre les runs du LCS et les chaînes de processus ayant terminé leurs exécutions locales des configurations 
+
 # Décidabilité de la couverture
 
-__To begin with we assume that processes do not check equality of receives with their initial values.__
+__To begin with we assume that processes only broadcast their initial values and not values that they received.__
 
 In that case we can define a directed graph with processes as nodes and an edge from p1 to p2 if p1 broadcasts a value stored by p2. We call this graph the __communication graph__.
 
@@ -74,13 +96,29 @@ The __output__ of a register in a local run is the sequence of messages broadcas
 >> In both cases, we use the fact that we can choose not to receive any arbitrary subsequence of messages from a process. For the first case we can replace the larger prefix with the shorter one in which the last values are replaced with the ones of the larger prefix and still have a correct run. For the second case we can replace the ancestor with its descendant to obtain a smaller tree. 
 
 > ## Theorem 1: 
-> Coverability is decidable for RBNA.
+> Coverability is decidable for RBNA where processes can only broadcast their initial values.
 >
 >>### Proof 
 >> Higman's lemma combined with Lemma 2 guarantee us that all runs that do not match one of the two conditions are finite, hence we can explore them all to get the set of reachable configurations.
-However, we still have to get rid of the hypothesis presented at the start of the section.
-To do so, we compute the __repeatability__ relation $R$ over $\mathcal{M}$, which is the transitive closure of the relation containing $(m,m')$ if and only if there is a local run that receives $m$ and stores the corresponding value and later broadcasts that same value with the message $m'$.
-We can compute (a sufficient subset of) this relation incrementally, by repeated calls to the coverability problem. Given (a subset of this relation), we allow a process to receive a message $m'$ with one of its initial values (with an equality test) if and only if it previously broadcast that value with a message $m$ such that $m R m'$.
+
+This argument can likely be extended to systems where processes can apply several operations to received messages (but still only receive one value).
+
+# Bounding the size of runs
+
+In order to obtain complexity bounds, we aim at providing bounds on the size of a run covering a state. To do so, one important step is to bound the length of a local run from one local configuration to another one.
+
+> ## Lemma 3:
+>
+> There exists a primitive recursive function $f$ such that for all local run $u$ from a local configuration $(q, \nu)$ to another one $(q', \nu')$ over $k$ registers, if $u$ has length greater than $f(|\mathcal{S}|)$ then there exists a shorter run $v$ from $(q, \nu)$ to $(q', \nu')$.
+>> ### Proof
+>> We prove this by induction on the number of registers $r$.
+Suppose we have constructed 
+Let $u$ be such  a run, we distinguish two cases:
+>> - There exists a factor of $u$ of length $>f_{r-1}(|\mathcal{S}|)$ with no reset of the value of the $i$th register. Then we consider the projection of this subrun where every operation on register $i$ has been replaced with a dummy transition $\epsilon$. By induction hypothesis we can find a shorter run reaching the same end configuration. Then this run where every $\epsilon$ is reverted to its original action is equivalent to the subrun we considered.
+Hence $u$ can be shortened.
+>> - There is no such factor of $u$. Then the size of the set of sequences of actions on the other registers between two resets of $r$ is bounded by $N = (|Act|+1)^{f_{r-1}(\mathcal{s})}$.
+If $u$ is of size more than $N |Q|^2$ then it contains two identical such sequences of actions with the same start and end states.
+We can glue together those sequences in order to shorten the run $u$...
 
 # Undecidability of Büchi conditions 
 

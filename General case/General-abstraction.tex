@@ -1,0 +1,173 @@
+\section{Bounded witnesses for reachability}
+
+\textbf{For now we assume that the BRNA do not contain $*$ operation. We will reduce the general case to this one later (lemma 28).}
+
+\begin{definition}
+	A ""local configuration"" is a pair $(q, \nu) \in Q \times ([1,r] \to \nats)$.
+	A ""local run"" is a sequence of local transitions $(q_0, \nu_0) \xrightarrow{op_1} (q_1, \nu_1) \xrightarrow{op_2} \cdots \xrightarrow{op_k} (q_k, \nu_k)$ with $op_1, \ldots, op_k \in Op_r^\messages$.
+	
+	Given a value $v \in \nats$, the $v$-input of a local run $u$, which we denote by $\vinput{v}{u}$, is the sequence of messages received through $u$ with value $v$.
+	Its $v$-output, which we denote by $\voutput{v}{u}$, is the sequence of messages of broadcasts made in $u$ with value $v$. 
+	Its $v$-vision, which we denote by $\vision{v}{u}$, is the sequence of messages of broadcasts made or received in $u$ with value $v$. 
+	
+	The ""input"" of $u$ is the set $\Input{u} = \set{\vinput{v}{u} \mid v \in \nats}$.
+	Its ""output"" is the set $\Output{u}=\set{\voutput{v}{u} \mid v \in \nats}$.
+\end{definition}
+
+\begin{definition}
+	Let $m_1, \cdots, m_\ell \in \messages$, $w_0, \ldots, w_\ell \in \messages^*$, we say that a word $w \in \messages^*$ ""decomposes as"" $(w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w = w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding some letters from $\set{m_1, \ldots, m_{j-1}}$.
+\end{definition}
+
+\begin{definition}
+	We define two types of specifications for runs of a given "protocol" $\prot$:
+	
+	\begin{itemize}
+		\item The first one is the ""production type"", and is given by a word $w$ over $\messages$. There should exist some value $v \in \nats$ such that the $v$-output of the run has $w$ as a subword.
+		
+		\item The second one is the ""echo type"". It is given by sequences of letters $m_1, \ldots, m_\ell \in \messages$ and words $w_0, \ldots, w_\ell$ over $\messages$, and a letter $m \in \messages$, such that all $m_j$ are distinct from $m$ and from each other.
+		There should exist some value $v$ such that the run takes as input a word $w'$ that "decomposes as" $(w_0, m_1, \ldots, m_\ell, w_\ell)$, and whose $v$-output contains an $m$.
+	\end{itemize}
+\end{definition}
+
+
+\begin{definition}
+	A "tree decomposition" of a run $\run$ with respect to a "specification" is
+	a tree whose nodes are labelled by local runs $u$ of $\prot$ and either by "production specifications" $w$ ("production nodes") or by "echo specifications" $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell, m)$ ("echo nodes"). 
+	
+	It must satisfy the following conditions:
+	Let $\mu$ be a node of that tree, and $u$ the local run labelling it.
+	
+	If it is a "production node" labelled by some $w$ then there must exist $v \in \nats$ an initial value of $u$ such that
+	\begin{itemize}
+		\item $w$ "decomposes as" $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ with $w_0 \cdots w_\ell$ the $v$-input of $u$, and for all $1 \leq j \leq \ell$ $\mu$ has a child which is an "echo node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.
+		
+		\item For all $v' \neq v$ appearing in $u$,
+		\begin{itemize}
+		\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "echo node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
+			
+		\item If $v'$ is not an initial value then $\mu$ has a child which is a "production node" labelled by $w'$ the $v'$-input of $u$.
+		\end{itemize}
+	\end{itemize}
+
+	If it is an "echo node" labelled by some $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell, m)$ then there must exist $v \in \nats$ an initial value of $u$ such that
+	\begin{itemize}
+		\item $u$ ends with a broadcast of $m$ with value $v$.
+		
+		\item The $v$-input of $u$ is a subword of some $w' = w'_0\cdots w'_\ell$ where, for all $j$, $w'_j$ can be obtained by adding some $m_1, \ldots, m_{j}$ to $w_j$.
+		
+		\item For all $v' \neq v$ appearing in $u$,
+		\begin{itemize}
+			\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "echo node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
+			
+			\item If $v'$ is not an initial value then $\mu$ has a child which is a "production node" labelled by $w'$ the $v'$-input of $u$.
+		\end{itemize}
+	\end{itemize}
+\end{definition}
+
+\begin{definition}
+	A "tree decomposition" satisfies a production specification $w$ if its root is a "production node" and $w$ is a subword of its label.
+	A "tree decomposition" satisfies an echo specification $(w_0, m_1, w_1, \ldots, m_k, w_k)$ if its root is an "echo node" labelled TODO.
+\end{definition}
+
+
+
+\begin{lemma}
+	If there exists a finite run $\rho$ satisfying some "specification" then there exists a finite "tree decomposition" whose root is labelled with that specification.
+\end{lemma}
+
+
+\begin{lemma}
+	If there exists there exists a finite "tree decomposition" whose root is labelled with some "specification" then  a finite run $\rho$ satisfying that specification.
+\end{lemma}
+
+\begin{lemma}
+	Let $w$ be a "production specification".
+	Let $\tau$ be a "tree decomposition" whose root is labelled with $w$.
+	Let $\mu, \mu'$ be two "production nodes" of $\tau$, $u, v$ and $u', v'$ the associated local runs.
+	If $\mu$ is an ancestor of $\mu'$ and the $v$-output of $\mu$ is a subword of the $v'$-output of $\mu'$ then there exists a smaller "tree decomposition" with its root labelled $w$.  
+\end{lemma}
+
+\begin{lemma}
+	Let $w$ be a "production specification".
+	Let $\tau$ be a "tree decomposition" whose root is labelled with $w$.
+	Let $\mu, \mu'$ be two "echo nodes" of $\tau$, $u, v$ and $u', v'$ the associated local runs.
+	If $\mu$ is an ancestor of $\mu'$ and the $v'$-input of $\mu'$ is a subword of the $v$-input of $\mu$ then there exists a smaller "tree decomposition" with its root labelled $w$.  
+\end{lemma}
+
+
+
+\cortoin{Define order on inputs/outputs}
+
+
+\newpage
+
+\begin{lemma}
+	Let $\prot$ be a protocol with $r$ registers.
+	Let $u$ be a "local run" of $\prot$ with an input $w$.
+	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
+	If $\size{u_2} > TOWER$, then there exists $u'$ such that $u_1u'u_3$ is a local run of $\prot$ with smaller input than $u$. 
+\end{lemma}
+
+\iffalse
+\begin{proof}
+	For this proof we will allow our protocols to execute local actions from a finite alphabet $\Sigma$.
+	We proceed by induction on $r$.
+	
+	If $r=0$ then if $\size{u} > Tower_{\size{Q}}(r+1) = \size{Q}$ then $u$ visits twice the same local configuration, and can thus be decomposed as $u_1 u_2 u_3$ where $u_2$ starts and ends in the same state, yielding the result. 
+	
+	Let $r>0$, suppose the proposition holds for $r-1$.
+	Let $u$ be a run of $\prot$, a protocol with $r$ registers, with $\size{u} > Tower_{\size{Q}}(r+1)$.
+	
+	\begin{itemize}
+		\item If there exists $i \in [1,r]$ such $u$ has a factor $u_f$ in which the value of register $i$ does not change and with $\size{u_f} > Tower_{\size{Q}}(r)$, then let $\Tilde{\prot}$ be $\prot$ where every operation $op$ over $i$ has been replaced with a local action $a_{op}$. Note that $\Tilde{\prot}$ only uses $r-1$ registers. 
+		Let $\Tilde{u_f}$ be the run following $u_f$ in $\prot$, where every transition $q \xrightarrow{op} q'$ with an operation on $i$ has been replaced with $q \xrightarrow{a_{op}} q'$.
+		
+		By induction hypothesis we have that $\Tilde{u_f} = \Tilde{u_{f,1}} \Tilde{u_{f,2}}\Tilde{u_{f,3}}$ such that  $\Tilde{u_{f,1}}\Tilde{u_{f,3}}$ is a run of $\Tilde{\prot}$ with the same initial and final local configurations as $\Tilde{u_f}$. 
+		
+		We conclude that the corresponding sequence of transitions $u_{f,1}u_{f,3}$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs.
+		
+		\item If no register keeps the same value for more than $M_{r-1}$ steps, then any run $u$ of length at least $M_{r-1} ((\size{\Delta})^{M_{r-1}} +1)$ can be split into $(\size{\Delta})^{M_{r-1}} +1$ segments of size $M_{r-1}$. There are $\size{\Delta})^{M_{r-1}}$ different sequences of transitions, thus by the pigeonhole principle we have $u = \pi_1 \sigma_1 \pi_2 \sigma_2 \pi_3$ with $\size{\sigma_1} = \size{\sigma_2} = M_{r-1}$ and such that  $\sigma_1$ and $\sigma_2$ have the same sequence of transitions.
+		
+		Furthermore as all registers change their values every $M_{r-1}$ steps, we know that $\sigma_1$ and $\sigma_2$ contain operations of the form $\rec{m}{i}{\enregact}$ for all $i \in [1,r]$.   
+	\end{itemize}
+\end{proof}
+\fi
+
+\begin{lemma}
+	Let $\mu$ be a node of a "tree decomposition", $u_\mu$ its local run.
+	Let $u$ be the local run of its father, and $u_1, \ldots, u_\ell$ the runs of its "echo" children.
+	Then if $\size{u_\mu} \geq TOWER \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree decomposition with the same root specification label.
+\end{lemma}
+
+\begin{definition}
+	We define the ""height"" of a node in a "tree decomposition" recursively as follows:
+	\begin{itemize}
+		\item The height of the root is $0$
+		
+		\item The height of a "production node" is the height of its father minus one
+		
+		\item The height of an "echo node" is the height of its father plus one.
+	\end{itemize}
+\end{definition}
+
+\begin{lemma}
+	In a minimal "tree decomposition" satisfying a given specification, the length of a local run associated with a node $\mu$ is bounded by $(TOWER (|\messages|+1))^{hmax-h+1}$
+\end{lemma}
+
+\begin{proposition}
+	In a minimal "tree decomposition" satisfying a given specification, the length of a branch is bounded by a function of $F_{\omega^\omega}$.
+\end{proposition}
+
+\begin{lemma}
+	Given a protocol $\prot$, one can construct in polynomial time a protocol $\prot'$ with no $*$ operation satisfying the same specifications as $\prot$.
+\end{lemma}
+
+\begin{lemma}
+	Given a protocol $\prot$ with multiple operations on messages, one can construct in exponential time a protocol $\prot'$ with single operations on messages satisfying the same specifications as $\prot$.
+\end{lemma}
+
+\begin{theorem}
+	The BNRA coverability problem is decidable and $F_{\omega^\omega}$-complete.
+	The upper bound holds even with multiple operations on messages.
+	The lower bound holds even with two registers.
+\end{theorem}

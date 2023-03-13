@@ -1,0 +1,140 @@
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{todonotes}
+\usepackage[notion, quotation, silent]{knowledge}
+%remove silent to have knowledge warnings
+\usepackage{extarrows}
+\usepackage[normalem]{ulem}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{xspace}
+\usepackage{tikz}
+%\usepackage{array}
+%\usepackage{changepage}
+\usepackage{enumitem}
+\usepackage[capitalise]{cleveref}
+\usepackage{cite}
+
+
+
+\usetikzlibrary{arrows,calc,automata,shapes,positioning}
+\tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append,every state/.style={minimum size=20,inner sep=2}}}
+
+
+%\newenvironment{proofsketch}{\noindent\emph{Proof sketch.}}{\hfill$\square$}
+
+%%% Basic Math
+
+\newcommand{\nats}{\mathbb{N}}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\powerset}[1]{2^{#1}}
+\newcommand{\step}[1]{\xrightarrow{#1}}
+\newcommand{\size}[1]{|#1|}
+\newcommand{\nset}[2]{\{#1,\dots,#2\}} %interval of natural numbers
+%%% Complexity classes
+
+\newcommand{\poly}{\text{\sc{P}}\xspace}
+\newcommand{\np}{\text{\sc{NP}}\xspace}
+\newcommand{\conp}{\textsc{coNP}\xspace}
+\newcommand{\pspace}{\text{\sc{PSpace}}\xspace}
+\newcommand{\expt}{\textsc{ExpTime}\xspace}
+\newcommand{\nexpt}{\textsc{NExpTime}\xspace}
+\newcommand{\exps}{\textsc{ExpSpace}\xspace}
+
+
+%%% Genral definition
+\newcommand{\prot}{\mathcal{P}} %protocol
+\newcommand{\transitions}{\Delta} % transitions
+
+% greek letters
+\renewcommand{\a}{\alpha}
+\newcommand{\config}{\gamma}
+
+
+%%% BNRA syntax
+
+\newcommand{\br}[2]{\textbf{br}(#1, #2)}
+% for reception, first argument is message type and second is operation made with the register
+\newcommand{\rec}[3]{\textbf{r}(#1, #2, #3)}
+\newcommand{\brsymb}{\textbf{br}}
+\newcommand{\recsymb}{\textbf{r}}
+\newcommand{\actions}{\mathsf{Actions}}
+\newcommand{\anact}{\alpha}
+\newcommand{\enregact}{\downarrow}
+\newcommand{\dummyact}{{*}}
+\newcommand{\diseqtestact}{{\ne}}
+\newcommand{\eqtestact}{{=}}
+
+%quotes in math mode
+\DeclareMathSymbol{\mlq}{\mathord}{operators}{``}
+\DeclareMathSymbol{\mrq}{\mathord}{operators}{`'}
+\newcommand{\quotemarks}[1]{\mlq #1 \mrq}
+
+
+% projection of a configuration on state part and register part
+\renewcommand{\st}[1]{\mathsf{st}(#1)}
+\newcommand{\data}[1]{\mathsf{data}(#1)}
+
+% a register value
+\newcommand{\aval}{v}
+\newcommand{\avalbr}{v_{\brsymb}}
+%messages
+\newcommand{\messages}{\mathcal{M}}
+\newcommand{\amessage}{m}
+
+%font for variables in queries
+\newcommand{\var}[1]{\mathsf{#1}}
+\newcommand{\varz}{\var{z}}
+\newcommand{\varset}{\mathsf{Var}}
+
+\newcommand{\query}{\phi}
+
+\renewcommand{\path}{\pi} % hoping that this does not beak anything
+\newcommand{\run}{\rho}
+\newcommand{\statesin}[1]{\mathsf{cov}(#1)}
+\newcommand{\valsof}[1]{\mathsf{val}(#1)}
+\newcommand{\agents}{\mathbb{A}}
+\newcommand{\agentsof}[1]{\mathsf{ag}(#1)}
+
+
+\newcommand{\configs}[1]{\Gamma(#1)}
+\newcommand{\allconfigs}{\Gamma}
+
+\newcommand{\lessthan}{\trianglelefteq}
+
+% gangs
+\newcommand{\boss}{\mathsf{b}}
+\newcommand{\clique}{\mathsf{K}}
+\newcommand{\gang}{\mathsf{G}}
+\newcommand{\gangset}{\mathcal{G}}
+\newcommand{\gangconfigs}{\mathcal{G}}
+\newcommand{\gangof}[2]{\mathsf{gang}_{#1}(#2)}
+\newcommand{\noboss}{\bot}
+
+% abstract semantics
+\newcommand{\covset}{S}
+\newcommand{\aconfig}{\sigma}
+\newcommand{\aconfigs}[1]{\Sigma_{#1}}
+\newcommand{\allaconfigs}{\Sigma}
+\newcommand{\aconfiginit}{\aconfig_0}
+\newcommand{\aconfiginitset}{\allaconfigs_{\mathsf{init}}}
+\newcommand{\arun}{\nu}
+
+\newcommand{\absproj}[2]{\mathsf{abs}_{#1}(#2)}
+
+% some standard names useful in proofs
+\newcommand{\agentbr}{a_{\brsymb}} %agent broadcasting
+\newcommand{\agentboss}{a_{\mathsf{boss}}}
+\newcommand{\statebr}{q_{\brsymb}}
+
+
+% 
+
+\newcommand{\vinput}[2]{In_{#1}(#2)}
+\newcommand{\voutput}[2]{Out_{#1}(#2)}
+\newcommand{\vision}[2]{Vis_{#1}(#2)}
+\newcommand{\Input}[1]{Input(#1)}
+\newcommand{\Output}[1]{Output(#1)}
