@@ -1,6 +1,75 @@
 \section{Bounded witnesses for reachability}
 
-\textbf{For now we assume that the BRNA do not contain $*$ operation. We will reduce the general case to this one later (lemma 28).}
+\subsection{Intuition}
+
+Our aim is to prove the decidability of the coverability problem for BNRA which can only send a single value in each broadcast. The constructions will actually lead us to a decidability proof for specifications of two different types, both subsuming the coverability specification.
+
+\paragraph*{Step 1 : simplification} In Lemma~\ref{lem:nostar-oneop} we prove that all protocols, even those which can apply several operations when receiving a broadcast, can be simulated by a protocol with a single operation upon reception of a message and no $*$ operation. A previous lemma already allowed us to remove $\diseqtestact$, thus we only have to prove decidability for systems with one operation per reception and only $\enregact$ and $\eqtestact$ operations.
+
+Lemma~\ref{lem:nostar-oneop} is placed at the end of the decidability proof as the constructions defined there may simplify the proof of the lemma (they allow us to prove that BRNA can simulate each other simply by proving that their local runs have the same behaviour).
+
+\paragraph*{Step 2 : run decomposition} Say we have a global run $\rho$ in which an agent broadcasts a message $m_f$. We isolate the local run $u$ of the first agent $a$ broadcasting $m_f$.
+In order to execute $u$, we need to receive a sequence of broadcast that matches the sequence of receive transitions in $u$. Let $v$ be a value appearing in $u$.
+
+\begin{itemize}
+	\item 
+	Say $v$ is not an initial value of $u$, let $w \in \messages^*$ be the sequence of broadcasts received by $a$ with value $v$ in $u$. Then the exact value $v$ does not matter, all $a$ needs is to receive a series of broadcasts with the messages of $w$ all with the same value. This is possible if and only if there exists a global run $\run'$ and a value $v'$ such that $w$ is a subword of the series of broadcasts made in that run with value $v'$. Indeed, if there exists such a run, then $u$ can receive selected broadcasts from $\rho'$ (happening in parallel) in order to get the sequence $w$ of messages with the same value. Conversely, if $u$ receives a sequence $w$ all with the same value in $\rho$, then the prefix of $\rho$ ending just before the broadcast of $m_f$ by $u$ is a fitting candidate for $\rho'$.
+	We do not take $\rho$ directly as witness as we want the runs to get shorter as we make the recursive calls.
+	
+	Here we have our first type of specification, given as a word $w \in \messages^*$. We ask that there exists a global run and a value $v'$ such that $w$ is a subword of the sequence of broadcasts made in the global run with value $v'$.
+	
+	
+	\item 	
+	Now suppose $v$ is an initial value of $u$. This situation is very different as other processes need $a$ to send some messages with this value in order to be able to send it back to him.
+	The key observation is that once an agent $a'$ other than $a$ has managed to broadcast some message $m$ with value $v$, we have an unlimited supply of such broadcasts:
+	Let $w$ be the series of messages broadcast by $a$ with value $v$ before $a'$ makes that broadcast, we now know that there is a global run which, if presented with an external series of broadcasts $w$ with the same value, can then broadcast $m$ with that value.
+	We then extend this reasoning and consider the series of broadcast made with value $v$ through $\run$. It can be decomposed as  $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ where $w_0 \cdots w_\ell$ is the sequence of broadcasts made by $a$ with that value and the $m_j$ are placed at the moments where another agent manages for the first time to broadcast that message (from then on we have unlimited supplies of broadcasts with that value and message $m_j$). In particular $\ell \leq \size{\messages}$.
+	
+	All we have to do is to check for all $j$ that there exists a global run (where no one has $v$ as initial value) which can broadcast $m_j$ with a value $v'$ while receiving a series of external broadcasts $w'$ which is of the form $w'_0\cdots w'_{j-1}$ where each $w'_i$ is obtained by adding some letters from $\set{m_0, \ldots, m_i}$ in $w_i$.
+	This forms our second type of specification, given by a decomposition $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}, m_j)$, which asks for a run that broadcasts $m_j$ with some value $v'$ which it does not have initially, while receiving a series of  external broadcasts with value $v'$ that match $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
+\end{itemize}   
+
+We can decompose any run satisfying one of those specifications into a local run (the one of the agent having the value initially in the first case, the one of the first agent which manages to broadcast $m_j$ while not having the value initially in the second case) and some number of specifications satisfied by smaller runs.
+
+Hence we can turn a global run satisfying a given specification into a finite tree where nodes are labelled by local runs and specifications of one of the two types above.
+
+\subsection{Bounds on the size of the minimal decomposition}
+
+The previous section provides witnesses for the satisfiability of specifications, in the form of a tree decomposition.
+
+However it is not clear that there is any bound on the size of those trees.
+
+To provide such bounds, we need several observations.
+We say that a local run is cheaper than another one if the set of children it spawns in the decomposition tree is easier to achieve: every child of the first run is a subword of a child of the second one.
+
+ First of all we use Lemma~\ref{lem:short-local-runs}, essentially stating that we can reduce any section of a local run of length more than $f(|\prot|)$, where $f$ is a primitive recursive function, to obtain a shorter and cheaper local run.
+ This new run may broadcast less messages, thus we cannot say that every local run can be reduced to one of size $f(\size{\prot})$.
+ However, we can say that if there exists a local run making some sequence of $N$ broadcasts, then there is one of size at most $Nf(\size{\prot})$, as we can reduce the sections of runs between those broadcasts.
+ 
+ We now define a notion of height of a node, which is not the same as its depth in the tree. Intuitively we put the children of a node $n$ below it if $n$ has to receive messages from them (first case in the previous subsection) and above it if $n$ has to send messages to them (second case).
+ The height of the root is $0$, and the height of a child of a node $n$  is  the one of $n$ minus one if it is of the first type of specification, plus one otherwise.
+ 
+ Nodes of minimal height (except maybe the root) are nodes of the second type which only have children of the first type, hence all they have to do is broadcast one single message (given by their father). Hence their length is at most $f(\size{\prot})$. 
+ 
+ Now assume we have a bound $M$ on runs of height $h$. A run of height $h-1$ sees at most $r$ different initial values. Hence it has at most $\size{\messages}r$ children of the second type, and for each corresponding specification it has to make at most $M$ broadcasts, as each of those children makes at most $M$ receiving actions.
+ Moreover, if it is of the first type, it also has to provide broadcasts for its father, but again his father has height $h$, thus will require at most $M$ broadcasts.
+ 
+ Overall a local run at height $h-1$ needs to make a series of at most $M(\size{\messages} r +1)$ broadcasts. If that can be done, it can be done by a local run of length at most $[M(\size{\messages} r +1)](f(\size{\prot})+1)$.
+ 
+ As a result, we can bound the size of a node of height $h$ by $g(\size{\prot}, hmax-h)$, where $hmax$ is the maximal height of the tree and $g$ is a primitive recursive function.
+ 
+ This allows us to bound $hmax$: indeed consider the branch reaching the highest point in the tree. Along that branch we can extract a sequence of nodes of the second type $\mu_0, \ldots, \mu_{hmax}$ such that $\mu_i$ has height $i$ for all $i$. If there are some $i<j$ such that $\mu_i$ and $\mu_j$ produce the same broadcast but $\mu_j$ is cheaper then we can reduce the branch.
+ The bounds on the lengths of the $\mu_i$ and the latter property allow us to bound $hmax$ with a function from the class $F_{\omega^\omega}$ (see, for instance, \cite{schmitzS2011}).
+ 
+ This also gives us a bound on the size of the root (which is also in $F_{\omega^\omega}$). From there we bound the minimal height of a node of this tree. The argument is that in order to reach a minimal height $hmin$ with a branch, we need to have along that branch a subsequence of nodes of the first type $\mu_0, \ldots, \mu_{-hmin}$ such that $\mu_i$ has height $-i$. If there exist $i<j$ such that $\mu_i$ broadcasts a subword of $\mu_j$ we can reduce the branch. Otherwise, the same results on bad sequences of words  for the subword order allow us to bound the minimal height of a node in that tree with a function of $F_{\omega^\omega}$.
+ As both the minimal and maximal heights in the tree are bounded by such functions, the size of a node of that tree is also bounded by such a function (using the bound on nodes based on their height). This is also a bound on the branching of the tree, as the number of children of a node is bounded by the number of values seen in its local run, thus by the size of that run.
+ 
+ The number of different nodes along a branch is also bounded, hence also the size of that branch (if the same node appears twice we can reduce the branch).
+ This lets us bound the overall size of the tree with a function of $F_{\omega^\omega}$, yielding decidability and complexity of the problem.
+
+\subsection{Formal proof}
+
+\textbf{For now we assume that the BRNA do not contain $*$ operations and apply only one operation for each message received. We will reduce the general case to this one later (lemma \ref{lem:nostar-oneop}).}
 
 \begin{definition}
 	A ""local configuration"" is a pair $(q, \nu) \in Q \times ([1,r] \to \nats)$.
@@ -8,14 +77,24 @@
 	
 	Given a value $v \in \nats$, the $v$-input of a local run $u$, which we denote by $\vinput{v}{u}$, is the sequence of messages received through $u$ with value $v$.
 	Its $v$-output, which we denote by $\voutput{v}{u}$, is the sequence of messages of broadcasts made in $u$ with value $v$. 
-	Its $v$-vision, which we denote by $\vision{v}{u}$, is the sequence of messages of broadcasts made or received in $u$ with value $v$. 
+	Its $v$-vision, which we denote by $\vision{v}{u}$, is the sequence of messages of broadcasts made or received in $u$ with value $v$.
 	
 	The ""input"" of $u$ is the set $\Input{u} = \set{\vinput{v}{u} \mid v \in \nats}$.
 	Its ""output"" is the set $\Output{u}=\set{\voutput{v}{u} \mid v \in \nats}$.
+	
+	We define a preorder on such sets of words:
+	Given $W, W' \in \powerset{\Sigma^*}$, $W \unlhd W'$ if $W \subseteq W'\downarrow$, where $W'\downarrow$ stands for the set of subwords of words in $W'$.
 \end{definition}
+
+
 
 \begin{definition}
 	Let $m_1, \cdots, m_\ell \in \messages$, $w_0, \ldots, w_\ell \in \messages^*$, we say that a word $w \in \messages^*$ ""decomposes as"" $(w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w = w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding some letters from $\set{m_1, \ldots, m_{j-1}}$.
+	
+	An unfolding of $(w_0, m_1, \ldots, m_\ell, w_\ell)$ is a subword of a word that decomposes as $(w_0, m_1, \ldots, m_\ell, w_\ell)$. 
+	
+	We define a preorder on decompositions:
+	$(w_0, m_1, \ldots, m_\ell, w_\ell) \preceq (w'_0, m'_1, \ldots, m'_k, w'_k)$ if the set of unfoldings of $(w_0, m_1, \ldots, m_\ell, w_\ell)$ is included in the one of $(w'_0, m'_1, \ldots, m'_k, w'_k)$
 \end{definition}
 
 \begin{definition}
@@ -66,7 +145,7 @@
 
 \begin{definition}
 	A "tree decomposition" satisfies a production specification $w$ if its root is a "production node" and $w$ is a subword of its label.
-	A "tree decomposition" satisfies an echo specification $(w_0, m_1, w_1, \ldots, m_k, w_k)$ if its root is an "echo node" labelled TODO.
+	A "tree decomposition" satisfies an echo specification $(w_0, m_1, w_1, \ldots, m_k, w_k,m)$ if its root is an "echo node" labelled with a "decomposition" $(w'_0, m'_1, w'_1, \ldots, m'_\ell, w'_\ell,m)$ such that  $(w_0, m_1, w_1, \ldots, m_k, w_k) \preceq (w'_0, m'_1, w'_1, \ldots, m'_\ell, w'_\ell)$.
 \end{definition}
 
 
@@ -75,10 +154,27 @@
 	If there exists a finite run $\rho$ satisfying some "specification" then there exists a finite "tree decomposition" whose root is labelled with that specification.
 \end{lemma}
 
+\begin{proof}
+	We proceed by strong induction on the length of $\rho$.
+	Let $N \in \nats$, suppose the lemma holds for all runs of length less than $N$.
+	
+	Let $\rho$ be a run of length $N$ satisfying a "production specification" $w$.
+		
+	There exists a value $v$ such that the sequence of messages broadcast with value $v$ through $\rho$ is a subword of $w$.
+	
+	If $w$ is empty then the tree decomposition with one node labelled with the an empty local run and $w$ satisfies $w$.	
+	
+	Otherwise let $a$ be the agent which has $v$ as an initial value, let $u$ be its local run in $\rho$.
+	\cortoin{TODO}
+\end{proof}
 
 \begin{lemma}
-	If there exists there exists a finite "tree decomposition" whose root is labelled with some "specification" then  a finite run $\rho$ satisfying that specification.
+	If there exists a finite "tree decomposition" whose root is labelled with some "specification" then there exists  a finite run $\rho$ satisfying that specification.
 \end{lemma}
+
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
 
 \begin{lemma}
 	Let $w$ be a "production specification".
@@ -87,6 +183,10 @@
 	If $\mu$ is an ancestor of $\mu'$ and the $v$-output of $\mu$ is a subword of the $v'$-output of $\mu'$ then there exists a smaller "tree decomposition" with its root labelled $w$.  
 \end{lemma}
 
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
+
 \begin{lemma}
 	Let $w$ be a "production specification".
 	Let $\tau$ be a "tree decomposition" whose root is labelled with $w$.
@@ -94,19 +194,21 @@
 	If $\mu$ is an ancestor of $\mu'$ and the $v'$-input of $\mu'$ is a subword of the $v$-input of $\mu$ then there exists a smaller "tree decomposition" with its root labelled $w$.  
 \end{lemma}
 
-
-
-\cortoin{Define order on inputs/outputs}
-
-
-\newpage
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
 
 \begin{lemma}
+	\label{lem:short-local-runs}
 	Let $\prot$ be a protocol with $r$ registers.
 	Let $u$ be a "local run" of $\prot$ with an input $w$.
 	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
 	If $\size{u_2} > TOWER$, then there exists $u'$ such that $u_1u'u_3$ is a local run of $\prot$ with smaller input than $u$. 
 \end{lemma}
+
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
 
 \iffalse
 \begin{proof}
@@ -139,6 +241,10 @@
 	Then if $\size{u_\mu} \geq TOWER \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree decomposition with the same root specification label.
 \end{lemma}
 
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
+
 \begin{definition}
 	We define the ""height"" of a node in a "tree decomposition" recursively as follows:
 	\begin{itemize}
@@ -151,23 +257,109 @@
 \end{definition}
 
 \begin{lemma}
-	In a minimal "tree decomposition" satisfying a given specification, the length of a local run associated with a node $\mu$ is bounded by $(TOWER (|\messages|+1))^{hmax-h+1}$
+	\label{lem:bound-length-at-height-h}
+	In a minimal "tree decomposition" satisfying a given specification, the length of a local run associated with a node $\mu$ of height $h$ is bounded by $(TOWER (|\messages|+1))^{hmax-h+1}$
 \end{lemma}
+
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
+
+\begin{lemma}
+	\label{lem:bound-max-height}
+	The maximal height in a minimal tree decomposition is bounded by $f_1(\size{\prot})$ where $f_1$ is a function of the class $F_{\omega^\omega}$.
+\end{lemma}
+
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
+
+\begin{corollary}
+	The local run associated with the root of a minimal tree decomposition is bounded by $f_2(\size{\prot})$ where $f_2$ is a function of the class $F_{\omega^\omega}$.
+\end{corollary}
+
+\begin{proof}
+	Consequence of Lemmas~\ref{lem:bound-length-at-height-h} and~\ref{lem:bound-max-height} as $F_{\omega^\omega}$ is closed by composition with primitive recursive functions.
+\end{proof}
+
+\begin{lemma}
+	\label{lem:bound-min-height}
+	The absolute value of the minimal height in a minimal tree decomposition is bounded by $f_3(\size{\prot})$ where $f_3$ is a function of the class $F_{\omega^\omega}$.
+\end{lemma}
+
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
+
+\begin{corollary}
+	\label{lem:bound-node-size}
+	The length of a local run associated with a node of a minimal tree decomposition is bounded by $f_4(\size{\prot})$ where $f_4$ is a function of the class $F_{\omega^\omega}$.
+\end{corollary}
+
+\begin{proof}
+	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-min-height} and \ref{lem:bound-min-height} as $F_{\omega^\omega}$ is closed by composition with primitive recursive functions.
+\end{proof}
 
 \begin{proposition}
 	In a minimal "tree decomposition" satisfying a given specification, the length of a branch is bounded by a function of $F_{\omega^\omega}$.
 \end{proposition}
 
-\begin{lemma}
-	Given a protocol $\prot$, one can construct in polynomial time a protocol $\prot'$ with no $*$ operation satisfying the same specifications as $\prot$.
-\end{lemma}
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
+
+%\begin{lemma}
+%	Given a protocol $\prot$, one can construct in polynomial time a protocol $\prot'$ with no $*$ operation satisfying the same specifications as $\prot$.
+%\end{lemma}
+%
+%\begin{proof}
+%	Let $r$ be the number of registers of $\prot$.
+%	We simply add a register $r+1$ to $\prot$ and turn all $\rec{m}{i}{*}$ transitions into $\rec{m}{r+1}{\enregact}$. 
+%	An easy induction shows that for all local run of $\prot$ there exists a local run of $\prot'$ with the same input and output, and vice-versa.
+%\end{proof}
 
 \begin{lemma}
-	Given a protocol $\prot$ with multiple operations on messages, one can construct in exponential time a protocol $\prot'$ with single operations on messages satisfying the same specifications as $\prot$.
+	\label{lem:nostar-oneop}
+	Given a protocol $\prot$ with multiple operations on messages, one can construct in exponential time a protocol $\prot'$ with single operations on messages and no $*$ operation satisfying the same specifications as $\prot$.
 \end{lemma}
+
+\begin{proof}
+	We construct $\prot'$ as follows: It has one more register than $\prot$, but stores in its state the current state of $\prot$ and a mapping $map : [1,r] \to [1,r]$ from registers of $\prot$ to its own registers.
+	
+	Intuitively, it is going to use its registers to store the different values that are in the registers of $\prot$, and the mapping to keep track of which registers contain which values.
+	When a value is received it guesses whether it is one of the existing values or a fresh one, and updates the registers and the mapping accordingly.
+	The extra register of $\prot'$ is not necessary, but simplifies the proof.
+	
+	Formally, we set $\prot = (Q, \messages, \Delta, q_0)$. The set of states of $\prot'$ is $Q \times ([1,r] \to [1,r])$. 
+	There is a transition $(q, map) \xrightarrow{\br{m}{i}} (q', map')$ if and only if $map = map'$ and $\prot$ has a transition $q \xrightarrow{\br{m}{j}} q'$ with $map(j) = i$.
+	
+	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\enregact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that $op_i \neq \eqtestact$ for all $i$ and $map^{-1}(j) =\emptyset$ and for all $i \in [1,r]$, $map'(i) = map(i)$ if $op_i = *$ and $map'(i) = j$ otherwise.
+	
+	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\eqtestact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that for all $i\in [1,r]$,
+	\begin{itemize}
+		\item If $op_i = \eqtestact$ then $map(i) = map'(i) = j$
+		
+		\item If $op_i = \enregact$ then $map'(i) = j$
+		
+		\item If $op_i = *$ then $map'(i)= map(i)$
+	\end{itemize}
+
+	
+	We prove by induction on $\size{u}$ that for all "local run" $u$ of $\prot$ there exists a "local run" $u'$ of $\prot'$ with the same "trace" and such that if the last configuration of $u$ is $(q,f)$ and the last configuration of $u'$ is $((q',map), f')$ then $q=q'$ and for all $i$, $f(i) = f'(map(i))$.  
+	
+	\cortoin{TODO}
+	
+	We prove by induction on $\size{u'}$ that for all "local run" $u'$ of $\prot'$ there exists a "local run" $u$ of $\prot$ with the same "trace" and such that if the last configuration of $u$ is $(q,f)$ and the last configuration of $u'$ is $((q',map), f')$ then $q=q'$ and for all $i$, $f(i) = f'(map(i))$.
+	
+	\cortoin{TODO}  
+\end{proof}
 
 \begin{theorem}
 	The BNRA coverability problem is decidable and $F_{\omega^\omega}$-complete.
 	The upper bound holds even with multiple operations on messages.
 	The lower bound holds even with two registers.
 \end{theorem}
+
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
