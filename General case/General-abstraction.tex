@@ -80,7 +80,7 @@ We say that a local run is cheaper than another one if the set of children it sp
 	Its $v$-vision, which we denote by $\vision{v}{u}$, is the sequence of messages of broadcasts made or received in $u$ with value $v$.
 	
 	The ""input"" of $u$ is the set $\Input{u} = \set{\vinput{v}{u} \mid v \in \nats}$.
-	Its ""output"" is the set $\Output{u}=\set{\voutput{v}{u} \mid v \in \nats}$.
+	Its ""output"" is the set $\Output{u}=\set{\voutput{v}{u} \mid v \in \nats}$. Its 
 	
 	We define a preorder on such sets of words:
 	Given $W, W' \in \powerset{\Sigma^*}$, $W \unlhd W'$ if $W \subseteq W'\downarrow$, where $W'\downarrow$ stands for the set of subwords of words in $W'$.
@@ -199,15 +199,52 @@ We say that a local run is cheaper than another one if the set of children it sp
 \end{proof}
 
 \begin{lemma}
+	Let $u_1$, $u_2$ be two local runs of a protocol $\prot$ with the same sequence of transitions, $(q_1, \nu_1)$ the first local configuration of $u_1$, $(q_2, \nu_2)$ the last one of $u_2$. Then there i a local run $u$ with the same sequence of transitions as $u_1$ and $u_2$ from $(q_1, \nu_1)$ to $(q_2, \nu_2)$. 
+\end{lemma}
+
+\begin{figure}
+	\input{../Figures/fig-illustration-pumping}
+	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. Lines correspond to registers, and vertical separations are times at which the value of that register changes. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed. We can then obtain a shorter run by glueing them together as in the picture.}
+\end{figure}
+
+\begin{lemma}
 	\label{lem:short-local-runs}
 	Let $\prot$ be a protocol with $r$ registers.
-	Let $u$ be a "local run" of $\prot$ with an input $w$.
+	Let $u$ be a "local run" of $\prot$ with an "input" $I$.
 	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
-	If $\size{u_2} > TOWER$, then there exists $u'$ such that $u_1u'u_3$ is a local run of $\prot$ with smaller input than $u$. 
+	If $\size{u_2} > TOWER$, then there exists $u'_2$ such that $u_1u'_2u_3$ is a local run of $\prot$ with smaller "input" than $u$. 
 \end{lemma}
 
 \begin{proof}
-	\cortoin{TODO}
+	The statement of this lemma is adapted to ease its use in the other proofs.
+	In order to prove it, we show a stronger statement.	
+	For this proof we will allow our protocols to execute local actions from a finite alphabet $\Sigma$, which are not associated with any broadcast or receive operation.	
+	
+	We will show the following result, which directly implies the lemma:
+	Let $\prot$ be a protocol with $r$ registers, let $u$ be a "local run" of $\prot$ from "local configuration" $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$ with an input $I$. If $\size{u} \geq TOWER$, then there exists a shorter local run $u'$ from $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$, with a smaller "input" and such that the sequence of local actions in $u'$ is a subword of the one in $u$.
+	We proceed by induction on $r$.
+	
+	If $r=0$ then if $\size{u} > TOWER = \size{Q}$ then $u$ visits twice the same state, hence the same local configuration as there are no registers, and the sequence between those two moments can be deleted, yielding the result.
+	
+	Let $r>0$, suppose the proposition holds for $r-1$.
+	Let $u$ be a run of $\prot$, a protocol with $r$ registers, with $\size{u} > TOWER$.
+	
+	\begin{itemize}
+		\item If there exists $i \in [1,r]$ such that $u$ has a factor $u_f$ in which the value of register $i$ does not change and with $\size{u_f} > TOWER$, then let $\Tilde{\prot}$ be $\prot$ where every operation $op$ over $i$ has been replaced with a local action $a_{op}$. Note that $\Tilde{\prot}$ only uses $r-1$ registers. 
+		Let $\Tilde{u_f}$ be the run following $u_f$ in $\prot$, where every transition $q \xrightarrow{op} q'$ with an operation on $i$ has been replaced with $q \xrightarrow{a_{op}} q'$.
+		
+		By induction hypothesis we have that there exists $\Tilde{u'_f}$ shorter than $\Tilde{u_f}$, with the same start and end local configurations, a smaller input, and a sequence of local actions that is a subword of the one of $\Tilde{u_f}$.
+		
+		We conclude that the corresponding sequence of transitions $u_f'$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs. .
+		
+		\item If no register keeps the same value for more than $TOWER$ steps, then any run $u$ of length at least $M_{r-1} ((\size{\Delta})^{M_{r-1}} +1)$ can be split into $(\size{\Delta})^{M_{r-1}} +1$ segments of size $M_{r-1}$. There are $\size{\Delta}^{M_{r-1}}$ different sequences of transitions, thus by the pigeonhole principle we have $u = \pi_1 \sigma_1 \pi_2 \sigma_2 \pi_3$ with $\size{\sigma_1} = \size{\sigma_2} = M_{r-1}$ and such that  $\sigma_1$ and $\sigma_2$ have the same sequence of transitions.
+		
+		Furthermore as all registers change their values every $M_{r-1}$ steps, we know that $\sigma_1$ and $\sigma_2$ contain operations of the form $\rec{m}{i}{\enregact}$ for all $i \in [1,r]$.
+		
+		Let $(q_1, \nu_1)$ be the local configuration at the beginning of $\sigma_1$, $(q_2, \nu_2)$ the one at the end of $\sigma_2$.
+		\cortoin{TO FINISH}
+	\end{itemize}
+	
 \end{proof}
 
 \iffalse
@@ -297,7 +334,7 @@ We say that a local run is cheaper than another one if the set of children it sp
 \end{corollary}
 
 \begin{proof}
-	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-min-height} and \ref{lem:bound-min-height} as $F_{\omega^\omega}$ is closed by composition with primitive recursive functions.
+	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $F_{\omega^\omega}$ is closed by composition with primitive recursive functions.
 \end{proof}
 
 \begin{proposition}
@@ -333,7 +370,7 @@ We say that a local run is cheaper than another one if the set of children it sp
 	Formally, we set $\prot = (Q, \messages, \Delta, q_0)$. The set of states of $\prot'$ is $Q \times ([1,r] \to [1,r])$. 
 	There is a transition $(q, map) \xrightarrow{\br{m}{i}} (q', map')$ if and only if $map = map'$ and $\prot$ has a transition $q \xrightarrow{\br{m}{j}} q'$ with $map(j) = i$.
 	
-	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\enregact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that $op_i \neq \eqtestact$ for all $i$ and $map^{-1}(j) =\emptyset$ and for all $i \in [1,r]$, $map'(i) = map(i)$ if $op_i = *$ and $map'(i) = j$ otherwise.
+	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\enregact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that $op_i \neq \eqtestact$ for all $i$ and $map^{-1}(j) =\emptyset$ and for all $i \in [1,r]$, $map'(i) = map(i)$ if $op_i = *$ and $map'(i) = j$ if $op_i = \enregact$.
 	
 	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\eqtestact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that for all $i\in [1,r]$,
 	\begin{itemize}
