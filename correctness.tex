@@ -41,15 +41,15 @@
 
 \begin{lemma}
 	\label{lem:correctness-construction}
-	Let $\sigma_0 \in \aconfiginitset$, and $\sigma_0 \to \sigma_1 \to \cdots \to \sigma_n$ an abstract run. For all $i$ we set $(S_i, b_i, K_i) = \sigma_i$. Let $M = \size{\Delta}+1$
+	Let $\sigma_0 \in \aconfiginitset$, and $\sigma_0 \to \sigma_1 \to \cdots \to \sigma_n$ an abstract run. For all $i$ let $(S_i, b_i, K_i) := \sigma_i$. Let $M = \size{\Delta}+1$.
 	
-	For all $i$, there exists a set of agents $\agents_i$ and a configuration $\config_i$ such that $\config_0 \step{*} \config_i$ over $\agents_i$ and agents $a_0, \cdots, a_n \in \agents_i$ and values $v_0, \ldots, v_n$ such that 
+	For all $i$, there exist a set of agents $\agents_i$, a configuration $\config_i$, a run $\run_i : \config_0 \step{*} \config_i$ over $\agents_i$, agents $a_0, \cdots, a_n \in \agents_i$ and values $v_0, \ldots, v_n \in \nats$ such that:
 	\begin{itemize}
-		\item for all $s \in S_i$, there are at least $M^{n-i}$ agents (different from $a_i$) in state $s$ whose initial value 
+		\item for all $s \in S_i$, there are at least $M^{n-i}$ agents (different from $a_i$) in state $s$ whose initial value \nico{???}
 		
 		\item for all $s \in K_i$, there are at least $M^{n-i}$ agents (different from $a_i$) in state $s$ with value $v_i$
 		
-		\item if $b \neq \noboss$, then $a_i$ is in state $b_i$ with value $v_i$.
+		\item if $b_i \neq \noboss$, then $a_i$ is in state $b_i$ with value $v_i$.
 	\end{itemize}
 \end{lemma}
 
@@ -57,7 +57,7 @@
 \begin{proof}
 
 We proceed by induction on $i$.
-We set $\agents_0 = \set{1, \ldots, \size{\Delta}^n}$, and we set $\config_0(a) = (q_0, a)$ for all $a$. Clearly $\config_0$ satisfies the requirements with respect to $\sigma_0$, with $a_0 = v_0 \in \agents$.
+We set $\agents_0 = \set{1, \ldots, M^n}$, and we set $\config_0(a) = (q_0, a)$ for all $a$. Clearly $\config_0$ satisfies the requirements with respect to $\sigma_0$, with $a_0 = v_0 \in \agents$.
 
 Now assume we constructed $\config_0 \step{*} \cdots \step{*} \config_{i}$ over $\agents_i$ satisfying the conditions of the lemma, we construct $\config_{i+1}$ using a case distinction on the form of the transition $\sigma_i \to \sigma_{i+1}$.
 For each $s \in S\setminus K$ we define $\agents_{i,s}$ as the set of agents in state $s$ in $\config_{i}$. We have $\size{\agents_{i,s}} \geq M^{n-i}$ thus we can extract $M = \size{\Delta}+1$ disjoint sets of agents $(\agents_{i,s}^d)_{d \in \Delta\cup\set{\epsilon}}$ from it.
