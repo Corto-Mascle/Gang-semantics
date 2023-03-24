@@ -9,8 +9,8 @@ Given a reception $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$ i
 
 \begin{definition}
 	Let $(Q,\messages, \transitions, q_0)$ be a protocol, and $\agents \subseteq \nats$ a finite set of \emph{agents}.
-	A ""configuration"" over a set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats$, associating a state and a ""register value"" to each agent. We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component. 
-	An \emph{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and for all $a, a' \in \agents$, if $\data{\config}(a) = \data{\config}(a')$ then $a=a'$.
+	A ""configuration"" over a set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats$, mapping each agent to a state and a ""register value"". We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component. 
+	An \intro{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and for all $a, a' \in \agents$, if $\data{\config}(a) = \data{\config}(a')$ then $a=a'$.
 	
 	\AP We denote by $\configs{\agents}$ the set of configurations over $\agents$, and by $\allconfigs := \cup_{\agents \subseteq \nats \text{ finite }} \configs{\agents}$ the set of all configurations. Given a configuration $\config$, we denote by $\agentsof{\config}$ the set of agents of $\config$.
 
@@ -39,11 +39,11 @@ A "run" $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when t
 %We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
 
-The following proposition formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
-\begin{proposition}
-\label{prop:run_no_new_register_values}
-For all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
-\end{proposition}
+The following remark formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
+\begin{remark}
+\label{rem:run_no_new_register_values}
+As at all steps the registers that change their values change it to one that comes from another register, we have that for all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
+\end{remark}
 
 \begin{definition}
 We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
