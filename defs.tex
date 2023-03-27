@@ -28,7 +28,7 @@ Given a reception $(q,\rec{\amessage}{\anact}, q') \in \transitions$, $\anact$ i
 		\end{itemize}
 	\end{itemize}
 
-	\AP A ""path"" is a sequence of steps $\path : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. 
+	\AP A ""path"" is a sequence of steps $\apath : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. 
 We write $\config_0 \step{*} \config_k$ the existence of such a "path".
  A ""run"" is a "path" whose first configuration is an "initial configuration"; runs are denoted using letter $\run$.  
 Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents, $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\valsof{\run} := \set{\aval \in \nats \mid \exists i, \exists a, \data{\config_i}(a) = \aval}$.  
