@@ -232,6 +232,54 @@ When building the run an follower node means that there exists a global run whic
 \end{proof}
 
 \begin{lemma}
+	If two protocols $\prot, \prot'$ are such that for all local run $u$ of one of them, the other has a local run with the same inputs and outputs, then they satisfy the same queries. 
+\end{lemma}
+
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
+
+
+
+\begin{lemma}
+	\label{lem:simple-reduction}
+	For all "protocol" $\prot$ there is a "simple protocol" $\prot'$ with one more register satisfying the same queries.
+\end{lemma}
+
+\begin{proof}
+	\cortoin{Ancienne preuve, à adapter ou réécrire}
+	
+	We construct $\prot'$ as follows: It has one more register than $\prot$, but stores in its state the current state of $\prot$ and a mapping $map : [1,r] \to [1,r+1]$ from registers of $\prot$ to its own registers.
+	
+	Intuitively, it is going to use its registers to store the different values that are in the registers of $\prot$, and the mapping to keep track of which registers contain which values.
+	When a value is received it guesses whether it is one of the existing values or a fresh one, and updates the registers and the mapping accordingly.
+	The extra register of $\prot'$ is not necessary, but simplifies the proof.
+	
+	Formally, we set $\prot = (Q, \messages, \Delta, q_0)$. The set of states of $\prot'$ is $Q \times ([1,r] \to [1,r])$. 
+	There is a transition $(q, map) \xrightarrow{\br{m}{i}} (q', map')$ if and only if $map = map'$ and $\prot$ has a transition $q \xrightarrow{\br{m}{j}} q'$ with $map(j) = i$.
+	
+	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\enregact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that $op_i \neq \eqtestact$ for all $i$ and $map^{-1}(j) =\emptyset$ and for all $i \in [1,r]$, $map'(i) = map(i)$ if $op_i = *$ and $map'(i) = j$ if $op_i = \enregact$.
+	
+	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\eqtestact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that for all $i\in [1,r]$,
+	\begin{itemize}
+		\item If $op_i = \eqtestact$ then $map(i) = map'(i) = j$
+		
+		\item If $op_i = \enregact$ then $map'(i) = j$
+		
+		\item If $op_i = *$ then $map'(i)= map(i)$
+	\end{itemize}
+	
+	
+	We prove by induction on $\size{u}$ that for all "local run" $u$ of $\prot$ there exists a "local run" $u'$ of $\prot'$ with the same "trace" and such that if the last configuration of $u$ is $(q,f)$ and the last configuration of $u'$ is $((q',map), f')$ then $q=q'$ and for all $i$, $f(i) = f'(map(i))$.  
+	
+	\cortoin{TODO}
+	
+	We prove by induction on $\size{u'}$ that for all "local run" $u'$ of $\prot'$ there exists a "local run" $u$ of $\prot$ with the same "trace" and such that if the last configuration of $u$ is $(q,f)$ and the last configuration of $u'$ is $((q',map), f')$ then $q=q'$ and for all $i$, $f(i) = f'(map(i))$.
+	
+	\cortoin{TODO}  
+\end{proof}
+
+\begin{lemma}
 	Let $w$ be a "boss specification".
 	Let $\tau$ be a "tree decomposition" whose root is labelled with $w$.
 	Let $\mu, \mu'$ be two "boss nodes" of $\tau$, $u, v$ and $u', v'$ the associated local runs.

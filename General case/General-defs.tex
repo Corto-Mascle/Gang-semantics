@@ -90,43 +90,7 @@ types.
 	%We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
 
-	\begin{lemma}
-		\label{lem:simple-reduction}
-	For all "protocol" $\prot$ there is a "simple protocol" $\prot'$ with one more register satisfying the same queries.
-\end{lemma}
-
-\begin{proof}
-	\cortoin{Ancienne preuve, à adapter ou réécrire}
 	
-	We construct $\prot'$ as follows: It has one more register than $\prot$, but stores in its state the current state of $\prot$ and a mapping $map : [1,r] \to [1,r]$ from registers of $\prot$ to its own registers.
-	
-	Intuitively, it is going to use its registers to store the different values that are in the registers of $\prot$, and the mapping to keep track of which registers contain which values.
-	When a value is received it guesses whether it is one of the existing values or a fresh one, and updates the registers and the mapping accordingly.
-	The extra register of $\prot'$ is not necessary, but simplifies the proof.
-	
-	Formally, we set $\prot = (Q, \messages, \Delta, q_0)$. The set of states of $\prot'$ is $Q \times ([1,r] \to [1,r])$. 
-	There is a transition $(q, map) \xrightarrow{\br{m}{i}} (q', map')$ if and only if $map = map'$ and $\prot$ has a transition $q \xrightarrow{\br{m}{j}} q'$ with $map(j) = i$.
-	
-	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\enregact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that $op_i \neq \eqtestact$ for all $i$ and $map^{-1}(j) =\emptyset$ and for all $i \in [1,r]$, $map'(i) = map(i)$ if $op_i = *$ and $map'(i) = j$ if $op_i = \enregact$.
-	
-	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\eqtestact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that for all $i\in [1,r]$,
-	\begin{itemize}
-		\item If $op_i = \eqtestact$ then $map(i) = map'(i) = j$
-		
-		\item If $op_i = \enregact$ then $map'(i) = j$
-		
-		\item If $op_i = *$ then $map'(i)= map(i)$
-	\end{itemize}
-	
-	
-	We prove by induction on $\size{u}$ that for all "local run" $u$ of $\prot$ there exists a "local run" $u'$ of $\prot'$ with the same "trace" and such that if the last configuration of $u$ is $(q,f)$ and the last configuration of $u'$ is $((q',map), f')$ then $q=q'$ and for all $i$, $f(i) = f'(map(i))$.  
-	
-	\cortoin{TODO}
-	
-	We prove by induction on $\size{u'}$ that for all "local run" $u'$ of $\prot'$ there exists a "local run" $u$ of $\prot$ with the same "trace" and such that if the last configuration of $u$ is $(q,f)$ and the last configuration of $u'$ is $((q',map), f')$ then $q=q'$ and for all $i$, $f(i) = f'(map(i))$.
-	
-	\cortoin{TODO}  
-\end{proof}
 
 \section{Basic properties}
 
@@ -141,16 +105,16 @@ types.
 %\end{lemma}
 
 
-\ifproofs
-\begin{proof}
-	Let $\agents' \subseteq \nats$ such that $|\agents'|= |\agents|$ and $\agents \cap \agents' = \emptyset$.
-	There exists a bijection $\psi: \agents \mapsto \agents'$. Let $\config_0'$ an initial configuration over $\agents \cup \agents'$ which is equal to $\config_0$ on every agent of $\agents$. 
-	The constructed "run" $\run'$ starts on configuration $\config_0'$ and is composed of two parts. 
-	The first part consists in mimicking the sequence of steps of $\run$ with agents of $\agents$, while agents in $\agents'$ remain idle. This defines a run $\run_p' : \config_0' \step{*}  \config_m'$.  
-	The second part consists in a path $\apath': \config_m' \step{*} \config_f'$ which replicates the sequence of actions of $\run$ but on agents of $\agents'$: if an agent $a \in \agents$ takes a transition at step $i$ of $\run$, we make $\psi(a)$ take that transition at step $i$ of $\apath'$. As $\apath'$ is identical to $\run_p'$ up to renaming of the agents and values, a straightforward induction shows that this is always a valid transition.
-	In this second part, agents of $\agents$ are left idle. $\run'$ is obtained by concatenating $\run_p'$ and $\apath'$. Since agents of $\agents$ behave the same in $\run$ and $\run'$, for all $a \in \agents$, $\config_f(a) = \config_f'(a')$. Also, $\psi(a_m)$ took the same transitions as $a_m$ hence $\st{\config_f}(\psi(a_m)) = q$. Finally, thanks to Lemma~\ref{prop:run_no_new_register_values}, the register values of agents of $\agents'$ are in the set $\data{\config_0'}(\agents')([1,r])$ while the register values of agents of $\agents$ are in $\data{\config_0'}(\agents)([1,r])$; both sets are disjoint as $\config_0'$ is initial and thus for all $a \in \agents, a' \in \agents'$, $j,j' \in [1,r]$, $\data{\config_f'}(a) \ne \data{\config_f'}(a'_q)$.
-\end{proof}
-\fi
+%\ifproofs
+%\begin{proof}
+%	Let $\agents' \subseteq \nats$ such that $|\agents'|= |\agents|$ and $\agents \cap \agents' = \emptyset$.
+%	There exists a bijection $\psi: \agents \mapsto \agents'$. Let $\config_0'$ an initial configuration over $\agents \cup \agents'$ which is equal to $\config_0$ on every agent of $\agents$. 
+%	The constructed "run" $\run'$ starts on configuration $\config_0'$ and is composed of two parts. 
+%	The first part consists in mimicking the sequence of steps of $\run$ with agents of $\agents$, while agents in $\agents'$ remain idle. This defines a run $\run_p' : \config_0' \step{*}  \config_m'$.  
+%	The second part consists in a path $\apath': \config_m' \step{*} \config_f'$ which replicates the sequence of actions of $\run$ but on agents of $\agents'$: if an agent $a \in \agents$ takes a transition at step $i$ of $\run$, we make $\psi(a)$ take that transition at step $i$ of $\apath'$. As $\apath'$ is identical to $\run_p'$ up to renaming of the agents and values, a straightforward induction shows that this is always a valid transition.
+%	In this second part, agents of $\agents$ are left idle. $\run'$ is obtained by concatenating $\run_p'$ and $\apath'$. Since agents of $\agents$ behave the same in $\run$ and $\run'$, for all $a \in \agents$, $\config_f(a) = \config_f'(a')$. Also, $\psi(a_m)$ took the same transitions as $a_m$ hence $\st{\config_f}(\psi(a_m)) = q$. Finally, thanks to Lemma~\ref{prop:run_no_new_register_values}, the register values of agents of $\agents'$ are in the set $\data{\config_0'}(\agents')([1,r])$ while the register values of agents of $\agents$ are in $\data{\config_0'}(\agents)([1,r])$; both sets are disjoint as $\config_0'$ is initial and thus for all $a \in \agents, a' \in \agents'$, $j,j' \in [1,r]$, $\data{\config_f'}(a) \ne \data{\config_f'}(a'_q)$.
+%\end{proof}
+%\fi
 
 %\begin{lemma}[Strong copycat]\label{lem:strong_copycat}
 %	Let $\run : \config_0 \step{*} \config_f$ a "run" over set of agents $\agents$ with some distinguished agent $a_m \in \agents$ and register $j_m \in [1,r]$ such that $\data{\config_f}(a_m)(j_m) \ne \data{\config_0}(a_m)(j_m)$. % note that this condition may be relaxed to : a_m's register value did not stay the same throughout all of $\run$. 
