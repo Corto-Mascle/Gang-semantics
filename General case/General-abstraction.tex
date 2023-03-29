@@ -1,5 +1,6 @@
 \section{Bounded witnesses for reachability}
 
+\ifintuition
 \subsection{Intuition}
 
 Our aim is to prove the decidability of the coverability problem for BNRA which can only send a single value in each broadcast. The constructions will actually lead us to a decidability proof for specifications of two different types, both subsuming the coverability specification.
@@ -70,8 +71,10 @@ We say that a local run is cheaper than another one if the set of children it sp
  This lets us bound the overall size of the tree with a function of $F_{\omega^\omega}$, yielding decidability and complexity of the problem.
 
 \subsection{Formal proof}
+\fi
 
-\textbf{For now we assume that the BRNA do not contain $*$ operations and apply only one operation for each message received. We will reduce the general case to this one later (lemma \ref{lem:nostar-oneop}).}
+
+\textbf{For now we assume that the BRNA do not contain $*$ operations and apply only one operation for each message received. The general case reduces to this one (lemma \ref{lem:simple-reduction}).}
 
 \begin{definition}
 	A ""local configuration"" is a pair $(q, \nu) \in Q \times ([1,r] \to \nats)$.
@@ -107,25 +110,25 @@ We say that a local run is cheaper than another one if the set of children it sp
 	\begin{itemize}
 		\item The first one is a local run of $\prot$. 
 		
-		\item The second one is a ""specification"", which is either a word $w \in \messages^*$ (we say that the node is a ""speaker node"") or a decomposition along with a message $(w_0, m_1, \ldots, w_\ell), m$ (""echo node""). 
+		\item The second one is a ""specification"", which is either a word $w \in \messages^*$ (we say that the node is a ""boss node"") or a decomposition along with a message $(w_0, m_1, \ldots, w_\ell), m$ (""follower node""). 
 	\end{itemize} 
 	
 	It must satisfy the following conditions:
 	Let $\mu$ be a node of that tree, and $u$ the local run labelling it.
 	
-	If it is a "speaker node" labelled by some word $w \in \messages^*$ then there must exist $v \in \nats$ an initial value of $u$ such that
+	If it is a "boss node" labelled by some word $w \in \messages^*$ then there must exist $v \in \nats$ an initial value of $u$ such that
 	\begin{itemize}
-		\item $w$ "decomposes as" $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ with $w_0 \cdots w_\ell$ the $v$-input of $u$, and for all $1 \leq j \leq \ell$, $\mu$ has a child which is an "echo node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.
+		\item $w$ "decomposes as" $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ with $w_0 \cdots w_\ell$ the $v$-input of $u$, and for all $1 \leq j \leq \ell$, $\mu$ has a child which is an "follower node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.
 		
 		\item For all $v' \neq v$ appearing in $u$,
 		\begin{itemize}
-			\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "echo node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
+			\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "follower node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
 			
-			\item If $v'$ is not an initial value then $\mu$ has a child which is a "speaker node" labelled by $w'$ the $v'$-input of $u$.
+			\item If $v'$ is not an initial value then $\mu$ has a child which is a "boss node" labelled by $w'$ the $v'$-input of $u$.
 		\end{itemize}
 	\end{itemize}
 	
-	If it is an "echo node" labelled by some $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell), m$ then there must exist $v \in \nats$ an initial value of $u$ such that
+	If it is an "follower node" labelled by some $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell), m$ then there must exist $v \in \nats$ an initial value of $u$ such that
 	\begin{itemize}
 		\item $u$ ends with a broadcast of $m$ with value $v$.
 		
@@ -133,9 +136,9 @@ We say that a local run is cheaper than another one if the set of children it sp
 		
 		\item For all $v' \neq v$ appearing in $u$,
 		\begin{itemize}
-			\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "echo node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
+			\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "follower node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
 			
-			\item If $v'$ is not an initial value then $\mu$ has a child which is a "speaker node" labelled by $w'$ the $v'$-input of $u$.
+			\item If $v'$ is not an initial value then $\mu$ has a child which is a "boss node" labelled by $w'$ the $v'$-input of $u$.
 		\end{itemize}
 	\end{itemize}
 \end{definition}
@@ -147,33 +150,33 @@ We say that a local run is cheaper than another one if the set of children it sp
 %	We define two types of specifications for runs of a given "protocol" $\prot$:
 %	
 %	\begin{itemize}
-%		\item The first one is the ""production type"", and is given by a word $w$ over $\messages$. There should exist some value $v \in \nats$ such that the $v$-output of the run has $w$ as a subword.
+%		\item The first one is the ""boss type"", and is given by a word $w$ over $\messages$. There should exist some value $v \in \nats$ such that the $v$-output of the run has $w$ as a subword.
 %		
-%		\item The second one is the ""echo type"". It is given by sequences of letters $m_1, \ldots, m_\ell \in \messages$ and words $w_0, \ldots, w_\ell$ over $\messages$, and a letter $m \in \messages$, such that all $m_j$ are distinct from $m$ and from each other.
+%		\item The second one is the ""follower type"". It is given by sequences of letters $m_1, \ldots, m_\ell \in \messages$ and words $w_0, \ldots, w_\ell$ over $\messages$, and a letter $m \in \messages$, such that all $m_j$ are distinct from $m$ and from each other.
 %		There should exist some value $v$ such that the run takes as input a word $w'$ that "decomposes as" $(w_0, m_1, \ldots, m_\ell, w_\ell)$, and whose $v$-output contains an $m$.
 %	\end{itemize}
 %\end{definition}
 
 %\begin{definition}
 %	A ""tree decomposition"" of a run $\run$ with respect to a "specification" is
-%	a tree whose nodes are labelled by local runs $u$ of $\prot$ and either by "production specifications" $w$ ("production nodes") or by "echo specifications" $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell, m)$ ("echo nodes"). 
+%	a tree whose nodes are labelled by local runs $u$ of $\prot$ and either by "boss specifications" $w$ ("boss nodes") or by "follower specifications" $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell, m)$ ("follower nodes"). 
 %	
 %	It must satisfy the following conditions:
 %	Let $\mu$ be a node of that tree, and $u$ the local run labelling it.
 %	
-%	If it is a "production node" labelled by some $w$ then there must exist $v \in \nats$ an initial value of $u$ such that
+%	If it is a "boss node" labelled by some $w$ then there must exist $v \in \nats$ an initial value of $u$ such that
 %	\begin{itemize}
-%		\item $w$ "decomposes as" $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ with $w_0 \cdots w_\ell$ the $v$-input of $u$, and for all $1 \leq j \leq \ell$ $\mu$ has a child which is an "echo node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.
+%		\item $w$ "decomposes as" $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ with $w_0 \cdots w_\ell$ the $v$-input of $u$, and for all $1 \leq j \leq \ell$ $\mu$ has a child which is an "follower node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.
 %		
 %		\item For all $v' \neq v$ appearing in $u$,
 %		\begin{itemize}
-%		\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "echo node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
+%		\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "follower node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
 %			
-%		\item If $v'$ is not an initial value then $\mu$ has a child which is a "production node" labelled by $w'$ the $v'$-input of $u$.
+%		\item If $v'$ is not an initial value then $\mu$ has a child which is a "boss node" labelled by $w'$ the $v'$-input of $u$.
 %		\end{itemize}
 %	\end{itemize}
 %
-%	If it is an "echo node" labelled by some $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell, m)$ then there must exist $v \in \nats$ an initial value of $u$ such that
+%	If it is an "follower node" labelled by some $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell, m)$ then there must exist $v \in \nats$ an initial value of $u$ such that
 %	\begin{itemize}
 %		\item $u$ ends with a broadcast of $m$ with value $v$.
 %		
@@ -181,25 +184,25 @@ We say that a local run is cheaper than another one if the set of children it sp
 %		
 %		\item For all $v' \neq v$ appearing in $u$,
 %		\begin{itemize}
-%			\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "echo node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
+%			\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "follower node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
 %			
-%			\item If $v'$ is not an initial value then $\mu$ has a child which is a "production node" labelled by $w'$ the $v'$-input of $u$.
+%			\item If $v'$ is not an initial value then $\mu$ has a child which is a "boss node" labelled by $w'$ the $v'$-input of $u$.
 %		\end{itemize}
 %	\end{itemize}
 %\end{definition}
 
 \begin{definition}
-	A "tree decomposition" satisfies a specification $w$ if its root is a "speaker node" and $w$ is a subword of its label.
-	A "tree decomposition" satisfies an echo specification $(w_0, m_1, w_1, \ldots, m_k, w_k) ,m$ if its root is an "echo node" labelled with a "decomposition" $(w'_0, m'_1, w'_1, \ldots, m'_\ell, w'_\ell,m)$ such that  $(w_0, m_1, w_1, \ldots, m_k, w_k) \preceq (w'_0, m'_1, w'_1, \ldots, m'_\ell, w'_\ell)$.
+	A "tree decomposition" satisfies a specification $w$ if its root is a "boss node" and $w$ is a subword of its specification label.
+	A "tree decomposition" satisfies a follower specification $(w_0, m_1, w_1, \ldots, m_k, w_k) ,m$ if its root is an "follower node" labelled with a "decomposition" $(w'_0, m'_1, w'_1, \ldots, m'_\ell, w'_\ell,m)$ such that  $(w_0, m_1, w_1, \ldots, m_k, w_k) \preceq (w'_0, m'_1, w'_1, \ldots, m'_\ell, w'_\ell)$.
 	\cortoin{To adapt (maybe)}
 \end{definition}
 
 We will now prove that there exists a finite run satisfying a specification if and only if there exists a finite tree satisfying that same specification.
 We first decompose a run into a tree, then we build a run from a tree. Note that by applying consecutively these two transformations we obtain in general a much larger run than the initial one. That is because each node of the tree is associated with a part played in the run by some agent. In the initial run, the same agent may play many different parts, while in the run we construct from the tree we use different agents for each node of the tree.
 
-Also note that the interpretation of the "echo nodes" changes between the two directions: When building the tree an echo node labelled $(w_0, m_1, w_1, \ldots, m_k, w_k) ,m$ means that there exists a global run in which some agent receives a sequence of messages which decomposes as  $(w_0, m_1, w_1, \ldots, m_k, w_k)$ before broadcasting $m$, all with a value $v$ that is not one of its initial ones.
+Also note that the interpretation of the "follower nodes" changes between the two directions: When building the tree an follower node labelled $(w_0, m_1, w_1, \ldots, m_k, w_k) ,m$ means that there exists a global run in which some agent receives a sequence of messages which decomposes as  $(w_0, m_1, w_1, \ldots, m_k, w_k)$ before broadcasting $m$, all with a value $v$ that is not one of its initial ones.
 
-When building the run an echo node means that there exists a global run which receives a series of external broadcasts which decomposes as $(w_0, m_1, w_1, \ldots, m_k, w_k)$, with a value $v$ that it initially does not contain, and eventually broadcasts $m$ with that value.
+When building the run an follower node means that there exists a global run which receives a series of external broadcasts which decomposes as $(w_0, m_1, w_1, \ldots, m_k, w_k)$, with a value $v$ that it initially does not contain, and eventually broadcasts $m$ with that value.
 
 \begin{lemma}
 	If there exists a finite run $\rho$ satisfying some "specification" then there exists a finite "tree decomposition" satisfying that "specification".
@@ -209,9 +212,9 @@ When building the run an echo node means that there exists a global run which re
 	We proceed by strong induction on the length of $\rho$.
 	Let $N \in \nats$, suppose the lemma holds for all runs of length less than $N$.
 	
-	\textbf{Case 1: The specification is a "production specification"}
+	\textbf{Case 1: The specification is a "boss specification"}
 	
-	Let $\run$ be a run of length $N$ satisfying a "production specification" $w$.
+	Let $\run$ be a run of length $N$ satisfying a "boss specification" $w$.
 	There exists a value $v$ such that $w$ is a subword of the sequence of messages broadcast with value $v$ through $\run$. Let $w'$ be the latter sequence.
 	If $w$ is empty then the tree decomposition with one node labelled with the an empty local run and $w$ satisfies $w$.	
 	Otherwise let $a$ be the agent which has $v$ as an initial value, let $u$ be its local run in $\run$. 
@@ -229,9 +232,9 @@ When building the run an echo node means that there exists a global run which re
 \end{proof}
 
 \begin{lemma}
-	Let $w$ be a "production specification".
+	Let $w$ be a "boss specification".
 	Let $\tau$ be a "tree decomposition" whose root is labelled with $w$.
-	Let $\mu, \mu'$ be two "production nodes" of $\tau$, $u, v$ and $u', v'$ the associated local runs.
+	Let $\mu, \mu'$ be two "boss nodes" of $\tau$, $u, v$ and $u', v'$ the associated local runs.
 	If $\mu$ is an ancestor of $\mu'$ and the $v$-output of $\mu$ is a subword of the $v'$-output of $\mu'$ then there exists a smaller "tree decomposition" with its root labelled $w$.  
 \end{lemma}
 
@@ -240,9 +243,9 @@ When building the run an echo node means that there exists a global run which re
 \end{proof}
 
 \begin{lemma}
-	Let $w$ be a "production specification".
+	Let $w$ be a "boss specification".
 	Let $\tau$ be a "tree decomposition" whose root is labelled with $w$.
-	Let $\mu, \mu'$ be two "echo nodes" of $\tau$, $u, v$ and $u', v'$ the associated local runs.
+	Let $\mu, \mu'$ be two "follower nodes" of $\tau$, $u, v$ and $u', v'$ the associated local runs.
 	If $\mu$ is an ancestor of $\mu'$ and the $v'$-input of $\mu'$ is a subword of the $v$-input of $\mu$ and their required output message is the same then there exists a smaller "tree decomposition" with its root labelled $w$.  
 \end{lemma}
 
@@ -331,7 +334,7 @@ When building the run an echo node means that there exists a global run which re
 
 \begin{lemma}
 	Let $\mu$ be a node of a "tree decomposition", $u_\mu$ its local run.
-	Let $u$ be the local run of its father, and $u_1, \ldots, u_\ell$ the runs of its "echo" children.
+	Let $u$ be the local run of its father, and $u_1, \ldots, u_\ell$ the runs of its "follower" children.
 	Then if $\size{u_\mu} \geq TOWER \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree decomposition with the same root specification label.
 \end{lemma}
 
@@ -344,9 +347,9 @@ When building the run an echo node means that there exists a global run which re
 	\begin{itemize}
 		\item The height of the root is $0$
 		
-		\item The height of a "production node" is the height of its father minus one
+		\item The height of a "boss node" is the height of its father minus one
 		
-		\item The height of an "echo node" is the height of its father plus one.
+		\item The height of an "follower node" is the height of its father plus one.
 	\end{itemize}
 \end{definition}
 
@@ -412,41 +415,9 @@ When building the run an echo node means that there exists a global run which re
 %	An easy induction shows that for all local run of $\prot$ there exists a local run of $\prot'$ with the same input and output, and vice-versa.
 %\end{proof}
 
-\begin{lemma}
-	\label{lem:nostar-oneop}
-	Given a protocol $\prot$ with multiple operations on messages, one can construct in exponential time a protocol $\prot'$ with single operations on messages and no $*$ operation satisfying the same specifications as $\prot$.
-\end{lemma}
 
-\begin{proof}
-	We construct $\prot'$ as follows: It has one more register than $\prot$, but stores in its state the current state of $\prot$ and a mapping $map : [1,r] \to [1,r]$ from registers of $\prot$ to its own registers.
-	
-	Intuitively, it is going to use its registers to store the different values that are in the registers of $\prot$, and the mapping to keep track of which registers contain which values.
-	When a value is received it guesses whether it is one of the existing values or a fresh one, and updates the registers and the mapping accordingly.
-	The extra register of $\prot'$ is not necessary, but simplifies the proof.
-	
-	Formally, we set $\prot = (Q, \messages, \Delta, q_0)$. The set of states of $\prot'$ is $Q \times ([1,r] \to [1,r])$. 
-	There is a transition $(q, map) \xrightarrow{\br{m}{i}} (q', map')$ if and only if $map = map'$ and $\prot$ has a transition $q \xrightarrow{\br{m}{j}} q'$ with $map(j) = i$.
-	
-	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\enregact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that $op_i \neq \eqtestact$ for all $i$ and $map^{-1}(j) =\emptyset$ and for all $i \in [1,r]$, $map'(i) = map(i)$ if $op_i = *$ and $map'(i) = j$ if $op_i = \enregact$.
-	
-	There is a transition $(q, map) \xrightarrow{\rec{m}{j}{\eqtestact}} (q', map')$ if and only if there is a transition $q \xrightarrow{\recmulti{m}{op_1\cdots op_r}} q'$ in $\prot$ such that for all $i\in [1,r]$,
-	\begin{itemize}
-		\item If $op_i = \eqtestact$ then $map(i) = map'(i) = j$
-		
-		\item If $op_i = \enregact$ then $map'(i) = j$
-		
-		\item If $op_i = *$ then $map'(i)= map(i)$
-	\end{itemize}
 
-	
-	We prove by induction on $\size{u}$ that for all "local run" $u$ of $\prot$ there exists a "local run" $u'$ of $\prot'$ with the same "trace" and such that if the last configuration of $u$ is $(q,f)$ and the last configuration of $u'$ is $((q',map), f')$ then $q=q'$ and for all $i$, $f(i) = f'(map(i))$.  
-	
-	\cortoin{TODO}
-	
-	We prove by induction on $\size{u'}$ that for all "local run" $u'$ of $\prot'$ there exists a "local run" $u$ of $\prot$ with the same "trace" and such that if the last configuration of $u$ is $(q,f)$ and the last configuration of $u'$ is $((q',map), f')$ then $q=q'$ and for all $i$, $f(i) = f'(map(i))$.
-	
-	\cortoin{TODO}  
-\end{proof}
+
 
 \begin{theorem}
 	The BNRA coverability problem is decidable and "$F_{\omega^\omega}$-complete".
