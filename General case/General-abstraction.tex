@@ -78,7 +78,7 @@ We say that a local run is cheaper than another one if the set of children it sp
 
 \begin{definition}
 	A ""local configuration"" is a pair $(q, \nu) \in Q \times ([1,r] \to \nats)$.
-	A ""local run"" is a sequence of local transitions $(q_0, \nu_0) \xrightarrow{op_1} (q_1, \nu_1) \xrightarrow{op_2} \cdots \xrightarrow{op_k} (q_k, \nu_k)$ with $op_1, \ldots, op_k \in Op_r^\messages$.
+	A ""local run"" is a sequence of local transitions $(q_0, \nu_0) \xrightarrow{op_1} (q_1, \nu_1) \xrightarrow{op_2} \cdots \xrightarrow{op_k} (q_k, \nu_k)$ with $op_1, \ldots, op_k \in Op_r^\messages$. 
 	
 	Given a value $v \in \nats$, the $v$-input of a local run $u$, which we denote by $\vinput{v}{u}$, is the sequence of messages received through $u$ with value $v$.
 	Its $v$-output, which we denote by $\voutput{v}{u}$, is the sequence of messages of broadcasts made in $u$ with value $v$. 
@@ -86,61 +86,56 @@ We say that a local run is cheaper than another one if the set of children it sp
 	
 	The ""input"" of $u$ is the set $\Input{u} = \set{\vinput{v}{u} \mid v \in \nats}$.
 	Its ""output"" is the set $\Output{u}=\set{\voutput{v}{u} \mid v \in \nats}$.
-	Its ""trace"" $\trace{u} \in Op^\messages_r$ is the sequence of operations executed by $u$.
+%	Its ""trace"" $\trace{u} \in Op^\messages_r$ is the sequence of operations executed by $u$.
 	
 	We define a preorder on such sets of words:
 	Given $W, W' \in \powerset{\Sigma^*}$, $W \unlhd W'$ if $W \subseteq W'\downarrow$, where $W'\downarrow$ stands for the set of subwords of words in $W'$.
 \end{definition}
 
+A key ingredient of our construction is the decomposition of words of messages. Say we have an execution and a value $v$ such that the sequence of messages broadcast in that execution with value $v$ is $w$. Then we can distinguish in $w$ the messages sent by the agent $a$ which had that value originally. This forms a subword $w'$ of $w$. Let $m$ be the first message sent by another agent with value $v$. This means that from the messages sent by $a$ before there is a set of agents that receives some of these messages and eventually sends back message $m$ with value $v$. An important remark is that we can copy this set of agents many times to obtain as many broadcasts with message $m$ and value $v$ as we want from this point in the run.
 
+In general, if an agent other than $a$ sends a message with value $v$ then we can add agents to obtain that message with that value as many times as we want.
+Therefore, we will describe the sequences of messages sent with a value $v$ as tuples $(w_0, m_1, \ldots, m_\ell, w_\ell)$, where $w_0\cdots w_\ell$ is the sequence of messages sent by the agent $a$ which has that value initially and the $m_i$ mark, for every message of $\messages$ the first moment at which some agent other than $a$ broadcasts it with value $v$ (if that happens).
 
 \begin{definition}
-	Let $m_1, \cdots, m_\ell \in \messages$, $w_0, \ldots, w_\ell \in \messages^*$, we say that a word $w \in \messages^*$ ""decomposes as"" $(w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w = w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding some letters from $\set{m_1, \ldots, m_{j-1}}$.
+	A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. The set of decompositions over $\messages$ is denoted $\decset{\messages}$.
 	
-	An unfolding of $(w_0, m_1, \ldots, m_\ell, w_\ell)$ is a subword of a word that decomposes as $(w_0, m_1, \ldots, m_\ell, w_\ell)$. 
+	We say that a word $w \in \messages^*$ ""decomposes as"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w = w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding some letters from $\set{m_1, \ldots, m_{j-1}}$.
+	
+	The language $\langdec{\decsymb}$ of $\decsymb$ is the set of words that decompose as $\decsymb$. We write $\langdecdown{\decsymb}$ for the subword closure of $\langdec{\decsymb}$.
 	
 	We define a preorder on decompositions:
-	$(w_0, m_1, \ldots, m_\ell, w_\ell) \preceq (w'_0, m'_1, \ldots, m'_k, w'_k)$ if the set of unfoldings of $(w_0, m_1, \ldots, m_\ell, w_\ell)$ is included in the one of $(w'_0, m'_1, \ldots, m'_k, w'_k)$
+	$\decsymb \preceq \decsymb'$ if $\langdecdown{\decsymb} \subseteq \langdecdown{\decsymb'}$.
 \end{definition}
 
 
 \begin{definition}
-	A ""tree decomposition""  is
+	A ""tree unfolding"" is
 	a finite tree where each node has two labels:
 	\begin{itemize}
 		\item The first one is a local run of $\prot$. 
 		
-		\item The second one is a ""specification"", which is either a word $w \in \messages^*$ (we say that the node is a ""boss node"") or a decomposition along with a message $(w_0, m_1, \ldots, w_\ell), m$ (""follower node""). 
+		\item The second one is either a word $w \in \messages^*$ or a pair $(\decsymb, m)$ with $m \in \messages$ and $\decsymb \in \decset{\messages\setminus\set{m}}$ a "decomposition" . In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"". 
 	\end{itemize} 
 	
 	It must satisfy the following conditions:
-	Let $\mu$ be a node of that tree, and $u$ the local run labelling it.
+	Let $\mu$ be a node of that tree, and $u$ the local run labelling it. There must exist a value $v \in \nats$ such that
 	
-	If it is a "boss node" labelled by some word $w \in \messages^*$ then there must exist $v \in \nats$ an initial value of $u$ such that
 	\begin{itemize}
-		\item $w$ "decomposes as" $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ with $w_0 \cdots w_\ell$ the $v$-input of $u$, and for all $1 \leq j \leq \ell$, $\mu$ has a child which is an "follower node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.
+		\item[C1] If it is a "boss node" labelled by $w \in \messages^*$ then $v$ is an initial value of $u$ and there exists a decomposition $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that
+	 $w_0 \cdots w_\ell$ is the $v$-output of $u$, $w \in \langdecdown{\decsymb}$, and for all $1 \leq j \leq \ell$, $\mu$ has a child which is a "follower node" with a label $((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.
 		
-		\item For all $v' \neq v$ appearing in $u$,
+		\item[C2] If it is a "follower node" labelled $(\decsymb, m)$ then $v$ is not an initial value of $u$ such that the $v$-input of $u$ is in $\langdec{\decsymb}$, and $m$ is broadcast at some point in $u$ with value $v$.
+		
+		\item[C3] In both cases, for all $v' \neq v$ broadvast or received at some point in $u$,
 		\begin{itemize}
-			\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "follower node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
+			\item[C3.1] If $v'$ is an initial value of $u$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$,for all $j \in [1,k]$ all receptions of $m_j$ with value $v'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,k]$ $\mu$ has a child which is a "follower node" with a label $\decsymb \preceq ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.  
 			
-			\item If $v'$ is not an initial value then $\mu$ has a child which is a "boss node" labelled by $w'$ the $v'$-input of $u$.
+			\item[C3.2] If $v'$ is not an initial value of $u$ then $\mu$ has a child which is a "boss node" labelled by $w'$ the $v'$-input of $u$.
 		\end{itemize}
 	\end{itemize}
 	
-	If it is an "follower node" labelled by some $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell), m$ then there must exist $v \in \nats$ an initial value of $u$ such that
-	\begin{itemize}
-		\item $u$ ends with a broadcast of $m$ with value $v$.
-		
-		\item The $v$-input of $u$ is a subword of some $w' = w'_0\cdots w'_\ell$ where, for all $j$, $w'_j$ can be obtained by adding some $m_1, \ldots, m_{j}$ to $w_j$.
-		
-		\item For all $v' \neq v$ appearing in $u$,
-		\begin{itemize}
-			\item If $v'$ is an initial value of $u$ then the $v'$-vision of $u$ "decomposes as"  $(w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$ and for all $1 \leq j \leq k$ $\mu$ has a child which is an "follower node" labelled $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j$.  
-			
-			\item If $v'$ is not an initial value then $\mu$ has a child which is a "boss node" labelled by $w'$ the $v'$-input of $u$.
-		\end{itemize}
-	\end{itemize}
+	
 \end{definition}
 
 
@@ -192,39 +187,90 @@ We say that a local run is cheaper than another one if the set of children it sp
 %\end{definition}
 
 \begin{definition}
-	A "tree decomposition" satisfies a specification $w$ if its root is a "boss node" and $w$ is a subword of its specification label.
-	A "tree decomposition" satisfies a follower specification $(w_0, m_1, w_1, \ldots, m_k, w_k) ,m$ if its root is an "follower node" labelled with a "decomposition" $(w'_0, m'_1, w'_1, \ldots, m'_\ell, w'_\ell,m)$ such that  $(w_0, m_1, w_1, \ldots, m_k, w_k) \preceq (w'_0, m'_1, w'_1, \ldots, m'_\ell, w'_\ell)$.
-	\cortoin{To adapt (maybe)}
+	A "run" $\run$ satisfies a boss specification $w$ if there exists $v \in \nats$ such that $w$ is the sequence of messages sent with value $v$ through $\run$.
+	
+	A "run" $\run$ satisfies a follower specification $(\decsymb, m)$ if there exists a value $v$ and an agent $a$ such that $v$ is not an initial value of $a$, the $v$-input of $a$ in $\run$ is in $\langdecdown{\decsymb}$ and agent $a$ broadcasts $m$ with value $v$ at some point.
+	
+	A "tree unfolding" satisfies a boss specification $w$ if its root is a "boss node" and $w$ is a subword of its specification label.
+	A "tree unfolding" satisfies a follower specification $(\decsymb ,m)$ if its root is an "follower node" labelled with $(\decsymb',m')$ such that $m'=m$ and  $\decsymb' \preceq \decsymb$.
 \end{definition}
 
 We will now prove that there exists a finite run satisfying a specification if and only if there exists a finite tree satisfying that same specification.
 We first decompose a run into a tree, then we build a run from a tree. Note that by applying consecutively these two transformations we obtain in general a much larger run than the initial one. That is because each node of the tree is associated with a part played in the run by some agent. In the initial run, the same agent may play many different parts, while in the run we construct from the tree we use different agents for each node of the tree.
 
-Also note that the interpretation of the "follower nodes" changes between the two directions: When building the tree an follower node labelled $(w_0, m_1, w_1, \ldots, m_k, w_k) ,m$ means that there exists a global run in which some agent receives a sequence of messages which decomposes as  $(w_0, m_1, w_1, \ldots, m_k, w_k)$ before broadcasting $m$, all with a value $v$ that is not one of its initial ones.
+Also note that the interpretation of the "follower nodes" changes between the two directions: When building the tree a follower node labelled $(\decsymb ,m)$ means that there exists a global run in which some agent receives a sequence of messages which decomposes as  $\decsymb$ and broadcasts $m$, all with a value $v$ that is not one of its initial ones.
 
-When building the run an follower node means that there exists a global run which receives a series of external broadcasts which decomposes as $(w_0, m_1, w_1, \ldots, m_k, w_k)$, with a value $v$ that it initially does not contain, and eventually broadcasts $m$ with that value.
+When building the run a follower node means that there exists a global run which receives a series of external broadcasts which decomposes as $\decsymb$, with a value $v$ that it initially does not contain, and eventually broadcasts $m$ with that value.
 
 \begin{lemma}
-	If there exists a finite run $\rho$ satisfying some "specification" then there exists a finite "tree decomposition" satisfying that "specification".
+	If there exists a finite run $\rho$ satisfying some "specification" then there exists a finite "tree unfolding" satisfying that "specification".
 \end{lemma}
 
+%\ifproofs
 \begin{proof}
-	We proceed by strong induction on the length of $\rho$.
-	Let $N \in \nats$, suppose the lemma holds for all runs of length less than $N$.
+	
+	We proceed by strong induction on the lexicographic order on $\nats \times \set{boss, follower}$ with the length of $\run$ as the first component and the type of specification as the second, "boss" being considered higher than "follower". 
+	
+	Let $\run$ be a run, $spec \in \messages^* \cup \decset{\messages}$ a specification, assume the property is satisfied for all lower pairs of runs and specifications. We construct a root and attach subtrees to it so that conditions (C1) to (C3) are satisfied 
+	
+	We split our construction in four parts. The first part applies if $spec$ is a "boss specification", the second one if $spec$ is a "follower specification". 
+	Those parts construct a local run $u$ and a value $v$, as well as the root and some children so that conditions (C1) and (C2) are satisfied.
+	
+	The third and fourth part construct children so that (C3.1) and (C3.2) are satisfied, respectively.
 	
 	\textbf{Case 1: The specification is a "boss specification"}
 	
-	Let $\run$ be a run of length $N$ satisfying a "boss specification" $w$.
+	Assume $spec$ is a "boss specification" $spec = w \in \messages^*$.
 	There exists a value $v$ such that $w$ is a subword of the sequence of messages broadcast with value $v$ through $\run$. Let $w'$ be the latter sequence.
-	If $w$ is empty then the tree decomposition with one node labelled with the an empty local run and $w$ satisfies $w$.	
-	Otherwise let $a$ be the agent which has $v$ as an initial value, let $u$ be its local run in $\run$. 
-	We decompose $w'$ as $(w'_0, m_1, w'_1, \ldots, m_\ell, w'_\ell)$, where $w'_0\cdots w'_\ell$ is the sequence of messages broadcast by $a$ with value $v$, and the $(m_j)_{1\leq j\leq \ell}$ are the elements of $\messages$, placed at the times at which they are first broadcast by an agents other than $a$ with value $v$. If there is no such broadcast of a message $m$, then it does not appear as an $m_j$. This is clearly a "decomposition" of $w'$.
+	If $w$ is empty then the tree decomposition with one node labelled with an empty local run and $w$ satisfies $w$.	
 	
-	For all $1 \leq j \leq \ell$, there exists a prefix of 
+	Otherwise let $a$ be the agent which has $v$ as an initial value, let $u$ be its local run in $\run$. We set $u$ and $w'$ to be the labels of the root of the tree unfolding we are constructing.
+	We decompose $w'$ as $(w'_0, m_1, w'_1, \ldots, m_\ell, w'_\ell)$, where $w'_0\cdots w'_\ell$ is the sequence of messages broadcast by $a$ with value $v$, and the $(m_j)_{1\leq j\leq \ell}$ are the elements of $\messages$, placed at the times at which they are first broadcast by an agents other than $a$ with value $v$. If there is no such broadcast of a message $m$, then it does not appear as an $m_j$. This forms a "decomposition" of $w'$.
+		
+	For all $1 \leq j \leq \ell$ let us write $\decsymb_j$ for the "decomposition" $(w'_0, m_1, w'_1, \ldots, m_{j-1}, w'_{j-1})$. Let $\run_j$ be the prefix of $\run$ up until the first broadcast of $m_j$ with $v$ by some agent $a$ that does not have $v$ as an initial value, and let $\run'_j$ be $\run_j$ without that last step. By definition of $\decsymb$, $\run'_j$ "decomposes as" $\decsymb_j$.
+	In particular, the $v$-input of $a$ before it broadcasts $m_j$ with $v$ must decompose as $\decsymb_j$.
+	 
+	Hence $(\decsymb_j, m_j)$ is a "follower specification" satisfied by $\run_j$, which has a length smaller or equal to the one of $\run$. By induction hypothesis (recall that we make our induction on the length of $\run$ and on the type of specification), there is a "tree unfolding" satisfying it.
+	
+	We put that "tree unfolding" as a child of our root, hence we satisfy (C1). We satisfy (C2) as the root we constructed is not a "follower node".
+	
+	\textbf{Case 2: The specification is a "follower specification"} 
+	
+	Assume $spec$ is a "follower specification" $spec = \decsymb \in \decset{\messages}$. 
+	There exists a value $v$, an agent $a$ and a decomposition $\decsymb' \in \decset{\messages}$ such that $\decsymb \preceq \decsymb'$ and the $v$-input of the local run $u$ of $a$ decomposes as $\decsymb'$. 
+	
+	We set our root to have as labels $u$ and $\decsymb'$, thus satisfying (C2). We satisfy (C1) as the root is not a "boss node".
+	
+	\textbf{In both cases}
+	
+	We have constructed an agent $a$ and a value $v$ and set our root to be labelled by the local run $u$ of $a$, and added children to that root so that conditions (C1) and (C2) are satisfied. We will now add some more children to satisfy condition (C3).
+	
+	We can assume that the last step of $\run$ is a broadcast of a message with value $v$, as otherwise we can erase its last step to get a run that still satisfies the specification, but has a smaller length than $\run$, hence we can apply the induction hypothesis.
+	
+	Let $v' \neq v$ be a value broadcast or received in $u$. 
+	
+	\begin{itemize}
+		\item If $v'$ is an initial value of $u$ then let $w'$ be the $v'$-"output" of $u$. Let $\decsymb' = (w'_0, m_1, w_1, \ldots, w'_k)$ be such that $w' = w'_0 \cdots w'_k$ and the $m_i$ mark the first time another agent sends each message of $\messages$ with value $v'$ in $\run$.  
+		
+		For all $j \in [1,k]$, all receptions of $m_j$ with value $v'$ in $u$ must happen after another agent has managed to broadcast it, hence after broadcasts of $w'_0 \cdots w'_{j-1}$ with value $v'$ have happened in $u$, by definition of $\decsymb'$.
+		
+		Let $j \in [1,k]$, let $a_j$ be the first agent other than $a$ to broadcast $m_j$ with value $v'$, and let $\run_j$ be the prefix of $\run$ up until that broadcast. The $v'$-input of $a_j$ in $\run_j$ is a subword of the sequence of messages broadcast with value $v'$ in $\run_j$, which decomposes as $\decsymb_j = (w'_0, m_1, w_1, \ldots, w'_{j-1})$.
+		
+		As the last step of $\run$ is a broadcast of $v$ and $v' \neq v$, all $\run_j$ are shorter than $\run$. Furthermore for all $j$, $\run_j$ satisfies the specification $(\decsymb_j, m_j)$.		
+		
+		By induction hypothesis, for all $j$ there exists a "tree unfolding" satisfying $(\decsymb_j, m_j)$. We add all those trees as children of our root.
+		
+		\item If $v'$ is not an initial value of $u$ then let $w'$ be the $v'$-input of $u$. 
+		 As $\run$ ends with a broadcast of $v$ and $v' \neq v$, we can remove the last step of $\run$ to obtain a run $\run'$. As $w'$ is a subword of the sequence of messages broadcast in $\run$ with value $v'$, it is also the case for $\run'$.
+		 Hence $\run'$ satisfies $w'$ as a specification, and has smaller length than $\run$. By induction hypothesis, there is a "tree unfolding" satisfying $w'$. We add it as a child of our root.
+	\end{itemize}
+	
+	We added some "tree unfoldings" as children of the root so that conditions (C1) to (C3) are satisfied. We obtain a "tree unfolding" satisfying the specification.
 \end{proof}
+%\fi
 
 \begin{lemma}
-	If there exists a finite "tree decomposition" whose root is labelled with some "specification" then there exists  a finite run $\rho$ satisfying that specification.
+	If there exists a finite "tree unfolding" whose root is labelled with some "specification" then there exists  a finite run $\rho$ satisfying that specification.
 \end{lemma}
 
 \begin{proof}
@@ -232,7 +278,7 @@ When building the run an follower node means that there exists a global run whic
 \end{proof}
 
 \begin{lemma}
-	If two protocols $\prot, \prot'$ are such that for all local run $u$ of one of them, the other has a local run with the same inputs and outputs, then they satisfy the same queries. 
+	If two protocols $\prot, \prot'$ are such that for all local run $u$ of one of them, the other has a local run with the same inputs and outputs, then their runs satisfy the same specifications. 
 \end{lemma}
 
 \begin{proof}
@@ -280,10 +326,11 @@ When building the run an follower node means that there exists a global run whic
 \end{proof}
 
 \begin{lemma}
-	Let $w$ be a "boss specification".
-	Let $\tau$ be a "tree decomposition" whose root is labelled with $w$.
-	Let $\mu, \mu'$ be two "boss nodes" of $\tau$, $u, v$ and $u', v'$ the associated local runs.
-	If $\mu$ is an ancestor of $\mu'$ and the $v$-output of $\mu$ is a subword of the $v'$-output of $\mu'$ then there exists a smaller "tree decomposition" with its root labelled $w$.  
+	Let $w_0$ be a "boss specification".
+	Let $\tau$ be a "tree unfolding" whose root is labelled with $w_0$.
+	Let $\mu, \mu'$ be two "boss nodes" of $\tau$, $w$ and $w'$ their specification labels.
+	
+	If $\mu$ is an ancestor of $\mu'$ and $w$ is a subword of the $w'$ then there exists a smaller "tree unfolding" with its root labelled $w_0$.  
 \end{lemma}
 
 \begin{proof}
@@ -291,19 +338,19 @@ When building the run an follower node means that there exists a global run whic
 \end{proof}
 
 \begin{lemma}
-	Let $w$ be a "boss specification".
-	Let $\tau$ be a "tree decomposition" whose root is labelled with $w$.
-	Let $\mu, \mu'$ be two "follower nodes" of $\tau$, $u, v$ and $u', v'$ the associated local runs.
-	If $\mu$ is an ancestor of $\mu'$ and the $v'$-input of $\mu'$ is a subword of the $v$-input of $\mu$ and their required output message is the same then there exists a smaller "tree decomposition" with its root labelled $w$.  
+	Let $w_0$ be a "boss specification".
+	Let $\tau$ be a "tree unfolding" whose root is labelled with $w_0$.
+	Let $\mu, \mu'$ be two "follower nodes" of $\tau$, $(\decsymb,m)$ and $(\decsymb',m')$ the associated specifications.
+	If $\mu$ is an ancestor of $\mu'$, $\decsymb' \preceq \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" with its root labelled $w$.  
 \end{lemma}
 
 \begin{proof}
 	\cortoin{TODO}
 \end{proof}
 
-\begin{lemma}
-	Let $u_1$, $u_2$ be two local runs of a protocol $\prot$ with the same sequence of transitions, $(q_1, \nu_1)$ the first local configuration of $u_1$, $(q_2, \nu_2)$ the last one of $u_2$. Then there i a local run $u$ with the same sequence of transitions as $u_1$ and $u_2$ from $(q_1, \nu_1)$ to $(q_2, \nu_2)$. 
-\end{lemma}
+%\begin{lemma}
+%	Let $u_1$, $u_2$ be two local runs of a protocol $\prot$ with the same sequence of transitions, $(q_1, \nu_1)$ the first local configuration of $u_1$, $(q_2, \nu_2)$ the last one of $u_2$. Then there is a local run $u$ with the same sequence of transitions as $u_1$ and $u_2$ from $(q_1, \nu_1)$ to $(q_2, \nu_2)$. 
+%\end{lemma}
 
 \begin{figure}
 	\input{../Figures/fig-illustration-pumping}
@@ -343,7 +390,7 @@ When building the run an follower node means that there exists a global run whic
 		
 		By induction hypothesis we have that there exists $\Tilde{u'_f}$ shorter than $\Tilde{u_f}$, with the same start and end local configurations, a smaller input, and a sequence of local actions that is a subword of the one of $\Tilde{u_f}$.
 		
-		We conclude that the corresponding sequence of transitions $u_f'$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs. .
+		We conclude that the corresponding sequence of transitions $u_f'$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs. By replacing $u_f$ with $u_f'$ in $u$, we obtain a shorter local run $u'$ of $\prot$. Let $v$ be the value that register $i$ keeps through $u_f$, the $v$-input of $u'$ 
 		
 		\item If no register keeps the same value for more than $TOWER$ steps, then any run $u$ of length at least $M_{r-1} ((\size{\Delta})^{M_{r-1}} +1)$ can be split into $(\size{\Delta})^{M_{r-1}} +1$ segments of size $M_{r-1}$. There are $\size{\Delta}^{M_{r-1}}$ different sequences of transitions, thus by the pigeonhole principle we have $u = \pi_1 \sigma_1 \pi_2 \sigma_2 \pi_3$ with $\size{\sigma_1} = \size{\sigma_2} = M_{r-1}$ and such that  $\sigma_1$ and $\sigma_2$ have the same sequence of transitions.
 		
@@ -381,9 +428,9 @@ When building the run an follower node means that there exists a global run whic
 \fi
 
 \begin{lemma}
-	Let $\mu$ be a node of a "tree decomposition", $u_\mu$ its local run.
+	Let $\mu$ be a node of a "tree unfolding", $u_\mu$ its local run.
 	Let $u$ be the local run of its father, and $u_1, \ldots, u_\ell$ the runs of its "follower" children.
-	Then if $\size{u_\mu} \geq TOWER \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree decomposition with the same root specification label.
+	Then if $\size{u_\mu} \geq TOWER \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree unfolding with the same root specification label.
 \end{lemma}
 
 \begin{proof}
@@ -391,19 +438,19 @@ When building the run an follower node means that there exists a global run whic
 \end{proof}
 
 \begin{definition}
-	We define the ""height"" of a node in a "tree decomposition" recursively as follows:
+	We define the ""altitude"" of a node in a "tree unfolding" recursively as follows:
 	\begin{itemize}
-		\item The height of the root is $0$
+		\item The altitude of the root is $0$
 		
-		\item The height of a "boss node" is the height of its father minus one
+		\item The altitude of a "boss node" is the altitude of its father minus one
 		
-		\item The height of an "follower node" is the height of its father plus one.
+		\item The altitude of a "follower node" is the altitude of its father plus one.
 	\end{itemize}
 \end{definition}
 
 \begin{lemma}
 	\label{lem:bound-length-at-height-h}
-	In a minimal "tree decomposition" satisfying a given specification, the length of a local run associated with a node $\mu$ of height $h$ is bounded by $(TOWER (|\messages|+1))^{hmax-h+1}$
+	In a minimal "tree unfolding" satisfying a given specification, the length of a local run associated with a node $\mu$ of altitude $h$ is bounded by $(TOWER (|\messages|+1))^{hmax-h+1}$
 \end{lemma}
 
 \begin{proof}
@@ -412,7 +459,7 @@ When building the run an follower node means that there exists a global run whic
 
 \begin{lemma}
 	\label{lem:bound-max-height}
-	The maximal height in a minimal tree decomposition is bounded by $f_1(\size{\prot})$ where $f_1$ is a function of the class $F_{\omega^\omega}$.
+	The maximal altitude in a minimal tree unfolding is bounded by $f_1(\size{\prot})$ where $f_1$ is a function of the class $F_{\omega^\omega}$.
 \end{lemma}
 
 \begin{proof}
@@ -420,7 +467,7 @@ When building the run an follower node means that there exists a global run whic
 \end{proof}
 
 \begin{corollary}
-	The local run associated with the root of a minimal tree decomposition is bounded by $f_2(\size{\prot})$ where $f_2$ is a function of the class $F_{\omega^\omega}$.
+	The local run associated with the root of a minimal tree unfolding is bounded by $f_2(\size{\prot})$ where $f_2$ is a function of the class $F_{\omega^\omega}$.
 \end{corollary}
 
 \begin{proof}
@@ -429,7 +476,7 @@ When building the run an follower node means that there exists a global run whic
 
 \begin{lemma}
 	\label{lem:bound-min-height}
-	The absolute value of the minimal height in a minimal tree decomposition is bounded by $f_3(\size{\prot})$ where $f_3$ is a function of the class $F_{\omega^\omega}$.
+	The absolute value of the minimal altitude in a minimal tree unfolding is bounded by $f_3(\size{\prot})$ where $f_3$ is a function of the class $F_{\omega^\omega}$.
 \end{lemma}
 
 \begin{proof}
@@ -438,7 +485,7 @@ When building the run an follower node means that there exists a global run whic
 
 \begin{corollary}
 	\label{lem:bound-node-size}
-	The length of a local run associated with a node of a minimal tree decomposition is bounded by $f_4(\size{\prot})$ where $f_4$ is a function of the class $F_{\omega^\omega}$.
+	The length of a local run associated with a node of a minimal tree unfolding is bounded by $f_4(\size{\prot})$ where $f_4$ is a function of the class $F_{\omega^\omega}$.
 \end{corollary}
 
 \begin{proof}
@@ -446,7 +493,7 @@ When building the run an follower node means that there exists a global run whic
 \end{proof}
 
 \begin{proposition}
-	In a minimal "tree decomposition" satisfying a given specification, the length of a branch is bounded by a function of $F_{\omega^\omega}$.
+	In a minimal "tree unfolding" satisfying a given specification, the length of a branch is bounded by a function of $F_{\omega^\omega}$.
 \end{proposition}
 
 \begin{proof}

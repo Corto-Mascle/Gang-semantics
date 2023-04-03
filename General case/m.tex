@@ -116,9 +116,19 @@
 	
 	\maketitle
 	
-	\input{Intro}
+	\begin{abstract}
+		We study a model representing an arbitrarily large network of agents. Agents can send broadcasts but have no guarantee on the set of other agents which will receive it.
+		Agents have local registers, containing identifiers. They can send a value from one of their registers in their broadcasts, store the values they receive or test equality between registers.
+		We show that the coverability problem is decidable, but as hard as the one for lossy channel systems, which is non-multiply recursive. 
+		We also show that other classical problems on such systems, such as target, are undecidable. 
+		By contrast, the coverability problem is NP-complete when each agent has only one register.
+		
+		\keywords{Parameterized verification \and Distributed systems \and Well quasi-orders}
+	\end{abstract}
+	
+%	\input{Intro}
 	\input{General-defs}
-	\input{General-lower-bounds}
+%	\input{General-lower-bounds}
 	\input{General-abstraction}
 	
 	\bibliography{biblio}

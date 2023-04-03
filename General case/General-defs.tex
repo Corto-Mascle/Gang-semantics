@@ -1,19 +1,18 @@
 \section{Definitions}
 
-A ""Broadcast Network of Register Automata"" (BNRA) is defined by finite transition system describing the behaviour of an agent, which can broadcast and receive messages with integer values, which he can store in some local registers.
+A ""Broadcast Network of Register Automata"" (BNRA) is defined by a finite transition system describing the behaviour of an agent, which can broadcast and receive messages with integer values, store them in local registers, or make equality tests.
 We consider that when a message is broadcast by an agent, each other agent independently may or may not receive it. 
 We study the behaviour of an arbitrary number of agents communicating this way.
 
-We use $r \geq 0$ to denote the number of registers in each node. We consider a finite alphabet $\messages$ of message
-types.
+We use $r \geq 0$ to denote the number of registers in each node. We consider a finite alphabet $\messages$ of messages.
 
 \begin{definition}[Syntax]
 	A ""protocol"" with $r$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times Op^\messages_r \times Q$ a finite set of transitions, with $Op^{\messages}_r = \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact}, \loc{i}{j}{\eqtestact}, \loc{i}{j}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq r}$ the set of operations.
 	
-	Transitions labelled with $\brsymb$ are ""broadcasts"", transitions labelled with $\recsymb$ are ""receptions"" and transitions labelled with $\locsymb$ are ""local transitions"".
-	Given a reception $\rec{\amessage}{i}{\anact}$ or a local transition $\loc{i}{j}{\anact}$, $\anact$ is the ""action"" of the reception (resp. local transition).
+	Transitions labelled with $\brsymb$ are ""broadcasts"", transitions labelled with $\recsymb$ are ""receptions"" and transitions labelled with $\locsymb$ are ""local tests"".
+	Given a reception $\rec{\amessage}{i}{\anact}$ or a local test $\loc{i}{j}{\anact}$, $\anact$ is the ""action"" of the reception (resp. local test).
 	
-	A ""simple protocol"" is one that does not have any local transitions or receptions with $\dummyact$.
+	A ""simple protocol"" is one that does not have any local tests or receptions with $\dummyact$.
 	
 	\cortoin{TODO : remarquer que pour r=1 on peut ignorer les actions locales}
 \end{definition}
@@ -29,7 +28,7 @@ types.
 	
 	\AP Given two configurations $\config, \config' \in \configs{\agents}$, a ""step"" $\config \step{} \config'$ is defined when one of the two following cases happens:
 	\begin{itemize}
-		\item there exists $a \in \agents$ and a "local transition" $(\st{\config}(a), \loc{j_1}{j_2}{\anact}, \st{\config'}(a))$ such that for all $a'\neq a$, $\config(a') = \config'(a')$ and
+		\item there exists $a \in \agents$ and a "local test" $(\st{\config}(a), \loc{j_1}{j_2}{\anact}, \st{\config'}(a))$ such that for all $a'\neq a$, $\config(a') = \config'(a')$ and
 		\begin{itemize}
 			\item either $\anact = \quotemarks{\eqtestact}$ $\data{\config}(a,j_1) = \data{\config}(a,j_2)$
 			
@@ -50,7 +49,7 @@ types.
 	\AP A ""path"" is a sequence of steps $\apath : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. 
 	We write $\config_0 \step{*} \config_k$ when there exists such a path.
 	A ""run"" is a path whose first configuration is an "initial configuration"; runs are denoted with the letter $\run$.  
-	Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents, $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
+	Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents, $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  We write $\Runs{\prot}$ for the set of runs of $\prot$.
 	% with current definition, every run is initial
 	
 	\AP A run $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when there exists $a \in \agents$ such that $\st{\config_f}(a) = q$. 
