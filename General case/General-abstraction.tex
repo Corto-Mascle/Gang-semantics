@@ -78,14 +78,16 @@ We say that a local run is cheaper than another one if the set of children it sp
 
 \begin{definition}
 	A ""local configuration"" is a pair $(q, \nu) \in Q \times ([1,r] \to \nats)$.
-	A ""local run"" is a sequence of local transitions $(q_0, \nu_0) \xrightarrow{op_1} (q_1, \nu_1) \xrightarrow{op_2} \cdots \xrightarrow{op_k} (q_k, \nu_k)$ with $op_1, \ldots, op_k \in Op_r^\messages$. 
+	A ""local run"" is a sequence of local steps $(q_0, \nu_0) \xrightarrow{op_1} (q_1, \nu_1) \xrightarrow{op_2} \cdots \xrightarrow{op_k} (q_k, \nu_k)$ with $op_1, \ldots, op_k \in Op_r^\messages$. 
 	
-	Given a value $v \in \nats$, the $v$-input of a local run $u$, which we denote by $\vinput{v}{u}$, is the sequence of messages received through $u$ with value $v$.
-	Its $v$-output, which we denote by $\voutput{v}{u}$, is the sequence of messages of broadcasts made in $u$ with value $v$. 
-	Its $v$-vision, which we denote by $\vision{v}{u}$, is the sequence of messages of broadcasts made or received in $u$ with value $v$.
+
+	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun}$ of messages received in $\localrun$. 
+	Simiarly, its ""output"" is the sequences $\Output{\localrun}$ of messages broadcasted in $\localrun$.
+
+	Given a value $v \in \nats$, the ""$v$-input"" of a local run $u$, which we denote by $\vinput{v}{\localrun}$, is the sequence of messages received in  $\localrun$ with value $v$. Said otherwise, it is the subsequence of $\Input{\localrun}$ containing only messages with value $v$.
+	Simiarly, its ""$v$-output"" $\voutput{v}{u}$ is the sequence of messages with value $v$ broadcasted in $\localrun$.
+	Its $v$-vision, which we denote by $\vision{v}{\localrun}$, is the sequence of messages in $\localrun$ with value $v$.
 	
-	The ""input"" of $u$ is the set $\Input{u} = \set{\vinput{v}{u} \mid v \in \nats}$.
-	Its ""output"" is the set $\Output{u}=\set{\voutput{v}{u} \mid v \in \nats}$.
 %	Its ""trace"" $\trace{u} \in Op^\messages_r$ is the sequence of operations executed by $u$.
 	
 	We define a preorder on such sets of words:
@@ -105,7 +107,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 	The language $\langdec{\decsymb}$ of $\decsymb$ is the set of words that decompose as $\decsymb$. We write $\langdecdown{\decsymb}$ for the subword closure of $\langdec{\decsymb}$.
 	
 	We define a preorder on decompositions:
-	$\decsymb \preceq \decsymb'$ if $\langdecdown{\decsymb} \subseteq \langdecdown{\decsymb'}$.
+	$\decsymb \subword \decsymb'$ if $\langdecdown{\decsymb} \subseteq \langdecdown{\decsymb'}$.
 \end{definition}
 
 
@@ -129,7 +131,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 		
 		\item[C3] In both cases, for all $v' \neq v$ broadvast or received at some point in $u$,
 		\begin{itemize}
-			\item[C3.1] If $v'$ is an initial value of $u$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$,for all $j \in [1,k]$ all receptions of $m_j$ with value $v'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,k]$ $\mu$ has a child which is a "follower node" with a label $\decsymb \preceq ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.  
+			\item[C3.1] If $v'$ is an initial value of $u$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$,for all $j \in [1,k]$ all receptions of $m_j$ with value $v'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,k]$ $\mu$ has a child which is a "follower node" with a label $\decsymb \subword ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.  
 			
 			\item[C3.2] If $v'$ is not an initial value of $u$ then $\mu$ has a child which is a "boss node" labelled by $w'$ the $v'$-input of $u$.
 		\end{itemize}
@@ -192,7 +194,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 	A "run" $\run$ satisfies a follower specification $(\decsymb, m)$ if there exists a value $v$ and an agent $a$ such that $v$ is not an initial value of $a$, the $v$-input of $a$ in $\run$ is in $\langdecdown{\decsymb}$ and agent $a$ broadcasts $m$ with value $v$ at some point.
 	
 	A "tree unfolding" satisfies a boss specification $w$ if its root is a "boss node" and $w$ is a subword of its specification label.
-	A "tree unfolding" satisfies a follower specification $(\decsymb ,m)$ if its root is an "follower node" labelled with $(\decsymb',m')$ such that $m'=m$ and  $\decsymb' \preceq \decsymb$.
+	A "tree unfolding" satisfies a follower specification $(\decsymb ,m)$ if its root is an "follower node" labelled with $(\decsymb',m')$ such that $m'=m$ and  $\decsymb' \subword \decsymb$.
 \end{definition}
 
 We will now prove that there exists a finite run satisfying a specification if and only if there exists a finite tree satisfying that same specification.
@@ -237,7 +239,7 @@ When building the run a follower node means that there exists a global run which
 	\textbf{Case 2: The specification is a "follower specification"} 
 	
 	Assume $spec$ is a "follower specification" $spec = \decsymb \in \decset{\messages}$. 
-	There exists a value $v$, an agent $a$ and a decomposition $\decsymb' \in \decset{\messages}$ such that $\decsymb \preceq \decsymb'$ and the $v$-input of the local run $u$ of $a$ decomposes as $\decsymb'$. 
+	There exists a value $v$, an agent $a$ and a decomposition $\decsymb' \in \decset{\messages}$ such that $\decsymb \subword \decsymb'$ and the $v$-input of the local run $u$ of $a$ decomposes as $\decsymb'$. 
 	
 	We set our root to have as labels $u$ and $\decsymb'$, thus satisfying (C2). We satisfy (C1) as the root is not a "boss node".
 	
@@ -341,7 +343,7 @@ When building the run a follower node means that there exists a global run which
 	Let $w_0$ be a "boss specification".
 	Let $\tau$ be a "tree unfolding" whose root is labelled with $w_0$.
 	Let $\mu, \mu'$ be two "follower nodes" of $\tau$, $(\decsymb,m)$ and $(\decsymb',m')$ the associated specifications.
-	If $\mu$ is an ancestor of $\mu'$, $\decsymb' \preceq \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" with its root labelled $w$.  
+	If $\mu$ is an ancestor of $\mu'$, $\decsymb' \subword \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" with its root labelled $w$.  
 \end{lemma}
 
 \begin{proof}
@@ -364,17 +366,38 @@ When building the run a follower node means that there exists a global run which
 
 \begin{lemma}
 	\label{lem:short-local-runs}
-	Let $\prot$ be a protocol with $r$ registers.
-	Let $u$ be a "local run" of $\prot$ with an "input" $I$.
-	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
-	If $\size{u_2} > TOWER$, then there exists $u'_2$ such that $u_1u'_2u_3$ is a local run of $\prot$ with smaller "input" than $u$. 
+	There exists a function $\towerfun(n, e)$ in $O(\repexp{n}{e})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ in $\prot$, there exists $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and $\Input{\localrun'} \subword \Input{\localrun}$. 
+%  with an "input" $I$.
+% 	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
+% 	If $\size{u_2} > TOWER$, then there exists $u'_2$ with $|u_2'| \leq \towerfun(\prot)$ such that $u_1u'_2u_3$ is a local run of $\prot$ with smaller "input" than $u$. 
 \end{lemma}
 
 \begin{proof}
-	The statement of this lemma is adapted to ease its use in the other proofs.
-	In order to prove it, we show a stronger statement.	
-	For this proof we will allow our protocols to execute local actions from a finite alphabet $\Sigma$, which are not associated with any broadcast or receive operation.	
-	
+
+% In the following proof, we consider for simplicity protocols with internal transitions, \emph{i.e.}, transitions with no labeled action that can be taken without condition. 
+Given a "local run", register $i$ is ""active"" in $\localrun$ if at least one $\quotemarks{\enregact}$ step on register $i$ is performed in $\localrun$. Also, let $n:=\size{\prot}$.
+
+We prove the following statement:
+for every $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(|\prot|,k)$, $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ whose sequence of transitions is a strict subsequence of the one of $\localrun$. 
+\nicoin{si le protocole n'est pas simple, cela n'implique pas l'inclusion  $\Input{\localrun'} \subword \Input{\localrun}$, il faut supposer que simple ou changer la def de local run pour qu'il inclut la séquence des messages reçus}
+
+We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, then registers keep their values throughout $\localrun$. Therefore, if $\localrun$ goes through the same state once, all steps in between may be removed, and it suffices to take $\towerfun(\size{\prot}, 0) := |\prot| + 1 \geq |Q| +1$.  
+
+Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(n)(k+1)$.
+
+First, if there exists an infix "local run" $\localrun': (q_1, \localdata_1), (q_2, \localdata_2)$ of $\localrun$ of length $\towerfun(n)(k)+1$ with only $k$ active registers, then by induction hypothesis $\localrun'$ can be shortened thus $\localrun$ can be shortened as well.
+
+Suppose now that there exists no such infix "local run".
+Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. 
+In any sequence of $\towerfun(n)(k)+1$ transitions performed in a row in $\localrun$, 
+there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\towerfun{n}{k+1} := n^{\towerfun{n}{k}+1}+\towerfun{n}{k} +1$ and suppose that $\length{\localrun} > \towerfun{n}{k+1}$. 
+There exist $n^{\towerfun{n}{k}+1}+1$ sequences of transitions of length $\towerfun(n)(k)+1$ in $\localrun$, 
+therefore by Pigeonhole principle two of these sequences are equal (there are $|\transitions|^{\towerfun(n)(k)+1}$ such sequences and $|\transitions| \leq n$). 
+There exist $(q_1, \localdata_1)$, $(q_2, \localdata_2)$ appearing in $\localrun$ in this order such that both configurations are followed by the same sequence $s$ of transitions in $\localrun$. We write $\localrun_1: (q_1, \localdata_1) \step{s} (q_1', \localdata_1')$ and $\localrun_2: (q_2, \localdata_2) \step{s} (q_2', \localdata_2')$. Morally, we can remove all transitions between $(q_1, \localdata_1)$ and $(q_2, \localdata_2)$. However, we do not have \nico{il faut pouvoir parler explicitement de la séquence de messages ici}
+
+ Note that we cannot directly cut this part out of the "local run" and concatenate the two ends, because messages received after $(q_2, \localdata_2)$
+Let $m_1$ the sequence of messages received when $s$ is performed from $(q_1, \localdata_1)$ and 
+
 	We will show the following result, which directly implies the lemma:
 	Let $\prot$ be a protocol with $r$ registers, let $u$ be a "local run" of $\prot$ from "local configuration" $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$ with an input $I$. If $\size{u} \geq TOWER$, then there exists a shorter local run $u'$ from $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$, with a smaller "input" and such that the sequence of local actions in $u'$ is a subword of the one in $u$.
 	We proceed by induction on $r$.

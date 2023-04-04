@@ -18,6 +18,8 @@
 %\usepackage{enumitem}
 \usepackage[capitalise]{cleveref}
 \usepackage{cite}
+\usepackage{multidef}
+\usepackage{xspace}
 
 
 
@@ -34,17 +36,18 @@
 \newcommand{\powerset}[1]{2^{#1}}
 \newcommand{\step}[1]{\xrightarrow{#1}}
 \newcommand{\size}[1]{|#1|}
+\newcommand{\length}[1]{|#1|}
 \newcommand{\nset}[2]{\{#1,\dots,#2\}} %interval of natural numbers
 %%% Complexity classes
 
-\newcommand{\poly}{\text{\sc{P}}\xspace}
-\newcommand{\np}{\text{\sc{NP}}\xspace}
-\newcommand{\conp}{\textsc{coNP}\xspace}
-\newcommand{\pspace}{\text{\sc{PSpace}}\xspace}
-\newcommand{\expt}{\textsc{ExpTime}\xspace}
-\newcommand{\nexpt}{\textsc{NExpTime}\xspace}
-\newcommand{\exps}{\textsc{ExpSpace}\xspace}
-
+% \newcommand{\poly}{\text{\sc{P}}\xspace}
+% \newcommand{\np}{\text{\sc{NP}}\xspace}
+% \newcommand{\conp}{\textsc{coNP}\xspace}
+% \newcommand{\pspace}{\text{\sc{PSpace}}\xspace}
+% \newcommand{\expt}{\textsc{ExpTime}\xspace}
+% \newcommand{\nexpt}{\textsc{NExpTime}\xspace}
+% \newcommand{\exps}{\textsc{ExpSpace}\xspace}
+\multidef{\text{\sc{#1}}\xspace}{co,coNP,NP,PSPACE,coPSPACE,NPSPACE,PTIME,EXPTIME,EXPSPACE,NEXPTIME, LOGSPACE, TOWER}
 
 %%% Genral definition
 \newcommand{\prot}{\mathcal{P}} %protocol
@@ -151,3 +154,14 @@
 \newcommand{\decset}[1]{\mathtt{Dec}_{#1}}
 \newcommand{\langdec}[1]{\mathcal{L}^{\mathtt{#1}}}
 \newcommand{\langdecdown}[1]{\mathcal{L}^{\mathtt{#1}}\downarrow}
+
+%local stuff
+\newcommand{\localrun}{u}
+\newcommand{\localdata}{\nu}
+
+%bounding functions
+\newcommand{\towerfun}{\mathsf{tow}}
+\newcommand{\repexp}[2]{\mathsf{repexp}(#1,#2)}
+
+\newcommand{\subword}{\preceq}
+\newcommand{\supword}{\succeq}
