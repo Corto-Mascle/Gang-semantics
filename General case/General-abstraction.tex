@@ -77,19 +77,31 @@ We say that a local run is cheaper than another one if the set of children it sp
 \textbf{For now we assume that the BRNA do not contain $*$ operations and apply only one operation for each message received. The general case reduces to this one (lemma \ref{lem:simple-reduction}).}
 
 \begin{definition}
+	An ""external broadcast"" is a transition between two configurations $\config \partstep{m, v} \config'$ such that $m \in \messages$, $v \in \nats$ and for all $a \in \agents$, either $\config'(a) = \config(a)$ or there exists a transition $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a))$
+	such that $\data{\config'}(a, j') = \data{\config}(a, j')$ for all $j' \neq j$ and one of the following cases holds:
+		\begin{itemize}
+			\item $\anact = \quotemarks{\dummyact}$ 
+			and $\data{\config'}(a,j) = \data{\config}(a,j)$
+			\item $\anact = \quotemarks{\enregact}$ and $\data{\config'}(a,j) = v$
+			\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) =v$
+			\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) \ne v$
+		\end{itemize}
+		
+		
+	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \step{} \config_{i}$ or $\config_{i-1} \partstep{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
+	
 	A ""local configuration"" is a pair $(q, \nu) \in Q \times ([1,r] \to \nats)$.
 	A ""local run"" is a sequence of local transitions $(q_0, \nu_0) \xrightarrow{op_1} (q_1, \nu_1) \xrightarrow{op_2} \cdots \xrightarrow{op_k} (q_k, \nu_k)$ with $op_1, \ldots, op_k \in Op_r^\messages$. 
 	
-	Given a value $v \in \nats$, the $v$-input of a local run $u$, which we denote by $\vinput{v}{u}$, is the sequence of messages received through $u$ with value $v$.
-	Its $v$-output, which we denote by $\voutput{v}{u}$, is the sequence of messages of broadcasts made in $u$ with value $v$. 
-	Its $v$-vision, which we denote by $\vision{v}{u}$, is the sequence of messages of broadcasts made or received in $u$ with value $v$.
+	Given a value $v \in \nats$, the ""input"" of a partial run $\run$, which we denote by $\extinput{\run} \in (\messages \times \nats)^*$, is the sequence of external broadcasts through $\run$ with value $v$.
+	Its ""output"", which we denote by $\extoutput{u} \in (\messages \times \nats)^*$, is the sequence of messages of broadcasts made in $\run$. 
 	
-	The ""input"" of $u$ is the set $\Input{u} = \set{\vinput{v}{u} \mid v \in \nats}$.
-	Its ""output"" is the set $\Output{u}=\set{\voutput{v}{u} \mid v \in \nats}$.
-%	Its ""trace"" $\trace{u} \in Op^\messages_r$ is the sequence of operations executed by $u$.
+	Given a value $v \in \nats $he $v$-input (resp. $v$-output) of $\run$ is defined as the projection of $\extinput{\run}$ (resp. $\extoutput{\run}$) on $\messages \times \set{v}$.
 	
-	We define a preorder on such sets of words:
-	Given $W, W' \in \powerset{\Sigma^*}$, $W \unlhd W'$ if $W \subseteq W'\downarrow$, where $W'\downarrow$ stands for the set of subwords of words in $W'$.
+	We define a preorder on "partial runs":
+	
+	Given $\run, \run'$, $\run \unlhd \run'$ if for all $v \in \nats$, there exists $v' \in \nats$ such that $\vinput{v}{\run}$ is a subword of $\vinput{v}{\run'}$.
+	\cortoin{TO READ OVER}
 \end{definition}
 
 A key ingredient of our construction is the decomposition of words of messages. Say we have an execution and a value $v$ such that the sequence of messages broadcast in that execution with value $v$ is $w$. Then we can distinguish in $w$ the messages sent by the agent $a$ which had that value originally. This forms a subword $w'$ of $w$. Let $m$ be the first message sent by another agent with value $v$. This means that from the messages sent by $a$ before there is a set of agents that receives some of these messages and eventually sends back message $m$ with value $v$. An important remark is that we can copy this set of agents many times to obtain as many broadcasts with message $m$ and value $v$ as we want from this point in the run.
@@ -123,15 +135,15 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 	
 	\begin{itemize}
 		\item[C1] If it is a "boss node" labelled by $w \in \messages^*$ then $v$ is an initial value of $u$ and there exists a decomposition $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that
-	 $w_0 \cdots w_\ell$ is the $v$-output of $u$, $w \in \langdecdown{\decsymb}$, and for all $1 \leq j \leq \ell$, $\mu$ has a child which is a "follower node" with a label $((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.
+	 $w_0 \cdots w_\ell$ is the $v$-output of $u$, $w \in \langdecdown{\decsymb}$, and for all $j \in [1,\ell]$, $\mu$ has a child which is a "follower node" with a label $((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.
 		
 		\item[C2] If it is a "follower node" labelled $(\decsymb, m)$ then $v$ is not an initial value of $u$ such that the $v$-input of $u$ is in $\langdec{\decsymb}$, and $m$ is broadcast at some point in $u$ with value $v$.
 		
-		\item[C3] In both cases, for all $v' \neq v$ broadvast or received at some point in $u$,
+		\item[C3] In both cases, for all $v' \neq v$ broadcast or received at some point in $u$,
 		\begin{itemize}
 			\item[C3.1] If $v'$ is an initial value of $u$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$,for all $j \in [1,k]$ all receptions of $m_j$ with value $v'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,k]$ $\mu$ has a child which is a "follower node" with a label $\decsymb \preceq ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.  
 			
-			\item[C3.2] If $v'$ is not an initial value of $u$ then $\mu$ has a child which is a "boss node" labelled by $w'$ the $v'$-input of $u$.
+			\item[C3.2] If $v'$ is not an initial value of $u$ then $\mu$ has a child which is a "boss node" labelled by $w'$ such that $\vinput{v}{u}$ is a subword of $w'$.
 		\end{itemize}
 	\end{itemize}
 	
@@ -269,12 +281,31 @@ When building the run a follower node means that there exists a global run which
 \end{proof}
 %\fi
 
+
+
 \begin{lemma}
 	If there exists a finite "tree unfolding" whose root is labelled with some "specification" then there exists  a finite run $\rho$ satisfying that specification.
 \end{lemma}
 
 \begin{proof}
-	\cortoin{TODO}
+	We prove the following statement by strong induction on the "tree unfolding". \corto{notation for t.u.}
+	
+	For all "tree unfolding" $\tau$, 
+	
+	\begin{itemize}
+		\item if $\tau$ satisfies a "boss specification" $w \in \messages^*$, then there exists a run $\run$ satisfying $w$.
+		
+		\item if $\tau$ satisfies a "follower specification" $(\decsymb, m)$ then there exists a word $w \in \langdecdown{\decsymb}$, a "partial run" $\run$ and a value $v$ such that $\extinput{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \in \langdecdown{\decsymb}$, and $\voutput{v}{\run}$ contains a $m$.
+	\end{itemize}
+	
+	Let $\tau$ be a "tree unfolding", let $\mu$ be its root, let $u$ be the local run labelling it. 
+	We distinguish two cases depending on the type of specification.
+	
+	\textbf{Case 1: The specification is a "boss specification" $spec \in \messages^*$}
+	
+	Then $\mu$ is a "boss node", labelled by $u$ and by a word $w$ of which $spec$ is a subword. 
+	By definition of a "tree unfolding", there exists a value $v$ and a decomposition $\decsymb = (w_0, m_1, \ldots, w_\ell) \in \decset{\messages}$ such that $\voutput{v}{u} = w_0\cdots w_\ell$ and $w \in \langdecdown{\decsymb}$.
+	Furthermore for all $j \in [1,\ell]$, $\mu$ has a child labelled $(\decsymb_j, m_j)$ with $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$. 	By induction hypothesis, there exists a partial run $\run_{v, \decsymb_j}$ in which there is a broadcast of $m_j$ with value $v$ 
 \end{proof}
 
 \begin{lemma}
@@ -326,26 +357,48 @@ When building the run a follower node means that there exists a global run which
 \end{proof}
 
 \begin{lemma}
-	Let $w_0$ be a "boss specification".
-	Let $\tau$ be a "tree unfolding" whose root is labelled with $w_0$.
+	Let $\tau$ be a "tree unfolding" satisfying a specification $spec$.
 	Let $\mu, \mu'$ be two "boss nodes" of $\tau$, $w$ and $w'$ their specification labels.
 	
-	If $\mu$ is an ancestor of $\mu'$ and $w$ is a subword of the $w'$ then there exists a smaller "tree unfolding" with its root labelled $w_0$.  
+	If $\mu$ is an ancestor of $\mu'$ and $w$ is a subword of $w'$ then there exists a smaller "tree unfolding" satisfying $spec$.  
 \end{lemma}
 
 \begin{proof}
-	\cortoin{TODO}
+	Let $\tau_{\mu}$, $\tau_{\mu'}$ be the subtrees rooted in $\mu$, $\mu'$ respectively. 
+	Let $\tau'$ be the tree obtained by replacing $\tau_{\mu}$ with $\tau_{\mu'}$. The size of $\tau'$ is smaller than the one of $\tau$, as $\tau_{\mu'}$ is a strict subtree of $\tau_{\mu}$.
+	
+	If $\mu$ is the root of $\tau$, then $\tau'$ is a "tree unfolding" with $\mu'$ as root. As $\mu$ is a "boss node" and $\tau$ satisfies $spec$, $spec$ is a "boss specification", and a subword of $w$. 
+	As $w$ is a subword of $w'$, $spec$ is a subword of $w'$ and thus $\tau'$ satisfies $spec$.
+	
+	If  $\mu'$ is not the root of $\tau'$ then let $\mu_0$ be the father of $\mu$. We have to check that $\tau'$ is a "tree unfolding". 
+	All nodes other than $\mu_0$ have the same children as before, thus the conditions of "tree unfoldings" are still respected for them.
+	As for $\mu_0$, it has the same "follower" children, hence conditions (C1) and (C3.1) are respected. Condition (C2) only depends on its label, which hasn't changed.
+	
+	Finally, let $u_0$ be the "local run" labelling $\mu_0$ and let $v'$ be a value that is not initial in $u_0$. Either $\mu_0$ has a "boss" child other than $\mu'$ such that $\vinput{v'}{u_0}$ is a subword of its label, or $\vinput{v'}{u_0}$ is a subword of $w$, which is a subword of $w'$, hence condition (C3.2) is satisfied. 
+	
+	As a result, in both cases $\tau'$ is a "tree unfolding" smaller than $\tau$ that satisfies $spec$. 
 \end{proof}
 
 \begin{lemma}
-	Let $w_0$ be a "boss specification".
-	Let $\tau$ be a "tree unfolding" whose root is labelled with $w_0$.
+	Let $\tau$ be a "tree unfolding" satisfying a specification $spec$.
 	Let $\mu, \mu'$ be two "follower nodes" of $\tau$, $(\decsymb,m)$ and $(\decsymb',m')$ the associated specifications.
-	If $\mu$ is an ancestor of $\mu'$, $\decsymb' \preceq \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" with its root labelled $w$.  
+	If $\mu$ is an ancestor of $\mu'$, $\decsymb' \preceq \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" satisfying $spec$.  
 \end{lemma}
 
 \begin{proof}
-	\cortoin{TODO}
+		Let $\tau_{\mu}$, $\tau_{\mu'}$ be the subtrees rooted in $\mu$, $\mu'$ respectively. 
+	Let $\tau'$ be the tree obtained by replacing $\tau_{\mu}$ with $\tau_{\mu'}$. The size of $\tau'$ is smaller than the one of $\tau$, as $\tau_{\mu'}$ is a strict subtree of $\tau_{\mu}$.
+	
+	If $\mu$ is the root of $\tau$, then $\tau'$ is a "tree unfolding" with $\mu'$ as root. As $\mu$ is a "follower node" and $\tau$ satisfies $spec$, $spec$ is a "follower specification". Let $(\decsymb_{spec}, m_{spec}) = spec$, we have $\decsymb \preceq \decsymb_{spec}$ and $m = m_{spec}$. 
+	Hence we have $\decsymb' \preceq \decsymb \preceq \decsymb_{spec}$ and $m' = m = m_{spec}$, thus $\tau'$ satisfies $spec$.
+	
+	If  $\mu'$ is not the root of $\tau'$ then let $\mu_0$ be the father of $\mu$. We have to check that $\tau'$ is a "tree unfolding". 
+	All nodes other than $\mu_0$ have the same children as before, thus the conditions of "tree unfoldings" are still respected for them.
+	As for $\mu_0$, it has the same "boss" children, hence condition (C3.2) is respected. Condition (C2) only depends on its label, which hasn't changed.
+	
+	Finally, let $u_0$ be the "local run" labelling $\mu_0$ and let $v'$ be an initial value in $u_0$. Either $\mu_0$ has a "boss" child other than $\mu'$ such that $\vinput{v'}{u_0}$ is a subword of its label, or $\vinput{v'}{u_0}$ is a subword of $w$, which is a subword of $w'$, hence condition (C3.2) is satisfied. 
+	
+	As a result, in both cases $\tau'$ is a "tree unfolding" smaller than $\tau$ that satisfies $spec$. 
 \end{proof}
 
 %\begin{lemma}
