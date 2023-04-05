@@ -431,7 +431,7 @@ When building the run a follower node means that there exists a global run which
 %\end{lemma}
 
 \begin{figure}
-	\input{../Figures/fig-illustration-pumping}
+	\input{Figures/fig-illustration-pumping}
 	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. Lines correspond to registers, and vertical separations are times at which the value of that register changes. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed. We can then obtain a shorter run by glueing them together as in the picture.}
 \end{figure}
 

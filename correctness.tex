@@ -53,7 +53,7 @@
 	\end{itemize}
 \end{lemma}
 
-
+\ifproofs
 \begin{proof}
 
 We proceed by induction on $i$.
@@ -64,7 +64,7 @@ For each $s \in S\setminus K$ we define $\agents_{i,s}$ as the set of agents in 
 Similarly, for each $s \in K$ we define $\agents_{i,s}$ as the set of agents in state $s$ \textbf{with value $\mathbf{v_i}$} in $\config_{i}$. We have $\size{\agents_{i,s}} \geq \size{\Delta}^{n-i}$ thus we can extract $\size{\Delta}+1$ disjoint sets of agents $(\agents_{i,s}^d)_{d \in \Delta\cup\set{\epsilon}}$ from it.
 
 
-\paragraph{Case 1: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the clique} $d = (q, \br{m}, q')$ with $q \in K_i$, then we make all agents $a \in \agents_{i,q}^{d}$ (which all have value $v_i$) execute that transition one by one.
+\paragraph*{Case 1: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the clique} $d = (q, \br{m}, q')$ with $q \in K_i$, then we make all agents $a \in \agents_{i,q}^{d}$ (which all have value $v_i$) execute that transition one by one.
 None of those broadcasts are received by any other agent, except for the last one:
 If $b \neq b'$ then there is a transition $(b, \rec{m}{\alpha}, b')$ and we make $a_i$ execute it upon receiving the broadcast. We then set $a_{i+1} = a_i$.
 For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}{\alpha}, k')$ such that either $\alpha$ is $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
@@ -74,7 +74,7 @@ For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition 
 
 We set $v_{i+1} = v_i$.
 
-\paragraph{Case 2: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the boss} $d = (b_i, \br{m}, b_{i+1})$, then we make $a_i$ (which has value $v_i$) execute that transition, and we set $a_{i+1} = a_i$.
+\paragraph*{Case 2: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the boss} $d = (b_i, \br{m}, b_{i+1})$, then we make $a_i$ (which has value $v_i$) execute that transition, and we set $a_{i+1} = a_i$.
 The agents receiving that message are as follows:
 
 For all $k' \in K_{i+1} \setminus K_i $ there exists a transition $d'=(k, \rec{m}{\alpha}, k')$ such that $\alpha$ is either $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
@@ -87,7 +87,7 @@ Hence we can make all agents of $\agents_{i,s}^{d}$ execute $d$, with no agent r
 
 We set $v_{i+1} = v_i$.
 
-\paragraph{Case 3: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{external broadcast} $d = (q, \br{m}, q')$ , then we make all agents $a \in \agents_q^{d}$ execute that transition one by one. None of those broadcasts are received by any other agent, except for the last one:
+\paragraph*{Case 3: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{external broadcast} $d = (q, \br{m}, q')$ , then we make all agents $a \in \agents_q^{d}$ execute that transition one by one. None of those broadcasts are received by any other agent, except for the last one:
 If $b_i \neq b_{i+1}$ then there is a transition $(b, \rec{m}{\alpha}, b'')$ and either $b_{i+1} = b'' \neq \noboss$ and $\alpha = *$ or $b_{i+1} = \noboss$ and $\alpha=\enregact$. In both cases we make $a_i$ execute that transition, and we set $a_{i+1} = a_i$.
 
 For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}{*}, k')$ with $k \in K_i$. We make all agents of $\agents_k^{d'}$ take that transition.
@@ -96,7 +96,7 @@ For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition 
 
 We set $v_{i+1} = v_i$.
 
-\paragraph{Case 4: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{gang reset} then no agent moves and we select some $a_{i+1}$ in $\agents_{q_0}$ and set $v_{i+1}$ to be its value.
+\paragraph*{Case 4: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{gang reset} then no agent moves and we select some $a_{i+1}$ in $\agents_{q_0}$ and set $v_{i+1}$ to be its value.
 %
 %\paragraph{In all cases:} After applying the given transitions, we use the copycat property: we add to $\agents_i$ $M^{n-i-1}$ disjoint copies of itself to obtain $\agents_{i+1}$, and repeat the run constructed thus far over each copy separately. This is to ensure that there are $M^{n-i-1}$ agents in $b_{i+1}$ (if it is not $\noboss$) after this step.
 
@@ -119,15 +119,16 @@ Throughout the case distinction we have ensured that:
 As a result, we have ensured that the conditions of the lemma were respected.
 This concludes our induction.
 \end{proof}
-
+\fi
 
 \begin{corollary}
 	\label{cor:soundness}
 	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
 \end{corollary}
 
+\ifproofs
 \begin{proof}
 	We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$.
 	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
 \end{proof}
-
+\fi

@@ -1,13 +1,13 @@
-\section{Lower bounds}
+\subsection{Lower bounds}
 \label{sec:lower-bounds}
 
-\begin{ex}
+\begin{example}
 	In some cases a protocol may require a "run" of exponential length (in the number of states) to reach a configuration satisfying a "query".
 	
 	\begin{figure}[h]
 		\input{Figures/fig-exp-run}
-		\label{fig:exp-run}
 		\caption{Example of a "protocol" with a state that requires an exponentially long "run" to be covered.}
+		\label{fig:exp-run}
 	\end{figure}
 
 	Consider the "protocol" displayed in Figure~\ref{fig:exp-run}. 
@@ -22,18 +22,19 @@
 	Hence there are at least $k$ agents in state $q_{n-1}$, hence at least $2k$ in the future of $n-1$. By induction hypothesis this means there are $2k(2^{n-1}-1) = k(2^n-2)$ in $\set{q_i \mid i<n-1}$, thus at least $k(2^n-1)$ in $\set{q_i \mid i<n}$.
 	
 	As a consequence, any initial run covering $N+1$ needs to send at least $2^N-1$ agents to the $q_i$ states, hence it needs to be exponentially long as each of those agents needs to execute at least one broadcast.
-\end{ex}
+\end{example}
 
 \begin{proposition}
 	\label{prop:np-hard-query-cover}
-	The "query coverability problem" is \np-hard.
+	The "query coverability problem" is NP-hard.
 \end{proposition}
 
+\ifproofs
 \begin{proof}
 	\begin{figure}[h]
 		\input{Figures/fig-np-hard}
 		\label{fig:np-hard}
-		\caption{The "protocol" used for the \np-hardness proof.}
+		\caption{The "protocol" used for the NP-hardness proof.}
 	\end{figure}
 	
 	We reduce from the 3SAT problem.
@@ -59,3 +60,4 @@
 	
 	As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus satisfies $\query$. This concludes our reduction
 \end{proof}
+\fi

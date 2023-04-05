@@ -99,10 +99,13 @@
 \newcommand{\lu}[1]{\todo[color=teal!20]{\small #1}}
 
 \newif\ifproofs
-\proofsfalse
+\proofstrue
 
 \newif\ifintuition
 \intuitionfalse
+
+\newif\ifbasic
+\basicfalse
 
 \input{General-preamble} 
 \input{../kl}
@@ -128,7 +131,7 @@
 	
 %	\input{Intro}
 	\input{General-defs}
-%	\input{General-lower-bounds}
+	\input{General-lower-bounds}
 	\input{General-abstraction}
 	
 	\bibliography{biblio}
