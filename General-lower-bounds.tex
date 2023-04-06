@@ -1,14 +1,6 @@
 \section{Lower bounds}
 
-\begin{proposition}
-	The Büchi coverability problem is undecidable for BNRA with two registers.
-\end{proposition}
 
-\ifproofs
-\begin{proof}
-	\cortoin{TODO}
-\end{proof}
-\fi
 
 \begin{proposition}
 	The Target reachability problem (asking whether there is a run in which all agents reach a state $q_f$) is undecidable for BNRA with two registers.
@@ -21,6 +13,7 @@
 \fi
 
 \begin{proposition}
+	\label{prop:reduction-LCS}
 	There is a polynomial-time reduction from the coverability problem for lossy channel systems to the coverability problem for BNRA with two registers.
 \end{proposition}
 
@@ -29,3 +22,7 @@
 	\cortoin{TODO}
 \end{proof}
 \fi
+
+\begin{remark}
+	The reduction presented in the proof of Proposition~\ref{prop:reduction-LCS} can be adapted to show that the repeat coverability problem is undecidable for BNRA, as it is for LCS.
+\end{remark}

@@ -7,7 +7,11 @@ We study the behaviour of an arbitrary number of agents communicating this way.
 We use $r \geq 0$ to denote the number of registers in each node. We consider a finite alphabet $\messages$ of messages.
 
 \begin{definition}[Syntax]
-	A ""protocol"" with $r$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times Op^\messages_r \times Q$ a finite set of transitions, with $Op^{\messages}_r = \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact}, \loc{i}{j}{\eqtestact}, \loc{i}{j}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq r}$ the set of operations.
+	A ""protocol"" with $r$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times Op^\messages_r \times Q$ a finite set of transitions, with 
+	\[
+	Op^{\messages}_r = \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact}, \loc{i}{j}{\eqtestact}, \loc{i}{j}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i,j \leq r}
+	\] 
+	the set of operations.
 	
 	Transitions labelled with $\brsymb$ are ""broadcasts"", transitions labelled with $\recsymb$ are ""receptions"" and transitions labelled with $\locsymb$ are ""local tests"".
 	Given a reception $\rec{\amessage}{i}{\anact}$ or a local test $\loc{i}{j}{\anact}$, $\anact$ is the ""action"" of the reception (resp. local test).
@@ -57,11 +61,12 @@ We use $r \geq 0$ to denote the number of registers in each node. We consider a 
 
 	
 	
-	The following lemma formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
-	\begin{lemma}
-		\label{lem:run_no_new_register_values}
-		For all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, j, \, \data{\config_0}(a)(j) = \aval}$.
-	\end{lemma}
+The following remark formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
+\begin{remark}
+	\label{rem:run_no_new_register_values}
+	As at all steps the registers that change their values change it to one that comes from another register, we have that for all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
+\end{remark}
+
 	
 	\begin{definition}
 		We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
@@ -91,9 +96,14 @@ We use $r \geq 0$ to denote the number of registers in each node. We consider a 
 
 \begin{lemma}
 	For all "query" $\query$ with $k$ variables and "protocol" $\prot$ with $r$ registers, there exists a "protocol" $\prot'$ with $\size{\prot}^k$ states and $kr$ registers and a state $q$ such that there is a run of $\prot$ satisfying $\query$ if and only if there is a run of $\prot'$ covering $q$.
-	Furthermore if $r = 1$ then $\prot'$ only needs one register.
+	Furthermore if $r = 1$ then $\prot'$ only needs $\size{\prot}+k+1$ states and one register.
 \end{lemma}
 
+\ifproofs
+\begin{proof}
+	\cortoin{TODO}
+\end{proof}
+\fi
 	
 \ifbasic
 \section{Basic properties}

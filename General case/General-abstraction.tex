@@ -109,7 +109,7 @@ We say that a local run is cheaper than another one if the set of children it sp
 	
 	We define a preorder on "partial runs":
 	Given $\run, \run'$, $\run \unlhd \run'$ if for all $v \in \nats$, there exists $v' \in \nats$ such that $\vinput{v}{\run}$ is a subword of $\vinput{v}{\run'}$.
-%	\cortoin{TO READ OVER}
+	\cortoin{TO READ OVER}
 \end{definition}
 
 A key ingredient of our construction is the decomposition of words of messages. Say we have an execution and a value $v$ such that the sequence of messages broadcast in that execution with value $v$ is $w$. Then we can distinguish in $w$ the messages sent by the agent $a$ which had that value originally. This forms a subword $w'$ of $w$. Let $m$ be the first message sent by another agent with value $v$. This means that from the messages sent by $a$ before there is a set of agents that receives some of these messages and eventually sends back message $m$ with value $v$. An important remark is that we can copy this set of agents many times to obtain as many broadcasts with message $m$ and value $v$ as we want from this point in the run.

@@ -33,8 +33,8 @@
 \begin{proof}
 	\begin{figure}[h]
 		\input{Figures/fig-np-hard}
-		\label{fig:np-hard}
 		\caption{The "protocol" used for the NP-hardness proof.}
+		\label{fig:np-hard}
 	\end{figure}
 	
 	We reduce from the 3SAT problem.
@@ -55,7 +55,7 @@
 	The register of $a$ cannot have changed its value throughout the run. 
 	For each $j$ it has received one of $\ell_j^1, \ell_j^2, \ell_j^3$ along with its own initial register value (which we call $r$). Let $p_j$ be such that $a$ has received $\ell_j^{p_j}$.
 	Hence for all $j$ there exists an agent $a_j \in \agents$ such that at some point in the run the register value of $a_j$ is $r$ and $a_j$ broadcasts $\ell_j^{p_j}$.
-	This agent $a_j$ must be in state $\ell_j^{p_j}$ after receiving the broadcast $\br{\ell_j^{p_j}}$ from $a$ (as all agents start with different register values).
+	This agent $a_j$ must be in state $\ell_j^{p_j}$ after receiving the broadcast $\brone{\ell_j^{p_j}}$ from $a$ (as all agents start with different register values).
 	Hence $\ell_j^{p_j}$ is satisfied by $\nu$. 
 	
 	As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus satisfies $\query$. This concludes our reduction

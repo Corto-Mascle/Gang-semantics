@@ -11,17 +11,17 @@
 	\node[state] [right of=0, xshift=50] (z) {3};
 
 	\path[->, bend left=10] 	
-	(0) edge node[above] {$\br{x}$} (x)
-	(0) edge node {$\br{z}$} (z)
+	(0) edge node[above] {$\brone{x}$} (x)
+	(0) edge node {$\brone{z}$} (z)
 	;
 	\path[->, bend right=10] 	
-	(0) edge node[above] {$\rec{y}{\enregact}$} (z)
-	(0) edge node[above] {$\rec{z}{\enregact}$} (x)
+	(0) edge node[above] {$\recone{y}{\enregact}$} (z)
+	(0) edge node[above] {$\recone{z}{\enregact}$} (x)
 	;
 	\path[->, bend left=20] 	
-	(0) edge node {$\br{y}$} (y)
+	(0) edge node {$\brone{y}$} (y)
 	;
 	\path[->, bend right=20] 	
-	(0) edge node[left] {$\rec{x}{\enregact}$} (y)
+	(0) edge node[left] {$\recone{x}{\enregact}$} (y)
 	;
 \end{tikzpicture}
