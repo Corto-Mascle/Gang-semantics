@@ -1,4 +1,4 @@
-\section{An \np algorithm}
+\section{A \NP algorithm}
 
 \begin{proposition}
 	\label{prop:sound-and-complete}
@@ -18,7 +18,7 @@
 
 \begin{theorem}
 	\label{thm:np-complete-query-cover}
-	The "query coverability problem" is \np-complete for "protocols" with one register.
+	The "query coverability problem" is \NP-complete for "protocols" with one register.
 \end{theorem}
 
 \begin{proof}
@@ -28,5 +28,5 @@
 	For each $i$, we have to verify that there exists a reachable configuration $\config_i$ satisfying $K_i$. By Proposition~\ref{prop:sound-and-complete}, it is the case if and only if there is an "abstract run" to an "abstract configuration" $(S,b, K)$ with either $K_i \subseteq K$ or $b\neq \noboss$ and $K_i \subseteq K\cup\set{b}$.
 	Furthermore, by Lemma~\ref{lem:short-run} if there is such an "abstract run" then there is one with at most $(\size{Q}+2)^3$ steps. 
 	Thus we can simply guess such an abstract run and verify it in polynomial time.
-	As a result, the "query coverability problem" is in \np. 
+	As a result, the "query coverability problem" is in \NP. 
 \end{proof}

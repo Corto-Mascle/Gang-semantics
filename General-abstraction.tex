@@ -76,47 +76,54 @@ We say that a local run is cheaper than another one if the set of children it sp
 
 \textbf{For now we assume that the BRNA do not contain $*$ operations and apply only one operation for each message received. The general case reduces to this one (lemma \ref{lem:simple-reduction}).}
 
-\begin{definition}
-	An ""external broadcast"" is a transition between two configurations $\config \partstep{m, v} \config'$ such that $m \in \messages$, $v \in \nats$ and for all $a \in \agents$, either $\config'(a) = \config(a)$ or there exists a transition $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a))$
-	such that $\data{\config'}(a, j') = \data{\config}(a, j')$ for all $j' \neq j$ and one of the following cases holds:
+% \begin{definition}
+% 	An ""external broadcast"" is a transition between two configurations $\config \extbr{m, v} \config'$ such that $m \in \messages$, $v \in \nats$ and for all $a \in \agents$, either $\config'(a) = \config(a)$ or there exists a transition $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a))$
+% 	such that $\data{\config'}(a, j') = \data{\config}(a, j')$ for all $j' \neq j$ and one of the following cases holds:
+% 		\begin{itemize}
+% 			\item $\anact = \quotemarks{\dummyact}$ 
+% 			and $\data{\config'}(a,j) = \data{\config}(a,j)$
+% 			\item $\anact = \quotemarks{\enregact}$ and $\data{\config'}(a,j) = v$
+% 			\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) =v$
+% 			\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) \ne v$.
+% 		\end{itemize}
+\begin{definition}[Local runs]			
+	A ""local configuration"" is a pair $(q, \localdata) \in Q \times ([1,r] \to \nats)$. Intuitively, it describes the configuration of a single agent. 
+
+	An ""external broadcast"" is a transition $(q,\localdata) \extbr{m, v} (q',\localdata')$ such that $m \in \messages$, $v \in \nats$ and there exists $(q,\rec{m}{j}{\anact},q') \in \transitions$
+	such that $\localdata(j') = \localdata(j')$ for all $j' \neq j$ and one of the following cases holds:
 		\begin{itemize}
 			\item $\anact = \quotemarks{\dummyact}$ 
-			and $\data{\config'}(a,j) = \data{\config}(a,j)$
-			\item $\anact = \quotemarks{\enregact}$ and $\data{\config'}(a,j) = v$
-			\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) =v$
-			\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) \ne v$
+			and $\localdata(j) = \localdata'(j)$
+			\item $\anact = \quotemarks{\enregact}$ and $\localdata'(j) = v$
+			\item $\anact = \quotemarks{\eqtestact}$ and $\localdata(j) = \localdata'(j)= v$
+			\item $\anact = \quotemarks{\diseqtestact}$ and $\localdata(j) = \localdata'(j) \ne v$.
 		\end{itemize}
-		
-		
-	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \step{} \config_{i}$ or $\config_{i-1} \partstep{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
-	
-	Given a value $v \in \nats$, the ""input"" of a partial run $\run$, which we denote by $\extinput{\run} \in (\messages \times \nats)^*$, is the sequence of external broadcasts through $\run$ with value $v$.
-	Its ""output"", which we denote by $\extoutput{u} \in (\messages \times \nats)^*$, is the sequence of messages of broadcasts made in $\run$. 
-	
-	Given a value $v \in \nats $he $v$-input (resp. $v$-output) of $\run$ is defined as the projection of $\extinput{\run}$ (resp. $\extoutput{\run}$) on $\messages \times \set{v}$.
-	
-	
-	
-	A ""local configuration"" is a pair $(q, \nu) \in Q \times ([1,r] \to \nats)$.
-	A ""local run"" is a sequence of local steps $(q_0, \nu_0) \xrightarrow{op_1} (q_1, \nu_1) \xrightarrow{op_2} \cdots \xrightarrow{op_k} (q_k, \nu_k)$ with $op_1, \ldots, op_k \in Op_r^\messages$. 
 
-	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun}$ of messages received in $\localrun$. 
-	Similarly, its ""output"" is the sequences $\Output{\localrun}$ of messages broadcasted in $\localrun$.
+	A "local step" $(q,\localdata) \step{} (q',\localdata')$ is either an "external broadcast" $(q,\localdata) \extbr{m, v} (q',\localdata')$ or an ""internal step""  $(q,\localdata) \step{\atrans} (q',\localdata')$ where $\atrans = (q,\op,q') \in \transitions$ with $\op$ a "broadcast" or a "local test" so that $\atrans$ is available for an agent in $(q\localdata)$ and brings that agent to $(q',\localdata')$. \nico{formulation pas terrible}
 
-	Given a value $v \in \nats$, the $v$-input of a local run $u$, which we denote by $\vinput{v}{\localrun}$, is the sequence of messages received in  $\localrun$ with value $v$. Said otherwise, it is the subsequence of $\Input{\localrun}$ containing only messages with value $v$.
-	Similarly, its $v$-output $\voutput{v}{u}$ is the sequence of messages with value $v$ broadcasted in $\localrun$.
+	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\atrans_1} (q_1, \nu_1) \step{\atrans_2} \cdots \step{\atrans_k} (q_k, \nu_k)$.
+
+	
+
+	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "external broadcasts".
+	Similarly, its ""output"", which we denote by $\voutput{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of broadcasts made in $\localrun$.
+	
+	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\localrun}{\aval}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$.  
+	
 	
 %	Its ""trace"" $\trace{u} \in Op^\messages_r$ is the sequence of operations executed by $u$.
 	
-	We define a preorder on "partial runs":
-	Given $\run, \run'$, $\run \unlhd \run'$ if for all $v \in \nats$, there exists $v' \in \nats$ such that $\vinput{v}{\run}$ is a subword of $\vinput{v}{\run'}$.
+	% A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \step{} \config_{i}$ or $\config_{i-1} \extbr{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
+
+	% We define a preorder on "partial runs":
+	% Given $\run, \run'$, $\run \unlhd \run'$ if for all $v \in \nats$, there exists $v' \in \nats$ such that $\vinput{v}{\run}$ is a subword of $\vinput{v}{\run'}$.
 %	\cortoin{TO READ OVER}
 \end{definition}
 
-A key ingredient of our construction is the decomposition of words of messages. Say we have an execution and a value $v$ such that the sequence of messages broadcast in that execution with value $v$ is $w$. Then we can distinguish in $w$ the messages sent by the agent $a$ which had that value originally. This forms a subword $w'$ of $w$. Let $m$ be the first message sent by another agent with value $v$. This means that from the messages sent by $a$ before there is a set of agents that receives some of these messages and eventually sends back message $m$ with value $v$. An important remark is that we can copy this set of agents many times to obtain as many broadcasts with message $m$ and value $v$ as we want from this point in the run.
+A key ingredient of our construction is the decomposition of words of messages. Say we have an execution and a value $v$ such that the sequence of messages broadcast in that execution with value $v$ is $w$. Let $w'$ the subword of $w$ of messages sent by the agent $a$ which had that value originally. Let $m$ be the first message sent by another agent with value $v$. This means that from the messages sent by $a$ before there is a set of agents that receives some of these messages and eventually sends back message $m$ with value $v$. An important remark is that we can copy this set of agents many times to obtain as many broadcasts with message $m$ and value $v$ as we want from this point in the run.
 
 In general, if an agent other than $a$ sends a message with value $v$ then we can add agents to obtain that message with that value as many times as we want.
-Therefore, we will describe the sequences of messages sent with a value $v$ as tuples $(w_0, m_1, \ldots, m_\ell, w_\ell)$, where $w_0\cdots w_\ell$ is the sequence of messages sent by the agent $a$ which has that value initially and the $m_i$ mark, for every message of $\messages$ the first moment at which some agent other than $a$ broadcasts it with value $v$ (if that happens).
+Therefore, we will describe the sequences of messages sent with a value $v$ as tuples $(w_0, m_1, \ldots, m_\ell, w_\ell)$, where $w_0 \cdots w_\ell$ is the sequence of messages sent by the agent $a$ which has that value initially and the $m_i$ mark, for every message of $\messages$ the first moment at which some agent other than $a$ broadcasts it with value $v$ (if that happens).
 
 \begin{definition}
 	A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. The set of decompositions over $\messages$ is denoted $\decset{\messages}$.
@@ -139,24 +146,32 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 		
 		\item The second one is a value, written $\valuelabel{\node}$.
 		
-		\item The third one is a ""specification"", which is either a word $\bosslabel{\node} \in \messages^*$ (boss specification) or a pair $(\followlabelword{\node}, \followlabelmessage{\node}) \in \messages^* \times \messages$ (follower specification). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
-		When we do not want to specify the type of specification, we write $\speclabel{\node}$ for the specification label.
+		\item The third one is a ""specification"" $\speclabel{\node}$, which is either a word $\bosslabel{\node} \in \messages^*$ (boss specification) or a pair $(\followlabelword{\node}, \followlabelmessage{\node}) \in \messages^* \times \messages$ (follower specification). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
 	\end{itemize} 
 	
-	It must satisfy the following conditions:
-	Let $\node$ be a node of that tree. The following conditions must hold:
-	
+	It must satisfy the following conditions, where $\aval := \valuelabel{\node}$ and $\localrun := \localrunlabel{\node}$.
+
 	\begin{itemize}
-		\item[C1\namedlabel{unfoldingC1}{C1}] If it is a "boss node" then $\valuelabel{\node}$ is an initial value of $\localrunlabel{\node}$ and there exists a decomposition $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that
-	 $\voutput{\valuelabel{\node}}{\localrunlabel{\node}} = w_0 \cdots w_\ell$, $\bosslabel{\node} \in \langdec{\decsymb}$, and for all $j \in [1,\ell]$, $\node$ has a child $\node'$ which is a "follower node" such that $\followlabelmessage{\node'} = m_j$ and $\followlabelword{\node'} \in\langdecdown{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
+		\item[C1\namedlabel{unfoldingC1}{C1}] If it is a "boss node" then:
+		\begin{itemize} 
+			\item $\aval$ is an initial value of $\localrun$, 
+			\item $\bosslabel{\node}$ decomposes as $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$, 
+			\item $\localrun$ may be split into sucessive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $\voutput{\aval}{\localrun_i} \subword w_i$ and $\vinput{\aval}{\localrun_i} \in \set{m_0, \dots, m_{i-1}}^*$, and
+			\item  for all $i \in [1,\ell]$, $\node$ has a child $\node_i$ which is a "follower node" such that $\followlabelmessage{\node_i} = m_i$ and $\followlabelword{\node_i} \in\langdecdown{\decsymb_i}$ where $\decsymb_i = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.
+		\end{itemize}
+		\item[C2\namedlabel{unfoldingC2}{C2}] If $\node$ is a "follower node" then $\aval$ is not an initial value of $\localrun$, $\vinput{\aval}{\localrun} = \followlabelword{\node}$ and 
+		$\voutput{\aval}{\localrun}$ contains $\followlabelmessage{\node}$.
 		
-		\item[C2\namedlabel{unfoldingC2}{C2}] If $\node$ is a "follower node" then $\valuelabel{\node}$ is not an initial value of $\localrunlabel{\node}$, $\vinput{\valuelabel{\node}}{\localrunlabel{\node}}$, and $\followlabelmessage{\node}$ is broadcast with value $\valuelabel{\node}$ at some point in $\localrunlabel{\node}$.
-		
-		\item[C3\namedlabel{unfoldingC3}{C3}] In both cases, for all value $\val' \neq \valuelabel{\node}$ broadcast or received at some point in $\localrunlabel{\node}$,
+		\item[C3\namedlabel{unfoldingC3}{C3}] In both cases, for all value $\aval' \neq \aval$ broadcast or received at some point in $\localrunlabel{\node}$, one of the two following conditions is satisfied:
 		\begin{itemize}
-			\item[C3.1\namedlabel{unfoldingC3.1}{C3.1}] If $v'$ is an initial value of $\localrunlabel{\node}$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k = \voutput{\val'}{\localrunlabel{\node}}$, for all $j \in [1,k]$ all receptions of $m'_j$ with value $\val'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $\val'$, and for all $j \in [1,k]$ $\node$ has a child $\mu'$ which is a "follower node" such that $\followlabelmessage{\node'} = m'_j$ and $\followlabelword{\node'} \in\langdecdown{\decsymb'_j}$ where $\decsymb'_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.  
+			\item[C3.1\namedlabel{unfoldingC3.1}{C3.1}]
+			 $\aval$ is an initial value of $\localrun$, 
+			there exists $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_{\ell'}, w'_{\ell'})$, s.t. $\localrun$ may be split into sucessive "local runs" $\localrun'_0, \dots, \localrun'_{\ell}$ where, for all $i \in \nset{1}{\ell'}$, $\voutput{\aval'}{\localrun'_i} \subword w'_i$ and $\vinput{\aval'}{\localrun'_i} \in \set{m'_0, \dots, m'_{i-1}}^*$, and
+			for all $i \in [1,\ell']$, $\node$ has a child $\node'_i$ which is a "follower node" such that $\followlabelmessage{\node'_i} = m'_i$ and $\followlabelword{\node'_i} \in\langdecdown{\decsymb'_i}$ where $\decsymb'_i = (w'_0, m'_1, w'_1, \ldots, m'_{i-1}, w'_{i-1})$.
+			%  If $\aval'$ is an initial value of $\localrun$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ 
+			% where $w'_0 w'_1 \ldots w'_k = \voutput{\aval'}{\localrunlabel{\node}}$, for all $j \in [1,k]$ all receptions of $m'_j$ with value $\val'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $\val'$, and for all $j \in [1,k]$ $\node$ has a child $\mu'$ which is a "follower node" such that $\followlabelmessage{\node'} = m'_j$ and $\followlabelword{\node'} \in\langdecdown{\decsymb'_j}$ where $\decsymb'_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.  
 			
-			\item[C3.2\namedlabel{unfoldingC3.2}{C3.2}] If $\val'$ is not an initial value of $\localrunlabel{\node}$ then $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\val'}{\localrunlabel{\node}}$ is a subword of $\bosslabel{\node'}$.
+			\item[C3.2\namedlabel{unfoldingC3.2}{C3.2}] If $\aval'$ is not an initial value of $\localrun$ then $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval'}{\localrun}$ is a subword of $\bosslabel{\node'}$.
 		\end{itemize}
 	\end{itemize}
 	
@@ -305,7 +320,7 @@ When building the run a follower node means that there exists a "partial run" wh
 	\begin{itemize}
 		\item if $\tau$ satisfies a "boss specification" $w \in \messages^*$, then there exists a run $\run$ satisfying $w$.
 		
-		\item if $\tau$ satisfies a "follower specification" $(\decsymb, m)$ then there exists a word $w \in \langdecdown{\decsymb}$, a "partial run" $\run$ and a value $v$ such that $\extinput{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \in \langdecdown{\decsymb}$, and $\voutput{v}{\run}$ contains a $m$.
+		\item if $\tau$ satisfies a "follower specification" $(\decsymb, m)$ then there exists a word $w \in \langdecdown{\decsymb}$, a "partial run" $\run$ and a value $v$ such that $\Input{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \in \langdecdown{\decsymb}$, and $\voutput{v}{\run}$ contains a $m$.
 	\end{itemize}
 	
 	Let $\tau$ be a "tree unfolding", let $\mu$ be its root, let $u$ be the local run labelling it. 

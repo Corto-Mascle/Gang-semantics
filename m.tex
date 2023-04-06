@@ -120,11 +120,12 @@
 	\maketitle
 	
 	\begin{abstract}
-		We study a model representing an arbitrarily large network of agents. Agents can send broadcasts but have no guarantee on the set of other agents which will receive it.
-		Agents have local registers, containing identifiers. They can send a value from one of their registers in their broadcasts, store the values they receive or test equality between registers.
-		We show that the coverability problem is decidable, but as hard as the one for lossy channel systems, which is non-multiply recursive. 
-		We also show that other classical problems on such systems, such as target, are undecidable. 
-		By contrast, the coverability problem is NP-complete when each agent has only one register.
+		We consider the parameterized verification of a model representing an arbitrarily large network of agents which communicate by broadcasting and receiving mess ages. The boradcast topology is reconfigurable, hence a message sent may be received by any set of agents.
+		Agents have local registers which contain identifiers. Agents starts with distinct values in their registers, and these values may be broadcast, stored and compared with one another.
+% They can broadcast a value from one of their registers, store the values they receive in the register or test equality between registers.
+		We consider the coverability problem, where one asks whether a given state of the system may be covered by at least one process. We show that this problem is decidable; however, it is as hard as coverability in lossy channel systems, which is non-primitive recursive. 
+		We also consider other classical problems on such systems, in particular the target problem where all processes must synchronize on a given state. This problem is however undecidable for our model. 
+		By contrast, we prove that the coverability problem is \NP-complete when each agent has only one register.
 		
 		\keywords{Parameterized verification \and Distributed systems \and Well quasi-orders}
 	\end{abstract}

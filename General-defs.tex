@@ -1,59 +1,64 @@
 \section{Definitions}
 
-A ""Broadcast Network of Register Automata"" (BNRA) is defined by a finite transition system describing the behaviour of an agent, which can broadcast and receive messages with integer values, store them in local registers, or make equality tests.
+A ""Broadcast Network of Register Automata"" (BNRA) \cite{DST2013} is defined by a finite transition system describing the behavior of an agent, which can broadcast and receive messages with integer values, store them in local registers, or make equality tests.
 We consider that when a message is broadcast by an agent, each other agent independently may or may not receive it. 
 We study the behaviour of an arbitrary number of agents communicating this way.
 
-We use $r \geq 0$ to denote the number of registers in each node. We consider a finite alphabet $\messages$ of messages.
+We use $r \geq 0$ to denote the number of registers in each node. 
+%We consider a finite alphabet $\messages$ of messages.
 
-\begin{definition}[Syntax]
-	A ""protocol"" with $r$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times Op^\messages_r \times Q$ a finite set of transitions, with 
-	\[
-	Op^{\messages}_r = \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact}, \loc{i}{j}{\eqtestact}, \loc{i}{j}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i,j \leq r}
-	\] 
+\begin{definition}[Protocols]
+	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with 
+	\begin{multline*}
+	\operations = \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq \regnum} \\ \cup  
+	\set{\loc{i}{j}{\eqtestact}, \loc{i}{j}{\diseqtestact} \mid 1 \leq i,j \leq \regnum}
+	\end{multline*}
 	the set of operations.
 	
 	Transitions labelled with $\brsymb$ are ""broadcasts"", transitions labelled with $\recsymb$ are ""receptions"" and transitions labelled with $\locsymb$ are ""local tests"".
-	Given a reception $\rec{\amessage}{i}{\anact}$ or a local test $\loc{i}{j}{\anact}$, $\anact$ is the ""action"" of the reception (resp. local test).
+	Given a reception $\rec{\amessage}{i}{\anact}$ or a local test $\loc{i}{j}{\anact}$, $\anact$ is the ""action"" of the reception (resp. local test). 
+The ""set of actions"" is $\actions = \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
+$\quotemarks{\eqtestact}$ is an ""equality test"", $\quotemarks{\diseqtestact}$ is a ""disequality test"", $\quotemarks{\enregact}$ is a ""store action"" and $\quotemarks{\dummyact}$ is a ""dummy action"" with no effect.
 	
-	A ""simple protocol"" is one that does not have any local tests or receptions with $\dummyact$.
+A ""simple protocol"" is a "protocol" that does not have action $\quotemarks{\dummyact}$.
 	
 %	\cortoin{TODO : remarquer que pour r=1 on peut ignorer les actions locales}
 \end{definition}
 
 
 \begin{definition}[Semantics]
-	Let $(Q,\messages, \transitions, q_0)$ be a protocol, and $\agents \subseteq \nats$ a finite set of \emph{agents}.
-	A ""configuration"" over a set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats^r$, associating a state to each agent and a ""register value"" to each of its registers. 
+	Let $(Q,\messages, \transitions, q_0)$ be a "protocol", and $\agents \subseteq \nats$ a finite set of \emph{agents}.
+	A ""configuration"" over a set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats^{\regnum}$, associating a state to each agent and a ""register value"" to each of its registers. 
 	We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component.
-	An \emph{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and for all $a, a' \in \agents$, $i, i' \in [1,r]$, if $\data{\config}(a, i) = \data{\config}(a', i')$ then $a=a'$ and $i=i'$.
+	An \emph{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and for all $a, a' \in \agents$, $i, i' \in \nset{1}{\regnum}$, if $\data{\config}(a, i) = \data{\config}(a', i')$ then $a=a'$ and $i=i'$.
 	
 	\AP We denote by $\configs{\agents}$ the set of configurations over $\agents$, and by $\allconfigs := \cup_{\agents \subseteq \nats \text{ finite }} \configs{\agents}$ the set of all configurations. Given a configuration $\config$, we denote by $\agentsof{\config}$ the set of agents of $\config$.
 	
-	\AP Given two configurations $\config, \config' \in \configs{\agents}$, a ""step"" $\config \step{} \config'$ is defined when one of the two following cases happens:
+	\AP Given two configurations $\config, \config' \in \configs{\agents}$, a ""step"" $\config \step{} \config'$ is defined when one of the two following conditions is satisfied:
 	\begin{itemize}
-		\item there exists $a \in \agents$ and a "local test" $(\st{\config}(a), \loc{j_1}{j_2}{\anact}, \st{\config'}(a))$ such that for all $a'\neq a$, $\config(a') = \config'(a')$ and
+		\item there exists $a \in \agents$ and a "local test" $(\st{\config}(a), \loc{i}{j}{\anact}, \st{\config'}(a)) \in \transitions$ such that for all $a'\neq a$, $\config(a') = \config'(a')$ and
 		\begin{itemize}
-			\item either $\anact = \quotemarks{\eqtestact}$ $\data{\config}(a,j_1) = \data{\config}(a,j_2)$
+			\item either $\anact = \quotemarks{\eqtestact}$ and $\data{\config}(a,i) = \data{\config}(a,j)$
 			
-			\item either $\anact = \quotemarks{\diseqtestact}$ $\data{\config}(a,j_1) \neq \data{\config}(a,j_2)$
+			\item or $\anact = \quotemarks{\diseqtestact}$ and $\data{\config}(a,i) \neq \data{\config}(a,j)$
 		\end{itemize}
 		
-		\item there exist $\amessage \in \messages$, $a_0 \in \agents$ and $j_0 \in [1,r]$ such that $(\st{\config}(a_0),\br{\amessage}{j_0}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and for all $a \in \agents\setminus \set{a_0}$, either $\config'(a) = \config(a)$ or there exists a transition $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a))$
+		\item there exist $\amessage \in \messages$, $a_0 \in \agents$ and $i \in [1,r]$ such that $(\st{\config}(a_0),\br{\amessage}{i}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and for all $a \in \agents\setminus \set{a_0}$, either $\config'(a) = \config(a)$ or there exists a transition $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a))$
 		such that $\data{\config'}(a, j') = \data{\config}(a, j')$ for all $j' \neq j$ and one of the following cases holds:
 		\begin{itemize}
 				\item $\anact = \quotemarks{\dummyact}$ 
 				and $\data{\config'}(a,j) = \data{\config}(a,j)$
-				\item $\anact = \quotemarks{\enregact}$ and $\data{\config'}(a,j) = \data{\config}(a_0,j_0)$
-				\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) =\data{\config}(a_0,j_0)$
-				\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) \ne \data{\config}(a_0,j_0)$
+				\item $\anact = \quotemarks{\enregact}$ and $\data{\config'}(a,j) = \data{\config}(a_0,i)$
+				\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) =\data{\config}(a_0,i)$
+				\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) \ne \data{\config}(a_0,i)$
 			\end{itemize}
 		\end{itemize}
 	
 	\AP A ""path"" is a sequence of steps $\apath : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. 
 	We write $\config_0 \step{*} \config_k$ when there exists such a path.
 	A ""run"" is a path whose first configuration is an "initial configuration"; runs are denoted with the letter $\run$.  
-	Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents, $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  We write $\Runs{\prot}$ for the set of runs of $\prot$.
+	Given such a "run" $\run$, we write $\agentsof{\run}$ its set of agents, $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
+% We write $\Runs{\prot}$ for the set of runs of $\prot$.
 	% with current definition, every run is initial
 	
 	\AP A run $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when there exists $a \in \agents$ such that $\st{\config_f}(a) = q$. 
@@ -64,7 +69,7 @@ We use $r \geq 0$ to denote the number of registers in each node. We consider a 
 The following remark formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
 \begin{remark}
 	\label{rem:run_no_new_register_values}
-	As at all steps the registers that change their values change it to one that comes from another register, we have that for all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
+	Because a register may only change its value to one that is broadcast from another register, we have that for all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
 \end{remark}
 
 	
