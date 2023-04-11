@@ -120,7 +120,7 @@
 	\maketitle
 	
 	\begin{abstract}
-		We consider the parameterized verification of a model representing an arbitrarily large network of agents which communicate by broadcasting and receiving mess ages. The boradcast topology is reconfigurable, hence a message sent may be received by any set of agents.
+		We consider the parameterized verification of a model representing an arbitrarily large network of agents which communicate by broadcasting and receiving mess ages. The broadcast topology is reconfigurable, hence a message sent may be received by any set of agents.
 		Agents have local registers which contain identifiers. Agents starts with distinct values in their registers, and these values may be broadcast, stored and compared with one another.
 % They can broadcast a value from one of their registers, store the values they receive in the register or test equality between registers.
 		We consider the coverability problem, where one asks whether a given state of the system may be covered by at least one process. We show that this problem is decidable; however, it is as hard as coverability in lossy channel systems, which is non-primitive recursive. 
@@ -140,4 +140,10 @@
 	\input{abstraction}
 	
 	\bibliography{biblio}
+	
+	\newpage
+	
+	\appendix
+	\input{Appendix/Preuve-tree-to-run}
+
 \end{document}

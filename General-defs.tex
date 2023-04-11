@@ -20,7 +20,7 @@ We use $r \geq 0$ to denote the number of registers in each node.
 The ""set of actions"" is $\actions = \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
 $\quotemarks{\eqtestact}$ is an ""equality test"", $\quotemarks{\diseqtestact}$ is a ""disequality test"", $\quotemarks{\enregact}$ is a ""store action"" and $\quotemarks{\dummyact}$ is a ""dummy action"" with no effect.
 	
-A ""simple protocol"" is a "protocol" that does not have action $\quotemarks{\dummyact}$.
+A ""simple protocol"" is a "protocol" that does not have receptions with action $\quotemarks{\dummyact}$ or local tests with action $\quotemarks{\eqtestact}$.
 	
 %	\cortoin{TODO : remarquer que pour r=1 on peut ignorer les actions locales}
 \end{definition}

@@ -1,0 +1,177 @@
+\section{Proof of Lemma~\ref{lem:tree-to-run}}
+
+\begin{definition}
+	We extend the notion of "external broadcast" to configurations.
+	An ""external message@global"" is a transition $\config \extbr{m, v} \config'$ between two configurations $\config, \config'$ over a set of agents $\agents$ such that for all $a \in \agents$ either $\config(a) \extbr{m, v} \config'(a)$ or $\config(a) = \config'(a)$.
+	
+	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \step{} \config_{i}$ or $\config_{i-1} \extbr{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
+	
+	We will use the notation $\config \step{m, v} \config'$ to signify that there is a "step" from $\config$ to $\config'$ using a broadcast of message $m$ with value $v$.
+	
+	We define the $v$-projection $\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external broadcast@@global" $\config \extbr{m, v} \config'$ of a message $m$ with value $v$ to $(m, in)$ and every broadcast of a message $m$ with value $v$ to $(m, out)$.
+	
+	The ""input@partial"" $\vinput{v}{\run}$ (resp. ""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ such that the projection on $\messages \times \set{in}$ (resp. $\messages\times \set{out}$) of $\vproj{v}{\run}$ is $(m_0, in) \cdots (m_k, in)$ (resp. $(m_0, out)\cdots(m_k, out)$).
+	
+	Note that a "local run" is a "partial run" with a single agent.
+	
+%	 We define a preorder on "partial runs":
+%	 Given $\run, \run'$, $\run \unlhd \run'$ if for all $v \in \nats$, there exists $v' \in \nats$ such that $\vinput{v}{\run}$ is a subword of $\vinput{v}{\run'}$.
+\end{definition}
+
+
+\begin{lemma}
+	Let $\run$ be a " partial run", $\run'$ a "run".
+	If there exist $v, v' \in \nats$ such that $\vinput{v}{\run} \subword \voutput{v'}{\run'}$ and $v$ is an initial value in $\run'$ but not in $\run$, then there exists a "partial run" $\Tilde{\run}$ such that 
+	\begin{itemize}
+		\item $\vinput{v}{\Tilde{\run}} = \varepsilon$ 
+		
+		\item for all $v'' \neq v$, if $\vproj{v''}{\run} \neq \varepsilon$ then $\vproj{v''}{\Tilde{\run}} = \vproj{v''}{\run}$
+		
+		\item for all $v'' \neq v$, if $\vproj{v''}{\run} = \varepsilon$ then $\vinput{v''}{\Tilde{\run}} = \varepsilon$.
+	\end{itemize}
+\end{lemma}
+
+\begin{proof}
+	Let $\agents, \agents'$ be the sets of agents of $\run$ and $\run'$, respectively.
+	We can rename agents so that those two sets are disjoint.
+	
+	Let $m_1 \cdots m_k = \vinput{v}{\run}$, $\run$ can be split into $\run = \config_0 \step{\run_0} \overline{\config}_0 \extbr{m_1,v} \config_{1} \step{\run_1} \cdots \extbr{m_k,v} \config_{k} \step{\run_k} \overline{\config}_k$ so that for all $j\in [0,k]$, $\vinput{v}{\run_j} = \varepsilon$.
+	
+	Similarly, as $m_1\cdots m_k \subword \voutput{v}{\run'}$, $\run'$ can be split into $\run' = \config'_0 \step{\run'_0} \overline{\config}'_0 \step{m_1, v} \config'_{1} \step{\run'_1} \cdots \step{m_k,v'} \config'_{k} \step{\run'_k} \overline{\config}'_k$.
+	
+	For all configurations $\config$ over $\agents$ and $\config'$ over $\agents'$, we write $\config \sqcup \config'$ for the configuration over $\agents \cup \agents'$ such that $\config \sqcup \config'(a)$ is $\config(a)$ if $a \in \agents$ and $\config'(a)$ if $a \in \agents'$.
+	
+	We apply a renaming to the values of $\run'$ so that $v'$ is mapped to $v$ and all other values are mapped to distinct values that do not appear in $\run$.
+	Hence the only value appearing in both runs is $v$, and it is initial only in $\run'$. As a consequence, the configuration $\config_0 \sqcup \config'_0$ is an "initial configuration".
+	
+	We then construct the desired run $\Tilde{\run}$ over $\agents \cup \agents'$ by matching the "external broadcasts" in $\run$ with the broadcasts in $\run'$ and executing the rest of the run in parallel.
+	
+	We have $\Tilde{\run} = \config_0 \sqcup \config'_0 \step{\run_0} \overline{\config}_0 \sqcup \config'_0 \step{\run'_0} \overline{\config}_0 \sqcup \overline{\config}'_0 \step{m_1, v} \config_{1} \sqcup \config'_1 \step{\run_1} \cdots \step{m_k,v} \config_{k}  \sqcup \config'_{k} \step{\run_k}  \overline{\config}_k \sqcup \config'_k \step{\run'_k} \overline{\config}_k \sqcup \overline{\config}'_k$.
+	
+	We indeed have $\overline{\config}_{j-1} \sqcup \overline{\config}'_{j-1} \step{m_j, v} \config_{j} \sqcup \config'_j$ as we can make all agents in $\agents$ that receive an "external broadcast" with message $m_j$ and value $v$ receive the broadcast made in $\agents'$ instead.
+	
+	Hence we obtain a run with 
+	\begin{itemize}
+		\item $\vinput{v}{\Tilde{\run}} = \varepsilon$ 
+		
+		\item for all $v'' \neq v$, if $\vproj{v''}{\run} \neq \varepsilon$ then $v''$ does not appear in $\run'$ after the renaming hence $\vproj{v''}{\Tilde{\run}} = \vproj{v''}{\run}$
+		
+		\item for all $v'' \neq v$, if $\vproj{v''}{\run} = \varepsilon$ then $\vinput{v''}{\run} = \varepsilon$ and $\vinput{v''}{\run'} = \varepsilon$ as $\run'$ is a "run" and not a "partial run", hence $\vinput{v''}{\Tilde{\run}} = \varepsilon$.
+	\end{itemize}
+	This concludes our proof.
+\end{proof}
+
+%\begin{lemma}
+%	Let $M \subseteq \messages$, $m \in M$, $w \in \messages^*$ and $w_{-m}$ its projection on $\messages\setminus \set{m}$, suppose there exists a run $\run$ and a value $v$ such that $\vinput{v}{\run} \in M^*$ and $w_{-m} \subword \voutput{v}{\run}$. 
+%	
+%	Suppose also that there exists a run $\run'$ and a value $v'$ such that the $\vinput{}$ 
+%	
+%	$\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in [1,\ell+1]$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $\voutput{v}{\run_j} = w_j$, $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
+%	
+%	Suppose that for all $j \in [1,\ell]$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j}$ "decomposes as" $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\voutput{v_j}{\run'_j}$ contains $m_j$ and $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$.
+%	
+%	Then there exists a "partial run" $\Tilde{\run}$ such that 
+%	\begin{itemize}
+%		\item $w \subword \voutput{v}{\Tilde{\run}}$, 
+%		
+%		\item $\vinput{v}{\run} = \varepsilon$,
+%		
+%		\item for all $v' \neq v$, if $\vproj{v'}{\run} \neq \varepsilon$ then $\vproj{v'}{\Tilde{\run}} = \vproj{v'}{\run}$
+%		
+%		\item for all $v' \neq v$, if $\vproj{v'}{\run} = \varepsilon$ then $\vinput{v'}{\Tilde{\run}} = \varepsilon$
+%	\end{itemize}
+%\end{lemma}
+
+\begin{lemma}
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $w \in \langdecdown{\decsymb}$, $\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in [1,\ell+1]$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $\voutput{v}{\run_j} = w_j$, $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
+	
+	Suppose that for all $j \in [1,\ell]$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j}$ "decomposes as" $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\voutput{v_j}{\run'_j}$ contains $m_j$ and $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$.
+	
+	Then there exists a "partial run" $\Tilde{\run}$ such that 
+	\begin{itemize}
+		\item $w \subword \voutput{v}{\Tilde{\run}}$, 
+		
+		\item $\vinput{v}{\run} = \varepsilon$,
+		
+		\item for all $v' \neq v$, if $\vproj{v'}{\run} \neq \varepsilon$ then $\vproj{v'}{\Tilde{\run}} = \vproj{v'}{\run}$
+		
+		\item for all $v' \neq v$, if $\vproj{v'}{\run} = \varepsilon$ then $\vinput{v'}{\Tilde{\run}} = \varepsilon$
+\end{itemize}
+\end{lemma}
+
+
+\begin{proof}
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", we prove the property for all $w \in \langdecdown{\decsymb}$ by induction on $(\size{\vinput{v}{\run}}_{m_\ell}, \ldots, \size{\vinput{v}{\run}}_{m_1})$, with the lexicographic ordering.
+	
+	If $\ell = 0$ then $w \subword w_0 = \voutput{v}{\run}$ and $\vinput{v}{\run} = \epsilon$. Then we can set $\Tilde{\run} = \run$ to obtain the result.
+	
+	If $\ell>0$, suppose the property is true for all smaller integers.
+	As $w \in \langdecdown{\decsymb}$, we can split it into $w = w^- w^+$ with $w^- \in \langdecdown{\decsymb_{\ell-1}}$ and $w^+$ such that its projection on $\messages \setminus \set{m_\ell}$ is a subword of $w_\ell$. 
+\end{proof}
+
+\LemTreeToRun*
+
+
+	We prove the following statement by strong induction on the "tree unfolding". \cortoin{notation for t.u.}
+	
+	For all "tree unfolding" $\tau$, 
+	
+	\begin{itemize}
+		\item if $\tau$ satisfies a "boss specification" $w \in \messages^*$, then there exists a run $\run$ satisfying $w$.
+		
+		\item if $\tau$ satisfies a "follower specification" $(\decsymb, m)$ then there exists a word $w \in \langdecdown{\decsymb}$, a "partial run" $\run$ and a value $v$ such that $\Input{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \in \langdecdown{\decsymb}$, and $\voutput{v}{\run}$ contains a message $m$.
+	\end{itemize}
+	
+	Let $\tau$ be a "tree unfolding", let $\node$ be its root.
+	
+	We see $\localrunlabel{\node}$ as a "partial run" with a single agent.
+	We are going to compose $\localrunlabel{\node}$ with some runs given by the children of $\node$ to construct a run satisfying the properties above.
+	Let $V$ be the set of values received or broadcast in $\localrunlabel{\node}$ and $V_{init}$ be the set of initial values of $\localrunlabel{\node}$.
+	
+	
+	\subsection{Step 1: Non-initial values}
+	
+	We show the following statement by reverse induction on $\size{V}$.
+	
+	For all $V' \subseteq V\setminus V_{init}$, there exists a "partial run" $\run$ such that for all $v \in \nats$:
+	\begin{itemize}
+		\item If $v \in V' \cup V_{init}$ then $\vinput{v}{\run} = \vinput{v}{u}$
+		
+		\item If $v \notin V' \cup V_{init}$ then $\vinput{v}{\run} = \epsilon$
+	\end{itemize}  
+	
+	If $V' = V\setminus (V_{init} \cup \set{\valuelabel{\mu}})$ then this is clear as we can simply take $\run = u$.
+	
+	Now suppose there exists $v \in V \setminus (V_{init} \cup V')$. Let $V'' = V' \setminus \set{v}$. By induction hypothesis (on $\size{V}$) there exists a "partial run" $\run'$ such that for all $v' \in \nats$:
+	\begin{itemize}
+		\item If $v' \in V'' \cup V_{init}$ then $\vinput{v'}{\run'} = \vinput{v'}{u}$
+		
+		\item If $v' \notin V'' \cup V_{init}$ then $\vinput{v'}{\run'} = \varepsilon$
+	\end{itemize}
+
+	If $v \neq \valuelabel{\node}$ then by condition \ref{unfoldingC3.2} $\node$ has a child $\node'$ such that $\vinput{v}{\localrunlabel{\mu}} \subword  \bosslabel{\node'}$.
+	By induction hypothesis (on the "tree unfolding"), as the subtree rooted in $\mu'$ satisfies the "boss specification" $\vinput{v}{\mu}$, there exists a run $\run_v$ satisfying $\vinput{v}{\localrunlabel{\mu}}$.
+	
+	Let $v' \in \nats$ be such that $\vinput{v}{\localrunlabel{\node}} \subword \voutput{v'}{\run_v}$. 
+	
+	We apply an injective renaming $\sigma : \nats \to \nats$ on the values in $\run_v$ to obtain a "partial run" $\run'_v$ so that $\sigma(v') = v$ and there is no other value appearing in both $\run'$ and $\run'_v$. 
+	We then compose $\run'_v$ and $\run'$ as follows: Let $m_1\cdots m_k = \vinput{v}{\localrunlabel{\node}}$, 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+%	
+%	
+%	\textbf{Case 1: The specification is a "boss specification" $spec \in \messages^*$}
+%	
+%	Then $\mu$ is a "boss node", labelled by $u$ and by a word $w$ of which $spec$ is a subword. 
+%	By definition of a "tree unfolding", there exists a value $v$ and a decomposition $\decsymb = (w_0, m_1, \ldots, w_\ell) \in \decset{\messages}$ such that $\voutput{v}{u} = w_0\cdots w_\ell$ and $w \in \langdecdown{\decsymb}$.
+%	%	Furthermore for all $j \in [1,\ell]$, $\mu$ has a child labelled $(\decsymb_j, m_j)$ with $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$. 	By induction hypothesis, there exists a partial run $\run_{v, \decsymb_j}$ in which there is a broadcast of $m_j$ with value $v$ 
+%	
+	\cortoin{IN PROGRESS}
