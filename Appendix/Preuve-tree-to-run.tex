@@ -1,27 +1,28 @@
 \section{Proof of Lemma~\ref{lem:tree-to-run}}
 
 \begin{definition}
-	We extend the notion of "external broadcast" to configurations.
-	An ""external message@global"" is a transition $\config \extbr{m, v} \config'$ between two configurations $\config, \config'$ over a set of agents $\agents$ such that for all $a \in \agents$ either $\config(a) \extbr{m, v} \config'(a)$ or $\config(a) = \config'(a)$.
+	We extend the notion of "local run" to describe the behaviour of a subset of agents in a "run".
 	
-	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \step{} \config_{i}$ or $\config_{i-1} \extbr{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
+	An ""internal test@global"" from $\config$ to $\config'$, denoted $\config \inttest \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent does a "local test". 
 	
-	We will use the notation $\config \step{m, v} \config'$ to signify that there is a "step" from $\config$ to $\config'$ using a broadcast of message $m$ with value $v$.
+	An ""internal message@global"" from $\config$ to $\config'$, denoted $\config \intmessage{m}{v} \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent broadcasts a message $m$ with value $v$. 
 	
-	We define the $v$-projection $\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external broadcast@@global" $\config \extbr{m, v} \config'$ of a message $m$ with value $v$ to $(m, in)$ and every broadcast of a message $m$ with value $v$ to $(m, out)$.
+	An ""external message@global"" from $\config$ to $\config'$, denoted $\config \extmessage{m}{v} \config'$ is defined when for all agents $a$, either there is a "local step" $\config(a) \extbr{m}{v} \config'(a)$ or $\config(a) = \config'(a)$.
 	
-	The ""input@partial"" $\vinput{v}{\run}$ (resp. ""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ such that the projection on $\messages \times \set{in}$ (resp. $\messages\times \set{out}$) of $\vproj{v}{\run}$ is $(m_0, in) \cdots (m_k, in)$ (resp. $(m_0, out)\cdots(m_k, out)$).
+	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \inttest \config_{i}$ or $\config_{i-1} \intmessage{m, v} \config_{i}$ or $\config_{i-1} \extmessage{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
 	
-	Note that a "local run" is a "partial run" with a single agent.
+	We define the $v$-projection $\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external message@@global" $\config \extmessage{m}{v} \config'$ to $(m, in)$, every "internal message" $\config \intmessage{m}{v} \config'$ to $(m, out)$, and every "internal step" to $\varepsilon$.
 	
-%	 We define a preorder on "partial runs":
-%	 Given $\run, \run'$, $\run \unlhd \run'$ if for all $v \in \nats$, there exists $v' \in \nats$ such that $\vinput{v}{\run}$ is a subword of $\vinput{v}{\run'}$.
+	The ""input@partial"" $\vinput{v}{\run}$ (resp. ""output@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ such that the projection on $\messages \times \set{in}$ (resp. $\messages\times \set{out}$) of $\vproj{v}{\run}$ is $(m_0, in) \cdots (m_k, in)$ (resp. $(m_0, out)\cdots(m_k, out)$).
+	
+	Note that a "local run" can be seen as a "partial run" with a single agent.
 \end{definition}
 
 
 \begin{lemma}
+	\label{lem:boss-composition}
 	Let $\run$ be a " partial run", $\run'$ a "run".
-	If there exist $v, v' \in \nats$ such that $\vinput{v}{\run} \subword \voutput{v'}{\run'}$ and $v$ is an initial value in $\run'$ but not in $\run$, then there exists a "partial run" $\Tilde{\run}$ such that 
+	If there exist $v, v' \in \nats$ such that $\vinput{v}{\run} \subword \voutput{v'}{\run'}$ and $v'$ is an initial value in $\run'$ but $v$ is not initial in $\run$, then there exists a "partial run" $\Tilde{\run}$ such that 
 	\begin{itemize}
 		\item $\vinput{v}{\Tilde{\run}} = \varepsilon$ 
 		
@@ -83,9 +84,10 @@
 %\end{lemma}
 
 \begin{lemma}
-	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $w \in \langdecdown{\decsymb}$, $\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in [1,\ell+1]$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $\voutput{v}{\run_j} = w_j$, $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
+	\label{lem:follower-composition}
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $w \in \langdecdown{\decsymb}$, $\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in [1,\ell+1]$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
 	
-	Suppose that for all $j \in [1,\ell]$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j}$ "decomposes as" $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\voutput{v_j}{\run'_j}$ contains $m_j$ and $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$.
+	Suppose that for all $j \in [1,\ell]$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j}$ $\vinput{v_j}{\run'_j} \in \langdecdown{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
 	
 	Then there exists a "partial run" $\Tilde{\run}$ such that 
 	\begin{itemize}
@@ -101,12 +103,25 @@
 
 
 \begin{proof}
-	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", we prove the property for all $w \in \langdecdown{\decsymb}$ by induction on $(\size{\vinput{v}{\run}}_{m_\ell}, \ldots, \size{\vinput{v}{\run}}_{m_1})$, with the lexicographic ordering.
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", we prove the property for all $w \in \langdecdown{\decsymb}$ by strong induction on $(\size{\vinput{v}{\run}}_{m_\ell} + \size{w}_{m_\ell}, \ldots, \size{\vinput{v}{\run}}_{m_1}+ \size{w}_{m_1})$, with the lexicographic ordering, $\run$ being the run obtained by concatenating $\run_1, \ldots, \run_\ell$.
 	
-	If $\ell = 0$ then $w \subword w_0 = \voutput{v}{\run}$ and $\vinput{v}{\run} = \epsilon$. Then we can set $\Tilde{\run} = \run$ to obtain the result.
+	\textbf{Case 1: $w \subword w_0\cdots w_\ell \subword \voutput{v}{\run}$}
 	
-	If $\ell>0$, suppose the property is true for all smaller integers.
-	As $w \in \langdecdown{\decsymb}$, we can split it into $w = w^- w^+$ with $w^- \in \langdecdown{\decsymb_{\ell-1}}$ and $w^+$ such that its projection on $\messages \setminus \set{m_\ell}$ is a subword of $w_\ell$. 
+	If $\vinput{v}{\run} = \epsilon$ then we can set $\Tilde{\run} = \run$ to obtain the result.
+	
+	If $\vinput{v}{\run} \neq \epsilon$, then let $j$ be such that $\vinput{v}{\run_j} \neq \epsilon$, then we can decompose $\run_j$ as $\run_j = \config_{j-1} \step{\run_j^-} \config_j^- \extmessage{m_{j'}}{v} \config_j^+ \step{\run_j^+} \config_j$ with $j'\leq j$. 
+	
+	There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdecdown{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
+	
+	Hence $\run'_j$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},\ell}'} \config_{{j'},\ell} \intmessage{m_{j'}}{v} \config'_{j'}$ with, for all $i \in [1, \ell]$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_j$.
+	
+	We then proceed in a similar way as in Lemma~\ref{lem:boss-composition}.
+	We can rename agents so that $\run$ and $\run'_j$ are on disjoint sets of agents, and apply a renaming of values in $\run_j'$ so that $v_j$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
+	We then construct a run by executing in parallel $\run_{j',i}'$ and $\run_i$ for all $i\in [1,\ell]$. As $w_j \subword \voutput{v}{\run_j}$, we can match the "internal messages" of $\run_j$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$
+	
+	Finally, we match the last step of $\run'_{j'}$ broadcasting $m_{j'}$ with value $v$ with the "external message" between $\run_{j}^-$ and $\run_{j}^+$ in $\run_j$.
+	
+	
 \end{proof}
 
 \LemTreeToRun*

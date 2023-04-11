@@ -69,6 +69,7 @@
 % greek letters
 \renewcommand{\a}{\alpha}
 \newcommand{\config}{\gamma}
+\renewcommand{\epsilon}{\varepsilon}
 
 
 %%% BNRA syntax
@@ -213,6 +214,12 @@
 \newcommand{\localrun}{u}
 \newcommand{\localdata}{\nu}
 
+%partial runs
+
+\newcommand{\inttest}{\xrightarrow{\locsymb}}
+\newcommand{\intmessage}[2]{\xrightarrow{\brsymb, #1, #2}}
+\newcommand{\extmessage}[2]{\xrightarrow{\recsymb, #1, #2}}
+	
 %bounding functions
 \newcommand{\towerfun}{\mathsf{tow}}
 \newcommand{\repexp}[2]{\mathsf{repexp}(#1,#2)}

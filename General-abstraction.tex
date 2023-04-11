@@ -100,11 +100,12 @@ We say that a local run is cheaper than another one if the set of children it sp
 		\end{itemize}
 	Said otherwise, $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$ when an agent in $(q,\localdata)$ may perform $\atrans$ when receiving a message of the right type with value $\aval$.
 
-	An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transtion $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\atrans$ is either a "broadcast" or a "local test" and an agent in $(q,\localdata)$ may perform this transition in isolation and get to $(q',\localdata')$. 
+	An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\atrans$ is either a "broadcast" or a "local test" and an agent in $(q,\localdata)$ may perform this transition in isolation and get to $(q',\localdata')$. 
 
 	A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either an "external broadcast" or an "internal step". 
-	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$, where for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup {\intlabel{\atrans} \mid \atrans \in \transitions}$. The sequence $\locallabel_1, \dots, \locallabel_k$ is called ""schedule"" of $\localrun$.
+	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$, where for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions}$. The sequence $\locallabel_1, \dots, \locallabel_k$ is called ""schedule"" of $\localrun$.
 
+	The ""trace"" of a "local run" is the sequence $\trace{\localrun} \in (\messages \times \nats \times \set{in, out})^*$ containing the message types and values that it receives and broadcasts, $in$ indicating an "external broadcast" and $out$ a broadcast made in $u$.
 
 	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "external broadcasts".
 	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcasts steps made in $\localrun$.
@@ -157,7 +158,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 		\begin{itemize} 
 			\item $\aval$ is an initial value of $\localrun$, 
 			\item $\bosslabel{\node}$ decomposes as $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$, 
-			\item $\localrun$ may be split into sucessive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $\voutput{\aval}{\localrun_i} \subword w_i$ and $\vinput{\aval}{\localrun_i} \in \set{m_0, \dots, m_{i-1}}^*$, and
+			\item $\localrun$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $\voutput{\aval}{\localrun_i} \subword w_i$ and $\vinput{\aval}{\localrun_i} \in \set{m_0, \dots, m_{i-1}}^*$, and
 			\item  for all $i \in [1,\ell]$, $\node$ has a child $\node_i$ which is a "follower node" such that $\followlabelmessage{\node_i} = m_i$ and $\followlabelword{\node_i} \in\langdecdown{\decsymb_i}$ where $\decsymb_i = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.
 		\end{itemize}
 		\item[C2\namedlabel{unfoldingC2}{C2}] If $\node$ is a "follower node" then $\aval$ is not an initial value of $\localrun$, $\vinput{\aval}{\localrun} = \followlabelword{\node}$ and 
@@ -340,198 +341,12 @@ The proof can be found in the appendix.
 \fi
 
 
-\begin{lemma}
+\begin{restatable}{lemma}{SimpleReduction}
 	\label{lem:simple-reduction}
 	For all "protocol" $\prot$ there is a "simple protocol" $\prot'$ with one more register satisfying the same "boss specifications".
-\end{lemma}
-\ifproofs
-\begin{proof}
-	
-	We construct $\prot'$ as follows: It has one more register than $\prot$, but stores in its state the current state of $\prot$ and a mapping $map : [1,r] \to [1,r+1]$ from registers of $\prot$ to its own registers.
-	
-	Intuitively, it is going to use its registers to store the different values that are in the registers of $\prot$, and the mapping to keep track of which registers contain which values.
-	When a value is received it guesses whether it is one of the existing values or a fresh one, and updates the registers and the mapping accordingly.
-	The extra register of $\prot'$ is not necessary, but simplifies the proof.
-	We will first define a system with $\varepsilon$-transitions (transitions with no effect), which we will then eliminate. 
-	
-	
-	Formally, we set $\prot = (Q, \messages, \Delta, q_0)$.
-	The set of states of $\prot'$ is $Q \times ([1,r] \to [1,r])$, its initial state is $(q_0, id)$ where $id(i) = i$ for all $i \in [1,r]$. 
-	
-	There is a transition $(q, map) \xrightarrow{op} (q', map')$ in the following cases:
-	
-	\begin{itemize}
-		\item $op = \br{m}{j}$ 
-		$map = map'$ and $\prot$ has a transition $q \xrightarrow{\br{m}{i}} q'$ with $map(i)=j$.
-		
-		\item $op=\rec{m}{j}{\enregact}$ and $map^{-1}(j) =\emptyset$ and either
-		\begin{itemize}
-			\item there is a transition $q \xrightarrow{\rec{m}{i_0}{\enregact}} q'$ in $\prot$ such that for all $i \in [1,r]$, $map'(i) = map(i)$ if $i \neq i_0$ and $map'(i_0) = j$.
-			
-			\item or there is a transition $q \xrightarrow{\rec{m}{i_0}{\dummyact}} q'$ in $\prot$ and for all $i \in [1,r]$, $map'(i) = map(i)$.
-		\end{itemize}
-		
-		\item $op = \rec{m}{j}{\eqtestact}$ and either
-		\begin{itemize}
-			\item there is a transition $q \xrightarrow{\rec{m}{i}{\eqtestact}} q'$ in $\prot$ such that $map(i)=j$ and $map'=map$.
-			
-			\item there is a transition $q \xrightarrow{\rec{m}{i_0}{\enregact}} q'$ in $\prot$ and $map'(i_0)=j$ and $map'(i) = map(i)$ for all $i \neq i_0$.
-		\end{itemize} 
-		
-		\item $op = \rec{m}{j}{\diseqtestact}$ and there is a transition $q \xrightarrow{\rec{m}{i}{\diseqtestact}} q'$ in $\prot$ such that $map(i)=j$
-		
-		\item $op=\loc{j_1}{j_2}{\diseqtestact}$ and there is a transition $q \xrightarrow{\loc{i_1}{i_2}{\diseqtestact}} q'$ in $\prot$ such that $map(i_1)=j_1$ and $map(i_2 = j_2)$.
-	\end{itemize}
+\end{restatable}
 
-	
-	We define the relation $\xrightarrow{\varepsilon}$ as $(q, map) \xrightarrow{\varepsilon} (q', map')$ if and only if $map=map'$ and there is a transition $q \xrightarrow{\loc{i_1}{i_2}{\eqtestact}} q'$ in $\prot$ such that $map(i_1)=j_1$ and $map(i_2) = j_2$.
-	Let $\xrightarrow{\varepsilon}^*$ be its transitive closure.
-	
-	For all transitions $(q,map) \xrightarrow{op} (q', map')$ we add transitions $(q,map) \xrightarrow{op} (q'', map'')$ for all $q'', map''$ such that $(q', map') \xrightarrow{\varepsilon}^* (q'', map'')$, to obtain $\prot'$.
-	
-	We prove by induction on $\size{u}$ that for all "local run" $u$ of $\prot$ there exists a "local run" $u'$ of $\prot'$ with the same "trace" and such that if the last configuration of $u$ is $(q,\nu)$ and the last configuration of $u'$ is $((q',map), \nu')$ then $(q', map') \xrightarrow{\varepsilon}^* (q, map')$, for all $i$, $\nu(i) = \nu'(map(i))$ and for all $i_1, i_2$, if $\nu(i_1)=\nu_{i_2}$ then $map(i_1) = map(i_2)$.  
-	
-	If $\size{u} = 0$, let $(q_0, \nu_0)$ be its initial configuration, then we simply set $u'$ as an empty "local run" with the initial configuration $((q_0, id), \nu'_0)$ where $\nu'_0(i) = \nu_0(i)$ for all $i \in [1,r]$ and $\nu_0(r+1)$ is a fresh value.
-	
-	If $\size{u}>0$, let $\Tilde{u}$ be $u$ without its last step. Let $(q, \nu)$ be the last "local configuration" of $u$, $(\Tilde{q}, \Tilde{\nu})$ the one of $\Tilde{u}$.
-	
-	By induction hypothesis there exists $\Tilde{u}'$ a local run of $\prot'$ with the same "trace" to a "local configuration" $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}')$ such that $(\Tilde{q}', \Tilde{map}') \xrightarrow{\varepsilon}^* (\Tilde{q}, \Tilde{map}')$ and for all $i \in [1,r]$, $\Tilde{\nu}'(\Tilde{map}'(i)) = \Tilde{\nu}(i)$.
-	
-	\begin{itemize}
-		\item 
-		If the last step of $u$ is $(\Tilde{q}, \Tilde{\nu}) \xrightarrow{\br{m}{i}} (q, \nu)$ then $\Tilde{\nu} = \nu$, and there is a transition $(\Tilde{q}, \Tilde{map}') \xrightarrow{\br{m}{j}} (q, \Tilde{map}')$ with $j=\Tilde{map}'(i)$.
-		
-		We add a step $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \xrightarrow{\br{m}{j}} ((q', map'), \nu')$ at the end of $\Tilde{u}'$ to obtain $u'$, where $q' = q$, $map' = \Tilde{map}'$ and $\nu' = \Tilde{\nu}'$. 
-		This step can be taken as $(\Tilde{q}', \Tilde{map}') \xrightarrow{\varepsilon}^* (\Tilde{q}, \Tilde{map}')$ and $(\Tilde{q}, \Tilde{map}') \xrightarrow{\br{m}{j}} (q, \Tilde{map}')$.   
-		
-		The resulting $u'$ satisfies the conditions as $(q', map') = (q, map')$, $\Tilde{map'} = map'$, the final configurations of $u$ and $u'$ are the same as the ones of $\Tilde{u}$ and $\Tilde{u}'$, and $\trace{u'} = \trace{\Tilde{u}'} (m,\Tilde{\nu}'(\Tilde{map}'(i)),out) = \trace{\Tilde{u}} (m,\Tilde{\nu}(i),out) = \trace{u}$.
-		
-		\item 
-		If the last step of $u$ is an "external broadcast" $(\Tilde{q}, \Tilde{\nu}) \extbr{m, v} (q, \nu)$ then let $j\in [1,r+1]$ be such that $\Tilde{map}'^{-1}(j) = \emptyset$ (such a $j$ exists as $\size{map([1,r])} = r < r+1$). There is a transition $\Tilde{q} \xrightarrow{\rec{m}{i_0}{\alpha}} q$ in $\prot$ such that $\nu(i)=\Tilde{\nu}(i)$ for all $i\neq i_0$ and we are in one of the following cases:
-		
-		\begin{itemize}
-			\item $\alpha=\enregact$, $\nu(i_0) = v$ and there exists $i_1 \neq i_0$ such that $\nu(i_1) = v$. Let $j_1=\Tilde{map}'(i_1)$
-			There is a transition $(\Tilde{q}, \Tilde{map}') \xrightarrow{\rec{m}{j_1}{\eqtestact}} (q, map')$ in $\prot'$ with $map'(i) = \Tilde{map}'(i)$ for all $i\neq i_0$ and $map'(i_0) = j_1$.
-			
-			We add a step $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \extbr{m, v} ((q', map'), \nu')$ at the end of $\Tilde{u}'$ to obtain $u'$, where $q' = q$ and $\nu' = \Tilde{\nu}'$.
-			
-			This step can be taken as $(\Tilde{q}', \Tilde{map}') \xrightarrow{\varepsilon}^* (\Tilde{q}, \Tilde{map}')$ and $(\Tilde{q}', \Tilde{map}') \xrightarrow{\rec{m}{j_1}{\eqtestact}} (q', map')$. 
-			
-			 We have $(q', map') = (q, map')$, $\nu'(map'(i_0)) = v = \nu(i_0)$ and $\nu'(map'(i)) = \Tilde{\nu}'(map'(i)) = \Tilde{\nu}(i) = \nu(i)$, and $\trace{u'} = \trace{\Tilde{u}'} (m,v,in) = \trace{\Tilde{u}} (m,v,in) = \trace{u}$.
-			 Furthermore for all $i', i'' \in [1,r]\setminus\set{i_0}$, if $\nu(i') = \nu(i'')$ then $map'(i') = \Tilde{map}'(i') = \Tilde{map}'(i'') = map'(i'')$, and for all $i' \in [1,r]$, if $\nu(i')=\nu(i_0)$ then $\nu(i')=\nu(i_1)$ and thus $map'(i') = map'(i_1) = map'(i_0)$.
-			 Thus the resulting $u'$ satisfies the conditions
-			
-			\item $\alpha=\enregact$, $\nu(i_0) = v$ and for all $i_1 \neq i_0$, $\nu(i_1) \neq v$. 
-			There is a transition $(\Tilde{q}, \Tilde{map}') \xrightarrow{\rec{m}{j}{\enregact}} (q, map')$ in $\prot'$ with $map'(i) = \Tilde{map}'(i)$ for all $i\neq i_0$ and $map'(i_0) = j$.
-			
-			We add a step $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \extbr{m, v} ((q', map'), \nu')$ at the end of $\Tilde{u}'$ to obtain $u'$, where $q' = q$ and $\nu'(j') = \Tilde{\nu}'(j')$ for all $j' \neq j$ and $\nu'(j) = v$.
-			
-			This step can be taken as $(\Tilde{q}', \Tilde{map}') \xrightarrow{\varepsilon}^* (\Tilde{q}, \Tilde{map}')$ and $(\Tilde{q}', \Tilde{map}') \xrightarrow{\rec{m}{j}{\enregact}} (q', map')$. 
-			
-			The resulting $u'$ satisfies the conditions as $(q', map') = (q, map')$, we have $\nu'(map'(i_0)) = v = \nu(i_0)$ and $\nu'(map'(i)) = \Tilde{\nu}'(map'(i)) = \Tilde{\nu}(i) = \nu(i)$, and $\trace{u'} = \trace{\Tilde{u}'} (m,v,in) = \trace{\Tilde{u}} (m,v,in) = \trace{u}$.
-			
-			\item $\alpha = \eqtestact$, $\nu(i_0) = \Tilde{\nu}(i_0) = v$. Then there is a transition $(\Tilde{q}, \Tilde{map}') \xrightarrow{\rec{m}{j}{\eqtestact}} (q, map')$ in $\prot'$ with $map' = \Tilde{map}'$ and $j = \Tilde{map}'(i_0)$.
-			
-			We add a step $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \extbr{m, v} ((q', map'), \nu')$ at the end of $\Tilde{u}'$ to obtain $u'$, where $q' = q$ and $\nu' = \Tilde{\nu}'$.
-			
-			This step can be taken as $\Tilde{\nu}'(\Tilde{map}'(i)) = \Tilde{\nu}(i) = v$ and $(\Tilde{q}', \Tilde{map}') \xrightarrow{\varepsilon}^* (\Tilde{q}, \Tilde{map}')$ and $(\Tilde{q}', \Tilde{map}') \xrightarrow{\rec{m}{j}{\eqtestact}} (q', map')$.
-			
-			The resulting $u'$ satisfies the conditions as $(q', map') = (q, map')$, the final configurations of $u$ and $u'$ are the same as the ones of $\Tilde{u}$ and $\Tilde{u}'$, and $\trace{u'} = \trace{\Tilde{u}'} (m,v,in) = \trace{\Tilde{u}} (m,v,in) = \trace{u}$.
-			
-			\item $\alpha = \diseqtestact$ and $\nu(i_0) = \Tilde{\nu}(i_0) \neq v$. Then there is a transition $(\Tilde{q}, \Tilde{map}') \xrightarrow{\rec{m}{j}{\diseqtestact}} (q, map')$ in $\prot'$ with $map' = \Tilde{map}'$ and $j = \Tilde{map}'(i_0)$.
-			
-			We add a step $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \extbr{m, v} ((q', map'), \nu')$ at the end of $\Tilde{u}'$ to obtain $u'$, where $q' = q$ and $\nu' = \Tilde{\nu}'$.
-			
-			This step can be taken as $\Tilde{\nu}'(\Tilde{map}'(i)) = \Tilde{\nu}(i) \neq v$ and $(\Tilde{q}', \Tilde{map}') \xrightarrow{\varepsilon}^* (\Tilde{q}, \Tilde{map}')$ and $(\Tilde{q}', \Tilde{map}') \xrightarrow{\rec{m}{j}{\diseqtestact}} (q', map')$.
-			
-			The resulting $u'$ satisfies the conditions as $(q', map') = (q, map')$, the final configurations of $u$ and $u'$ are the same as the ones of $\Tilde{u}$ and $\Tilde{u}'$, and $\trace{u'} = \trace{\Tilde{u}'} (m,v,in) = \trace{\Tilde{u}} (m,v,in) = \trace{u}$.
-			
-			\item $\alpha = \dummyact$ and $\nu(i_0) = \Tilde{\nu}(i_0)$. Then there is a transition $(\Tilde{q}, \Tilde{map}') \xrightarrow{\rec{m}{j}{\enregact}} (q, map')$ in $\prot'$ with $map' = \Tilde{map}'$.
-			
-			We add a step $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \extbr{m, v} ((q', map'), \nu')$ at the end of $\Tilde{u}'$ to obtain $u'$, where $q' = q$ and $\nu' = \Tilde{\nu}'$.
-			
-			This step can be taken as $(\Tilde{q}', \Tilde{map}') \xrightarrow{\varepsilon}^* (\Tilde{q}, \Tilde{map}')$ and $(\Tilde{q}', \Tilde{map}') \xrightarrow{\rec{m}{j}{\enregact}} (q', map')$.
-			
-			The resulting $u'$ satisfies the conditions as $(q', map') = (q, map')$, the final configurations of $u$ and $u'$ are the same as the ones of $\Tilde{u}$ and $\Tilde{u}'$, and $\trace{u'} = \trace{\Tilde{u}'} (m,v,in) = \trace{\Tilde{u}} (m,v,in) = \trace{u}$. 
-		\end{itemize}
-		
-	\item 
-	If the last step of $u$ is $(\Tilde{q}, \Tilde{\nu}) \xrightarrow{\loc{i_1}{i_2}{\eqtestact}} (q, \nu)$ then $\Tilde{\nu} = \nu$, and $(\Tilde{q}, \Tilde{map}') \xrightarrow{\varepsilon} (q, \Tilde{map}')$.
-	
-	We set $u' = \Tilde{u}'$. The last configuration of $u'$ is $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}')$. It satisfies the conditions as $(\Tilde{q}', \Tilde{map}') \xrightarrow{\varepsilon}^* (\Tilde{q}, \Tilde{map}') \xrightarrow{\varepsilon} (q, \Tilde{map}')$ and the final configurations of $u$ and $u'$ are the same as the ones of $\Tilde{u}$ and $\Tilde{u}'$.
-		
-	\item 
-	If the last step of $u$ is $(\Tilde{q}, \Tilde{\nu}) \xrightarrow{\loc{i_1}{i_2}{\diseqtestact}} (q, \nu)$ then $\Tilde{\nu} = \nu$, and there is a transition $(\Tilde{q}, \Tilde{map}') \xrightarrow{\loc{j_1}{j_2}{\diseqtestact}} (q, \Tilde{map}')$ with $j_1=\Tilde{map}'(i_1)$ and $j_2=\Tilde{map}'(i_2)$.
-	
-	We add a step $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \xrightarrow{\loc{j_1}{j_2}{\diseqtestact}} ((q', map'), \nu')$ at the end of $\Tilde{u}'$ to obtain $u'$, where $q' = q$, $map' = \Tilde{map}'$ and $\nu' = \Tilde{\nu}'$. 
-	This step can be taken as $\Tilde{\nu}'(j_1) = \Tilde{\nu}(i_1) \neq \Tilde{\nu}(i_2) = \Tilde{\nu}'(j_2)$ and $(\Tilde{q}', \Tilde{map}') \xrightarrow{\varepsilon}^* (\Tilde{q}, \Tilde{map}')$ and $(\Tilde{q}, \Tilde{map}') \xrightarrow{\loc{j_1}{j_2}{\diseqtestact}} (q, \Tilde{map}')$.   
-	
-	The resulting $u'$ satisfies the conditions as $(q', map') = (q, map')$ and the "traces" and final configurations of $u$ and $u'$ are the same as the ones of $\Tilde{u}$ and $\Tilde{u}'$.
-\end{itemize}
-	
-	This concludes our first induction.
-	
-	We now prove by induction on $\size{u'}$ that for all "local run" $u'$ of $\prot'$ there exists a "local run" $u$ of $\prot$ with the same "trace" and such that if the last configuration of $u$ is $(q,\nu)$ and the last configuration of $u'$ is $((q',map), \nu')$ then $q=q'$ and for all $i$, $\nu(i) = \nu'(map(i))$.  
-	
-	If $\size{u'} = 0$, let $(q_0, \nu'_0)$ be its initial configuration, then we  set $u$ as an empty "local run" with the initial configuration $((q_0, id), \nu_0)$ where $\nu_0(i) = \nu'_0(i)$ for all $i \in [1,r]$.
-	
-	If $\size{u}>0$, let $\Tilde{u}'$ be $u'$ without its last step. Let $((q', map'), \nu')$ be the last "local configuration" of $u'$, $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}')$ the one of $\Tilde{u}'$.
-	
-	By induction hypothesis there exists $\Tilde{u}$ a local run of $\prot$ with the same "trace" as $u'$ to a "local configuration" $(\Tilde{q}, \Tilde{\nu})$ such that $\Tilde{q}'=\Tilde{q}$ and for all $i \in [1,r]$, $\Tilde{\nu}'(\Tilde{map}'(i)) = \Tilde{\nu}(i)$.
-	
-	\begin{itemize}
-		\item If the last step of $u'$ is $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \xrightarrow{\br{m}{j}} ((q', map'), \nu')$, then $\Tilde{map}' = map'$ and there exists $q \in Q$ and $i \in [1,r]$ such that $map'(i)=j$ and $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $q \xrightarrow{\br{m}{i}} q'$ is a transition of $\prot$.
-		
-		As $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $map'=\Tilde{map}'$, there is a path in $\prot$ from $\Tilde{q}$ to $q$ consisting only of transitions labelled by operations of the form $\loc{i_1}{i_2}{\eqtestact}$ with $\Tilde{map}'(i_1) = \Tilde{map}'(i_2)$ and thus $\Tilde{\nu}(i_1) = \Tilde{\nu}(i_2)$.
-		As a result, we can extend $\Tilde{u}$ into a "local run" to $(q, \Tilde{\nu})$ with the same  "trace" as $\Tilde{u}$.
-		
-		We then append a step $(q, \Tilde{\nu}) \xrightarrow{\br{m}{i}} (q', \nu)$ at the end of that local run to obtain $u$. As $j = map(i)$, we have $\Tilde{\nu}(i) = \Tilde{\nu}'(j)$ and thus $\trace{u} = \trace{\Tilde{u}}(m, \Tilde{\nu}(i), out) = \trace{\Tilde{u}'}(m, \Tilde{\nu}'(j), out) = \trace{u'}$.
-		
-		\item If the last step of $u'$ is $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \extbr{m, v} ((q', map'), \nu')$, then there exists a transition  $(\Tilde{q}', \Tilde{map}') \xrightarrow{\rec{m}{j_0}{\alpha}} (q', map')$ and $i_0 \in [1,r]$ such that $map'(i) = \Tilde{map}'(i)$ for all $i\neq i_0$ and we are in one of the following cases:
-		
-		\begin{itemize}
-			\item $\alpha = \enregact$ and $\nu'(j_0)=v$. Then there exists $q \in Q$ and $i \in [1,r]$ such that $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $q \xrightarrow{\rec{m}{i_0}{\beta}} q'$ is a transition of $\prot$
-			
-			Like before, as $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $map'=\Tilde{map}'$, we can extend $\Tilde{u}$ into a "local run" to $(q, \Tilde{\nu})$ with the same  "trace" as $\Tilde{u}$.
-			
-			We have either
-			\begin{itemize}
-				\item $\beta=\enregact$ and $map'(i_0) = j_0$. Then we add a step $(q, \Tilde{\nu}) \extbr{m,v} (q', \nu)$ at the end of the constructed local run to obtain $u$, with $\nu(i_0)=v$ and $\nu(i) = \Tilde{\nu}(i)$ for all $i \neq i_0$.
-				
-				\item $\beta=\dummyact$ and $map' = \Tilde{map}'$. Then we add a step $(q, \Tilde{\nu}) \extbr{m,v} (q', \nu)$ at the end of the constructed local run to obtain $u$, with $\nu = \Tilde{\nu}$.
-			\end{itemize}
-			
-			\item $\alpha = \eqtestact$ and $map'(i_0)=\Tilde{map}'(i_0)$ and $\nu'(j_0) = \Tilde{\nu}'(j_0) = v$. Then there exists $q \in Q$ such that $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $q \xrightarrow{\rec{m}{i_0}{\beta}} q'$ is a transition of $\prot$.
-			
-			Like before, as $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $map'=\Tilde{map}'$, we can extend $\Tilde{u}$ into a "local run" to $(q, \Tilde{\nu})$ with the same  "trace" as $\Tilde{u}$.
-			
-			We have either
-			\begin{itemize}
-				\item $\beta=\eqtestact$ and $map' = \Tilde{map}'$ and $\Tilde{\nu}(i_0) = v$. Then we add a step $(q, \Tilde{\nu}) \extbr{m,v} (q', \nu)$ at the end of the constructed local run to obtain $u$, with $\nu = \Tilde{\nu}$.
-				
-				\item $\beta=\enregact$. Then we add a step $(q, \Tilde{\nu}) \extbr{m,v} (q', \nu)$ at the end of the constructed local run to obtain $u$, with $\nu(i_0) = v$ and $\nu(i)=\Tilde{\nu}(i)$ for all $i \neq i_0$.
-			\end{itemize}
-			
-			\item $\alpha = \diseqtestact$ and $map'(i_0)=\Tilde{map}'(i_0) \neq v$. Then there exists $q \in Q$ and $i_0 \in [1,r]$ such that $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $q \xrightarrow{\rec{m}{i_0}{\diseqtestact}} q'$ is a transition of $\prot$.
-			
-			Like before, as $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $map'=\Tilde{map}'$, we can extend $\Tilde{u}$ into a "local run" to $(q, \Tilde{\nu})$ with the same "trace" as $\Tilde{u}$.
-			
-			We add a step $(\Tilde{q}, \Tilde{\nu}) \extbr{m,v} (q, \nu)$ at the end to obtain $u$, with $\nu = \nu'$.
-		\end{itemize}
-	
-		In all cases, the conditions are respected, as $\trace{u} = \trace{\Tilde{u}} (m,v, in) = \trace{\Tilde{u}'} (m,v, in) = \trace{u'}$.
-		
-		\item If the last step of $u'$ is $((\Tilde{q}', \Tilde{map}'), \Tilde{\nu}') \xrightarrow{\loc{j_1}{j_2}{\diseqtestact}} ((q', map'), \nu')$ then $map'=\Tilde{map}'$, $\nu' = \Tilde{\nu}'$, $\nu'(j_1) \neq \nu'(j_2)$ and there exists $q \in Q$ and $i_1, i_2 \in [1,r]$ such that $map'(i_1)=j_1$, $map'(i_2)=j_2$ and $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $q \xrightarrow{\loc{i_1}{i_2}{\diseqtestact}} q'$ is a transition of $\prot$.
-		
-		Like before, as $(\Tilde{q}, map') \xrightarrow{\varepsilon}^* (q, map')$ and $map'=\Tilde{map}'$, we can extend $\Tilde{u}$ into a "local run" to $(q, \Tilde{\nu})$ with the same "trace" as $\Tilde{u}$.
-		
-		
-		We append a step $(q, \Tilde{\nu}) \xrightarrow{\loc{i_1}{i_2}{\diseqtestact}} (q', \nu)$ at the end of that local run to obtain $u$, with $\nu = \Tilde{\nu}$. We have $\Tilde{\nu}(i_1) = \Tilde{\nu}'(j_1) \neq \Tilde{\nu}'(j_2) = \Tilde{\nu}(i_2)$ and thus $\trace{u} = \trace{\Tilde{u}} = \trace{\Tilde{u}'} = \trace{u'}$.
-	\end{itemize}
-
-We have shown that $\prot$ and $\prot'$ produce the same set of "traces" from their "local runs". As the "input" and "output" of a local run depend only on its "trace", we obtain the result by Lemma~\ref{lem:local-to-global}.
-\end{proof}
-\fi
+The proof can be found in Appendix~\ref{sec:proof-simple}.
 
 \begin{lemma}
 	Let $\tree$ be a "tree unfolding" satisfying a specification $\spec$.
@@ -599,10 +414,7 @@ We have shown that $\prot$ and $\prot'$ produce the same set of "traces" from th
 \end{figure}
 
 
-\begin{remark}
-	The tower bound of Lemma~\ref{lem:short-local-runs} is tight, in the sense that some local runs may need to have length a tower of exponentials of height the number of registers.
-	It also holds for pushdown automata, and for all transition systems which have some kind of pumping lemma.
-\end{remark}
+
 
 \begin{lemma}
 	\label{lem:short-local-runs}
@@ -684,6 +496,11 @@ We build $\localrun_s$ step by step. We denote, for every $j \in \nset{1}{M+1}$,
 	
 \end{proof}
 \fi 
+
+\begin{remark}
+	The tower bound of Lemma~\ref{lem:short-local-runs} is tight, in the sense that some local runs may need to have length a tower of exponentials of height the number of registers.
+	It also holds for pushdown automata, and for all transition systems which have some kind of pumping lemma.
+\end{remark}
 
 \iffalse
 \begin{proof}
@@ -823,8 +640,7 @@ We build $\localrun_s$ step by step. We denote, for every $j \in \nset{1}{M+1}$,
 
 \begin{theorem}
 	The BNRA coverability problem is decidable in $F_{\omega^\omega}$ and there is no $\alpha < \omega^\omega$ such that this problem ca be solved in $F_{\alpha}$.
-	The upper bound holds even with multiple operations on messages.
-	The lower bound holds even with two registers.
+	The lower bound holds even with two registers and no local tests.
 \end{theorem}
 
 \ifproofs
