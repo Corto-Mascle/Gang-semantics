@@ -61,10 +61,10 @@ We say that a local run is cheaper than another one if the set of children it sp
  
  As a result, we can bound the size of a node of altitude $h$ by $g(\size{\prot}, hmax-h)$, where $hmax$ is the maximal altitude of the tree and $g$ is a primitive recursive function.
  
- This allows us to bound $hmax$: indeed consider the branch reaching the highest point in the tree. Along that branch we can extract a sequence of nodes of the second type $\mu_0, \ldots, \mu_{hmax}$ such that $\mu_i$ has altitude $i$ for all $i$. If there are some $i<j$ such that $\mu_i$ and $\mu_j$ produce the same broadcast but $\mu_j$ is cheaper then we can reduce the branch.
- The bounds on the lengths of the $\mu_i$ and the latter property allow us to bound $hmax$ with a function from the class $F_{\omega^k}$ with $k = \size{\Sigma} +1$ (see, for instance, \cite{SchmitzS2011upperHigman}).
+ This allows us to bound $hmax$: indeed consider the branch reaching the highest point in the tree. Along that branch we can extract a sequence of nodes of the second type $\node_0, \ldots, \node_{hmax}$ such that $\node_i$ has altitude $i$ for all $i$. If there are some $i<j$ such that $\node_i$ and $\node_j$ produce the same broadcast but $\node_j$ is cheaper then we can reduce the branch.
+ The bounds on the lengths of the $\node_i$ and the latter property allow us to bound $hmax$ with a function from the class $F_{\omega^k}$ with $k = \size{\Sigma} +1$ (see, for instance, \cite{SchmitzS2011upperHigman}).
  
- This also gives us a bound on the size of the root (which is also in $F_{\omega^k}$). From there we bound the minimal altitude of a node of this tree. The argument is that in order to reach a minimal altitude $hmin$ with a branch, we need to have along that branch a subsequence of nodes of the first type $\mu_0, \ldots, \mu_{-hmin}$ such that $\mu_i$ has altitude $-i$. If there exist $i<j$ such that $\mu_i$ broadcasts a subword of $\mu_j$ we can reduce the branch. Otherwise, the same results on bad sequences of words  for the subword order allow us to bound the minimal altitude of a node in that tree with a function of $F_{\omega^k}$.
+ This also gives us a bound on the size of the root (which is also in $F_{\omega^k}$). From there we bound the minimal altitude of a node of this tree. The argument is that in order to reach a minimal altitude $hmin$ with a branch, we need to have along that branch a subsequence of nodes of the first type $\node_0, \ldots, \node_{-hmin}$ such that $\node_i$ has altitude $-i$. If there exist $i<j$ such that $\node_i$ broadcasts a subword of $\node_j$ we can reduce the branch. Otherwise, the same results on bad sequences of words  for the subword order allow us to bound the minimal altitude of a node in that tree with a function of $F_{\omega^k}$.
  As both the minimal and maximal altitudes in the tree are bounded by such functions, the size of a node of that tree is also bounded by such a function (using the bound on nodes based on their altitude). This is also a bound on the branching of the tree, as the number of children of a node is bounded by the number of values seen in its local run, thus by the size of that run.
  
  The number of different nodes along a branch is also bounded, hence also the size of that branch (if the same node appears twice we can reduce the branch).
@@ -89,7 +89,7 @@ We say that a local run is cheaper than another one if the set of children it sp
 \begin{definition}[Local runs]			
 	A ""local configuration"" is a pair $(q, \localdata) \in Q \times ([1,r] \to \nats)$. Intuitively, it describes the configuration of a single agent. 
 
-	An ""external broadcast"" is a transition $(q,\localdata) \extbr{m, v} (q',\localdata')$ such that $m \in \messages$, $v \in \nats$ and there exists $(q,\rec{m}{j}{\anact},q') \in \transitions$
+	An ""external broadcast"" from $(q,\localdata)$ to $(q',\localdata')$ with transtion $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans = (q,\rec{m}{j}{\anact},q') \in \transitions$
 	such that $\localdata(j') = \localdata(j')$ for all $j' \neq j$ and one of the following cases holds:
 		\begin{itemize}
 			\item $\anact = \quotemarks{\dummyact}$ 
@@ -98,16 +98,16 @@ We say that a local run is cheaper than another one if the set of children it sp
 			\item $\anact = \quotemarks{\eqtestact}$ and $\localdata(j) = \localdata'(j)= v$
 			\item $\anact = \quotemarks{\diseqtestact}$ and $\localdata(j) = \localdata'(j) \ne v$.
 		\end{itemize}
+	Said otherwise, $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$ when an agent in $(q,\localdata)$ may perform $\atrans$ when receiving a message of the right type with value $\aval$.
 
-	A "local step" $(q,\localdata) \step{} (q',\localdata')$ is either an "external broadcast" $(q,\localdata) \extbr{m, v} (q',\localdata')$ or an ""internal step""  $(q,\localdata) \step{\atrans} (q',\localdata')$ where $\atrans = (q,\op,q') \in \transitions$ with $\op$ a "broadcast" or a "local test" so that $\atrans$ is available for an agent in $(q, \localdata)$ and brings that agent to $(q',\localdata')$. \nico{formulation pas terrible}
+	An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transtion $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\atrans$ is either a "broadcast" or a "local test" and an agent in $(q,\localdata)$ may perform this transition in isolation and get to $(q',\localdata')$. 
 
-	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\atrans_1} (q_1, \nu_1) \step{\atrans_2} \cdots \step{\atrans_k} (q_k, \nu_k)$.
+	A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either an "external broadcast" or an "internal step". 
+	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$, where for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup {\intlabel{\atrans} \mid \atrans \in \transitions}$. The sequence $\locallabel_1, \dots, \locallabel_k$ is called ""schedule"" of $\localrun$.
 
-	
-	The ""trace"" of a "local run" is the sequence $\trace{\localrun} \in (\messages \times \nats \times \set{in, out})^*$ containing the message types and values that it receives and broadcasts, $in$ indicating an "external broadcast" and $out$ a broadcast made in $u$.
-	
+
 	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "external broadcasts".
-	Similarly, its ""output"", which we denote by $\voutput{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of broadcasts made in $\localrun$.
+	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcasts steps made in $\localrun$.
 	
 	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\localrun}{\aval}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$.  
 	
@@ -170,7 +170,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 			there exists $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_{\ell'}, w'_{\ell'})$, s.t. $\localrun$ may be split into sucessive "local runs" $\localrun'_0, \dots, \localrun'_{\ell}$ where, for all $i \in \nset{1}{\ell'}$, $\voutput{\aval'}{\localrun'_i} \subword w'_i$ and $\vinput{\aval'}{\localrun'_i} \in \set{m'_0, \dots, m'_{i-1}}^*$, and
 			for all $i \in [1,\ell']$, $\node$ has a child $\node'_i$ which is a "follower node" such that $\followlabelmessage{\node'_i} = m'_i$ and $\followlabelword{\node'_i} \in\langdecdown{\decsymb'_i}$ where $\decsymb'_i = (w'_0, m'_1, w'_1, \ldots, m'_{i-1}, w'_{i-1})$.
 			%  If $\aval'$ is an initial value of $\localrun$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ 
-			% where $w'_0 w'_1 \ldots w'_k = \voutput{\aval'}{\localrunlabel{\node}}$, for all $j \in [1,k]$ all receptions of $m'_j$ with value $\val'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $\val'$, and for all $j \in [1,k]$ $\node$ has a child $\mu'$ which is a "follower node" such that $\followlabelmessage{\node'} = m'_j$ and $\followlabelword{\node'} \in\langdecdown{\decsymb'_j}$ where $\decsymb'_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.  
+			% where $w'_0 w'_1 \ldots w'_k = \voutput{\aval'}{\localrunlabel{\node}}$, for all $j \in [1,k]$ all receptions of $m'_j$ with value $\val'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $\val'$, and for all $j \in [1,k]$ $\node$ has a child $\node'$ which is a "follower node" such that $\followlabelmessage{\node'} = m'_j$ and $\followlabelword{\node'} \in\langdecdown{\decsymb'_j}$ where $\decsymb'_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.  
 			
 			\item[C3.2\namedlabel{unfoldingC3.2}{C3.2}] If $\aval'$ is not an initial value of $\localrun$ then $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval'}{\localrun}$ is a subword of $\bosslabel{\node'}$.
 		\end{itemize}
@@ -194,19 +194,19 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 %	\end{itemize} 
 %	
 %	It must satisfy the following conditions:
-%	Let $\mu$ be a node of that tree, and $u$ and $v$ the local run and value labelling it. The following conditions must hold:
+%	Let $\node$ be a node of that tree, and $u$ and $v$ the local run and value labelling it. The following conditions must hold:
 %	
 %	\begin{itemize}
 %		\item[C1\namedlabel{unfoldingC1}{C1}] If it is a "boss node" labelled by $w \in \messages^*$ then $v$ is an initial value of $u$ and there exists a decomposition $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that
-%		$w_0 \cdots w_\ell$ is the $v$-output of $u$, $w \in \langdec{\decsymb}$, and for all $j \in [1,\ell]$, $\mu$ has a child which is a "follower node" with a label $\decsymb \subword ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.
+%		$w_0 \cdots w_\ell$ is the $v$-output of $u$, $w \in \langdec{\decsymb}$, and for all $j \in [1,\ell]$, $\node$ has a child which is a "follower node" with a label $\decsymb \subword ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.
 %		
 %		\item[C2\namedlabel{unfoldingC2}{C2}] If it is a "follower node" labelled $(\decsymb, m)$ then $v$ is not an initial value of $u$, the $v$-input of $u$ is in $\langdec{\decsymb}$, and $m$ is broadcast at some point in $u$ with value $v$.
 %		
 %		\item[C3\namedlabel{unfoldingC3}{C3}] In both cases, for all $v' \neq v$ broadcast or received at some point in $u$,
 %		\begin{itemize}
-%			\item[C3.1\namedlabel{unfoldingC3.1}{C3.1}] If $v'$ is an initial value of $u$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$, for all $j \in [1,k]$ all receptions of $m_j$ with value $v'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,k]$ $\mu$ has a child which is a "follower node" with a label $\decsymb \subword ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.  
+%			\item[C3.1\namedlabel{unfoldingC3.1}{C3.1}] If $v'$ is an initial value of $u$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$, for all $j \in [1,k]$ all receptions of $m_j$ with value $v'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,k]$ $\node$ has a child which is a "follower node" with a label $\decsymb \subword ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.  
 %			
-%			\item[C3.2\namedlabel{unfoldingC3.2}{C3.2}] If $v'$ is not an initial value of $u$ then $\mu$ has a child which is a "boss node" labelled by $w'$ such that $\vinput{v}{u}$ is a subword of $w'$.
+%			\item[C3.2\namedlabel{unfoldingC3.2}{C3.2}] If $v'$ is not an initial value of $u$ then $\node$ has a child which is a "boss node" labelled by $w'$ such that $\vinput{v}{u}$ is a subword of $w'$.
 %		\end{itemize}
 %	\end{itemize}
 %	
@@ -220,25 +220,26 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 
 
 \begin{definition}
-	A "run" $\run$ satisfies a boss specification $bw$ if there exists $v \in \nats$ such that $bw$ is the sequence of messages sent with value $v$ through $\run$.
+	A "run" $\run$ satisfies a boss specification $\bossspec$ if there exists $\aval \in \nats$ such that $\bossspec$ is the sequence of messages sent with value $\aval$ through $\run$.
 	
-	A "run" $\run$ satisfies a follower specification $(fw, fm)$ if there exists a value $v$ and an agent $a$ such that $v$ is not an initial value of $a$, the $v$-input of $a$ in $\run$ is $fw$ and agent $a$ broadcasts $m$ with value $v$ at some point.
+	A "run" $\run$ satisfies a follower specification $(\followwordspec, \followmessagespec)$ if there exists a value $\aval$ and an agent $a$ such that $\aval$ is not an initial value of $a$, the $\aval$-input of $a$ in $\run$ is $\followwordspec$ and agent $a$ broadcasts $\followmessagespec$ with value $\aval$ at some point.
 	
-	A "tree unfolding" satisfies a boss specification $bw$ if its root $\node$ is a "boss node" and $bw$ is a subword of its specification label $\bosslabel{\node}$.
-	A "tree unfolding" satisfies a follower specification $(fw, fm)$ if its root $\node$ is a "follower node" such that $fm=\followlabelmessage{\node}$ and  $\followlabelword{\node}$ is a subword of $fw$.
+	A "tree unfolding" satisfies a boss specification $\bossspec$ if its root $\node$ is a "boss node" and $\bossspec$ is a subword of its specification label $\bosslabel{\node}$.
+	A "tree unfolding" satisfies a follower specification $(\followwordspec, \followmessagespec)$ if its root $\node$ is a "follower node" such that $\followmessagespec=\followlabelmessage{\node}$ and  $\followlabelword{\node}$ is a subword of $\followwordspec$.
 \end{definition}
 
-We will now prove that there exists a finite run satisfying a specification if and only if there exists a finite tree satisfying that same specification.
-We first decompose a run into a tree, then we build a run from a tree. Note that by applying consecutively these two transformations we obtain in general a much larger run than the initial one. That is because each node of the tree is associated with a part played in the run by some agent. In the initial run, the same agent may play many different parts, while in the run we construct from the tree we use different agents for each node of the tree.
+We will now prove that there exists a run satisfying a specification if and only if there exists a finite tree satisfying that same specification. To do so, we will build a tree from a run and conversely.
 
-Also note that the interpretation of the "follower nodes" changes between the two directions: When building the tree a follower node labelled $(fw, fm)$ means that there exists a global run in which some agent receives the sequence of messages $fw$ broadcasts $m$, all with a value $v$ that is not one of its initial ones.
+
+Also note that the interpretation of the "follower nodes" changes between the two directions: when building the tree a follower node labelled $(\followwordspec, \followmessagespec)$ means that there exists a global run in which some agent receives the sequence of messages $\followwordspec$ and broadcasts $\followmessagespec$, all with a value $\aval$ that is not one of its initial ones.
+\nico{pas clair}
 
 When building the run a follower node means that there exists a "partial run" which receives a series of external broadcasts which forms the word $fw$, with a value $v$ that it initially does not contain, and eventually broadcasts $m$ with that same value.
 
 \begin{lemma}
 	\label{lem:run-to-tree}
 	Let $\prot$ be a protocol.
-	If there exists a finite run $\run$ of $\prot$ satisfying some "specification" $\spec$ then there exists a finite "tree unfolding" $\tau$ labelled with local runs of $\prot$ satisfying $\spec$.
+	If there exists a finite run $\run$ of $\prot$ satisfying some "specification" $\spec$ then there exists a finite "tree unfolding" $\tree$ labelled with local runs of $\prot$ satisfying $\spec$. \nico{pourquoi label par $\prot$?}
 \end{lemma}
 
 \ifproofs
@@ -323,16 +324,16 @@ The proof can be found in the appendix.
 \begin{proof}
 	We infer this statement from the "tree unfoldings".
 	
-	Suppose $\prot_1$ satisfies a specification $\spec$, then by Lemma~\ref{lem:run-to-tree} there exists a "tree unfolding" $\tau_1$ labelled by local runs of $\prot_1$ satisfying $\spec$. 
+	Suppose $\prot_1$ satisfies a specification $\spec$, then by Lemma~\ref{lem:run-to-tree} there exists a "tree unfolding" $\tree_1$ labelled by local runs of $\prot_1$ satisfying $\spec$. 
 	
-	Let $\mu$ be a node of $\tau_1$ labelled by a "local run" $u_1$ of $\prot_1$, a value $v$ and a "specification" $\spec$.  
+	Let $\node$ be a node of $\tree_1$ labelled by a "local run" $u_1$ of $\prot_1$, a value $v$ and a "specification" $\spec$.  
 	
 	There exists a "local run" $u_2$ of $\prot_2$ with the same initial values, "input" and "output" as $u_1$. In particular they have the same $v$-input and $v$-output.
 	
-	We define $\tau_2$ as the tree obtained by replacing in the label of each node the local run of $\prot_1$ by a local run of $\prot_2$ with the same initial values, "input" and "output". The rest of the labels stays the same.
+	We define $\tree_2$ as the tree obtained by replacing in the label of each node the local run of $\prot_1$ by a local run of $\prot_2$ with the same initial values, "input" and "output". The rest of the labels stays the same.
 	
 	Conditions \ref{unfoldingC1}, \ref{unfoldingC2} and \ref{unfoldingC3} are still satisfied on every node as they only talk about the initial values, "input" and "output" of each local run label, and the value and specification labels. None of those things have changed.
-	Furthermore as the specification label of the root is the same for $\tau_1$ and $\tau_2$, $\tau_2$ satisfies $\spec$.
+	Furthermore as the specification label of the root is the same for $\tree_1$ and $\tree_2$, $\tree_2$ satisfies $\spec$.
 	
 	By Lemma~\ref{lem:tree-to-run}, as $\spec$ is a "boss specification", there exists a "run" of $\prot_2$ satisfying $\spec$.
 \end{proof}
@@ -533,59 +534,59 @@ We have shown that $\prot$ and $\prot'$ produce the same set of "traces" from th
 \fi
 
 \begin{lemma}
-	Let $\tau$ be a "tree unfolding" satisfying a specification $\spec$.
-	Let $\mu, \mu'$ be two "boss nodes" of $\tau$, $w$ and $w'$ their specification labels.
+	Let $\tree$ be a "tree unfolding" satisfying a specification $\spec$.
+	Let $\node, \node'$ be two "boss nodes" of $\tree$, $\bossspec$ and $\bossspec'$ their specification labels.
 	
-	If $\mu$ is an ancestor of $\mu'$ and $w$ is a subword of $w'$ then there exists a smaller "tree unfolding" satisfying $\spec$.  
+	If $\node$ is an ancestor of $\node'$ and $\bossspec$ is a subword of $\bossspec'$ then there exists a smaller "tree unfolding" satisfying $\spec$.  
 \end{lemma}
 
 \ifproofs
 \begin{proof}
-	Let $\tau_{\mu}$, $\tau_{\mu'}$ be the subtrees rooted in $\mu$, $\mu'$ respectively. 
-	Let $\tau'$ be the tree obtained by replacing $\tau_{\mu}$ with $\tau_{\mu'}$. The size of $\tau'$ is smaller than the one of $\tau$, as $\tau_{\mu'}$ is a strict subtree of $\tau_{\mu}$.
+	Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
+	Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
 	
-	If $\mu$ is the root of $\tau$, then $\tau'$ is a "tree unfolding" with $\mu'$ as root. As $\mu$ is a "boss node" and $\tau$ satisfies $spec$, $spec$ is a "boss specification", and a subword of $w$. 
-	As $w$ is a subword of $w'$, $spec$ is a subword of $w'$ and thus $\tau'$ satisfies $spec$.
+	If $\node$ is the root of $\tree$, then $\tree'$ is a "tree unfolding" with $\node'$ as root. As $\node$ is a "boss node" and $\tree$ satisfies $spec$, $spec$ is a "boss specification", and a subword of $w$. 
+	As $w$ is a subword of $w'$, $spec$ is a subword of $w'$ and thus $\tree'$ satisfies $spec$.
 	
-	If  $\mu'$ is not the root of $\tau'$ then let $\mu''$ be the father of $\mu$. We have to check that $\tau'$ is a "tree unfolding". 
-	All nodes other than $\mu''$ have the same children as before, thus the conditions of "tree unfoldings" are still respected for them.
-	As for $\mu''$, it has the same "follower" children, hence conditions \ref{unfoldingC1} and \ref{unfoldingC3.1} are respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
+	If  $\node'$ is not the root of $\tree'$ then let $\node''$ be the father of $\node$. We have to check that $\tree'$ is a "tree unfolding". 
+	All nodes other than $\node''$ have the same children as before, thus the conditions of "tree unfoldings" are still respected for them.
+	As for $\node''$, it has the same "follower" children, hence conditions \ref{unfoldingC1} and \ref{unfoldingC3.1} are respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
 	
-	Finally, let $u''$ be the "local run" labelling $\mu''$ and let $v'$ be a value that is not initial in $u''$. Either $\mu''$ has a "boss" child other than $\mu'$ such that $\vinput{v'}{u''}$ is a subword of its label, or $\vinput{v'}{u''}$ is a subword of $w$, which is a subword of $w'$, hence condition \ref{unfoldingC3.2} is satisfied. 
+	Finally, let $u''$ be the "local run" labelling $\node''$ and let $v'$ be a value that is not initial in $u''$. Either $\node''$ has a "boss" child other than $\node'$ such that $\vinput{v'}{u''}$ is a subword of its label, or $\vinput{v'}{u''}$ is a subword of $w$, which is a subword of $w'$, hence condition \ref{unfoldingC3.2} is satisfied. 
 	
-	As a result, in both cases $\tau'$ is a "tree unfolding" smaller than $\tau$ that satisfies $spec$. 
+	As a result, in both cases $\tree'$ is a "tree unfolding" smaller than $\tree$ that satisfies $spec$. 
 \end{proof}
 \fi
 
 \begin{lemma}
-	Let $\tau$ be a "tree unfolding" satisfying a specification $spec$.
-	Let $\mu, \mu'$ be two "follower nodes" of $\tau$, $(\decsymb,m)$ and $(\decsymb',m')$ the associated specifications.
-	If $\mu$ is an ancestor of $\mu'$, $\decsymb' \subword \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" satisfying $spec$. 
+	Let $\tree$ be a "tree unfolding" satisfying a specification $spec$.
+	Let $\node, \node'$ be two "follower nodes" of $\tree$, $(\decsymb,m)$ and $(\decsymb',m')$ the associated specifications.
+	If $\node$ is an ancestor of $\node'$, $\decsymb' \subword \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" satisfying $spec$. 
 \end{lemma}
 
 \ifproofs
 \begin{proof}
-		Let $\tau_{\mu}$, $\tau_{\mu'}$ be the subtrees rooted in $\mu$, $\mu'$ respectively. 
-	Let $\tau'$ be the tree obtained by replacing $\tau_{\mu}$ with $\tau_{\mu'}$. The size of $\tau'$ is smaller than the one of $\tau$, as $\tau_{\mu'}$ is a strict subtree of $\tau_{\mu}$.
+		Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
+	Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
 	
-	If $\mu$ is the root of $\tau$, then $\tau'$ is a "tree unfolding" with $\mu'$ as root. As $\mu$ is a "follower node" and $\tau$ satisfies $spec$, $spec$ is a "follower specification". Let $(\decsymb_{spec}, m_{spec}) = spec$, we have $\decsymb \preceq \decsymb_{spec}$ and $m = m_{spec}$. 
-	Hence we have $\decsymb' \preceq \decsymb \preceq \decsymb_{spec}$ and $m' = m = m_{spec}$, thus $\tau'$ satisfies $spec$.
+	If $\node$ is the root of $\tree$, then $\tree'$ is a "tree unfolding" with $\node'$ as root. As $\node$ is a "follower node" and $\tree$ satisfies $spec$, $spec$ is a "follower specification". Let $(\decsymb_{spec}, m_{spec}) = spec$, we have $\decsymb \preceq \decsymb_{spec}$ and $m = m_{spec}$. 
+	Hence we have $\decsymb' \preceq \decsymb \preceq \decsymb_{spec}$ and $m' = m = m_{spec}$, thus $\tree'$ satisfies $spec$.
 	
-	If  $\mu'$ is not the root of $\tau'$ then let $\mu''$ be the father of $\mu$. We have to check that $\tau'$ is a "tree unfolding". 
-	All nodes other than $\mu''$ have the same children as before, thus the conditions of "tree unfoldings" are still respected for them.
-	As for $\mu''$, it has the same "boss" children, hence condition \ref{unfoldingC3.2} is respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
+	If  $\node'$ is not the root of $\tree'$ then let $\node''$ be the father of $\node$. We have to check that $\tree'$ is a "tree unfolding". 
+	All nodes other than $\node''$ have the same children as before, thus the conditions of "tree unfoldings" are still respected for them.
+	As for $\node''$, it has the same "boss" children, hence condition \ref{unfoldingC3.2} is respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
 	
-	Let $u''$ and $v''$ be the local run and value labelling $\mu''$.
-	For condition \ref{unfoldingC1}, suppose $\mu''$ is a "boss node" labelled by a word $w''$, then $v''$ is an initial value in $u''$. There exists a decomposition $\decsymb'' = (w_0, m_1, \ldots, w_\ell)$ such that $\voutput{v''}{u''} = w_0\cdots w_\ell$, $w''\in \langdecdown{\decsymb}$ and for all $j \in [1,\ell]$, $\mu''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subword (w_0, m_1, \ldots, w_{j-1})$ in $\tau$.
-	For all $j$, either $\mu''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subword (w_0, m_1, \ldots, w_{j-1})$ in $\tau$ besides $\mu$, in which case this child is still there in $\tau'$, or $\mu$ is labelled $(\decsymb,m_j)$ for some $\decsymb \subword (w_0, m_1, \ldots, w_{j-1})$, in which case $\mu'$ is labelled $(\decsymb', m_j)$ with  $\decsymb' \subword \decsymb \subword (w_0, m_1, \ldots, w_{j-1})$.
+	Let $u''$ and $v''$ be the local run and value labelling $\node''$.
+	For condition \ref{unfoldingC1}, suppose $\node''$ is a "boss node" labelled by a word $w''$, then $v''$ is an initial value in $u''$. There exists a decomposition $\decsymb'' = (w_0, m_1, \ldots, w_\ell)$ such that $\voutput{v''}{u''} = w_0\cdots w_\ell$, $w''\in \langdecdown{\decsymb}$ and for all $j \in [1,\ell]$, $\node''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subword (w_0, m_1, \ldots, w_{j-1})$ in $\tree$.
+	For all $j$, either $\node''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subword (w_0, m_1, \ldots, w_{j-1})$ in $\tree$ besides $\node$, in which case this child is still there in $\tree'$, or $\node$ is labelled $(\decsymb,m_j)$ for some $\decsymb \subword (w_0, m_1, \ldots, w_{j-1})$, in which case $\node'$ is labelled $(\decsymb', m_j)$ with  $\decsymb' \subword \decsymb \subword (w_0, m_1, \ldots, w_{j-1})$.
 	Condition \ref{unfoldingC1} is still satisfied.
 	
 	Finally, let $v' \neq v''$ an initial value of $u$ broadcast or received at some point.
-	Then there exists a decomposition $\decsymb'' = (w'_0, m'_1, \ldots, w'_\ell)$ such that $\voutput{v''}{u''} = w'_0\cdots w'_\ell$, and for all $j \in [1,\ell]$, all receptions of $m'_j$ with value $v'$ in $u''$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,\ell]$ $\mu$ has a child in $\tau$ which is a "follower node" with a label $\decsymb \subword (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
-	If that child is not $\mu$ then it is still there in $\tau'$. If it is $\mu$, in $\tau'$ $\mu''$ has $\mu'$ as child, with a label $\decsymb' \subword \decsymb \subword (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
+	Then there exists a decomposition $\decsymb'' = (w'_0, m'_1, \ldots, w'_\ell)$ such that $\voutput{v''}{u''} = w'_0\cdots w'_\ell$, and for all $j \in [1,\ell]$, all receptions of $m'_j$ with value $v'$ in $u''$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,\ell]$ $\node$ has a child in $\tree$ which is a "follower node" with a label $\decsymb \subword (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
+	If that child is not $\node$ then it is still there in $\tree'$. If it is $\node$, in $\tree'$ $\node''$ has $\node'$ as child, with a label $\decsymb' \subword \decsymb \subword (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
 	In both cases condition \ref{unfoldingC3.1} is satisfied.
 	
-	As a result, in both cases $\tau'$ is a "tree unfolding" smaller than $\tau$ that satisfies $\spec$. 
+	As a result, in both cases $\tree'$ is a "tree unfolding" smaller than $\tree$ that satisfies $\spec$. 
 \end{proof}
 \fi
 %\begin{lemma}
@@ -605,7 +606,7 @@ We have shown that $\prot$ and $\prot'$ produce the same set of "traces" from th
 
 \begin{lemma}
 	\label{lem:short-local-runs}
-	There exists a function $\towerfun(n, e)$ in $O(\repexp{n}{e})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ in $\prot$, there exists $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and $\Input{\localrun'} \subword \Input{\localrun}$. 
+	There exists a function $\towerfun(n, e)$ in $O(\repexp{n}{e})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ in $\prot$, there exists $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and $\Input{\localrun'}$ is a subword of $\Input{\localrun}$. 
 %  with an "input" $I$.
 % 	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
 % 	If $\size{u_2} > TOWER$, then there exists $u'_2$ with $|u_2'| \leq \towerfun(\prot)$ such that $u_1u'_2u_3$ is a local run of $\prot$ with smaller "input" than $u$. 
@@ -615,28 +616,46 @@ We have shown that $\prot$ and $\prot'$ produce the same set of "traces" from th
 \begin{proof}
 
 % In the following proof, we consider for simplicity protocols with internal transitions, \emph{i.e.}, transitions with no labeled action that can be taken without condition. 
-Given a "local run", register $i$ is ""active"" in $\localrun$ if at least one $\quotemarks{\enregact}$ step on register $i$ is performed in $\localrun$. Also, let $n:=\size{\prot}$.
+Given a "local run" $\localrun$, register $i$ is ""active"" in $\localrun$ if at least one $\quotemarks{\enregact}$ step on register $i$ is performed in $\localrun$. Also, let $n:=\size{\prot}$.
 
 We prove the following statement:
-for every $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(|\prot|,k)$, $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ whose sequence of transitions is a strict subsequence of the one of $\localrun$. 
-\nicoin{si le protocole n'est pas simple, cela n'implique pas l'inclusion  $\Input{\localrun'} \subword \Input{\localrun}$, il faut supposer que simple ou changer la def de local run pour qu'il inclut la séquence des messages reçus}
+for every $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(|\prot|,k)$, $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ whose "schedule" is a strict subsequence of the one of $\localrun$. Note that if the "schedule" of $\localrun'$ is a subsequence of the one of $\localrun$ then $\Input{\localrun'}$ is a subsequence of $\Input{\localrun}$.
 
 We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, then registers keep their values throughout $\localrun$. Therefore, if $\localrun$ goes through the same state once, all steps in between may be removed, and it suffices to take $\towerfun(\size{\prot}, 0) := |\prot| + 1 \geq |Q| +1$.  
 
 Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(n)(k+1)$.
 
-First, if there exists an infix "local run" $\localrun': (q_1, \localdata_1), (q_2, \localdata_2)$ of $\localrun$ of length $\towerfun(n)(k)+1$ with only $k$ active registers, then by induction hypothesis $\localrun'$ can be shortened thus $\localrun$ can be shortened as well.
+First, if there exists an infix "local run" $\localrun_i: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$ of $\localrun$ of length $\towerfun(n)(k)+1$ with only $k$ active registers, then by induction hypothesis $\localrun_i$ can be shortened thus $\localrun$ can be shortened as well.
 
 Suppose now that there exists no such infix "local run".
-Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. 
-In any sequence of $\towerfun(n)(k)+1$ transitions performed in a row in $\localrun$, 
-there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\towerfun{n}{k+1} := n^{\towerfun{n}{k}+1}+\towerfun{n}{k} +1$ and suppose that $\length{\localrun} > \towerfun{n}{k+1}$. 
-There exist $n^{\towerfun{n}{k}+1}+1$ sequences of transitions of length $\towerfun(n)(k)+1$ in $\localrun$, 
-therefore by Pigeonhole principle two of these sequences are equal (there are $|\transitions|^{\towerfun(n)(k)+1}$ such sequences and $|\transitions| \leq n$). 
-There exist $(q_1, \localdata_1)$, $(q_2, \localdata_2)$ appearing in $\localrun$ in this order such that both configurations are followed by the same sequence $s$ of transitions in $\localrun$. We write $\localrun_1: (q_1, \localdata_1) \step{s} (q_1', \localdata_1')$ and $\localrun_2: (q_2, \localdata_2) \step{s} (q_2', \localdata_2')$. Morally, we can remove all transitions between $(q_1, \localdata_1)$ and $(q_2, \localdata_2)$. However, we do not have \nico{il faut pouvoir parler explicitement de la séquence de messages ici}
+Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n)(k){+}1$. 
+In any sequence of $M$ "local steps" in a row in $\localrun$, 
+there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\towerfun(n)(k+1) := n^{M}+M$ and suppose that $\length{\localrun} > \towerfun(n)(k+1)$. For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$.
+ For every $i \in \nset{1}{n^M+1}$, we write $s_i$ the sequence $\delta_i, \delta_{i+1}, \cdots, \delta_{M{+}i}$.
+By Pigeonhole principle two of the sequences $s_i$ are equal (there are $|\transitions|^{M}$ distinct such sequences and $|\transitions| \leq n$). 
+There exist $(q, \localdata_1)$, $(q, \localdata_3)$ appearing in $\localrun$ in this order (but not consecutively) such that both "local configurations" are followed by the same sequence $s$ of transitions in $\localrun$, with $s$ of length $M$. Note that the states of the two "local configurations" are equal as it must be the source state of the first transition in $s$. Let $\locallabel = \locallabel^1, \dots, \locallabel^M$ the sequence of labels of the $M$ local steps following $(q, \localdata_1)$, and $\locallabel' = \locallabel'^1, \dots, \locallabel'^M$ the sequence of labels of the $M$ local steps following $(q, \localdata_3)$. The underlying sequences of transitions of $\locallabel$ and $\locallabel'$ are both equal to $s$; however, it could be that the values $\aval$ of the "external broadcasts" are not equal in $\locallabel$ and $\locallabel'$, hence we cannot directly shorten $\localrun $ by replacing $\locallabel$ by $\locallabel'$. 	
 
- Note that we cannot directly cut this part out of the "local run" and concatenate the two ends, because messages received after $(q_2, \localdata_2)$
-Let $m_1$ the sequence of messages received when $s$ is performed from $(q_1, \localdata_1)$ and 
+We write $\localrun_a: (q, \localdata_1) \step{\locallabel} (q', \localdata_2)$ and $\localrun_b: (q, \localdata_3) \step{\locallabel} (q', \localdata_4)$ the corresponding infux "local runs". 
+We build a "local run" $\localrun_s: (q, \localdata_1) \step{*} (q', \localdata_4)$ of length $M$ whose underlying sequence of transitions is also $s$. To do so, we identify, for every active register $i \in I$, the index $k_i \in \nset{1}{M}$ of the first $\quotemarks{\enregact}$ transitions about register $i$ in $s$, which exists by hypothesis: in any sequence of $M$ "local steps" in a row in $\localrun$, 
+there is a $\quotemarks{\enregact}$ transition on every register in $I$. 
+
+We build $\localrun_s$ step by step. We denote, for every $j \in \nset{1}{M+1}$, by $\localrun_a(j)$, $\localrun_b(j)$ and $\localrun_s(j)$ the $j$-th "local configurations" in the corresponding "local run". Because we guarantee by construction of $\localrun_s$ that its underlying sequence of transitions is $s$, for every $j \in \nset{1}{M+1}$, $\localrun_a(j), \localrun_b(j)$ and $\localrun_s(j)$ has the same state and the same data value for registers in $\nset{1}{\regnum} \setminus I$ (because these registers has the same values thourghout $\localrun$).
+ We maintain the following property: for every $i \in I$, $\localrun_s(j)$ shares value of register $i$ with $\localrun_a(j)$ if $j \leq k_i$, and with $\localrun_b(j)$ if $j > k_i$. We achieve this by mimicking in $\localrun_s$ ????
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	We will show the following result, which directly implies the lemma:
 	Let $\prot$ be a protocol with $r$ registers, let $u$ be a "local run" of $\prot$ from "local configuration" $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$ with an input $I$. If $\size{u} \geq TOWER$, then there exists a shorter local run $u'$ from $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$, with a smaller "input" and such that the sequence of local actions in $u'$ is a subword of the one in $u$.
@@ -692,9 +711,9 @@ Let $m_1$ the sequence of messages received when $s$ is performed from $(q_1, \l
 \fi
 
 \begin{lemma}
-	Let $\mu$ be a node of a "tree unfolding", $u_\mu$ its local run.
+	Let $\node$ be a node of a "tree unfolding", $u_\node$ its local run.
 	Let $u$ be the local run of its father, and $u_1, \ldots, u_\ell$ the runs of its "follower" children.
-	Then if $\size{u_\mu} \geq \towerfun(\size{\prot})(r) \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree unfolding with the same root specification label.
+	Then if $\size{u_\node} \geq \towerfun(\size{\prot})(r) \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree unfolding with the same root specification label.
 \end{lemma}
 
 \ifproofs
@@ -728,9 +747,9 @@ Let $m_1$ the sequence of messages received when $s$ is performed from $(q_1, \l
 \begin{proof}
 	We prove this by induction on $altmax-\altitude{\node}$.
 	
-	If $\altitude{\node} = altmax$ then $\mu$ has no "follower nodes" as children and is either the root or a "follower node" (otherwise its father would have a greater height).
+	If $\altitude{\node} = altmax$ then $\node$ has no "follower nodes" as children and is either the root or a "follower node" (otherwise its father would have a greater height).
 	
-	If $\mu$ is the root 
+	If $\node$ is the root 
 \end{proof}
 \fi
 

@@ -43,8 +43,11 @@
 \newcommand{\set}[1]{\{#1\}}
 \newcommand{\powerset}[1]{2^{#1}}
 \newcommand{\step}[1]{\xrightarrow{#1}}
-\newcommand{\extbr}[1]{\xrightarrow{#1}_{ext}}
-\newcommand{\internalstep}[1]{\xrightarrow{#1}}
+\newcommand{\extlabel}[2]{\mathsf{ext}(#1,#2)} % message type + value
+\newcommand{\intlabel}[1]{\mathsf{int}(#1)}
+\newcommand{\locallabel}{\lambda} % variable name for something that may either be a \extlabel or a \intlabel
+\newcommand{\extbr}[2]{\xrightarrow{\extlabel{#1}{#2}}}
+\newcommand{\intstep}[1]{\xrightarrow{\intlabel{#1}}}
 \newcommand{\size}[1]{|#1|}
 \newcommand{\length}[1]{|#1|}
 \newcommand{\nset}[2]{\{#1,\dots,#2\}} %interval of natural numbers
@@ -171,7 +174,6 @@
 \newcommand{\inputword}{in}
 \newcommand{\Outputword}{out}
 
-\newcommand{\spec}{spec}
 
 \newcommand{\decsymb}{\mathtt{dec}}
 \newcommand{\decset}[1]{\mathtt{Dec}_{#1}}
@@ -187,6 +189,11 @@
 \newcommand{\followlabelword}[1]{\mathbf{fw}(#1)}
 \newcommand{\followlabelmessage}[1]{\mathbf{fm}(#1)}
 \newcommand{\speclabel}[1]{\mathbf{spec}(#1)}
+\newcommand{\spec}{\mathsf{spec}}
+\newcommand{\bossspec}{\mathsf{bw}}
+\newcommand{\followwordspec}{\mathsf{fw}}
+\newcommand{\followmessagespec}{\mathsf{fm}}
+
 
 
 %Target problem
