@@ -122,6 +122,16 @@ We say that a local run is cheaper than another one if the set of children it sp
 %	\cortoin{TO READ OVER}
 \end{definition}
 
+We start by proving that we may in fact get rid of local equality tests:
+
+\begin{restatable}{lemma}{SimpleReduction}
+	\label{lem:simple-reduction}
+	There exists an exponential-time reduction from the "coverability problem" to the coverability problem on protocols with no "local equality tests" $\loc{i}{j}{=}$.
+\end{restatable}
+
+The proof can be found in Appendix~\ref{sec:proof-simple}. In fact, the exponential cost of the reduction will have no impact the complexity results proven below.
+In the following, we will assume that the considered protocol has no "local equality tests". 
+
 A key ingredient of our construction is the decomposition of words of messages. Say we have an execution and a value $v$ such that the sequence of messages broadcast in that execution with value $v$ is $w$. Let $w'$ the subword of $w$ of messages sent by the agent $a$ which had that value originally. Let $m$ be the first message sent by another agent with value $v$. This means that from the messages sent by $a$ before there is a set of agents that receives some of these messages and eventually sends back message $m$ with value $v$. An important remark is that we can copy this set of agents many times to obtain as many broadcasts with message $m$ and value $v$ as we want from this point in the run.
 
 In general, if an agent other than $a$ sends a message with value $v$ then we can add agents to obtain that message with that value as many times as we want.
@@ -341,13 +351,6 @@ The proof can be found in the appendix.
 \fi
 
 
-\begin{restatable}{lemma}{SimpleReduction}
-	\label{lem:simple-reduction}
-	For all "protocol" $\prot$ there is a "simple protocol" $\prot'$ with one more register satisfying the same "boss specifications".
-\end{restatable}
-
-The proof can be found in Appendix~\ref{sec:proof-simple}.
-\end{proof}
 
 \begin{lemma}
 	Let $\tree$ be a "tree unfolding" satisfying a specification $\spec$.
@@ -419,8 +422,14 @@ The proof can be found in Appendix~\ref{sec:proof-simple}.
 
 \begin{lemma}
 	\label{lem:short-local-runs}
-	There exists a function $\towerfun(n, e)$ in $O(\repexp{n}{e})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ in $\prot$, there exists $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and $\Input{\localrun'}$ is a subword of $\Input{\localrun}$. 
-%  with an "input" $I$.
+	There exists a function $\towerfun(n, e)$ in $O(\repexp{n}{e})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ in $\prot$, there exists $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ such that:
+	\begin{itemize}
+		\item  $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$
+		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item for all $\aval \in \nats$ appearing in $\localrun$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+		% \item by writing $V := \nats \setminus \set{\localdata_i(k) \mid k \in \nset{1}{\regnum}}$, for every $\aval' \in V$, there exists $\aval \in V$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$.
+	\end{itemize}
+		%  with an "input" $I$.
 % 	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
 % 	If $\size{u_2} > TOWER$, then there exists $u'_2$ with $|u_2'| \leq \towerfun(\prot)$ such that $u_1u'_2u_3$ is a local run of $\prot$ with smaller "input" than $u$. 
 \end{lemma}
@@ -443,22 +452,33 @@ First, if there exists an infix "local run" $\localrun_i: (q_1, \localdata_1) \s
 Suppose now that there exists no such infix "local run".
 Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n)(k){+}1$. 
 In any sequence of $M$ "local steps" in a row in $\localrun$, 
-there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\towerfun(n)(k+1) := n^{M}+M$ and suppose that $\length{\localrun} > \towerfun(n)(k+1)$. For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$.
- For every $i \in \nset{1}{n^M+1}$, we write $s_i$ the sequence $\delta_i, \delta_{i+1}, \cdots, \delta_{M{+}i}$.
-By Pigeonhole principle two of the sequences $s_i$ are equal (there are $|\transitions|^{M}$ distinct such sequences and $|\transitions| \leq n$). 
-There exist $(q, \localdata_1)$, $(q, \localdata_3)$ appearing in $\localrun$ in this order (but not consecutively) such that both "local configurations" are followed by the same sequence $s$ of transitions in $\localrun$, with $s$ of length $M$. Note that the states of the two "local configurations" are equal as it must be the source state of the first transition in $s$. Let $\locallabel = \locallabel^1, \dots, \locallabel^M$ the sequence of labels of the $M$ local steps following $(q, \localdata_1)$, and $\locallabel' = \locallabel'^1, \dots, \locallabel'^M$ the sequence of labels of the $M$ local steps following $(q, \localdata_3)$. The underlying sequences of transitions of $\locallabel$ and $\locallabel'$ are both equal to $s$; however, it could be that the values $\aval$ of the "external broadcasts" are not equal in $\locallabel$ and $\locallabel'$, hence we cannot directly shorten $\localrun $ by replacing $\locallabel$ by $\locallabel'$. 	
+there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\towerfun(n)(k+1) := (n^{2M}+1)*M$ and suppose that $\length{\localrun} > \towerfun(n)(k+1)$. Additionally, suppose that $\localrun$ does not go twice through the same local configuration (otherwise it may be easily shortened). For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$.
+ For every $i \in \nset{0}{n^{2M}}$, we write $s_i$ the sequence $\delta_{2M*i+1}, \delta_{2M*i+2}, \cdots, \delta_{2M*i+2M}$.
+By Pigeonhole principle two of the sequences $s_i$ are equal (there are $|\transitions|^{2M}$ distinct such sequences and $|\transitions| \leq n$). 
+There exist $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have sequence of transitions $s$.
 
-We write $\localrun_a: (q, \localdata_1) \step{\locallabel} (q', \localdata_2)$ and $\localrun_b: (q, \localdata_3) \step{\locallabel} (q', \localdata_4)$ the corresponding infux "local runs". 
-We build a "local run" $\localrun_s: (q, \localdata_1) \step{*} (q', \localdata_4)$ of length $M$ whose underlying sequence of transitions is also $s$. To do so, we identify, for every active register $i \in I$, the index $k_i \in \nset{1}{M}$ of the first $\quotemarks{\enregact}$ transitions about register $i$ in $s$, which exists by hypothesis: in any sequence of $M$ "local steps" in a row in $\localrun$, 
-there is a $\quotemarks{\enregact}$ transition on every register in $I$. 
+Although $\localrun_a$ and $\localrun_b$ have the same sequence of transitions, their schedules may differ because their "external message" steps may have different values.
+We build a schedule $\sigma$ such that $(q_1,\localdata_1) \step{\sigma} (q_4, \localdata_4)$ where the underlying sequence of transitions of $\sigma$ is $s$.
 
-We build $\localrun_s$ step by step. We denote, for every $j \in \nset{1}{M+1}$, by $\localrun_a(j)$, $\localrun_b(j)$ and $\localrun_s(j)$ the $j$-th "local configurations" in the corresponding "local run". Because we guarantee by construction of $\localrun_s$ that its underlying sequence of transitions is $s$, for every $j \in \nset{1}{M+1}$, $\localrun_a(j), \localrun_b(j)$ and $\localrun_s(j)$ has the same state and the same data value for registers in $\nset{1}{\regnum} \setminus I$ (because these registers has the same values thourghout $\localrun$).
- We maintain the following property: for every $i \in I$, $\localrun_s(j)$ shares value of register $i$ with $\localrun_a(j)$ if $j \leq k_i$, and with $\localrun_b(j)$ if $j > k_i$. We achieve this by mimicking in $\localrun_s$ ????
+For every active register $i \in I$, let $e_i \in \nset{1}{2M}$ denote the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$ and $f_i \in \nset{1}{2M}$ denote the last $\quotemarks{\enregact}$ on register $i$ in $s$. By hypothesis, because $s$ is of length $2M$, it contains at least two $\quotemarks{\enregact}$ on register $i$, one in the fist half and one in the second half, hence $e_i \leq M < M +1 \leq f_i$. 
 
+For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define "internal step" $j$ of $\sigma$ to be $\intstep{\delta_j}$. 
+Suppose now that $\delta_j$ is a "reception" of the form $\rec{\amessage}{i}{\anact}$, Let $\aval_a$ be the value of the $j$-th "local step" of $\localrun_a$, and $\aval_b$ be the value of the $j$-th "local step" of $\localrun_b$
+ (the $j$-th "local steps" of $\localrun_a$ and $\localrun_b$ has underlying transition $\delta_j$ hence are "external messages" of the form $\extlabel{\delta_j}{\aval_x}$ for some $\aval_x$). In particular, $\aval_a= \localdata_2(i)$ and $\aval_b = \localdata_4(i)$. 
+  Additionally, let $V \subseteq \nats$ the set of values of registers appearing in $\localrun_a$ or $\localrun_b$. Because $V$ is finite, there exists a function $\phi: V \rightarrow \nats \setminus V$ injective.
+We define the $j$-th "local step" of $\sigma$ to be $\extlabel{\delta_j}{\aval}$ where:
+\begin{itemize} 
+\item if $j < e_i$, $\aval = \aval_a$,
+\item if $e_i \leq j < f_i$, $\aval = \phi(\aval_a)$,
+\item if $f_i \leq j$, $\aval = \aval_b$.
+\end{itemize}
+We now claim that $(q_1,\localdata_1) \step{\sigma} (q_4,\localdata_4)$. 
+First, for every active register $i$, the last $\quotemarks{\enregact}$ step on register $i$ has value $\localdata_4(i)$ hence, if every "internal step" is valid then we indeed end on $(q_4, \localdata_4)$.
+For every $l \in \nset{0}{2M}$, let $\sigma_l$ denote the prefix of $\sigma$ of length $l$.
+We now prove by induction that $\sigma_l$ is valid from $(q_1, \localdata_1)$. It is trivially true for $l =0$. Assume that we have $(q_1, \localdata_1) \step{\sigma_l} (q, \localdata)$ and let $\locallabel$ such that $\sigma_l \cdot \locallabel := \sigma_{l+1}$. Let $\atrans$ the underlying transition of $\locallabel$.
+First, $q$ is the initial state of $\atrans$ because $\locallabel$ was valid in $\localrun_a$ and $\localrun_b$. Hence if $\atrans$ is a "broadcast" then $\locallabel$ is valid.
 
-
-
-
+If $\locallabel$ is an "external message" of the form $\extbr{\atrans}{\aval}$, then $\atrans$ has action $\rec{\amessage}{i}{\anact}$. Let $\aval_i := \localdata(i)$. The only problematic case is when $\anact = \quotemarks{\diseqtestact}$ (we have no equality tests thanks to Lemma~\ref{lem:simple-reduction}). If $l+1<e_i$ then the value in the register and the value of the message are the same as in $\localrun_a$ at the same stage, hence the disequelity test passes. If $e_i \leq l+1 < f_i$, then $\aval = \phi(\aval_a)$ where $\aval_a$ is the value in $\localrun_a$ at the same stage and $\aval_i$ is either $ $. \todo{bien écrire cette partie}  
 
 
 
