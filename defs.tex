@@ -11,6 +11,7 @@
 	
 	Given a "configuration" $\config$, we write $\data{\config}(a)$ for $\data{\config}(a,1)$. 
 
+	We shall see that in this case, the "query coverability problem" is much easier than in the general case. Intuitively, it suffices to keep track of the state of one boss agent\lu{please remove if the term boss is not used in the general case} (the one who broadcast its initial value) and a set of states in which any number of processes with the same register's value can be. This way, we can (i) compute the set of reachable states and (ii) decide if a "query" is coverable or not. In this section, we prove that the "query coverability problem" for BNRA with one register is NP-complete.
 
 
 

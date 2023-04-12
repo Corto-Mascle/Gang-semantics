@@ -62,9 +62,9 @@ We set $\agents_0 = \set{1, \ldots, M^n}$, and we set $\config_0(a) = (q_0, a)$ 
 Now assume we constructed $\config_0 \step{*} \cdots \step{*} \config_{i}$ over $\agents_i$ satisfying the conditions of the lemma, we construct $\config_{i+1}$ using a case distinction on the form of the transition $\sigma_i \to \sigma_{i+1}$.
 For each $s \in S\setminus K$ we define $\agents_{i,s}$ as the set of agents in state $s$ in $\config_{i}$. We have $\size{\agents_{i,s}} \geq M^{n-i}$ thus we can extract $M = \size{\Delta}+1$ disjoint sets of agents $(\agents_{i,s}^d)_{d \in \Delta\cup\set{\epsilon}}$ from it.
 Similarly, for each $s \in K$ we define $\agents_{i,s}$ as the set of agents in state $s$ \textbf{with value $\mathbf{v_i}$} in $\config_{i}$. We have $\size{\agents_{i,s}} \geq \size{\Delta}^{n-i}$ thus we can extract $\size{\Delta}+1$ disjoint sets of agents $(\agents_{i,s}^d)_{d \in \Delta\cup\set{\epsilon}}$ from it.
+\\
 
-
-\paragraph*{Case 1: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the clique} $d = (q, \brone{m}, q')$ with $q \in K_i$, then we make all agents $a \in \agents_{i,q}^{d}$ (which all have value $v_i$) execute that transition one by one.
+\textbf{Case 1: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the clique} $d = (q, \brone{m}, q')$ with $q \in K_i$, then we make all agents $a \in \agents_{i,q}^{d}$ (which all have value $v_i$) execute that transition one by one.
 None of those broadcasts are received by any other agent, except for the last one:
 If $b \neq b'$ then there is a transition $(b, \rec{m}{\alpha}, b')$ and we make $a_i$ execute it upon receiving the broadcast. We then set $a_{i+1} = a_i$.
 For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}{\alpha}, k')$ such that either $\alpha$ is $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
@@ -73,8 +73,9 @@ In both cases we make all agents of $\agents_{i,k}^{d'}$ take that transition.
 For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition $d'=(s,\rec{m}{*},s')$ (the operation cannot be $\enregact$ or $\eqtestact$ as otherwise $s$ would be in $K_{i+1}$). We then make all agents of $\agents_{i,s}^{d'}$ follow that transition. 
 
 We set $v_{i+1} = v_i$.
+\\
 
-\paragraph*{Case 2: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the boss} $d = (b_i, \brone{m}, b_{i+1})$, then we make $a_i$ (which has value $v_i$) execute that transition, and we set $a_{i+1} = a_i$.
+\textbf{Case 2: }If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast from the boss} $d = (b_i, \brone{m}, b_{i+1})$, then we make $a_i$ (which has value $v_i$) execute that transition, and we set $a_{i+1} = a_i$.
 The agents receiving that message are as follows:
 
 For all $k' \in K_{i+1} \setminus K_i $ there exists a transition $d'=(k, \rec{m}{\alpha}, k')$ such that $\alpha$ is either $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
@@ -86,8 +87,9 @@ By definition of an "abstract run", we must have $b_i \in S_i$.
 Hence we can make all agents of $\agents_{i,s}^{d}$ execute $d$, with no agent receiving the corresponding broadcasts.
 
 We set $v_{i+1} = v_i$.
+\\
 
-\paragraph*{Case 3: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{external broadcast} $d = (q, \brone{m}, q')$ , then we make all agents $a \in \agents_q^{d}$ execute that transition one by one. None of those broadcasts are received by any other agent, except for the last one:
+\textbf{Case 3: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{external broadcast} $d = (q, \brone{m}, q')$ , then we make all agents $a \in \agents_q^{d}$ execute that transition one by one. None of those broadcasts are received by any other agent, except for the last one:
 If $b_i \neq b_{i+1}$ then there is a transition $(b, \rec{m}{\alpha}, b'')$ and either $b_{i+1} = b'' \neq \noboss$ and $\alpha = *$ or $b_{i+1} = \noboss$ and $\alpha=\enregact$. In both cases we make $a_i$ execute that transition, and we set $a_{i+1} = a_i$.
 
 For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}{*}, k')$ with $k \in K_i$. We make all agents of $\agents_k^{d'}$ take that transition.
@@ -95,9 +97,10 @@ For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \rec{m}
 For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition $d'=(s,\rec{m}{\alpha},s')$ with $\alpha \in \set{*, \enregact}$. We then make all agents of $\agents_s^{d'}$ follow that transition. 
 
 We set $v_{i+1} = v_i$.
+\\
 
-\paragraph*{Case 4: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{gang reset} then no agent moves and we select some $a_{i+1}$ in $\agents_{q_0}$ and set $v_{i+1}$ to be its value.
-%
+\textbf{Case 4: }  If $\sigma_i \to \sigma_{i+1}$ is an \emph{gang reset} then no agent moves and we select some $a_{i+1}$ in $\agents_{q_0}$ and set $v_{i+1}$ to be its value.
+\\
 %\paragraph{In all cases:} After applying the given transitions, we use the copycat property: we add to $\agents_i$ $M^{n-i-1}$ disjoint copies of itself to obtain $\agents_{i+1}$, and repeat the run constructed thus far over each copy separately. This is to ensure that there are $M^{n-i-1}$ agents in $b_{i+1}$ (if it is not $\noboss$) after this step.
 
 Throughout the case distinction we have ensured that:
