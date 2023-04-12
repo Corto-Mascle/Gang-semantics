@@ -256,6 +256,7 @@ The \emph{initial abstract configuration} is $\aconfiginit := (\set{q_0}, q_0, \
 As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 = \aconfiginit$ is the initial configuration and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Similarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
 \end{definition}
 
+The gang reset will help us doing the following, if one wants to check if one state is reachable, it should be the abstract run leading to it. Once it is done, the reachable state is added to $S$, we are now ready to check something else, for example, if another state is reachable. This way, it can do a "gang reset" step in order to restart with some new boss but it keeps in mind the states it knows to be reachable, so it can use it later on. \lu{c'est une première formulation un peu moche, il faut repasser dessus}
 
 \begin{lemma}
 	\label{lem:short-run}
