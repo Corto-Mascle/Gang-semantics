@@ -135,7 +135,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 	The language $\langdec{\decsymb}$ of $\decsymb$ is the set of words that decompose as $\decsymb$. We write $\langdecdown{\decsymb}$ for the subword closure of $\langdec{\decsymb}$.
 	
 	We define a preorder on decompositions:
-	$\decsymb \subword \decsymb'$ if $\langdecdown{\decsymb} \subseteq \langdecdown{\decsymb'}$.
+	$\decsymb \subword \decsymb'$ if $\langdecdown{\decsymb} \subseteq \langdecdown{\decsymb'}$. \todo{Change notation}
 \end{definition}
 
 
@@ -345,44 +345,6 @@ The proof can be found in the appendix.
 	\label{lem:simple-reduction}
 	For all "protocol" $\prot$ there is a "simple protocol" $\prot'$ with one more register satisfying the same "boss specifications".
 \end{restatable}
-\ifproofs
-\begin{proof}
-	
-	We construct $\prot'$ as follows: It has one more register than $\prot$, but stores in its state the current state of $\prot$ and a mapping $map : [1,r] \to [1,r+1]$ from registers of $\prot$ to its own registers.
-	
-	Intuitively, it is going to use its registers to store the different values that are in the registers of $\prot$, and the mapping to keep track of which registers contain which values.
-	When a value is received it guesses whether it is one of the existing values or a fresh one, and updates the registers and the mapping accordingly.
-	The extra register of $\prot'$ is not necessary, but simplifies the proof.
-	We will first define a system with $\varepsilon$-transitions (transitions with no effect), which we will then eliminate. 
-	
-	
-	Formally, we set $\prot = (Q, \messages, \Delta, q_0)$.
-	The set of states of $\prot'$ is $Q \times ([1,r] \to [1,r])$, its initial state is $(q_0, id)$ where $id(i) = i$ for all $i \in [1,r]$. 
-	
-	There is a transition $(q, map) \xrightarrow{op} (q', map')$ in the following cases:
-	
-	\begin{itemize}
-		\item $op = \br{m}{j}$ 
-		$map = map'$ and $\prot$ has a transition $q \xrightarrow{\br{m}{i}} q'$ with $map(i)=j$.
-		
-		\item $op=\rec{m}{j}{\enregact}$ and $map^{-1}(j) =\emptyset$ and either
-		\begin{itemize}
-			\item there is a transition $q \xrightarrow{\rec{m}{i_0}{\enregact}} q'$ in $\prot$ such that for all $i \in [1,r]$, $map'(i) = map(i)$ if $i \neq i_0$ and $map'(i_0) = j$.
-			
-			\item or there is a transition $q \xrightarrow{\rec{m}{i_0}{\dummyact}} q'$ in $\prot$ and for all $i \in [1,r]$, $map'(i) = map(i)$.
-		\end{itemize}
-		
-		\item $op = \rec{m}{j}{\eqtestact}$ and either
-		\begin{itemize}
-			\item there is a transition $q \xrightarrow{\rec{m}{i}{\eqtestact}} q'$ in $\prot$ such that $map(i)=j$ and $map'=map$.
-			
-			\item there is a transition $q \xrightarrow{\rec{m}{i_0}{\enregact}} q'$ in $\prot$ and $map'(i_0)=j$ and $map'(i) = map(i)$ for all $i \neq i_0$.
-		\end{itemize} 
-		
-		\item $op = \rec{m}{j}{\diseqtestact}$ and there is a transition $q \xrightarrow{\rec{m}{i}{\diseqtestact}} q'$ in $\prot$ such that $map(i)=j$
-		
-		\item $op=\loc{j_1}{j_2}{\diseqtestact}$ and there is a transition $q \xrightarrow{\loc{i_1}{i_2}{\diseqtestact}} q'$ in $\prot$ such that $map(i_1)=j_1$ and $map(i_2) = j_2$.
-	\end{itemize}
 
 The proof can be found in Appendix~\ref{sec:proof-simple}.
 \end{proof}
