@@ -380,11 +380,11 @@ The proof can be found in the appendix.
 		
 		\item $op = \rec{m}{j}{\diseqtestact}$ and there is a transition $q \xrightarrow{\rec{m}{i}{\diseqtestact}} q'$ in $\prot$ such that $map(i)=j$
 		
-		\item $op=\loc{j_1}{j_2}{\diseqtestact}$ and there is a transition $q \xrightarrow{\loc{i_1}{i_2}{\diseqtestact}} q'$ in $\prot$ such that $map(i_1)=j_1$ and $map(i_2 = j_2)$.
+		\item $op=\loc{j_1}{j_2}{\diseqtestact}$ and there is a transition $q \xrightarrow{\loc{i_1}{i_2}{\diseqtestact}} q'$ in $\prot$ such that $map(i_1)=j_1$ and $map(i_2) = j_2$.
 	\end{itemize}
 
 	
-	We define the relation $\xrightarrow{\varepsilon}$ as $(q, map) \xrightarrow{\varepsilon} (q', map')$ if and only if $map=map'$ and there is a transition $q \xrightarrow{\loc{i_1}{i_2}{\eqtestact}} q'$ in $\prot$ such that $map(i_1)=j_1$ and $map(i_2) = j_2$.
+	We define the relation $\xrightarrow{\varepsilon}$ as $(q, map) \xrightarrow{\varepsilon} (q', map')$ if and only if $map=map'$ and there is a transition $q \xrightarrow{\loc{i_1}{i_2}{\eqtestact}} q'$ in $\prot$ such that $map(i_1)=map(i_2)$.
 	Let $\xrightarrow{\varepsilon}^*$ be its transitive closure.
 	
 	For all transitions $(q,map) \xrightarrow{op} (q', map')$ we add transitions $(q,map) \xrightarrow{op} (q'', map'')$ for all $q'', map''$ such that $(q', map') \xrightarrow{\varepsilon}^* (q'', map'')$, to obtain $\prot'$.
