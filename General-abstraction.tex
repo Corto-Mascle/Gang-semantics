@@ -502,35 +502,28 @@ We build $\localrun_s$ step by step. We denote, for every $j \in \nset{1}{M+1}$,
 	It also holds for pushdown automata, and for all transition systems which have some kind of pumping lemma.
 \end{remark}
 
-\iffalse
-\begin{proof}
-	For this proof we will allow our protocols to execute local actions from a finite alphabet $\Sigma$.
-	We proceed by induction on $r$.
-	
-	If $r=0$ then if $\size{u} > Tower_{\size{Q}}(r+1) = \size{Q}$ then $u$ visits twice the same local configuration, and can thus be decomposed as $u_1 u_2 u_3$ where $u_2$ starts and ends in the same state, yielding the result. 
-	
-	Let $r>0$, suppose the proposition holds for $r-1$.
-	Let $u$ be a run of $\prot$, a protocol with $r$ registers, with $\size{u} > Tower_{\size{Q}}(r+1)$.
-	
-	\begin{itemize}
-		\item If there exists $i \in [1,r]$ such $u$ has a factor $u_f$ in which the value of register $i$ does not change and with $\size{u_f} > Tower_{\size{Q}}(r)$, then let $\Tilde{\prot}$ be $\prot$ where every operation $op$ over $i$ has been replaced with a local action $a_{op}$. Note that $\Tilde{\prot}$ only uses $r-1$ registers. 
-		Let $\Tilde{u_f}$ be the run following $u_f$ in $\prot$, where every transition $q \xrightarrow{op} q'$ with an operation on $i$ has been replaced with $q \xrightarrow{a_{op}} q'$.
-		
-		By induction hypothesis we have that $\Tilde{u_f} = \Tilde{u_{f,1}} \Tilde{u_{f,2}}\Tilde{u_{f,3}}$ such that  $\Tilde{u_{f,1}}\Tilde{u_{f,3}}$ is a run of $\Tilde{\prot}$ with the same initial and final local configurations as $\Tilde{u_f}$. 
-		
-		We conclude that the corresponding sequence of transitions $u_{f,1}u_{f,3}$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs.
-		
-		\item If no register keeps the same value for more than $M_{r-1}$ steps, then any run $u$ of length at least $M_{r-1} ((\size{\Delta})^{M_{r-1}} +1)$ can be split into $(\size{\Delta})^{M_{r-1}} +1$ segments of size $M_{r-1}$. There are $\size{\Delta})^{M_{r-1}}$ different sequences of transitions, thus by the pigeonhole principle we have $u = \pi_1 \sigma_1 \pi_2 \sigma_2 \pi_3$ with $\size{\sigma_1} = \size{\sigma_2} = M_{r-1}$ and such that  $\sigma_1$ and $\sigma_2$ have the same sequence of transitions.
-		
-		Furthermore as all registers change their values every $M_{r-1}$ steps, we know that $\sigma_1$ and $\sigma_2$ contain operations of the form $\rec{m}{i}{\enregact}$ for all $i \in [1,r]$.   
-	\end{itemize}
-\end{proof}
-\fi
+\begin{lemma}
+	Let $\prot$ be a "protocol" with $r$ registers.
+	Let $u$ be a local run of $\prot$, $w \in (\messages \times \nats)^*$ such that $w \subword \Input{u}$. 
+	Then there exists $u'$ a local run of $\prot$ such that $w \subword \Input{u'}$ and $\size{u'} \leq \size{w}\towerfun(\size{\prot})(r)$.
+\end{lemma}
 
 \begin{lemma}
-	Let $\node$ be a node of a "tree unfolding", $u_\node$ its local run.
-	Let $u$ be the local run of its father, and $u_1, \ldots, u_\ell$ the runs of its "follower" children.
-	Then if $\size{u_\node} \geq \towerfun(\size{\prot})(r) \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree unfolding with the same root specification label.
+	\label{lem:bound-successor-height}
+	Let $\node$ be a node of a "tree unfolding" of minimal size satisfying a "boss specification" $w$.
+	
+	Let $\node_1, \ldots, \node_\ell$ be the "follower" children of $\node$. 
+	
+	\begin{itemize}
+		\item If $\node$ is the root of $\tau$ then we have $\bosslabel{\node} = w$ and $\size{\localrunlabel{\node}} \leq (\size{w} + \sum_{i=1}^{\ell} \size{\localrunlabel{\node_i}}) (\towerfun(\size{\prot})(r))$. 
+		
+		\item Otherwise, let $\node'$ be its father, 
+		\begin{itemize}
+			\item If $\node$ is a "boss node" then we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$ and $\size{\localrunlabel{\node}} \leq (\size{\localrunlabel{\node'}} + \sum_{i=1}^{\ell} \size{\localrunlabel{\node_i}}) (\towerfun(\size{\prot})(r))$. 
+			
+			\item If $\node$ is a "follower node" then we have $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq (1 +\sum_{i=1}^{\ell} \size{\localrunlabel{\node_i}}) (\towerfun(\size{\prot})(r))$. 
+		\end{itemize}
+	\end{itemize}
 \end{lemma}
 
 \ifproofs
@@ -552,21 +545,38 @@ We build $\localrun_s$ step by step. We denote, for every $j \in \nset{1}{M+1}$,
 
 \begin{lemma}
 	\label{lem:bound-length-at-height-h}
-	Let $\prot$ be a protocol, $bw$ a "boss specification".
-	 
-	If there exists a "tree unfolding" over $\prot$ satisfying $bw$ then we can change its node labels to obtain a new "tree unfolding" such that for all node $\node$, 
+	Let $\prot$ be a protocol, $w$ a "boss specification".
+	Let $\node$ be a node of a "tree unfolding" $\tree$ of minimal size satisfying $w$ labelled by $\prot$, and let $\altmax$ be the maximal altitude of a node of $\tree$.
+	
+	Then we have 
 	\[
-		\size{\localrunlabel{\node}} \leq \size{bw} \Big[(\size{\messages}+2) \towerfun(\size{\prot})(r)\Big]^{altmax-\altitude{\node}}
+		\size{\localrunlabel{\node}} \leq \size{w} \Big[(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)\Big]^{\altmax-\altitude{\node}+1}
 	\] 
 \end{lemma}
 
 \ifproofs
 \begin{proof}
-	We prove this by induction on $altmax-\altitude{\node}$.
+	We prove this by induction on $\altmax-\altitude{\node}$.
 	
-	If $\altitude{\node} = altmax$ then $\node$ has no "follower nodes" as children and is either the root or a "follower node" (otherwise its father would have a greater height).
+	If $\altitude{\node} = \altmax$ then $\node$ has no "follower nodes" as children and is either the root or a "follower node" (otherwise its father would have a greater height).
 	
-	If $\node$ is the root 
+	If $\node$ is the root and has no "follower" children then by Lemma~\ref{lem:bound-successor-height} we have $\size{\localrunlabel{\node}} \leq \size{w}(\towerfun(\prot)(r))$ and thus $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}r+1) \towerfun(\size{\prot})(r)$.
+	
+	If $\node$ is a "follower node" then by Lemma~\ref{lem:bound-successor-height} we have 
+	$\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r)$ and therefore $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}r+1) \towerfun(\size{\prot})(r)$.
+	
+	Now suppose $\altitude{\node} < \altmax$. Let $\node_1, \ldots, \node_k$ be its "follower children". 
+	As $\localrunlabel{\node}$ has $r$ initial values, there are at most $r$ initial values that are broadcast or received in it.
+	For each one of them, at most $\size{\messages}$ "follower" children are required to witness the condition \ref{unfoldingC3.1}.
+	We may need $\size{\messages}$ extra children to satisfy \ref{unfoldingC1}.
+	As a result, as $\tree$ is of minimal size \corto{define size of a tree}, we have $k \leq \size{\messages}(r+1)$.
+	
+	By induction hypothesis for all $i$ we have 
+	\[
+	\size{\localrunlabel{\node_i}} \leq \size{w} \Big[(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)\Big]^{\altmax-\altitude{\node}}
+	\]
+	
+	\cortoin{To finish}
 \end{proof}
 \fi
 
