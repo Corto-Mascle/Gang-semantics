@@ -1,11 +1,20 @@
-\subsection{Abstraction}
-\label{sec:abstraction}
+%\subsection{Upper bound}
+To prove that the "query coveravility problem" is in NP in the special case where there is only one register\lu{trouver abbréviation pour BNRA+1 reg}, we will present an abstraction on "configurations" and "runs". Intuitively, our abstraction keeps track of a set of reachable states and what we shall name a "gang". A "gang" represents a "boss" state and a set of "followers" states, it should represent all configurations in which a process is on the "boss" state and kept its initial value $v$ and other processes are on the "followers" states with register value $\val$. We will define an abstract semantics, and prove it to be sound and complete. Finally, we will present a NP-algorithm on this abstraction to answer the "query coverability problem".
+
+In order to make proofs easier, and simplify the problem, we first present some preliminaries lemmas which allow us to (i) reduce our analysis to protocols that does not have receptions with actions $\quotemarks{\ne}$, or local tests, (ii) only consider "non-contradictory" queries.
+
+\subsection{Preliminaries}
+
+
 
 %\begin{definition}
 %	Given two runs $\run, \run'$ over sets of agents $\agents, \agents'$ respectively, we define their ""parallel composition"" as the run over $\agents\times \set{0} \cup \agents'\times \set{1}$ defined as follows: 
 %\end{definition}
 
 \cortoin{Copycats are not used in the proofs. Remove?}
+\luin{sometimes "copycat principle"}
+
+In this model, given a run, we can clone it. Take a disjoint set of agents, with a disjoint set of initial values, each agent can mimick the behaviour of one agent of the initial run and reach the same state than its original agent. This idea is formalized in the following lemma.
 
 \begin{lemma}[Weak copycat]\label{lem:weak_copycat}
 Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ a "run" over a set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\st{\config_f}(a_m) = q$. There exist $\agents' \subseteq \nats$ finite s.t. $\agents \cap \agents' = \emptyset$, $a_c \in \agents'$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ such that:
@@ -27,6 +36,10 @@ The second part consists in a path $\apath': \config_m' \step{*} \config_f'$ whi
 In this second part, agents of $\agents$ are left idle. $\run'$ is obtained by concatenating $\run_p'$ and $\apath'$. Since agents of $\agents$ behave the same in $\run$ and $\run'$, for all $a \in \agents$, $\config_f(a) = \config_f'(a')$. Also, $\psi(a_m)$ took the same transitions as $a_m$ hence $\st{\config_f}(\psi(a_m)) = q$. Finally, thanks to Remark~\ref{rem:run_no_new_register_values}, the register values of agents of $\agents'$ are in the set $\data{\config_0'}(\agents')$ while the register values of agents of $\agents$ are in $\data{\config_0'}(\agents')$; both sets are disjoint as $\config_0'$ is initial and for all $a \in \agents, a' \in \agents'$, $\data{\config_f'}(a) \ne \data{\config_f'}(a'_q)$.
 \end{proof}
 \fi
+
+
+We can also clone some agents with their values. 
+Take any run in which one agent broadcast its initial value, each time it sends its value, any number of processes can receive it. If one process stores the value at one point, any number of agents can do the same. This way, we can create run with any arbitrary number of processes storing the same value of the initial agent. This idea is formalized in the following lemma.
 
 \begin{lemma}[Strong copycat]\label{lem:strong_copycat}
 Let $\run : \config_0 \step{*} \config_f$ a "run" over a set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\data{\config_f}(a_m) \ne \data{\config_0}(a_m)$. % note that this condition may be relaxed to : a_m's register value did not stay the same throughout all of $\run$. 
@@ -58,7 +71,7 @@ Suppose now that $(\tilde{\prot}, \query)$ is a positive instance of the "query 
 
 If $\config = \config_0$ then $\run = \tilde{\run}$ suffices. Suppose that $\tilde{\run}$ has length $k \geq 1$, and that the result if true for "runs" of length $k-1$. Decompose $\tilde{\run}$ into $\tilde{\run_{k-1}}: \tilde{\config_0} \step{*} \tilde{\config_{k-1}}$ of length $k-1$ and a final step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. 
 By induction hypothesis, there exists $\run_{k-1}: \config_0 \step{*} \config_{k-1}$ such that $\tilde{\config_{k-1}} \lessthan \config_{k-1}$: there exists an injective function $\pi : \tilde{\agents} \rightarrow \agents$
- such that, for all $a \in \tilde{\agents}$, $\tilde{\config_{k-1}}(a) = \config_{k-1}(\pi(a))$, where $\tilde{\agents} := \agentsof{\tilde{\run}}$ and $\agents := \agentsof{\run}$. If $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ involves no reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$, then we directly lift this step into a step appended at the end of $\run_{k-1}$ (making $\pi(a)$ take a transition whenever $a$ does so in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$). Otherwise, write $\tilde{\agents}_{\diseqtestact}$ the subset of $\tilde{agents}$ corresponding to agents taking in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ a reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$ . Write $(q, \brone{m}, q') \in \transitions$ the broadcast transition used in this step.  Using Lemma~\ref{lem:weak_copycat}, we add to $\config_{k-1}$ a fresh agent $a_{\mathsf{new}}$ with state $q$ and a register value that does not appear in $\config_{k-1}$. 
+ such that, for all $a \in \tilde{\agents}$, $\tilde{\config_{k-1}}(a) = \config_{k-1}(\pi(a))$, where $\tilde{\agents} := \agentsof{\tilde{\run}}$ and $\agents := \agentsof{\run}$. If $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ involves no reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$, then we directly lift this step into a step appended at the end of $\run_{k-1}$ (making $\pi(a)$ take a transition whenever $a$ does so in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$). Otherwise, write $\tilde{\agents}_{\diseqtestact}$ the subset of $\tilde{\agents}$ corresponding to agents taking in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ a reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$ . Write $(q, \brone{m}, q') \in \transitions$ the broadcast transition used in this step.  Using Lemma~\ref{lem:weak_copycat}, we add to $\config_{k-1}$ a fresh agent $a_{\mathsf{new}}$ with state $q$ and a register value that does not appear in $\config_{k-1}$. 
 We first mimic this broadcast step at the end of $\run_{k-1}$, making any agent $\pi(a) \in \pi(\tilde{\agents} \setminus \tilde{\agents}_{\diseqtestact})$ take the transition that $a$ takes in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. We then add a new step where $a_{\mathsf{new}}$ broadcasts using transition $(q, \brone{m}, q')$, and every agent $\pi(a) \in \pi(\tilde{\agents}_{\diseqtestact})$ takes the transition corresponding to the transition taken by $a$ in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. Such a transition is a reception with action $\quotemarks{\diseqtestact}$ in $\prot$; however, because $a_{\mathsf{new}}$ does not share its register value with any process from $\tilde{\agents}$, all disequality conditions are satisfied and this step is valid. In this end, every agent $\pi(a) \in \pi(\tilde{\agents})$ has taken the transition in $\prot$ corresponding to the one $a$ took in $\tilde{\prot}$ in step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$, hence the configuration $\config_k$ reached by the constructed run is such that $\tilde{\config_k} \lessthan \config_k$. 
 \end{proof}
 \fi
@@ -84,7 +97,7 @@ Note that if a "run" satisfies $K$, then it covers every state in $K$. The conve
 \end{example}
 
 
-
+The rest of this subsection aims to prove that one can only consider "non-contradictory" queries. We formalize this term in the following definition.
 \begin{definition}
 We say that a "query" $\query$ is ""contradictory"" if either:
 	\begin{itemize}
@@ -143,6 +156,13 @@ For each $C_i$ we define $K_i = \set{q \in Q \mid \exists \varz \in C_i, q(\varz
 \fi
 
 
+We are now ready to define our abstraction.
+
+\subsubsection{Abstraction}
+\label{sec:abstraction}
+
+The abstraction should keep track of a particular state (the state of the process with the initial register value) and a set of states in which any number of processes can be on with the same non-initial value. We name this tuple a "gang" which we define formally below.
+
 \begin{definition}
 	Let $(Q,\transitions, q_0)$ be a protocol.
 
@@ -171,7 +191,7 @@ An ""abstract configuration"" over $\agents$ is a tuple of $2^Q \times \gangset$
 
 Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denoted $\aconfig \step{} \aconfig'$, when $\clique' \subseteq \covset'$, $\boss' \in \covset' \cup \set{\noboss}$ and one of the following cases is satisfied.
 \begin{enumerate}
-\item[Broadcast from "clique":] 
+\item \emph{Broadcast from "clique":}
 	\begin{enumerate}[i]
 		\item\label{item:broadcast_from_clique_broadcast} There exist $\amessage \in \messages$ and $\statebr \in \clique, \statebr' \in \clique'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
 		
@@ -189,7 +209,9 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 			\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
 		\end{itemize}
 	\end{enumerate}
-	\item[Broadcast from "boss":] 
+
+
+	\item \emph{Broadcast from "boss":}
 	\begin{enumerate}[i]
 		\item \label{item:broadcast_from_boss_broadcast} there exists $\amessage \in \messages$ such that $(\boss, \brone{m}, \boss') \in \transitions$
 		
@@ -207,7 +229,9 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 			\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
 		\end{itemize}
 	\end{enumerate}
-	\item[External broadcast:] 
+
+
+	\item \emph{External broadcast:}
 	\begin{enumerate}[i]
 		\item\label{item:external_broadcast_broadcast} There exists $\amessage \in \messages$ and $\statebr \in \covset, \statebr' \in \covset'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
 	
@@ -221,7 +245,7 @@ Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\a
 		
 		\item\label{item:external_broadcast_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q \in \covset$ s.t. $(q, \rec{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\enregact}$ or $\anact = \quotemarks{\dummyact}$.
 	\end{enumerate}
-	\item[""Gang reset"":] $S' = S$, $\clique' = \emptyset$ and $\boss'= q_0$
+	\item \emph{""Gang reset"":} $S' = S$, $\clique' = \emptyset$ and $\boss'= q_0$
 \end{enumerate}
 
 
@@ -249,13 +273,14 @@ We can hence enforce in the abstract semantics that, at least every $|Q|+2$ step
 
 We now prove that our abstraction is sound and complete for our problem of interest. 
 
-%\subsection{Completeness}
+\subsection{Completeness}
+This subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
 
 \begin{lemma}
 \label{lem:abstraction_complete}
 If $\run$ is a (concrete) "run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
 \end{lemma}
-The rest of this subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
+
 
 % The following lemma shall later be useful:
 % \begin{lemma}

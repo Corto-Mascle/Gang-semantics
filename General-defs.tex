@@ -17,7 +17,7 @@ We use $r \geq 0$ to denote the number of registers in each node.
 	
 	Transitions labelled with $\brsymb$ are ""broadcasts"", transitions labelled with $\recsymb$ are ""receptions"" and transitions labelled with $\locsymb$ are ""local tests"".
 	Given a reception $\rec{\amessage}{i}{\anact}$ or a local test $\loc{i}{j}{\anact}$, $\anact$ is the ""action"" of the reception (resp. local test). 
-The set of actions is $\actions = \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
+The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
 $\quotemarks{\eqtestact}$ is an equality test, $\quotemarks{\diseqtestact}$ is a disequality test, $\quotemarks{\enregact}$ is a store action and $\quotemarks{\dummyact}$ is a dummy action with no effect.
 	
 A ""simple protocol"" is a "protocol" that does not have receptions with action $\quotemarks{\dummyact}$ or local tests with action $\quotemarks{\eqtestact}$.
@@ -90,6 +90,10 @@ The following remark formalizes the intuition that, because the only way to take
 		
 		\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is a "run" of this protocol whose last "configuration" satisfies the query.
 	\end{definition}
+
+	\AP The ""cover problem"" is to determine, given a "protocol" and a state $q$, whether there is a "run" of this protocol whose last "configuration" satisfies the "query" with the single formula $\quotemarks{q(\var{z})}$.
+	
+	\AP The ""target reachability problem"" is to determine, given a "protocol" and a state $q$, whether there is a "run" of this protocol whose last "configuration" $\config$ is such that $\st{\config}(\agentsof{\gamma}) = \{q\}$, i.e all agents reached $q$.
 	
 	\begin{remark}
 		\label{rem:bigger_config_query}

@@ -1,7 +1,6 @@
-\subsection{Lower bounds}
-\label{sec:lower-bounds}
 
-\begin{example}
+
+\begin{example}\lu{est ce que cet exemple a vraiment sa place dans la version conférence ? j'aurai plutot mis un exemple qui donne une idée de 1) pourquoi c'est plus facile que dans le cas général et/ou 2) pourquoi c'est plus compliqué que le papier de RP }
 	In some cases a protocol may require a "run" of exponential length (in the number of states) to reach a configuration satisfying a "query".
 	
 	\begin{figure}[h]
@@ -24,27 +23,26 @@
 	As a consequence, any initial run covering $N+1$ needs to send at least $2^N-1$ agents to the $q_i$ states, hence it needs to be exponentially long as each of those agents needs to execute at least one broadcast.
 \end{example}
 
-\begin{proposition}
-	\label{prop:np-hard-query-cover}
-	The "query coverability problem" is NP-hard.
-\end{proposition}
 
-\ifproofs
-\begin{proof}
+\paragraph*{NP-hardness.} We present here a reduction of the 3SAT problem to the "query coverability problem" in the 1-register case.\lu{ça vous va comme formulation?}
+%\label{sec:lower-bounds}
+
+%\ifproofs
+%\begin{proof}
 	\begin{figure}[h]
 		\input{Figures/fig-np-hard}
 		\caption{The "protocol" used for the NP-hardness proof.}
 		\label{fig:np-hard}
 	\end{figure}
 	
-	We reduce from the 3SAT problem.
+	%We present here a reduction of the 3SAT problem to our problem.
 	Let $x_1, \ldots, x_n$ be variables and $\query = \bigwedge_{j=1}^m C_j$ with, for all $j$, $C_j = \ell_j^1 \lor \ell_j^2 \lor \ell_j^3$ and $\ell_j^1, \ell_j^2, \ell_j^3 \in \set{x_i, \neg x_i \mid 1 \leq i \leq n}$. 
 
 	Consider the "protocol" displayed in Figure~\ref{fig:np-hard}.
 	Our alphabet of messages is the set of literals $\set{x_i, \neg x_i \mid 1 \leq i \leq n}$.
 	Each agent may either receive a message, and repeat it forever or it may broadcast one of $x_i, \neg x_i$ for each $i$ and then try to receive a message one of $\ell_j^1, \ell_j^2, \ell_j^3$ for each $j$, with its own register value.
 	
-	Suppose $\query$ is satisfiable, let $\nu$ be a satisfying assignment, then we set $\agents = \set{a, a_1, \ldots, a_n}$ as our set of agents. First for each $i$ we make $a$ broadcast $x_i$ if $\nu(x_i)= \top$ and $\neg x_i$ otherwise, and $a_i$ only receive it (and go to the corresponding state).
+	Suppose $\query$ is satisfiable, let $\nu$ be a satisfying assignment, then we set $\agents = \set{a, a_1, \ldots, a_n}$ as our set of agents. First for each $i$ we make $a$ broadcast $x_i$ if $\nu(x_i)= \top$ and $\neg x_i$ otherwise, this broadcast shall be received only by agent $a_i$. Agent $a_i$ will store $a$'s register value.
 	Then for each $j$ we select some $\ell_j^p$ satisfied by $\nu$. There exists $i$ such that $a_i$ is in state $\ell_j^p$. It broadcasts $\ell_j^p$ along with the initial register value of $a$, allowing $a$ to go to the next state.
 	
 	As a result, there is an execution in which agent $a$ reaches $m'$.
@@ -58,6 +56,12 @@
 	This agent $a_j$ must be in state $\ell_j^{p_j}$ after receiving the broadcast $\brone{\ell_j^{p_j}}$ from $a$ (as all agents start with different register values).
 	Hence $\ell_j^{p_j}$ is satisfied by $\nu$. 
 	
-	As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus satisfies $\query$. This concludes our reduction
-\end{proof}
-\fi
+	As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus satisfies $\query$. This concludes our reduction.
+	
+%\end{proof}
+%\fi
+
+\begin{proposition}
+	\label{prop:np-hard-query-cover}
+	The "query coverability problem" is NP-hard.
+\end{proposition}
