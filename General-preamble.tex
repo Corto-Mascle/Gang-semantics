@@ -23,7 +23,7 @@
 
 
 
-\usetikzlibrary{arrows,calc,automata,shapes,positioning}
+\usetikzlibrary{arrows,calc,automata,fit,shapes,positioning}
 \tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append,every state/.style={minimum size=20,inner sep=2}}}
 
 
@@ -178,6 +178,7 @@
 
 \newcommand{\decsymb}{\mathtt{dec}}
 \newcommand{\decset}[1]{\mathtt{Dec}_{#1}}
+\newcommand{\subdec}{\unlhd}
 \newcommand{\langdec}[1]{\mathcal{L}^{\mathtt{#1}}}
 \newcommand{\langdecdown}[1]{\mathcal{L}^{\mathtt{#1}}\downarrow}
 

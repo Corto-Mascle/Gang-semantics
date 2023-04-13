@@ -110,16 +110,7 @@ We say that a local run is cheaper than another one if the set of children it sp
 	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "external broadcasts".
 	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcasts steps made in $\localrun$.
 	
-	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\localrun}{\aval}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$.  
-	
-	
-%	Its ""trace"" $\trace{u} \in Op^\messages_r$ is the sequence of operations executed by $u$.
-	
-	% A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \step{} \config_{i}$ or $\config_{i-1} \extbr{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
-
-	% We define a preorder on "partial runs":
-	% Given $\run, \run'$, $\run \unlhd \run'$ if for all $v \in \nats$, there exists $v' \in \nats$ such that $\vinput{v}{\run}$ is a subword of $\vinput{v}{\run'}$.
-%	\cortoin{TO READ OVER}
+	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\localrun}{\aval}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$. 
 \end{definition}
 
 We start by proving that we may in fact get rid of local equality tests:
@@ -145,7 +136,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 	The language $\langdec{\decsymb}$ of $\decsymb$ is the set of words that decompose as $\decsymb$. We write $\langdecdown{\decsymb}$ for the subword closure of $\langdec{\decsymb}$.
 	
 	We define a preorder on decompositions:
-	$\decsymb \subword \decsymb'$ if $\langdecdown{\decsymb} \subseteq \langdecdown{\decsymb'}$. \todo{Change notation}
+	$\decsymb \subdec \decsymb'$ if $\langdecdown{\decsymb} \subseteq \langdecdown{\decsymb'}$.
 \end{definition}
 
 
@@ -258,7 +249,7 @@ When building the run a follower node means that there exists a "partial run" wh
 	
 	We proceed by strong induction on the lexicographic order on $\nats \times \set{boss, follower}$ with the length of $\run$ as the first component and the type of specification as the second, "boss" being considered higher than "follower". 
 	
-	Let $\run$ be a run, $spec \in \messages^* \cup \decset{\messages}$ a specification, assume the property is satisfied for all lower pairs of runs and specifications. We construct a root and attach subtrees to it so that conditions \ref{unfoldingC1} to \ref{unfoldingC3} are satisfied 
+	Let $\run$ be a run, $\spec \in \messages^* \cup \decset{\messages}$ a specification, assume the property is satisfied for all lower pairs of runs and specifications. We construct a root and attach subtrees to it so that conditions \ref{unfoldingC1} to \ref{unfoldingC3} are satisfied 
 	
 	We split our construction in four parts. The first part applies if $spec$ is a "boss specification", the second one if $spec$ is a "follower specification". 
 	Those parts construct a local run $u$ and a value $v$, as well as the root and some children so that conditions \ref{unfoldingC1} and \ref{unfoldingC2} are satisfied.
@@ -284,7 +275,7 @@ When building the run a follower node means that there exists a "partial run" wh
 	\textbf{Case 2: The specification is a "follower specification"} 
 	
 	Assume $\spec$ is a "follower specification" $\spec = \decsymb \in \decset{\messages}$. 
-	There exists a value $v$, an agent $a$ and a decomposition $\decsymb' \in \decset{\messages}$ such that $\decsymb \subword \decsymb'$ and the $v$-input of the local run $u$ of $a$ decomposes as $\decsymb'$. 
+	There exists a value $v$, an agent $a$ and a decomposition $\decsymb' \in \decset{\messages}$ such that $\decsymb \subdec \decsymb'$ and the $v$-input of the local run $u$ of $a$ decomposes as $\decsymb'$. 
 	
 	We set our root to have as labels $u$, $v$ and $\decsymb'$, thus satisfying \ref{unfoldingC2}. We satisfy \ref{unfoldingC1} as the root is not a "boss node".
 	
@@ -380,7 +371,7 @@ The proof can be found in the appendix.
 \begin{lemma}
 	Let $\tree$ be a "tree unfolding" satisfying a specification $spec$.
 	Let $\node, \node'$ be two "follower nodes" of $\tree$, $(\decsymb,m)$ and $(\decsymb',m')$ the associated specifications.
-	If $\node$ is an ancestor of $\node'$, $\decsymb' \subword \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" satisfying $spec$. 
+	If $\node$ is an ancestor of $\node'$, $\decsymb' \subdec \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" satisfying $spec$. 
 \end{lemma}
 
 \ifproofs
@@ -396,13 +387,13 @@ The proof can be found in the appendix.
 	As for $\node''$, it has the same "boss" children, hence condition \ref{unfoldingC3.2} is respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
 	
 	Let $u''$ and $v''$ be the local run and value labelling $\node''$.
-	For condition \ref{unfoldingC1}, suppose $\node''$ is a "boss node" labelled by a word $w''$, then $v''$ is an initial value in $u''$. There exists a decomposition $\decsymb'' = (w_0, m_1, \ldots, w_\ell)$ such that $\voutput{v''}{u''} = w_0\cdots w_\ell$, $w''\in \langdecdown{\decsymb}$ and for all $j \in [1,\ell]$, $\node''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subword (w_0, m_1, \ldots, w_{j-1})$ in $\tree$.
-	For all $j$, either $\node''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subword (w_0, m_1, \ldots, w_{j-1})$ in $\tree$ besides $\node$, in which case this child is still there in $\tree'$, or $\node$ is labelled $(\decsymb,m_j)$ for some $\decsymb \subword (w_0, m_1, \ldots, w_{j-1})$, in which case $\node'$ is labelled $(\decsymb', m_j)$ with  $\decsymb' \subword \decsymb \subword (w_0, m_1, \ldots, w_{j-1})$.
+	For condition \ref{unfoldingC1}, suppose $\node''$ is a "boss node" labelled by a word $w''$, then $v''$ is an initial value in $u''$. There exists a decomposition $\decsymb'' = (w_0, m_1, \ldots, w_\ell)$ such that $\voutput{v''}{u''} = w_0\cdots w_\ell$, $w''\in \langdecdown{\decsymb}$ and for all $j \in [1,\ell]$, $\node''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subdec (w_0, m_1, \ldots, w_{j-1})$ in $\tree$.
+	For all $j$, either $\node''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subdec (w_0, m_1, \ldots, w_{j-1})$ in $\tree$ besides $\node$, in which case this child is still there in $\tree'$, or $\node$ is labelled $(\decsymb,m_j)$ for some $\decsymb \subdec (w_0, m_1, \ldots, w_{j-1})$, in which case $\node'$ is labelled $(\decsymb', m_j)$ with  $\decsymb' \subdec \decsymb \subdec (w_0, m_1, \ldots, w_{j-1})$.
 	Condition \ref{unfoldingC1} is still satisfied.
 	
 	Finally, let $v' \neq v''$ an initial value of $u$ broadcast or received at some point.
-	Then there exists a decomposition $\decsymb'' = (w'_0, m'_1, \ldots, w'_\ell)$ such that $\voutput{v''}{u''} = w'_0\cdots w'_\ell$, and for all $j \in [1,\ell]$, all receptions of $m'_j$ with value $v'$ in $u''$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,\ell]$ $\node$ has a child in $\tree$ which is a "follower node" with a label $\decsymb \subword (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
-	If that child is not $\node$ then it is still there in $\tree'$. If it is $\node$, in $\tree'$ $\node''$ has $\node'$ as child, with a label $\decsymb' \subword \decsymb \subword (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
+	Then there exists a decomposition $\decsymb'' = (w'_0, m'_1, \ldots, w'_\ell)$ such that $\voutput{v''}{u''} = w'_0\cdots w'_\ell$, and for all $j \in [1,\ell]$, all receptions of $m'_j$ with value $v'$ in $u''$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,\ell]$ $\node$ has a child in $\tree$ which is a "follower node" with a label $\decsymb \subdec (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
+	If that child is not $\node$ then it is still there in $\tree'$. If it is $\node$, in $\tree'$ $\node''$ has $\node'$ as child, with a label $\decsymb' \subdec \decsymb \subdec (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
 	In both cases condition \ref{unfoldingC3.1} is satisfied.
 	
 	As a result, in both cases $\tree'$ is a "tree unfolding" smaller than $\tree$ that satisfies $\spec$. 
@@ -581,10 +572,10 @@ If $\locallabel$ is an "external message" of the form $\extbr{\atrans}{\aval}$, 
 	
 	If $\altitude{\node} = \altmax$ then $\node$ has no "follower nodes" as children and is either the root or a "follower node" (otherwise its father would have a greater height).
 	
-	If $\node$ is the root and has no "follower" children then by Lemma~\ref{lem:bound-successor-height} we have $\size{\localrunlabel{\node}} \leq \size{w}(\towerfun(\prot)(r))$ and thus $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}r+1) \towerfun(\size{\prot})(r)$.
+	If $\node$ is the root and has no "follower" children then by Lemma~\ref{lem:bound-successor-height} we have $\size{\localrunlabel{\node}} \leq \size{w}(\towerfun(\prot)(r))$ and thus $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)$.
 	
 	If $\node$ is a "follower node" then by Lemma~\ref{lem:bound-successor-height} we have 
-	$\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r)$ and therefore $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}r+1) \towerfun(\size{\prot})(r)$.
+	$\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r)$ and therefore $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)$.
 	
 	Now suppose $\altitude{\node} < \altmax$. Let $\node_1, \ldots, \node_k$ be its "follower children". 
 	As $\localrunlabel{\node}$ has $r$ initial values, there are at most $r$ initial values that are broadcast or received in it.
@@ -597,13 +588,20 @@ If $\locallabel$ is an "external message" of the form $\extbr{\atrans}{\aval}$, 
 	\size{\localrunlabel{\node_i}} \leq \size{w} \Big[(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)\Big]^{\altmax-\altitude{\node}}
 	\]
 	
+	If $\node$ is the root, then we can directly apply Lemma~\ref{lem:bound-successor-height} to obtain 
+	
+	
+	\[
+	\size{\localrunlabel{\node}} \leq \size{w} + \size{\messages}(r+1) \Big[(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)\Big]^{\altmax-\altitude{\node}}
+	\]
+	
 	\cortoin{To finish}
 \end{proof}
 \fi
 
 \begin{lemma}
 	\label{lem:bound-max-height}
-	The maximal altitude in a minimal tree unfolding is bounded by $f_1(\size{\prot})$ where $f_1$ is a function of the class $F_{\omega^\omega}$.
+	The maximal altitude in a minimal tree unfolding is bounded by $f_1(\size{\prot})$ where $f_1$ is a function of the class $F_{\omega^{\size{\messages} +1}}$.
 \end{lemma}
 
 \ifproofs
