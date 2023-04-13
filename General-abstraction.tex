@@ -178,7 +178,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 		\begin{itemize}
 			\item[C3.1\namedlabel{unfoldingC3.1}{C3.1}]
 			 $\aval$ is an initial value of $\localrun$, 
-			there exists $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_{\ell'}, w'_{\ell'})$, s.t. $\localrun$ may be split into successive "local runs" $\localrun'_0, \dots, \localrun'_{\ell}$ where, for all $i \in \nset{1}{\ell'}$, $\voutput{\aval'}{\localrun'_i} \subword w'_i$ and $\vinput{\aval'}{\localrun'_i} \in \set{m'_0, \dots, m'_{i-1}}^*$, and
+			there exists $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_{\ell'}, w'_{\ell'})$, s.t. $\localrun$ may be split into sucessive "local runs" $\localrun'_0, \dots, \localrun'_{\ell}$ where, for all $i \in \nset{1}{\ell'}$, $\voutput{\aval'}{\localrun'_i} \subword w'_i$ and $\vinput{\aval'}{\localrun'_i} \in \set{m'_0, \dots, m'_{i-1}}^*$, and
 			for all $i \in [1,\ell']$, $\node$ has a child $\node'_i$ which is a "follower node" such that $\followlabelmessage{\node'_i} = m'_i$ and $\followlabelword{\node'_i} \in\langdecdown{\decsymb'_i}$ where $\decsymb'_i = (w'_0, m'_1, w'_1, \ldots, m'_{i-1}, w'_{i-1})$.
 			%  If $\aval'$ is an initial value of $\localrun$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ 
 			% where $w'_0 w'_1 \ldots w'_k = \voutput{\aval'}{\localrunlabel{\node}}$, for all $j \in [1,k]$ all receptions of $m'_j$ with value $\val'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $\val'$, and for all $j \in [1,k]$ $\node$ has a child $\node'$ which is a "follower node" such that $\followlabelmessage{\node'} = m'_j$ and $\followlabelword{\node'} \in\langdecdown{\decsymb'_j}$ where $\decsymb'_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.  
@@ -412,23 +412,22 @@ The proof can be found in the appendix.
 %	Let $u_1$, $u_2$ be two local runs of a protocol $\prot$ with the same sequence of transitions, $(q_1, \nu_1)$ the first local configuration of $u_1$, $(q_2, \nu_2)$ the last one of $u_2$. Then there is a local run $u$ with the same sequence of transitions as $u_1$ and $u_2$ from $(q_1, \nu_1)$ to $(q_2, \nu_2)$. 
 %\end{lemma}
 
-\begin{figure}
-	\input{Figures/fig-illustration-pumping}
-	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. Lines correspond to registers, and vertical separations are times at which the value of that register changes. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed. We can then obtain a shorter run by glueing them together as in the picture.}
-\end{figure}
+% \begin{figure}
+% 	\input{Figures/fig-illustration-pumping}
+% 	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. Lines correspond to registers, and vertical separations are times at which the value of that register changes. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed. We can then obtain a shorter run by glueing them together as in the picture.}
+% \end{figure}
 
 
 
 
 \begin{lemma}
 	\label{lem:short-local-runs}
-	There exists a function $\towerfun(n, e)$ in $O(\repexp{n}{e})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ in $\prot$, there exists $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ such that:
-	\begin{itemize}
-		\item  $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$
-		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
-		\item for all $\aval \in \nats$ appearing in $\localrun$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+	There exists a function $\towerfun(n, e)$ in $O(\repexp{n}{e})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and:
+	\begin{enumerate}
+		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item \label{item:shorterrun_oldvalues} for all $\aval \in \nats$ appearing in some message in $\localrun$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 		% \item by writing $V := \nats \setminus \set{\localdata_i(k) \mid k \in \nset{1}{\regnum}}$, for every $\aval' \in V$, there exists $\aval \in V$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$.
-	\end{itemize}
+	\end{enumerate}
 		%  with an "input" $I$.
 % 	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
 % 	If $\size{u_2} > TOWER$, then there exists $u'_2$ with $|u_2'| \leq \towerfun(\prot)$ such that $u_1u'_2u_3$ is a local run of $\prot$ with smaller "input" than $u$. 
@@ -440,20 +439,24 @@ The proof can be found in the appendix.
 % In the following proof, we consider for simplicity protocols with internal transitions, \emph{i.e.}, transitions with no labeled action that can be taken without condition. 
 Given a "local run" $\localrun$, register $i$ is ""active"" in $\localrun$ if at least one $\quotemarks{\enregact}$ step on register $i$ is performed in $\localrun$. Also, let $n:=\size{\prot}$.
 
-We prove the following statement:
-for every $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(|\prot|,k)$, $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ whose "schedule" is a strict subsequence of the one of $\localrun$. Note that if the "schedule" of $\localrun'$ is a subsequence of the one of $\localrun$ then $\Input{\localrun'}$ is a subsequence of $\Input{\localrun}$.
+We prove the following statement: \\
+Let a "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(n,k)$ and let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$. We claim that $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ active registees such that $\length{\localrun'} < \length{\localrun}$ and:
+ \begin{itemize}
+\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+ \end{itemize}
 
-We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, then registers keep their values throughout $\localrun$. Therefore, if $\localrun$ goes through the same state once, all steps in between may be removed, and it suffices to take $\towerfun(\size{\prot}, 0) := |\prot| + 1 \geq |Q| +1$.  
+We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, registers keep their values throughout $\localrun$. Therefore, if $\localrun$ goes through the same state twice, all steps in between may be removed, and we take $\towerfun(\size{\prot}, 0) := |\prot| + 1 \geq |Q| +1$.  
 
 Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(n)(k+1)$.
 
-First, if there exists an infix "local run" $\localrun_i: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$ of $\localrun$ of length $\towerfun(n)(k)+1$ with only $k$ active registers, then by induction hypothesis $\localrun_i$ can be shortened thus $\localrun$ can be shortened as well.
+First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of length $\towerfun(n)(k)+1$ with only $k$ active registers, then it suffices to apply the induction hypothesis on $u_i$ and $V$.
 
 Suppose now that there exists no such infix "local run".
 Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n)(k){+}1$. 
 In any sequence of $M$ "local steps" in a row in $\localrun$, 
-there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\towerfun(n)(k+1) := (n^{2M}+1)*M$ and suppose that $\length{\localrun} > \towerfun(n)(k+1)$. Additionally, suppose that $\localrun$ does not go twice through the same local configuration (otherwise it may be easily shortened). For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$.
- For every $i \in \nset{0}{n^{2M}}$, we write $s_i$ the sequence $\delta_{2M*i+1}, \delta_{2M*i+2}, \cdots, \delta_{2M*i+2M}$.
+there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\towerfun(n)(k+1) := M (n^{2M}+1)$ and suppose that $\length{\localrun} > \towerfun(n)(k+1)$. Additionally, suppose that $\localrun$ does not go twice through the same local configuration (otherwise it may be easily shortened). For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$.
+ For every $i \in \nset{0}{n^{2M}}$, we write $s_i$ the sequence $\delta_{2  M \cdot i+1}, \delta_{2  M \cdot i+2}, \cdots, \delta_{2 M \cdot i+2M}$.
 By Pigeonhole principle two of the sequences $s_i$ are equal (there are $|\transitions|^{2M}$ distinct such sequences and $|\transitions| \leq n$). 
 There exist $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have sequence of transitions $s$.
 
@@ -462,7 +465,7 @@ We build a schedule $\sigma$ such that $(q_1,\localdata_1) \step{\sigma} (q_4, \
 
 For every active register $i \in I$, let $e_i \in \nset{1}{2M}$ denote the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$ and $f_i \in \nset{1}{2M}$ denote the last $\quotemarks{\enregact}$ on register $i$ in $s$. By hypothesis, because $s$ is of length $2M$, it contains at least two $\quotemarks{\enregact}$ on register $i$, one in the fist half and one in the second half, hence $e_i \leq M < M +1 \leq f_i$. 
 
-For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define "internal step" $j$ of $\sigma$ to be $\intstep{\delta_j}$. 
+For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define "internal step" $j$ of $\sigma$ to be $\intlabel{\delta_j}$. 
 Suppose now that $\delta_j$ is a "reception" of the form $\rec{\amessage}{i}{\anact}$, Let $\aval_a$ be the value of the $j$-th "local step" of $\localrun_a$, and $\aval_b$ be the value of the $j$-th "local step" of $\localrun_b$
  (the $j$-th "local steps" of $\localrun_a$ and $\localrun_b$ has underlying transition $\delta_j$ hence are "external messages" of the form $\extlabel{\delta_j}{\aval_x}$ for some $\aval_x$). In particular, $\aval_a= \localdata_2(i)$ and $\aval_b = \localdata_4(i)$. 
   Additionally, let $V \subseteq \nats$ the set of values of registers appearing in $\localrun_a$ or $\localrun_b$. Because $V$ is finite, there exists a function $\phi: V \rightarrow \nats \setminus V$ injective.
@@ -478,42 +481,82 @@ For every $l \in \nset{0}{2M}$, let $\sigma_l$ denote the prefix of $\sigma$ of 
 We now prove by induction that $\sigma_l$ is valid from $(q_1, \localdata_1)$. It is trivially true for $l =0$. Assume that we have $(q_1, \localdata_1) \step{\sigma_l} (q, \localdata)$ and let $\locallabel$ such that $\sigma_l \cdot \locallabel := \sigma_{l+1}$. Let $\atrans$ the underlying transition of $\locallabel$.
 First, $q$ is the initial state of $\atrans$ because $\locallabel$ was valid in $\localrun_a$ and $\localrun_b$. Hence if $\atrans$ is a "broadcast" then $\locallabel$ is valid.
 
-If $\locallabel$ is an "external message" of the form $\extbr{\atrans}{\aval}$, then $\atrans$ has action $\rec{\amessage}{i}{\anact}$. Let $\aval_i := \localdata(i)$. The only problematic case is when $\anact = \quotemarks{\diseqtestact}$ (we have no equality tests thanks to Lemma~\ref{lem:simple-reduction}). If $l+1<e_i$ then the value in the register and the value of the message are the same as in $\localrun_a$ at the same stage, hence the disequelity test passes. If $e_i \leq l+1 < f_i$, then $\aval = \phi(\aval_a)$ where $\aval_a$ is the value in $\localrun_a$ at the same stage and $\aval_i$ is either $ $. \todo{bien écrire cette partie}  
+For every $i \in I$, let $\localdata_a, \localdata_b$ the content of the register after step $l$ in $\localrun_a$ and $\localrun_b$ respectively.
 
+\noindent \textbf{$\locallabel$ is an "external message"} \\
+If $\locallabel$ is an "external message" of the form $\extlabel{\atrans}{\aval}$, then $\atrans$ has action $\rec{\amessage}{i}{\anact}$. Let $\aval_a$, $\aval_b$ the value of the corresponding "external message" in $\localrun_a$ and $\localrun_b$ respectively. The only problematic cases are when $\anact = \quotemarks{\diseqtestact}$ or $\anact = \quotemarks{\eqtestact}$.
 
+In this case, we prove that $\binrel{\aval}{\anact}{\localdata(i)}$ with $\anact \in \set{\quotemarks{\eqtestact}, \quotemarks{\diseqtestact}}$. First, because the corresponding step is valid in $\localrun_a$ and $\localrun_b$, we have $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ and $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. We distinguish cases depending on the value of $l+1$:
+\begin{itemize}
+\item $l+1<e_i$: $\localdata(i)= \localdata_a(i)$ and $\aval = \aval_a$, and because the "internal step" is valid in $\localrun_a$ we have $\binrel{\localdata_a(i)}{\anact}{\aval_a}$. 
+\item $e_i \leq l+1 < f_i$: We have $\aval = \phi(\aval_a)$. 
+Moreover, because $e_i < l+1$, there is at least one $\quotemarks{\enregact}$ on register $i$ in $\sigma_l$. Consider the last such "transition" in $\sigma_l$; its index $j$ satisfies $e_i \leq j < f_i$ by definition of $e_i$, hence the value of the corresponding "external message" in $\localrun_a$ is $\localdata_a(i)$ and its value in $\sigma_{l+1}$ is $\phi(\localdata_a(i))$. One has $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ therefore (by injectivity of $\phi$ for $\anact = \quotemarks{\diseqtestact}$)
+ $\binrel{\phi(\localdata_a(i))}{\anact}{\phi(\aval_a)}$.
+\item$f_i \leq l+1$: $\localdata(i)= \localdata_b(i)$ and $\aval = \aval_b$, and because the "internal step" is valid in $\localrun_b$ we have $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. 
+\end{itemize}
 
+\noindent \textbf{$\locallabel$ is an "internal step"} \\
+The only problematic case is when $\locallabel =: \loc{i}{i'}{\diseqtestact}$ with $i,i' \in \nset{1}{\regnum}$ (we have no equality tests thanks to Lemma~\ref{lem:simple-reduction}). We have to prove that $\localdata(i) \ne \localdata(i')$. 
+Because the "local test" is satisfied in $\localrun_a$ and $\localrun_b$, we have $\localdata_a(i) \ne \localdata_a(i')$ and $\localdata_b(i) \ne \localdata_b(i')$.
 
+If $i \notin I$ and $i' \notin I$ (none are "active registers") then there values are the same as in $\localrun$ and, because the "local test" was satisfied in $\localrun$ we have $\localdata(i) \ne \localdata(i')$.
 
+If $i \in I$ and $i' \notin I$, then:
+\begin{itemize}
+\item if $l+1<e_i$ then $\localdata(i) = \localdata_a(i) \ne \localdata(i')$,
+\item if $e_i \leq l+1 < f_i$ then $\localdata(i) = \phi(\localdata_a(i)) \in V$ and  $\localdata(i') \notin V$ therefore $\localdata(i) \ne \localdata(i')$,
+\item if $f_i \leq l+1$ then $\localdata(i) = \localdata_b(i) \ne \localdata_b(i')$.
+\end{itemize}
 
+If $i \in I$ and $i' \in I$, recall that $e_i \leq M < f_{i'}$ and $e_{i'} \leq M < f_i$. Therefore, we again make a case disjunction on the value of $l+1$:
+\begin{itemize}
+\item $l+1<e_i$ and $l+1 <e_{i'}$: $\localdata(i)= \localdata_a(i)$ and $\localdata(i)= \localdata_a(i)$, and because the "internal step" is valid in $\localrun_a$ we have $\localdata_a(i) \ne \localdata_a(i')$. 
+\item $e_i \leq l+1 < f_i$, $l+1<e_{i'}$: $\localdata(i) = \phi(\localdata_a(i)) \in \nats  \setminus V$, $\localdata(i') = \localdata_a(i') \in V$ therefore $\localdata(i') \ne \localdata(i)$.
+\item $e_{i'} \leq l+1 < f_{i'}$, $l+1<e_{i}$: symmetric to the previous case.
+\item $e_i \leq l+1 < f_i$, $e_{i'} \leq l+1 < f_{i'}$: $\localdata(i) = \phi(\localdata_a(i))$, $\localdata(i') = \phi(\localdata_a(i'))$; however $\localdata_a(i) \ne \localdata_a(i')$ and $\phi$ is injective hence $\localdata(i') \ne \localdata(i)$.
+\item $e_i \leq l+1 < f_i$, $f_{i'} \leq l+1$: $\localdata(i') = \localdata_b(i') \in V$, $\localdata(i) = \phi(\localdata_a(i) \in V$ hence $\localdata(i) \ne \localdata(i')$.
+\item $f_i \leq l+1$, $e_{i'} \leq l+1 < f_{i'}$: symmetric to the previous case.
+\item $f_i \leq l+1$, $f_{i'} \leq l+1$: $\localdata(i)= \localdata_b(i)$ and $\localdata(i)= \localdata_b(i)$, and because the "internal step" is valid in $\localrun_b$ we have $\localdata_b(i) \ne \localdata_b(i')$. 
+\end{itemize}
 
+This proves that $\locallabel$ is valid from $(q,\localdata)$ which concludes the induction. 
+We have proven that $(q_1,\localdata_1) \step{\sigma} (q_4, \localdata_4)$; however $\sigma$ is of length $2M$ and there are at least $2M+1$ steps between $(q_1,\localdata_1)$ and $(q_4, \localdata_4)$ in $\localrun$. Therefore, replacing this part of $\localrun$ with $(q_1,\localdata_1) \step{\sigma} (q_4, \localdata_4)$ yields a "local run" $\localrun': (q_i, \localdata_i) \step{*} (q_f,\localdata_f)$ with strictly less steps that $\localrun$. 
 
+It remains to prove the conditions on the "$v$-inputs" of $\localrun'$. If suffices to prove the condition for the part between $(q_1, \localdata_1)$ to $(q_4, \localdata_4)$,
+ because the rest of $\localrun$ is left untouched. Let $\tau$ the "schedule" of the suffix run of $\localrun$ from $(q_1, \localdata_1)$ to $(q_4, \localdata_4)$, so $(q_1,\localdata_1) \step{\tau} (q_4, \localdata_4)$. 
 
+Let $(q_m, \localdata_m)$ the "local configuration" after $M$ steps of $\sigma$ from $(q_1, \localdata_1)$; write $\localrun_1$ the local run from $(q_1,\localdata_1)$ to $(q_m, \localdata_m)$ corresponding to the first $M$ steps of $\sigma$, and $\localrun_2$ the "local run" from $(q_m, \localdata_m)$ to $(q_4, \localdata_4)$ corresponding to the last $M$ steps of $\sigma$.  
 
+Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\sigma$, the "external message" steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the second half. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval in V$. Note that this proves both required conditions for values in $V$, \emph{i.e.}, values appearing in $\localrun$.
 
-	We will show the following result, which directly implies the lemma:
-	Let $\prot$ be a protocol with $r$ registers, let $u$ be a "local run" of $\prot$ from "local configuration" $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$ with an input $I$. If $\size{u} \geq TOWER$, then there exists a shorter local run $u'$ from $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$, with a smaller "input" and such that the sequence of local actions in $u'$ is a subword of the one in $u$.
-	We proceed by induction on $r$.
+Let $\aval' \in \nats \setminus V$. Either $\aval'$ does not appear in $\sigma$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "external message" steps with value $\phi(\aval)$ correspond to "external message" steps in $\localrun_a$ with value $\aval$, and similarly for the second half with $\localrun_b$. This proves the condition for every $\aval'$ that does not appear in $\localrun$.
+
+Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies the properties on the "$v$-inputs" and that is strictly shorter that $\localrun$. This process may be iterated to obtain a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$; on further iterations, one must simply make sure that fresh values chosen by $\phi$ appear in no message of previous iterations, \emph{i.e.}, that $V$ only increases at each iteration.
+
+	% We will show the following result, which directly implies the lemma:
+	% Let $\prot$ be a protocol with $r$ registers, let $u$ be a "local run" of $\prot$ from "local configuration" $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$ with an input $I$. If $\size{u} \geq TOWER$, then there exists a shorter local run $u'$ from $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$, with a smaller "input" and such that the sequence of local actions in $u'$ is a subword of the one in $u$.
+	% We proceed by induction on $r$.
 	
-	If $r=0$ then if $\size{u} > TOWER = \size{Q}$ then $u$ visits twice the same state, hence the same local configuration as there are no registers, and the sequence between those two moments can be deleted, yielding the result.
+	% If $r=0$ then if $\size{u} > TOWER = \size{Q}$ then $u$ visits twice the same state, hence the same local configuration as there are no registers, and the sequence between those two moments can be deleted, yielding the result.
 	
-	Let $r>0$, suppose the proposition holds for $r-1$.
-	Let $u$ be a run of $\prot$, a protocol with $r$ registers, with $\size{u} > TOWER$.
+	% Let $r>0$, suppose the proposition holds for $r-1$.
+	% Let $u$ be a run of $\prot$, a protocol with $r$ registers, with $\size{u} > TOWER$.
 	
-	\begin{itemize}
-		\item If there exists $i \in [1,r]$ such that $u$ has a factor $u_f$ in which the value of register $i$ does not change and with $\size{u_f} > TOWER$, then let $\Tilde{\prot}$ be $\prot$ where every operation $op$ over $i$ has been replaced with a local action $a_{op}$. Note that $\Tilde{\prot}$ only uses $r-1$ registers. 
-		Let $\Tilde{u_f}$ be the run following $u_f$ in $\prot$, where every transition $q \xrightarrow{op} q'$ with an operation on $i$ has been replaced with $q \xrightarrow{a_{op}} q'$.
+	% \begin{itemize}
+	% 	\item If there exists $i \in [1,r]$ such that $u$ has a factor $u_f$ in which the value of register $i$ does not change and with $\size{u_f} > TOWER$, then let $\Tilde{\prot}$ be $\prot$ where every operation $op$ over $i$ has been replaced with a local action $a_{op}$. Note that $\Tilde{\prot}$ only uses $r-1$ registers. 
+	% 	Let $\Tilde{u_f}$ be the run following $u_f$ in $\prot$, where every transition $q \xrightarrow{op} q'$ with an operation on $i$ has been replaced with $q \xrightarrow{a_{op}} q'$.
 		
-		By induction hypothesis we have that there exists $\Tilde{u'_f}$ shorter than $\Tilde{u_f}$, with the same start and end local configurations, a smaller input, and a sequence of local actions that is a subword of the one of $\Tilde{u_f}$.
+	% 	By induction hypothesis we have that there exists $\Tilde{u'_f}$ shorter than $\Tilde{u_f}$, with the same start and end local configurations, a smaller input, and a sequence of local actions that is a subword of the one of $\Tilde{u_f}$.
 		
-		We conclude that the corresponding sequence of transitions $u_f'$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs. By replacing $u_f$ with $u_f'$ in $u$, we obtain a shorter local run $u'$ of $\prot$. Let $v$ be the value that register $i$ keeps through $u_f$, the $v$-input of $u'$ 
+	% 	We conclude that the corresponding sequence of transitions $u_f'$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs. By replacing $u_f$ with $u_f'$ in $u$, we obtain a shorter local run $u'$ of $\prot$. Let $v$ be the value that register $i$ keeps through $u_f$, the $v$-input of $u'$ 
 		
-		\item If no register keeps the same value for more than $TOWER$ steps, then any run $u$ of length at least $M_{r-1} ((\size{\Delta})^{M_{r-1}} +1)$ can be split into $(\size{\Delta})^{M_{r-1}} +1$ segments of size $M_{r-1}$. There are $\size{\Delta}^{M_{r-1}}$ different sequences of transitions, thus by the pigeonhole principle we have $u = \pi_1 \sigma_1 \pi_2 \sigma_2 \pi_3$ with $\size{\sigma_1} = \size{\sigma_2} = M_{r-1}$ and such that  $\sigma_1$ and $\sigma_2$ have the same sequence of transitions.
+	% 	\item If no register keeps the same value for more than $TOWER$ steps, then any run $u$ of length at least $M_{r-1} ((\size{\Delta})^{M_{r-1}} +1)$ can be split into $(\size{\Delta})^{M_{r-1}} +1$ segments of size $M_{r-1}$. There are $\size{\Delta}^{M_{r-1}}$ different sequences of transitions, thus by the pigeonhole principle we have $u = \pi_1 \sigma_1 \pi_2 \sigma_2 \pi_3$ with $\size{\sigma_1} = \size{\sigma_2} = M_{r-1}$ and such that  $\sigma_1$ and $\sigma_2$ have the same sequence of transitions.
 		
-		Furthermore as all registers change their values every $M_{r-1}$ steps, we know that $\sigma_1$ and $\sigma_2$ contain operations of the form $\rec{m}{i}{\enregact}$ for all $i \in [1,r]$.
+	% 	Furthermore as all registers change their values every $M_{r-1}$ steps, we know that $\sigma_1$ and $\sigma_2$ contain operations of the form $\rec{m}{i}{\enregact}$ for all $i \in [1,r]$.
 		
-		Let $(q_1, \nu_1)$ be the local configuration at the beginning of $\sigma_1$, $(q_2, \nu_2)$ the one at the end of $\sigma_2$.
-		\cortoin{TO FINISH}
-	\end{itemize}
+	% 	Let $(q_1, \nu_1)$ be the local configuration at the beginning of $\sigma_1$, $(q_2, \nu_2)$ the one at the end of $\sigma_2$.
+	% 	\cortoin{TO FINISH}
+	% \end{itemize}
 	
 \end{proof}
 \fi 
@@ -523,28 +566,35 @@ If $\locallabel$ is an "external message" of the form $\extbr{\atrans}{\aval}$, 
 	It also holds for pushdown automata, and for all transition systems which have some kind of pumping lemma.
 \end{remark}
 
-\begin{lemma}
-	Let $\prot$ be a "protocol" with $r$ registers.
-	Let $u$ be a local run of $\prot$, $w \in (\messages \times \nats)^*$ such that $w \subword \Input{u}$. 
-	Then there exists $u'$ a local run of $\prot$ such that $w \subword \Input{u'}$ and $\size{u'} \leq \size{w}\towerfun(\size{\prot})(r)$.
-\end{lemma}
-
-\begin{lemma}
-	\label{lem:bound-successor-height}
-	Let $\node$ be a node of a "tree unfolding" of minimal size satisfying a "boss specification" $w$.
+\iffalse
+\begin{proof}
+	For this proof we will allow our protocols to execute local actions from a finite alphabet $\Sigma$.
+	We proceed by induction on $r$.
 	
-	Let $\node_1, \ldots, \node_\ell$ be the "follower" children of $\node$. 
+	If $r=0$ then if $\size{u} > Tower_{\size{Q}}(r+1) = \size{Q}$ then $u$ visits twice the same local configuration, and can thus be decomposed as $u_1 u_2 u_3$ where $u_2$ starts and ends in the same state, yielding the result. 
+	
+	Let $r>0$, suppose the proposition holds for $r-1$.
+	Let $u$ be a run of $\prot$, a protocol with $r$ registers, with $\size{u} > Tower_{\size{Q}}(r+1)$.
 	
 	\begin{itemize}
-		\item If $\node$ is the root of $\tau$ then we have $\bosslabel{\node} = w$ and $\size{\localrunlabel{\node}} \leq (\size{w} + \sum_{i=1}^{\ell} \size{\localrunlabel{\node_i}}) (\towerfun(\size{\prot})(r))$. 
+		\item If there exists $i \in [1,r]$ such $u$ has a factor $u_f$ in which the value of register $i$ does not change and with $\size{u_f} > Tower_{\size{Q}}(r)$, then let $\Tilde{\prot}$ be $\prot$ where every operation $op$ over $i$ has been replaced with a local action $a_{op}$. Note that $\Tilde{\prot}$ only uses $r-1$ registers. 
+		Let $\Tilde{u_f}$ be the run following $u_f$ in $\prot$, where every transition $q \xrightarrow{op} q'$ with an operation on $i$ has been replaced with $q \xrightarrow{a_{op}} q'$.
 		
-		\item Otherwise, let $\node'$ be its father, 
-		\begin{itemize}
-			\item If $\node$ is a "boss node" then we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$ and $\size{\localrunlabel{\node}} \leq (\size{\localrunlabel{\node'}} + \sum_{i=1}^{\ell} \size{\localrunlabel{\node_i}}) (\towerfun(\size{\prot})(r))$. 
-			
-			\item If $\node$ is a "follower node" then we have $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq (1 +\sum_{i=1}^{\ell} \size{\localrunlabel{\node_i}}) (\towerfun(\size{\prot})(r))$. 
-		\end{itemize}
+		By induction hypothesis we have that $\Tilde{u_f} = \Tilde{u_{f,1}} \Tilde{u_{f,2}}\Tilde{u_{f,3}}$ such that  $\Tilde{u_{f,1}}\Tilde{u_{f,3}}$ is a run of $\Tilde{\prot}$ with the same initial and final local configurations as $\Tilde{u_f}$. 
+		
+		We conclude that the corresponding sequence of transitions $u_{f,1}u_{f,3}$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs.
+		
+		\item If no register keeps the same value for more than $M_{r-1}$ steps, then any run $u$ of length at least $M_{r-1} ((\size{\Delta})^{M_{r-1}} +1)$ can be split into $(\size{\Delta})^{M_{r-1}} +1$ segments of size $M_{r-1}$. There are $\size{\Delta})^{M_{r-1}}$ different sequences of transitions, thus by the pigeonhole principle we have $u = \pi_1 \sigma_1 \pi_2 \sigma_2 \pi_3$ with $\size{\sigma_1} = \size{\sigma_2} = M_{r-1}$ and such that  $\sigma_1$ and $\sigma_2$ have the same sequence of transitions.
+		
+		Furthermore as all registers change their values every $M_{r-1}$ steps, we know that $\sigma_1$ and $\sigma_2$ contain operations of the form $\rec{m}{i}{\enregact}$ for all $i \in [1,r]$.   
 	\end{itemize}
+\end{proof}
+\fi
+
+\begin{lemma}
+	Let $\node$ be a node of a "tree unfolding", $u_\node$ its local run.
+	Let $u$ be the local run of its father, and $u_1, \ldots, u_\ell$ the runs of its "follower" children.
+	Then if $\size{u_\node} \geq \towerfun(\size{\prot})(r) \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree unfolding with the same root specification label.
 \end{lemma}
 
 \ifproofs
@@ -566,38 +616,21 @@ If $\locallabel$ is an "external message" of the form $\extbr{\atrans}{\aval}$, 
 
 \begin{lemma}
 	\label{lem:bound-length-at-height-h}
-	Let $\prot$ be a protocol, $w$ a "boss specification".
-	Let $\node$ be a node of a "tree unfolding" $\tree$ of minimal size satisfying $w$ labelled by $\prot$, and let $\altmax$ be the maximal altitude of a node of $\tree$.
-	
-	Then we have 
+	Let $\prot$ be a protocol, $bw$ a "boss specification".
+	 
+	If there exists a "tree unfolding" over $\prot$ satisfying $bw$ then we can change its node labels to obtain a new "tree unfolding" such that for all node $\node$, 
 	\[
-		\size{\localrunlabel{\node}} \leq \size{w} \Big[(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)\Big]^{\altmax-\altitude{\node}+1}
+		\size{\localrunlabel{\node}} \leq \size{bw} \Big[(\size{\messages}+2) \towerfun(\size{\prot})(r)\Big]^{altmax-\altitude{\node}}
 	\] 
 \end{lemma}
 
 \ifproofs
 \begin{proof}
-	We prove this by induction on $\altmax-\altitude{\node}$.
+	We prove this by induction on $altmax-\altitude{\node}$.
 	
-	If $\altitude{\node} = \altmax$ then $\node$ has no "follower nodes" as children and is either the root or a "follower node" (otherwise its father would have a greater height).
+	If $\altitude{\node} = altmax$ then $\node$ has no "follower nodes" as children and is either the root or a "follower node" (otherwise its father would have a greater height).
 	
-	If $\node$ is the root and has no "follower" children then by Lemma~\ref{lem:bound-successor-height} we have $\size{\localrunlabel{\node}} \leq \size{w}(\towerfun(\prot)(r))$ and thus $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}r+1) \towerfun(\size{\prot})(r)$.
-	
-	If $\node$ is a "follower node" then by Lemma~\ref{lem:bound-successor-height} we have 
-	$\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r)$ and therefore $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}r+1) \towerfun(\size{\prot})(r)$.
-	
-	Now suppose $\altitude{\node} < \altmax$. Let $\node_1, \ldots, \node_k$ be its "follower children". 
-	As $\localrunlabel{\node}$ has $r$ initial values, there are at most $r$ initial values that are broadcast or received in it.
-	For each one of them, at most $\size{\messages}$ "follower" children are required to witness the condition \ref{unfoldingC3.1}.
-	We may need $\size{\messages}$ extra children to satisfy \ref{unfoldingC1}.
-	As a result, as $\tree$ is of minimal size \corto{define size of a tree}, we have $k \leq \size{\messages}(r+1)$.
-	
-	By induction hypothesis for all $i$ we have 
-	\[
-	\size{\localrunlabel{\node_i}} \leq \size{w} \Big[(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)\Big]^{\altmax-\altitude{\node}}
-	\]
-	
-	\cortoin{To finish}
+	If $\node$ is the root 
 \end{proof}
 \fi
 

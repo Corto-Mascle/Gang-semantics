@@ -49,7 +49,7 @@
 \newcommand{\extbr}[2]{\xrightarrow{\extlabel{#1}{#2}}}
 \newcommand{\intstep}[1]{\xrightarrow{\intlabel{#1}}}
 \newcommand{\size}[1]{|#1|}
-\newcommand{\length}[1]{|#1|}
+\newcommand{\length}[1]{\mathsf{len}(#1)}
 \newcommand{\nset}[2]{\{#1,\dots,#2\}} %interval of natural numbers
 %%% Complexity classes
 
@@ -228,3 +228,4 @@
 \newcommand{\subword}{\preceq}
 \newcommand{\supword}{\succeq}
 
+\newcommand{\binrel}[3]{#1 \mathrel{#2} #3}
