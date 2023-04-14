@@ -1,24 +1,23 @@
-\section{Todo}
-
 \begin{itemize}
 \item def tower and repexp
-\item definir local step
 \item s'assurer de la coherence step / transition
-\item ecrire quelque part qu'un run local inclut sa séquence de messages car un seul message convient par réception sous l'hypothèse de s'être débarassé des $\dummyact$ et des $\diseqtestact$: faire une remarque \label{rem:local_transition_unique_message}
 \item definir proprement "target" et "cover"
 \luin{proposition de definition après query coverability problem }
 \item mettre au bon endroit la definition de "partial run": 
 	% A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \step{} \config_{i}$ or $\config_{i-1} \extbr{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
-    \item choisir une seule macro de $\val$ et $\aval$
     \item passer $\regnum$ dans le tuple du protocole
     \item reflechir nomenclature internal broadcast et autres -> external message
     \item decompose as -> peut créer des ambiguités: machintruc decomposition 
     \item figure lemme tower
+    \item[nico] encodage lcs
+    \item[nico] remarque buchi
+    \item[nico] remarque query 
+    \item[nico] remarque on a besoin de tower
+    \item remarques automates à pile    
+    \item harmoniser bnra - protocol
 \end{itemize}
 
 A discuter:
 \begin{itemize}
 \item toutes les valeurs dans les différents registres sont différentes ? Cela me semble étrange vis-à-vis de la notion d'identifiant
-
-
 \end{itemize}
