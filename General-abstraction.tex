@@ -557,35 +557,40 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 	It also holds for pushdown automata, and for all transition systems which have some kind of pumping lemma.
 \end{remark}
 
-\iffalse
-\begin{proof}
-	For this proof we will allow our protocols to execute local actions from a finite alphabet $\Sigma$.
-	We proceed by induction on $r$.
+\begin{lemma}
+	\label{lem:short-dec}
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a decomposition, and for all $i\in [0,\ell]$ let $\decsymb_i = (w_0, \ldots, w_i)$.
+	Let $w'_0, \ldots, w'_\ell$ be such that $w'_i \in \langdecdown{\decsymb_i}$ for all $i$.
 	
-	If $r=0$ then if $\size{u} > Tower_{\size{Q}}(r+1) = \size{Q}$ then $u$ visits twice the same local configuration, and can thus be decomposed as $u_1 u_2 u_3$ where $u_2$ starts and ends in the same state, yielding the result. 
-	
-	Let $r>0$, suppose the proposition holds for $r-1$.
-	Let $u$ be a run of $\prot$, a protocol with $r$ registers, with $\size{u} > Tower_{\size{Q}}(r+1)$.
-	
-	\begin{itemize}
-		\item If there exists $i \in [1,r]$ such $u$ has a factor $u_f$ in which the value of register $i$ does not change and with $\size{u_f} > Tower_{\size{Q}}(r)$, then let $\Tilde{\prot}$ be $\prot$ where every operation $op$ over $i$ has been replaced with a local action $a_{op}$. Note that $\Tilde{\prot}$ only uses $r-1$ registers. 
-		Let $\Tilde{u_f}$ be the run following $u_f$ in $\prot$, where every transition $q \xrightarrow{op} q'$ with an operation on $i$ has been replaced with $q \xrightarrow{a_{op}} q'$.
-		
-		By induction hypothesis we have that $\Tilde{u_f} = \Tilde{u_{f,1}} \Tilde{u_{f,2}}\Tilde{u_{f,3}}$ such that  $\Tilde{u_{f,1}}\Tilde{u_{f,3}}$ is a run of $\Tilde{\prot}$ with the same initial and final local configurations as $\Tilde{u_f}$. 
-		
-		We conclude that the corresponding sequence of transitions $u_{f,1}u_{f,3}$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs.
-		
-		\item If no register keeps the same value for more than $M_{r-1}$ steps, then any run $u$ of length at least $M_{r-1} ((\size{\Delta})^{M_{r-1}} +1)$ can be split into $(\size{\Delta})^{M_{r-1}} +1$ segments of size $M_{r-1}$. There are $\size{\Delta})^{M_{r-1}}$ different sequences of transitions, thus by the pigeonhole principle we have $u = \pi_1 \sigma_1 \pi_2 \sigma_2 \pi_3$ with $\size{\sigma_1} = \size{\sigma_2} = M_{r-1}$ and such that  $\sigma_1$ and $\sigma_2$ have the same sequence of transitions.
-		
-		Furthermore as all registers change their values every $M_{r-1}$ steps, we know that $\sigma_1$ and $\sigma_2$ contain operations of the form $\rec{m}{i}{\enregact}$ for all $i \in [1,r]$.   
-	\end{itemize}
-\end{proof}
-\fi
+	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that $w'_i \in \langdecdown{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$) for all $i$ and $\sum_{i=1}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=1}^{\ell} \size{w'_i}$. 
+\end{lemma}
 
 \begin{lemma}
-	Let $\node$ be a node of a "tree unfolding", $u_\node$ its local run.
-	Let $u$ be the local run of its father, and $u_1, \ldots, u_\ell$ the runs of its "follower" children.
-	Then if $\size{u_\node} \geq \towerfun(\size{\prot})(r) \cdot (1+ \size{u}+ \sum_{j=1}^{\ell} \size{u_j})$ then there exists a smaller tree unfolding with the same root specification label.
+	Let $\prot$ be a "protocol", let $\node$ be a node of a "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$.
+	Let $\node_1, \ldots, \node_k$ be its "follower" children. If $\node$ is not the root of $\tree$ then let $\mu'$ be its father.
+	We have the following properties:
+	
+	\begin{itemize}
+		\item $k \leq \size{\messages}(r + 1)$
+		
+		\item The root of $\tree$ is a "boss node".
+				
+		\item  If $\node$ is a "boss node" then 
+		\begin{itemize}
+			\item If $\node$ is the root of $\tree$ then $\bosslabel{\node} = w$
+			
+			\item If $\node$ is not the root then $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$
+			
+			\item In both cases $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r) + 1)\Big[ \size{\bosslabel{\node}} + \sum_{i=1}^k \size{\followlabelword{\node_i}} \Big]$
+		\end{itemize}
+	
+		\item If $\node$ is a "follower node" then 
+		\begin{itemize}
+			\item $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r) +1)\Big[ 1 + \sum_{i=1}^k \size{\followlabelword{\node_i}} \Big]$
+			
+			\item $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}}$
+		\end{itemize}
+	\end{itemize}
 \end{lemma}
 
 \ifproofs
@@ -607,12 +612,17 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 
 \begin{lemma}
 	\label{lem:bound-length-at-height-h}
-	Let $\prot$ be a protocol, $bw$ a "boss specification".
-	 
-	If there exists a "tree unfolding" over $\prot$ satisfying $bw$ then we can change its node labels to obtain a new "tree unfolding" such that for all node $\node$, 
-	\[
-		\size{\localrunlabel{\node}} \leq \size{bw} \Big[(\size{\messages}+2) \towerfun(\size{\prot})(r)\Big]^{altmax-\altitude{\node}}
-	\] 
+	Let $\prot$ be a protocol, let $\node$ be a node of a "tree unfolding" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$.
+	Let $\altmax$ be the maximal "altitude" in $\tau$, let $N = \size{w} + \size{\prot} +1$ and let $f_0 : \nats \to \nats$ be the function mapping each $n \in \nats$ to $f_0(n)=(N^2 (\towerfun(N)(N) + 2))^{n}$ 
+	
+	\begin{itemize}
+		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node}} \leq f_0(\altmax + 1 - \altitude{\node})$.
+		
+		\item If $\node$ is a "follower node" then $\size{\localrunlabel{\node}} \leq \size{\followlabelword{\node}} \leq  f_0(\altmax + 1 - \altitude{\node})$.
+	\end{itemize} 
+	
+	
+	
 \end{lemma}
 
 \ifproofs
@@ -626,11 +636,11 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 	If $\node$ is a "follower node" then by Lemma~\ref{lem:bound-successor-height} we have 
 	$\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r)$ and therefore $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)$.
 	
-	Now suppose $\altitude{\node} < \altmax$. Let $\node_1, \ldots, \node_k$ be its "follower children". 
+	Now suppose $\altitude{\node} < \altmax$. Let $\node_1, \ldots, \node_k$ be its "follower" children. 
 	As $\localrunlabel{\node}$ has $r$ initial values, there are at most $r$ initial values that are broadcast or received in it.
 	For each one of them, at most $\size{\messages}$ "follower" children are required to witness the condition \ref{unfoldingC3.1}.
 	We may need $\size{\messages}$ extra children to satisfy \ref{unfoldingC1}.
-	As a result, as $\tree$ is of minimal size \corto{define size of a tree}, we have $k \leq \size{\messages}(r+1)$.
+	As a result, as $\tree$ is of minimal size \corto{define size of a tree and of a protocol}, we have $k \leq \size{\messages}(r+1)$.
 	
 	By induction hypothesis for all $i$ we have 
 	\[
@@ -650,7 +660,7 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 
 \begin{lemma}
 	\label{lem:bound-max-height}
-	The maximal altitude in a minimal tree unfolding is bounded by $f_1(\size{\prot})$ where $f_1$ is a function of the class $F_{\omega^{\size{\messages} +1}}$.
+	There exists a function $f_1$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the maximal altitude of a node of $\tree$ is bounded by $f_1(\size{\prot} + \size{w})$.
 \end{lemma}
 
 \ifproofs
@@ -660,18 +670,18 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 \fi
 
 \begin{corollary}
-	The local run associated with the root of a minimal tree unfolding is bounded by $f_2(\size{\prot})$ where $f_2$ is a function of the class $F_{\omega^\omega}$.
+	There exists a function $f_2$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, if we call $\node$ its root then $\size{\bosslabel{\node}}$ and $\size{\localrunlabel{\node}}$ are both bounded by $f_2(\size{\prot} + \size{w})$.
 \end{corollary}
 
 \ifproofs
 \begin{proof}
-	Consequence of Lemmas~\ref{lem:bound-length-at-height-h} and~\ref{lem:bound-max-height} as $F_{\omega^\omega}$ is closed by composition with primitive recursive functions.
+	Consequence of Lemmas~\ref{lem:bound-length-at-height-h} and~\ref{lem:bound-max-height} as $F_{\omega^{\size{\messages}+1}}$ is closed by composition with primitive recursive functions.
 \end{proof}
 \fi
 
 \begin{lemma}
 	\label{lem:bound-min-height}
-	The absolute value of the minimal altitude in a minimal tree unfolding is bounded by $f_3(\size{\prot})$ where $f_3$ is a function of the class $F_{\omega^\omega}$.
+	There exists a function $f_3$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the absolute value of the minimal "altitude" of a node of $\tree$ is bounded by $f_3(\size{\prot} + \size{w})$.
 \end{lemma}
 
 \ifproofs
@@ -683,18 +693,24 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 
 \begin{corollary}
 	\label{lem:bound-node-size}
-	The length of a local run associated with a node of a minimal tree unfolding is bounded by $f_4(\size{\prot})$ where $f_4$ is a function of the class $F_{\omega^\omega}$.
+	There exists a function $f_4$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, for all node $\node$ of $\tree$,
+	
+		\begin{itemize}
+		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node}} \leq f_4(\size{\prot}+ \size{w})$.
+		
+		\item If $\node$ is a "follower node" then $\size{\localrunlabel{\node}} \leq \size{\followlabelword{\node}} \leq f_4(\size{\prot}+ \size{w})$.
+	\end{itemize} 
 \end{corollary}
 
 \ifproofs
 \begin{proof}
-	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $F_{\omega^\omega}$ is closed by composition with primitive recursive functions.
+	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $F_{\omega^{\size{\messages}+1}}$ is closed by composition with primitive recursive functions.
 \end{proof}
 \fi
 
 
 \begin{proposition}
-	In a minimal "tree unfolding" satisfying a given specification, the length of a branch is bounded by a function of $F_{\omega^\omega}$.
+	There exists a function $f_5$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f_5(\size{\prot} + \size{w})$.
 \end{proposition}
 
 \ifproofs
@@ -717,7 +733,7 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 
 
 \begin{theorem}
-	The BNRA coverability problem is decidable in $F_{\omega^\omega}$ and there is no $\alpha < \omega^\omega$ such that this problem ca be solved in $F_{\alpha}$.
+	The BNRA coverability problem is decidable in time $F_{\omega^\omega}$\corto{proper notation} and there is no $\alpha < \omega^\omega$ such that this problem can be solved in time $F_{\alpha}$.
 	The lower bound holds even with two registers and no local tests.
 \end{theorem}
 
