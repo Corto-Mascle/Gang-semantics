@@ -1,0 +1,63 @@
+\begin{tikzpicture}[AUT style,node distance=2.1cm,auto,>= triangle
+	45]
+	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+	distance=.7cm]
+	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+	%	distance=.7cm,accepting where =right]
+	
+	
+	\draw (0,0) rectangle (1.5,2);
+	\draw (3,2) rectangle (4.5,4);
+	\draw (-2,2) rectangle (-0.5,4);
+	\draw (0.5,4) rectangle (2,6);
+	
+	\node (Q1) at (1.2,5.8) {$q_1$};
+	\node (Q2) at (3.7,3.8) {$q_2$};
+	\node (Q3) at (0.7,1.8) {$q_3$};
+	\node (Q4) at (-1.3,3.8) {$q_4$};
+	
+	\node (Q1R1) [below left of=Q1, xshift=30, yshift=25] {$r_1$};
+	\node (Q2R1) [below left of=Q2, xshift=30, yshift=25] {$r_1$};
+	\node (Q3R1) [below left of=Q3, xshift=30, yshift=25] {$r_1$};
+	\node (Q4R1) [below left of=Q4, xshift=30, yshift=25] {$r_1$};
+	
+	\node (Q1R2) [below of=Q1R1, yshift=40] {$r_2$};
+	\node (Q2R2) [below of=Q2R1, yshift=40] {$r_2$};
+	\node (Q3R2) [below of=Q3R1, yshift=40] {$r_2$};
+	\node (Q4R2) [below of=Q4R1, yshift=40] {$r_2$};
+	
+	\node[draw,inner sep=1mm] (Q1X1) [right of=Q1R1, xshift=-40] {\color{orange} $x_1$};
+	\node[draw,inner sep=1mm] (Q2X2) [right of=Q2R1, xshift=-40] {\color{blue} $x_2$};
+	\node[draw,inner sep=1mm] (Q3X3) [right of=Q3R1, xshift=-40] {\color{magenta}$x_3$};
+	\node[draw,inner sep=1mm] (Q4X4) [right of=Q4R1, xshift=-40] {\color{olive} $x_4$};
+	
+	\node[draw,inner sep=1mm] (Q1X4) [below of=Q1X1, yshift=40] {\color{olive} $x_4$};
+	\node[draw,inner sep=1mm] (Q2X1) [below of=Q2X2, yshift=40] {\color{orange} $x_1$};
+	\node[draw,inner sep=1mm] (Q3X2) [below of=Q3X3, yshift=40] {\color{blue}$x_2$};
+	\node[draw,inner sep=1mm] (Q4X3) [below of=Q4X4, yshift=40] {\color{magenta}$x_3$};
+	
+	\node (A11) [right of=Q1X1, xshift=-55] {};
+	\node (A22) [right of=Q2X2, xshift=-55] {};
+	\node (A44) [right of=Q4X4, xshift=-55] {};
+	\node (A32) [right of=Q3X2, xshift=-55] {};
+	
+	\node (A33) [left of=Q3X3, xshift=55] {};
+	\node (A14) [left of=Q1X4, xshift=60] {};
+	\node (A21) [left of=Q2X1, xshift=56] {};
+	\node (A43) [left of=Q4X3, xshift=60] {};
+	
+	\draw[color=orange] (A11) ..controls +(0.5,0) and +(0,0.5).. (3,4.5); % arc 1
+	\draw[color=orange] (3,4.5) ..controls +(0,-0.5) and +(0,0.5).. (2,3.4); % arc 2
+	\draw[color=orange, ->] (2,3.4) ..controls +(0,-0.5) and +(-0.5,0).. (A21); % arc 3
+	
+	
+	\draw[color=blue] (A22) ..controls +(0.5,0) and +(0.5,0.5).. (4.5,1.5); % arc 1
+	\draw[color=blue, ->] (4.5,1.5) ..controls +(-0.5,-0.5) and +(1,0).. (A32); % arc 2
+	
+	
+	\draw[color=magenta] (A33) ..controls +(-0.5,0) and +(0.5,-0.2).. (-0.5,1.5); % arc 1
+	\draw[color=magenta, ->] (-0.5,1.5) ..controls +(-0.5,0.2) and +(0,-0.5).. (A43); % arc 2
+	
+	\draw[color=olive] (A44) ..controls +(0.5,0.5) and +(-0.5,0).. (1,3.8); % arc 1
+	\draw[color=olive, ->] (1,3.8) ..controls +(0.5,0) and +(0,-0.5).. (A14); % arc 2
+\end{tikzpicture}
