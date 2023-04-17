@@ -66,6 +66,9 @@
 \end{proof}
 \fi
 
+""Lossy channel systems""  are systems where finite-state processes communicate via send messages from a finite alphabet through unbounded FIFO channels through which messages may be lost. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AK95,AbdullaJ1996undec}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and in fact lays at level $\mathcal{F}_{\omega^{\omega}}$ in the Fast-Growing Function Hierarchy \cite{ChambartS2008ordinal}.
+
+We now prove that the coverability problem in BNRA is at least as hard as the reachability problem for "lossy channel system", and that this already hold for $2$-BNRAs.  
 \begin{proposition}
 	\label{prop:reduction-LCS}
 	There is a polynomial-time reduction from the coverability problem for lossy channel systems to the coverability problem for BNRA with two registers.
@@ -73,7 +76,17 @@
 
 \ifproofs
 \begin{proof}
-	\cortoin{TODO}
+It is in fact sufficient to prove that it is as hard as reachability for lossy channel systems with a single channel, which corresponds to a single finite-state machine that buffering symbols in a lossy FIFO channel \cite{Schnoebelen2002verifying}.
+Let $\los := (\lstates,\Sigma,\Delta)$ be a "lossy channel system", where $\lstates$ is a finite set of states, $\Sigma$ is a finite set of symbols and $\Delta \subseteq \lstates \times \Sigma^* \times \set{!, ?} \times \lstates$; $\quotemarks{!}$ corresponds to writing to the channel and $\quotemarks{?}$ to reading from the channel. A configuration of $\los$ is a pair of $\lstates \times \Sigma^*$ denoting the state of the system and the content of the channel. There exists a step from $(\alstate,w)$ to $(\alstate',w')$ using transition $\delta \in \Delta$, denoted $(\alstate,w) \lstep{\delta} (\alstate',w')$, when:
+\begin{itemize}
+\item $\delta = (\alstate,u,!,\alstate')$ for some $u \in \Sigma^*$ and $w' = w \cdot u$ ($u$ is written at the end of the channel), or
+\item $\delta = (\alstate,u,?,\alstate')$ for some $u \in \Sigma^*$ and $w = u \cdot w'$ ($u$ is read at the beginning of the channel).
+\end{itemize}
+The existence of such a transition for some $\delta \in \transitions$ is denoted $(\alstate,w) \lstep{} (\alstate',w')$, and its transitive closure is denoted $\lstep{*}$. The ""reachability problem@@lcs"" asks, given $\los$ and two states $\alstate_, \alstate_f \in \lstates$, whether $(\alstate_i,\epsilon) \step{*} (\alstate_f, \epsilon)$. 
+
+We aim at constructing a $2$-BNRA $\prot$ with a distinguished state $q_f$ such that $q_f$ may be covered if and only if $(\los, q_i, q_f)$ is a positive instance of the "reachability problem@@lcs".
+
+\nico{a finir}
 \end{proof}
 \fi
 

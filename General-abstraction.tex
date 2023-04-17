@@ -405,7 +405,7 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 
 \begin{lemma}
 	\label{lem:short-local-runs}
-	There exists a function $\towerfun(n, e)$ in $O(\repexp{n}{e})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and:
+	There exists a function $\towerfun(n, \regnum)$ in $O(\intro*\repexp{n}{\regnum})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and:
 	\begin{enumerate}
 		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item \label{item:shorterrun_oldvalues} for all $\aval \in \nats$ appearing in some message in $\localrun$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
@@ -422,14 +422,14 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 % In the following proof, we consider for simplicity protocols with internal transitions, \emph{i.e.}, transitions with no labeled action that can be taken without condition. 
 Given a "local run" $\localrun$, register $i$ is ""active"" in $\localrun$ if at least one $\quotemarks{\enregact}$ step on register $i$ is performed in $\localrun$. Also, let $n:=\size{\prot}$.
 
-We prove the following statement: \\
-Let a "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(n,k)$ and let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$. We claim that $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ active registees such that $\length{\localrun'} < \length{\localrun}$ and:
+We prove the ""shortening property"": \\
+Let a "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(n,k)$ and let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$. We claim that $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ active registers such that $\length{\localrun'} < \length{\localrun}$ and:
  \begin{itemize}
 \item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
  \end{itemize}
 
-We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, registers keep their values throughout $\localrun$. Therefore, if $\localrun$ goes through the same state twice, all steps in between may be removed, and we take $\towerfun(\size{\prot}, 0) := |\prot| + 1 \geq |Q| +1$.  
+We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, register values do not change in $\localrun$. Therefore, if $\localrun$ goes through the same state twice, all steps in between may be removed and it suffices to take $\towerfun(\size{\prot}, 0) := |\prot| + 1 \geq |Q| +1$.  
 
 Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(n)(k+1)$.
 
@@ -438,20 +438,19 @@ First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of leng
 Suppose now that there exists no such infix "local run".
 Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n)(k){+}1$. 
 In any sequence of $M$ "local steps" in a row in $\localrun$, 
-there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\towerfun(n)(k+1) := M (n^{2M}+1)$ and suppose that $\length{\localrun} > \towerfun(n)(k+1)$. Additionally, suppose that $\localrun$ does not go twice through the same local configuration (otherwise it may be easily shortened). For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$.
+there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\towerfun(n)(k+1) := M (n^{2M}+1)$ and suppose that $\length{\localrun} > \towerfun(n)(k+1)$. Additionally, suppose that $\localrun$ no local configuration appears twice in $\localrun$ (otherwise $\localrun$ may easily be shortened). For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$.
  For every $i \in \nset{0}{n^{2M}}$, we write $s_i$ the sequence $\delta_{2  M \cdot i+1}, \delta_{2  M \cdot i+2}, \cdots, \delta_{2 M \cdot i+2M}$.
 By Pigeonhole principle two of the sequences $s_i$ are equal (there are $|\transitions|^{2M}$ distinct such sequences and $|\transitions| \leq n$). 
-There exist $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have sequence of transitions $s$.
+There exist two infix "local runs" $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have sequence of transitions $s$.
 
-Although $\localrun_a$ and $\localrun_b$ have the same sequence of transitions, their schedules may differ because their "external message" steps may have different values.
+Although $\localrun_a$ and $\localrun_b$ have the same sequence of transitions, their schedules may differ because their "external messages" may have different values.
 We build a schedule $\sigma$ such that $(q_1,\localdata_1) \step{\sigma} (q_4, \localdata_4)$ where the underlying sequence of transitions of $\sigma$ is $s$.
 
-For every active register $i \in I$, let $e_i \in \nset{1}{2M}$ denote the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$ and $f_i \in \nset{1}{2M}$ denote the last $\quotemarks{\enregact}$ on register $i$ in $s$. By hypothesis, because $s$ is of length $2M$, it contains at least two $\quotemarks{\enregact}$ on register $i$, one in the fist half and one in the second half, hence $e_i \leq M < M +1 \leq f_i$. 
+For every active register $i \in I$, let $e_i \in \nset{1}{2M}$ denote the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$ and $f_i \in \nset{1}{2M}$ the index of the last $\quotemarks{\enregact}$ on register $i$ in $s$. By hypothesis, because $s$ is of length $2M$, it contains at least two $\quotemarks{\enregact}$ on register $i$, one in the fist half and one in the second half, hence $e_i \leq M < M +1 \leq f_i$. 
 
-For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define "internal step" $j$ of $\sigma$ to be $\intlabel{\delta_j}$. 
-Suppose now that $\delta_j$ is a "reception" of the form $\rec{\amessage}{i}{\anact}$, Let $\aval_a$ be the value of the $j$-th "local step" of $\localrun_a$, and $\aval_b$ be the value of the $j$-th "local step" of $\localrun_b$
- (the $j$-th "local steps" of $\localrun_a$ and $\localrun_b$ has underlying transition $\delta_j$ hence are "external messages" of the form $\extlabel{\delta_j}{\aval_x}$ for some $\aval_x$). In particular, $\aval_a= \localdata_2(i)$ and $\aval_b = \localdata_4(i)$. 
-  Additionally, let $V \subseteq \nats$ the set of values of registers appearing in $\localrun_a$ or $\localrun_b$. Because $V$ is finite, there exists a function $\phi: V \rightarrow \nats \setminus V$ injective.
+For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define the $j$-th "local step" of $\sigma$ as $\intlabel{\delta_j}$. 
+Suppose now that $\delta_j$ is a "reception" of the form $\rec{\amessage}{i}{\anact}$. The $j$-th "local step" of $\localrun_a$ (resp. $\localrun_b$) has underlying transition $\delta_j$ hence is an "external message" of the form $\extlabel{\delta_j}{\aval_a}$ for some $\aval_a \in V$ (resp. $\extlabel{\delta_j}{\aval_b}$ for some $\aval_b \in V$).
+Because $V$ is finite, there exists a function $\phi: V \rightarrow \nats \setminus V$ injective.
 We define the $j$-th "local step" of $\sigma$ to be $\extlabel{\delta_j}{\aval}$ where:
 \begin{itemize} 
 \item if $j < e_i$, $\aval = \aval_a$,
@@ -459,21 +458,21 @@ We define the $j$-th "local step" of $\sigma$ to be $\extlabel{\delta_j}{\aval}$
 \item if $f_i \leq j$, $\aval = \aval_b$.
 \end{itemize}
 We now claim that $(q_1,\localdata_1) \step{\sigma} (q_4,\localdata_4)$. 
-First, for every active register $i$, the last $\quotemarks{\enregact}$ step on register $i$ has value $\localdata_4(i)$ hence, if every "internal step" is valid then we indeed end on $(q_4, \localdata_4)$.
+First, for every active register $i$, the last $\quotemarks{\enregact}$ step on register $i$ has value $\localdata_4(i)$ in $\sigma$ (as we are in the case $f_i \leq j$). Hence if every "local step" is valid then the final "local configuration" is $(q_4, \localdata_4)$.
 For every $l \in \nset{0}{2M}$, let $\sigma_l$ denote the prefix of $\sigma$ of length $l$.
-We now prove by induction that $\sigma_l$ is valid from $(q_1, \localdata_1)$. It is trivially true for $l =0$. Assume that we have $(q_1, \localdata_1) \step{\sigma_l} (q, \localdata)$ and let $\locallabel$ such that $\sigma_l \cdot \locallabel := \sigma_{l+1}$. Let $\atrans$ the underlying transition of $\locallabel$.
-First, $q$ is the initial state of $\atrans$ because $\locallabel$ was valid in $\localrun_a$ and $\localrun_b$. Hence if $\atrans$ is a "broadcast" then $\locallabel$ is valid.
+We prove by induction on $l$ that $\sigma_l$ is valid from $(q_1, \localdata_1)$. It is trivially true for $l =0$. Assume that we have $(q_1, \localdata_1) \step{\sigma_l} (q, \localdata)$ and let $\locallabel$ such that $\sigma_l \cdot \locallabel = \sigma_{l+1}$. Let $\atrans$ the underlying transition of $\locallabel$.
+First, $q$ is the initial state of $\atrans$ because $\locallabel$ is valid at step $l+1$ of $\localrun_a$ (and $\localrun_b$). Hence if $\atrans$ is a "broadcast" then $\locallabel$ is valid from $(q,\localdata)$.
 
-For every $i \in I$, let $\localdata_a, \localdata_b$ the content of the register after step $l$ in $\localrun_a$ and $\localrun_b$ respectively.
+For every $i \in I$, let $\localdata_a, \localdata_b$ the content of register $i$ after the $l$-th step in $\localrun_a$ and $\localrun_b$ respectively.
 
 \noindent \textbf{$\locallabel$ is an "external message"} \\
 If $\locallabel$ is an "external message" of the form $\extlabel{\atrans}{\aval}$, then $\atrans$ has action $\rec{\amessage}{i}{\anact}$. Let $\aval_a$, $\aval_b$ the value of the corresponding "external message" in $\localrun_a$ and $\localrun_b$ respectively. The only problematic cases are when $\anact = \quotemarks{\diseqtestact}$ or $\anact = \quotemarks{\eqtestact}$.
 
 In this case, we prove that $\binrel{\aval}{\anact}{\localdata(i)}$ with $\anact \in \set{\quotemarks{\eqtestact}, \quotemarks{\diseqtestact}}$. First, because the corresponding step is valid in $\localrun_a$ and $\localrun_b$, we have $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ and $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. We distinguish cases depending on the value of $l+1$:
 \begin{itemize}
-\item $l+1<e_i$: $\localdata(i)= \localdata_a(i)$ and $\aval = \aval_a$, and because the "internal step" is valid in $\localrun_a$ we have $\binrel{\localdata_a(i)}{\anact}{\aval_a}$. 
+\item $l+1<e_i$: $\localdata(i)= \localdata_a(i)$, $\aval = \aval_a$ and $\binrel{\localdata_a(i)}{\anact}{\aval_a}$. 
 \item $e_i \leq l+1 < f_i$: We have $\aval = \phi(\aval_a)$. 
-Moreover, because $e_i < l+1$, there is at least one $\quotemarks{\enregact}$ on register $i$ in $\sigma_l$. Consider the last such "transition" in $\sigma_l$; its index $j$ satisfies $e_i \leq j < f_i$ by definition of $e_i$, hence the value of the corresponding "external message" in $\localrun_a$ is $\localdata_a(i)$ and its value in $\sigma_{l+1}$ is $\phi(\localdata_a(i))$. One has $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ therefore (by injectivity of $\phi$ for $\anact = \quotemarks{\diseqtestact}$)
+Moreover, because $e_i < l+1$, there is at least one $\quotemarks{\enregact}$ on register $i$ in $\sigma_l$. Consider the last such "transition" in $\sigma_l$; its index $j$ satisfies $e_i \leq j < f_i$ by definition of $e_i$, hence the value of the corresponding "external message" in $\localrun_a$ is $\localdata_a(i)$ and its value in $\sigma_{l}$ is $\phi(\localdata_a(i))$. One has $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ therefore (by injectivity of $\phi$ for $\anact = \quotemarks{\diseqtestact}$)
  $\binrel{\phi(\localdata_a(i))}{\anact}{\phi(\aval_a)}$.
 \item$f_i \leq l+1$: $\localdata(i)= \localdata_b(i)$ and $\aval = \aval_b$, and because the "internal step" is valid in $\localrun_b$ we have $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. 
 \end{itemize}
@@ -482,39 +481,46 @@ Moreover, because $e_i < l+1$, there is at least one $\quotemarks{\enregact}$ on
 The only problematic case is when $\locallabel =: \loc{i}{i'}{\diseqtestact}$ with $i,i' \in \nset{1}{\regnum}$ (we have no equality tests thanks to Lemma~\ref{lem:simple-reduction}). We have to prove that $\localdata(i) \ne \localdata(i')$. 
 Because the "local test" is satisfied in $\localrun_a$ and $\localrun_b$, we have $\localdata_a(i) \ne \localdata_a(i')$ and $\localdata_b(i) \ne \localdata_b(i')$.
 
-If $i \notin I$ and $i' \notin I$ (none are "active registers") then there values are the same as in $\localrun$ and, because the "local test" was satisfied in $\localrun$ we have $\localdata(i) \ne \localdata(i')$.
+If $i \notin I$ and $i' \notin I$ (none are "active registers") then  $\localdata(i) = \localdata_a(i) \ne \localdata_a(i') = \localdata(i')$.
 
-If $i \in I$ and $i' \notin I$, then:
+If $i \in I$ and $i' \notin I$, then $\localdata(i') = \localdata_a(i') = \localdata_b(i')$ and:
 \begin{itemize}
-\item if $l+1<e_i$ then $\localdata(i) = \localdata_a(i) \ne \localdata(i')$,
-\item if $e_i \leq l+1 < f_i$ then $\localdata(i) = \phi(\localdata_a(i)) \in V$ and  $\localdata(i') \notin V$ therefore $\localdata(i) \ne \localdata(i')$,
+\item if $l+1<e_i$ then $\localdata(i) = \localdata_a(i) \ne \localdata_a(i')$,
+\item if $e_i \leq l+1 < f_i$ then $\localdata(i) = \phi(\localdata_a(i)) \notin V$ and  $\localdata(i') \in V$ therefore $\localdata(i) \ne \localdata(i')$,
 \item if $f_i \leq l+1$ then $\localdata(i) = \localdata_b(i) \ne \localdata_b(i')$.
 \end{itemize}
+We treat the case $i \notin I$ and $i' \in I$ symmetrically.
 
-If $i \in I$ and $i' \in I$, recall that $e_i \leq M < f_{i'}$ and $e_{i'} \leq M < f_i$. Therefore, we again make a case disjunction on the value of $l+1$:
+If $i \in I$ and $i' \in I$, recall that $e_i \leq M < f_{i'}$ and $e_{i'} \leq M < f_i$ thus $e_i < f_{i'}$ and $e_{i'}< f_i$. We again make a case disjunction on the value of $l+1$:
 \begin{itemize}
-\item $l+1<e_i$ and $l+1 <e_{i'}$: $\localdata(i)= \localdata_a(i)$ and $\localdata(i)= \localdata_a(i)$, and because the "internal step" is valid in $\localrun_a$ we have $\localdata_a(i) \ne \localdata_a(i')$. 
-\item $e_i \leq l+1 < f_i$, $l+1<e_{i'}$: $\localdata(i) = \phi(\localdata_a(i)) \in \nats  \setminus V$, $\localdata(i') = \localdata_a(i') \in V$ therefore $\localdata(i') \ne \localdata(i)$.
+\item $l+1<e_i$ and $l+1 <e_{i'}$: $\localdata(i)= \localdata_a(i)$, $\localdata(i)= \localdata_a(i)$ and $\localdata_a(i) \ne \localdata_a(i')$. 
+\item $e_i \leq l+1 < f_i$, $l+1<e_{i'}$: $\localdata(i) = \phi(\localdata_a(i)) \notin V$, $\localdata(i') = \localdata_a(i') \in V$ therefore $\localdata(i') \ne \localdata(i)$.
 \item $e_{i'} \leq l+1 < f_{i'}$, $l+1<e_{i}$: symmetric to the previous case.
 \item $e_i \leq l+1 < f_i$, $e_{i'} \leq l+1 < f_{i'}$: $\localdata(i) = \phi(\localdata_a(i))$, $\localdata(i') = \phi(\localdata_a(i'))$; however $\localdata_a(i) \ne \localdata_a(i')$ and $\phi$ is injective hence $\localdata(i') \ne \localdata(i)$.
-\item $e_i \leq l+1 < f_i$, $f_{i'} \leq l+1$: $\localdata(i') = \localdata_b(i') \in V$, $\localdata(i) = \phi(\localdata_a(i) \in V$ hence $\localdata(i) \ne \localdata(i')$.
+\item $e_i \leq l+1 < f_i$, $f_{i'} \leq l+1$: $\localdata(i') = \localdata_b(i') \in V$, $\localdata(i) = \phi(\localdata_a(i)) \notin V$ hence $\localdata(i) \ne \localdata(i')$.
 \item $f_i \leq l+1$, $e_{i'} \leq l+1 < f_{i'}$: symmetric to the previous case.
-\item $f_i \leq l+1$, $f_{i'} \leq l+1$: $\localdata(i)= \localdata_b(i)$ and $\localdata(i)= \localdata_b(i)$, and because the "internal step" is valid in $\localrun_b$ we have $\localdata_b(i) \ne \localdata_b(i')$. 
+\item $f_i \leq l+1$, $f_{i'} \leq l+1$: $\localdata(i)= \localdata_b(i)$, $\localdata(i)= \localdata_b(i)$ and $\localdata_b(i) \ne \localdata_b(i')$. 
 \end{itemize}
 
 This proves that $\locallabel$ is valid from $(q,\localdata)$ which concludes the induction. 
 We have proven that $(q_1,\localdata_1) \step{\sigma} (q_4, \localdata_4)$; however $\sigma$ is of length $2M$ and there are at least $2M+1$ steps between $(q_1,\localdata_1)$ and $(q_4, \localdata_4)$ in $\localrun$. Therefore, replacing this part of $\localrun$ with $(q_1,\localdata_1) \step{\sigma} (q_4, \localdata_4)$ yields a "local run" $\localrun': (q_i, \localdata_i) \step{*} (q_f,\localdata_f)$ with strictly less steps that $\localrun$. 
 
 It remains to prove the conditions on the "$v$-inputs" of $\localrun'$. If suffices to prove the condition for the part between $(q_1, \localdata_1)$ to $(q_4, \localdata_4)$,
- because the rest of $\localrun$ is left untouched. Let $\tau$ the "schedule" of the suffix run of $\localrun$ from $(q_1, \localdata_1)$ to $(q_4, \localdata_4)$, so $(q_1,\localdata_1) \step{\tau} (q_4, \localdata_4)$. 
+ because the rest of $\localrun$ is left untouched. 
 
-Let $(q_m, \localdata_m)$ the "local configuration" after $M$ steps of $\sigma$ from $(q_1, \localdata_1)$; write $\localrun_1$ the local run from $(q_1,\localdata_1)$ to $(q_m, \localdata_m)$ corresponding to the first $M$ steps of $\sigma$, and $\localrun_2$ the "local run" from $(q_m, \localdata_m)$ to $(q_4, \localdata_4)$ corresponding to the last $M$ steps of $\sigma$.  
+Let $(q_m, \localdata_m)$ the "local configuration" after $M$ steps of $\sigma$ from $(q_1, \localdata_1)$; write $\localrun_1$ the local run from $(q_1,\localdata_1)$ to $(q_m, \localdata_m)$ corresponding to the first $M$ steps of $\sigma$ in $\localrun'$, and $\localrun_2$ the "local run" from $(q_m, \localdata_m)$ to $(q_4, \localdata_4)$ corresponding to the last $M$ steps of $\sigma$ in $\localrun'$.  
 
-Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\sigma$, the "external message" steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the second half. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval in V$. Note that this proves both required conditions for values in $V$, \emph{i.e.}, values appearing in $\localrun$.
+Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\sigma$, the "external message" steps in the first $M$ steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the last $M$ steps. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval \in V$ and values of $V$ satisfy conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues}. 
 
-Let $\aval' \in \nats \setminus V$. Either $\aval'$ does not appear in $\sigma$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "external message" steps with value $\phi(\aval)$ correspond to "external message" steps in $\localrun_a$ with value $\aval$, and similarly for the second half with $\localrun_b$. This proves the condition for every $\aval'$ that does not appear in $\localrun$.
+Let $\aval' \in \nats \setminus V$; $\aval$ does not appear in $\localrun$. Either $\aval'$ does not appear in $\sigma$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "external message" steps with value $\phi(\aval)$ correspond to "external message" steps in $\localrun_a$ with value $\aval$, and similarly for $\localrun_2$ and $\localrun_b$. This proves condition \ref{item:shorterrun_anyvalue} for every $\aval' \in \nats \setminus V$.
+Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues} and that is strictly shorter that $\localrun$, which proves the "shortening property".
 
-Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies the properties on the "$v$-inputs" and that is strictly shorter that $\localrun$. This process may be iterated to obtain a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$; on further iterations, one must simply make sure that fresh values chosen by $\phi$ appear in no message of previous iterations, \emph{i.e.}, that $V$ only increases at each iteration.	
+We build a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot})(\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup W$ where $W$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
+The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot})(\regnum)$, which concludes the proof of Lemma~\ref{lem:short-local-runs}. 	
+
+
+%Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies the properties on the "$v$-inputs" and that is strictly shorter that $\localrun$. This process may be iterated to obtain a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$; on further iterations, one must simply make sure that fresh values chosen by $\phi$ appear in no message of previous iterations, \emph{i.e.}, that $V$ only increases at each iteration.	
+
 \end{proof}
 \fi 
 
