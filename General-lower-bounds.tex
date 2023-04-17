@@ -77,16 +77,23 @@ We now prove that the coverability problem in BNRA is at least as hard as the re
 \ifproofs
 \begin{proof}
 It is in fact sufficient to prove that it is as hard as reachability for lossy channel systems with a single channel, which corresponds to a single finite-state machine that buffering symbols in a lossy FIFO channel \cite{Schnoebelen2002verifying}.
-Let $\los := (\lstates,\Sigma,\Delta)$ be a "lossy channel system", where $\lstates$ is a finite set of states, $\Sigma$ is a finite set of symbols and $\Delta \subseteq \lstates \times \Sigma^* \times \set{!, ?} \times \lstates$; $\quotemarks{!}$ corresponds to writing to the channel and $\quotemarks{?}$ to reading from the channel. A configuration of $\los$ is a pair of $\lstates \times \Sigma^*$ denoting the state of the system and the content of the channel. There exists a step from $(\alstate,w)$ to $(\alstate',w')$ using transition $\delta \in \Delta$, denoted $(\alstate,w) \lstep{\delta} (\alstate',w')$, when:
+Let $\los := (\lstates,\Sigma,\Delta)$ be a "lossy channel system", where $\lstates$ is a finite set of states, $\Sigma$ is a finite set of symbols and $\Delta \subseteq \lstates \times \Sigma^* \times \set{!, ?} \times \lstates$; $\quotemarks{!}$ corresponds to writing to the channel and $\quotemarks{?}$ to reading from the channel. A configuration of $\los$ is a pair of $\lstates \times \Sigma^*$ denoting the state of the system and the content of the channel. There exists a step from $(\alstate,w)$ to $(\alstate',w')$ using transition $\delta \in \Delta$, denoted $(\alstate,w) \lstep{\delta} (\alstate',w')$, when, by denoting $\subword$ for the "subword relation":
 \begin{itemize}
-\item $\delta = (\alstate,u,!,\alstate')$ for some $u \in \Sigma^*$ and $w' = w \cdot u$ ($u$ is written at the end of the channel), or
-\item $\delta = (\alstate,u,?,\alstate')$ for some $u \in \Sigma^*$ and $w = u \cdot w'$ ($u$ is read at the beginning of the channel).
+\item $\delta = (\alstate,u,!,\alstate')$ for some $u \in \Sigma^*$ and $w' \subword w \cdot u$ (a ""push"", $u$ is written at the end of the channel), or
+\item $\delta = (\alstate,u,?,\alstate')$ for some $u \in \Sigma^*$ and $u \cdot w' \subword w$ (a ""pop"", $u$ is read at the beginning of the channel).
 \end{itemize}
-The existence of such a transition for some $\delta \in \transitions$ is denoted $(\alstate,w) \lstep{} (\alstate',w')$, and its transitive closure is denoted $\lstep{*}$. The ""reachability problem@@lcs"" asks, given $\los$ and two states $\alstate_, \alstate_f \in \lstates$, whether $(\alstate_i,\epsilon) \step{*} (\alstate_f, \epsilon)$. 
+The lossiness of the channel is encoded with the subword relations (instead of equalities for non-lossy channels); intuitively, it expresses the fact that letters in the channel may get lost. 
+
+The existence of such a transition for some $\delta \in \transitions$ is denoted $(\alstate,w) \lstep{} (\alstate',w')$, and its transitive closure is denoted $\lstep{*}$. The ""reachability problem@@lcs"" asks, given $\los$ and two states $\alstate_i, \alstate_f \in \lstates$, whether $(\alstate_i,\epsilon) \step{*} (\alstate_f, \epsilon)$. 
 
 We aim at constructing a $2$-BNRA $\prot$ with a distinguished state $q_f$ such that $q_f$ may be covered if and only if $(\los, q_i, q_f)$ is a positive instance of the "reachability problem@@lcs".
+The intuition of $\prot$ is the following. Agents will form chains, each agent of the chain is meant to encode a configuration of $\lstates \times \Sigma$ along an execution of the "lossy channel system". 
+An agent of the chain will only listen to message of their predecessor in the chain, from which they will obtain a state of the system and the content of the channel. It will then broadcast the new state of the system and the new, modified content of the register to the next agent of the chain. 
 
-\nico{a finir}
+Note that the content of the channel might be big, therefore agents will not store it, but rather rebroadcast it letter by letter, only applying a small modification at the beginning of the channel word if it decides to apply a "pop" transition and and at the end of the channel if it decides to apply a "push" transition. Messages might get lost, which is why we are able to encode "lossy channel systems" but not non-lossy ones.
+
+In some initial phase, agents decide whether their are at the beginning of their chain or not. An agent that decides to be at the beginning of their chain receive no message; they simply broadcast their identifiers, followed by 
+It starts with a gadget allowed every agent to non-deterministically decide whether it is a
 \end{proof}
 \fi
 
