@@ -321,6 +321,7 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 	\label{lem:local-to-global}
 	If two protocols $\prot_1, \prot_2$ are such that for all local run $u_1$ of $\prot_1$, there is a local run $u_2$ of $\prot_2$ with the same initial values as $u_1$ and such that $\Input{u_1} = \Input{u_2}$ and $\Output{u_1} = \Output{u_2}$, then for all "boss specification" $bw \in \messages^*$, if $\prot_1$ has a run satisfying $\spec$ then so does $\prot_2$.
 \end{lemma}
+
 \cortoin{Only useful for the local equality test elimination}
 \ifproofs
 \begin{proof}
@@ -532,10 +533,11 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 
 
 \begin{lemma}
+	\label{lem:short-run-for-output}
 	Let $\prot$ be a "protocol", $\localrun$ a local run of $\prot$. 
 	Let $w_{in} \in (\messages\times \nats)^*$ be a subword of $\Output{\localrun}$.
 	
-	Then there is a run $\localrun'$ of $\prot$ such that $\size{\localrun'}\leq \towerfun(\size{\prot})(r) \size{w_{in}}$, $w_{in} \subword \Output{\localrun'}$ and  
+	Then there is a run $\localrun'$ of $\prot$ such that $\size{\localrun'}\leq \size{w_{in}} (\towerfun(\size{\prot})(r) +1)$, $w_{in} \subword \Output{\localrun'}$ and  
 	\begin{enumerate}
 		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item for all $\aval \in \nats$ appearing in some message in $\localrun$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
@@ -557,6 +559,7 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 	\end{itemize}
 
 	We now define $\localrun'$ as $(q_0, \nu_0) \step{u'_1} (q'_1, \nu'_1) \intstep{\delta_1} (q_1, \nu_1) \step{u'_2} (q'_2, \nu'_2) \intstep{\delta_2} (q_2, \nu_2) \cdots \step{u'_k}  (q'_k, \nu'_k) \intstep{\delta_k} (q_k, \nu_k)$. As the local steps $(q'_j, \nu'_j) \intstep{\delta_j} (q_j, \nu_j)$ are unchanged, we have $w_{in} \subword \Output{\localrun}$.
+	The length of $\localrun'$ is $k + \sum_{j=1}^{k} \length{u'_j} \leq \size{w_{in}} (\towerfun(\size{\prot})(r) +1)$.
 	
 	Moreover, for all $v' \in \nats$, 
 	\begin{itemize}
@@ -650,9 +653,17 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 	
 	Hence if $\size{\bosslabel{\node}} > \size{\localrunlabel{\node'}}$ we can obtain a "tree unfolding" smaller than $\tree$ and satisfying $w$, contradicting the minimality of $\tree$. As a result, $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$.
 	
-	We have shown the first two points of property 3. For the third one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "tree unfolding conditions" and then bound the number of steps between those broadcasts using Lemma~\ref{lem:short-local-runs}.
+	We have shown the first two points of property 3. For the third one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "tree unfolding conditions" and then bound the length of $\localrunlabel{\node}$ using Lemma~\ref{lem:short-run-for-output}.
 	
+	Let $v$ be an initial value of $\localrunlabel{\node}$. If $v = \valuelabel{\node}$ then by condition~\ref{unfoldingC1} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_1, \ldots, \node_{\ell_v}$ such that
+	\begin{itemize}
+		\item 
+	\end{itemize}
 	
+	 $\voutput{v}{}$
+	 for all $i$ $\followlabelword{\node_i} \in \langdecdown{\decsymb_{v,i}}$, with $\decsymb_{v,i}= (w_{v,0}, m_{v,1}, \ldots, w_{v,i-1})$, and $\followlabelmessage{\node_i} = m_i$. 
+	
+	By Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \followlabelword{\node_i}$ 
 	\cortoin{TO FINISH}
 \end{proof}
 \fi
