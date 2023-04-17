@@ -73,7 +73,6 @@ We say that a local run is cheaper than another one if the set of children it sp
 \subsection{Formal proof}
 \fi
 
-
 \textbf{For now we assume that the BRNA do not contain $*$ operations and apply only one operation for each message received. The general case reduces to this one (lemma \ref{lem:simple-reduction}).}
 
 % \begin{definition}
@@ -120,7 +119,7 @@ We start by proving that we may in fact get rid of local equality tests:
 	There exists an exponential-time reduction from the "coverability problem" to the coverability problem on protocols with no "local equality tests" $\loc{i}{j}{=}$.
 \end{restatable}
 
-The proof can be found in Appendix~\ref{sec:proof-simple}. In fact, the exponential cost of the reduction will have no impact the complexity results proven below.
+The proof can be found in Appendix~\ref{sec:proof-simple} \corto{A corriger}. In fact, the exponential cost of the reduction will have no impact the complexity results proven below.
 In the following, we will assume that the considered protocol has no "local equality tests". 
 
 A key ingredient of our construction is the decomposition of words of messages. Say we have an execution and a value $v$ such that the sequence of messages broadcast in that execution with value $v$ is $w$. Let $w'$ the subword of $w$ of messages sent by the agent $a$ which had that value originally. Let $m$ be the first message sent by another agent with value $v$. This means that from the messages sent by $a$ before there is a set of agents that receives some of these messages and eventually sends back message $m$ with value $v$. An important remark is that we can copy this set of agents many times to obtain as many broadcasts with message $m$ and value $v$ as we want from this point in the run.
@@ -158,7 +157,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 		\item[C1\namedlabel{unfoldingC1}{C1}] If it is a "boss node" then:
 		\begin{itemize} 
 			\item $\aval$ is an initial value of $\localrun$, 
-			\item $\bosslabel{\node}$ decomposes as $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$, 
+			\item there exists a "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that $\bosslabel{\node} \in \langdecdown{\decsymb}$, 
 			\item $\localrun$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $\voutput{\aval}{\localrun_i} \subword w_i$ and $\vinput{\aval}{\localrun_i} \in \set{m_0, \dots, m_{i-1}}^*$, and
 			\item  for all $i \in [1,\ell]$, $\node$ has a child $\node_i$ which is a "follower node" such that $\followlabelmessage{\node_i} = m_i$ and $\followlabelword{\node_i} \in\langdecdown{\decsymb_i}$ where $\decsymb_i = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.
 		\end{itemize}
@@ -222,9 +221,9 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 
 
 \begin{definition}
-	A "run" $\run$ satisfies a boss specification $\bossspec$ if there exists $\aval \in \nats$ such that $\bossspec$ is the sequence of messages sent with value $\aval$ through $\run$.
+	A "run" $\run$ satisfies a boss specification $\bossspec$ if there exists $\aval \in \nats$ such that $\bossspec$ is a subword of the sequence of messages sent with value $\aval$ through $\run$.
 	
-	A "run" $\run$ satisfies a follower specification $(\followwordspec, \followmessagespec)$ if there exists a value $\aval$ and an agent $a$ such that $\aval$ is not an initial value of $a$, the $\aval$-input of $a$ in $\run$ is $\followwordspec$ and agent $a$ broadcasts $\followmessagespec$ with value $\aval$ at some point.
+	A "run" $\run$ satisfies a follower specification $(\followwordspec, \followmessagespec)$ if there exists a value $\aval$ and an agent $a$ such that $\aval$ is not an initial value of $a$, the $\aval$-input of $a$ in $\run$ is a subword of $\followwordspec$ and agent $a$ broadcasts $\followmessagespec$ with value $\aval$ at some point.
 	
 	A "tree unfolding" satisfies a boss specification $\bossspec$ if its root $\node$ is a "boss node" and $\bossspec$ is a subword of its specification label $\bosslabel{\node}$.
 	A "tree unfolding" satisfies a follower specification $(\followwordspec, \followmessagespec)$ if its root $\node$ is a "follower node" such that $\followmessagespec=\followlabelmessage{\node}$ and  $\followlabelword{\node}$ is a subword of $\followwordspec$.
@@ -247,56 +246,56 @@ When building the run a follower node means that there exists a "partial run" wh
 \ifproofs
 \begin{proof}
 	
-	We proceed by strong induction on the lexicographic order on $\nats \times \set{boss, follower}$ with the length of $\run$ as the first component and the type of specification as the second, "boss" being considered higher than "follower". 
+	We proceed by strong induction on the lexicographic order on $\nats \times \set{boss, follower}$ with the length of $\run$ as the first component and the type of specification as the second, ``boss'' being considered higher than ``follower''. 
 	
-	Let $\run$ be a run, $\spec \in \messages^* \cup \decset{\messages}$ a specification, assume the property is satisfied for all lower pairs of runs and specifications. We construct a root and attach subtrees to it so that conditions \ref{unfoldingC1} to \ref{unfoldingC3} are satisfied 
+	Let $\run$ be a run, $\spec \in \messages^* \cup \messages^* \times \messages$ a specification, assume the property is satisfied for all lower pairs of runs and specifications. We construct a root and attach subtrees to it so that conditions \ref{unfoldingC1} to \ref{unfoldingC3} are satisfied 
 	
-	We split our construction in four parts. The first part applies if $spec$ is a "boss specification", the second one if $spec$ is a "follower specification". 
-	Those parts construct a local run $u$ and a value $v$, as well as the root and some children so that conditions \ref{unfoldingC1} and \ref{unfoldingC2} are satisfied.
+	We split our construction in four parts. The first part applies if $\spec$ is a "boss specification", the second one if $spec$ is a "follower specification". 
+	Those parts construct a root labelled with a local run $u$ and a value $v$, as well as some children so that conditions \ref{unfoldingC1} and \ref{unfoldingC2} are satisfied.
 	
-	The third and fourth part construct children so that \ref{unfoldingC3.1} and \ref{unfoldingC3.2} are satisfied, respectively.
+	The third and fourth part add children so that \ref{unfoldingC3.1} and \ref{unfoldingC3.2} are satisfied, respectively.
 	
 	\textbf{Case 1: The specification is a "boss specification"}
 	
-	Assume $spec$ is a "boss specification" $spec = w \in \messages^*$.
-	There exists a value $v$ such that $w$ is a subword of the sequence of messages broadcast with value $v$ through $\run$. Let $w'$ be the latter sequence.
-	If $w$ is empty then the tree decomposition with one node labelled with an empty local run, any value and $w$ satisfies $w$.	
+	Assume $\spec$ is a "boss specification" $\spec = \bossspec \in \messages^*$.
+	There exists a value $v$ such that $\bossspec$ is a subword of the sequence of messages broadcast with value $v$ through $\run$. Let $w$ be the latter sequence.
+	If $\bossspec$ is empty then the tree decomposition with one node labelled with an empty local run, any value and $\bossspec$ satisfies $\bossspec$.	
 	
-	Otherwise let $a$ be the agent which has $v$ as an initial value, let $u$ be its local run in $\run$. We set $u$, $v$ and $w'$ to be the labels of the root of the tree unfolding we are constructing.
-	We decompose $w'$ as $(w'_0, m_1, w'_1, \ldots, m_\ell, w'_\ell)$, where $w'_0\cdots w'_\ell$ is the sequence of messages broadcast by $a$ with value $v$, and the $(m_j)_{1\leq j\leq \ell}$ are the elements of $\messages$, placed at the times at which they are first broadcast by an agents other than $a$ with value $v$. If there is no such broadcast of a message $m$, then it does not appear as an $m_j$. This forms a "decomposition" of $w'$.
+	Otherwise let $a$ be the agent which has $v$ as an initial value, let $u$ be its local run in $\run$. We set $u$, $v$ and $w$ to be the labels of the root of the tree unfolding we are constructing.
+	We decompose $w$ as $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$, where $w_0\cdots w_\ell$ is the sequence of messages broadcast by $a$ with value $v$, and the $(m_j)_{1\leq j\leq \ell}$ are the elements of $\messages$, placed at the times at which they are first broadcast by an agents other than $a$ with value $v$. If there is no such broadcast of a message $m$, then it does not appear as an $m_j$. This forms a "decomposition" of $w'$.
 		
-	For all $1 \leq j \leq \ell$ let us write $\decsymb_j$ for the "decomposition" $(w'_0, m_1, w'_1, \ldots, m_{j-1}, w'_{j-1})$. Let $\run_j$ be the prefix of $\run$ up until the first broadcast of $m_j$ with $v$ by some agent $a$ that does not have $v$ as an initial value, and let $\run'_j$ be $\run_j$ without that last step. By definition of $\decsymb$, the sequence of broadcasts with value $v$ in $\run'_j$ "decomposes as" $\decsymb_j$.
-	In particular, the $v$-input of $a$ before it broadcasts $m_j$ with $v$ must decompose as $\decsymb_j$.
+	For all $1 \leq j \leq \ell$ let us write $\decsymb_j$ for the "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$. Let $\run_j$ be the prefix of $\run$ up until the first broadcast of $m_j$ with $v$ by some agent $a_j$ that does not have $v$ as an initial value, and let $\run'_j$ be $\run_j$ without that last step. By definition of $\decsymb$, the sequence of broadcasts with value $v$ in $\run'_j$ "decomposes as" $\decsymb_j$.
+	In particular, the $v$-input $w'_j$ of $a_j$ before it broadcasts $m_j$ with $v$ must decompose as $\decsymb_j$.
 	 
-	Hence $(\decsymb_j, m_j)$ is a "follower specification" satisfied by $\run_j$, which has a length smaller or equal to the one of $\run$. By induction hypothesis (recall that we make our induction on the length of $\run$ and on the type of specification), there is a "tree unfolding" satisfying it.
+	Hence $(w'_j, m_j)$ is a "follower specification" satisfied by $\run_j$, which has a length smaller or equal to the one of $\run$. By induction hypothesis (recall that we make our induction on the length of $\run$ and on the type of specification), there is a "tree unfolding" satisfying it.
 	
 	We put that "tree unfolding" as a child of our root, hence we satisfy \ref{unfoldingC1}. We satisfy \ref{unfoldingC2} as the root we constructed is not a "follower node".
 	
 	\textbf{Case 2: The specification is a "follower specification"} 
 	
-	Assume $\spec$ is a "follower specification" $\spec = \decsymb \in \decset{\messages}$. 
-	There exists a value $v$, an agent $a$ and a decomposition $\decsymb' \in \decset{\messages}$ such that $\decsymb \subdec \decsymb'$ and the $v$-input of the local run $u$ of $a$ decomposes as $\decsymb'$. 
+	Assume $\spec$ is a "follower specification" $\spec = (\followwordspec, \followmessagespec) \in \messages^* \times \messages$. 
+	There exists a value $v$ and an agent $a$ with a local run $u$ whose $v$-input $w$ is a subword of $\followwordspec$ and whose output contains $\followmessagespec$. 
 	
-	We set our root to have as labels $u$, $v$ and $\decsymb'$, thus satisfying \ref{unfoldingC2}. We satisfy \ref{unfoldingC1} as the root is not a "boss node".
+	We set our root to have as labels $u$, $v$ and $w$, thus satisfying \ref{unfoldingC2}. We satisfy \ref{unfoldingC1} as the root is not a "boss node".
 	
 	\textbf{In both cases}
 	
 	We have constructed an agent $a$ and a value $v$ and set our root to be labelled by the local run $u$ of $a$ and $v$, and added children to that root so that conditions \ref{unfoldingC1} and \ref{unfoldingC2} are satisfied. We will now add some more children to satisfy condition \ref{unfoldingC3}.
 	
-	We can assume that the last step of $\run$ is a broadcast of a message with value $v$, as otherwise we can erase its last step to get a run that still satisfies the specification, but has a smaller length than $\run$, hence we can apply the induction hypothesis.
+	We can assume that the last step of $\run$ is a broadcast of a message with value $v$, as otherwise we can erase its last step to get a run that still satisfies the specification, but has a smaller length than $\run$, and apply the induction hypothesis.
 	
 	Let $v' \neq v$ be a value broadcast or received in $u$. 
 	
 	\begin{itemize}
-		\item If $v'$ is an initial value of $u$ then let $w'$ be the $v'$-"output" of $u$. Let $\decsymb' = (w'_0, m_1, w_1, \ldots, w'_k)$ be such that $w' = w'_0 \cdots w'_k$ and the $m_i$ mark the first time another agent sends each message of $\messages$ with value $v'$ in $\run$.  
+		\item If $v'$ is an initial value of $u$ then let $w'$ be the $v'$-output of $u$. Let $\decsymb' = (w'_0, m_1, w_1, \ldots, w'_k)$ be such that $w' = w'_0 \cdots w'_k$ and the $m_i$ mark the first time another agent sends each message of $\messages$ with value $v'$ in $\run$, if that happens.  
 		
 		For all $j \in [1,k]$, all receptions of $m_j$ with value $v'$ in $u$ must happen after another agent has managed to broadcast it, hence after broadcasts of $w'_0 \cdots w'_{j-1}$ with value $v'$ have happened in $u$, by definition of $\decsymb'$.
 		
-		Let $j \in [1,k]$, let $a_j$ be the first agent other than $a$ to broadcast $m_j$ with value $v'$, and let $\run_j$ be the prefix of $\run$ up until that broadcast. The $v'$-input of $a_j$ in $\run_j$ is a subword of the sequence of messages broadcast with value $v'$ in $\run_j$, which decomposes as $\decsymb_j = (w'_0, m_1, w_1, \ldots, w'_{j-1})$.
+		Let $j \in [1,k]$, let $a_j$ be the first agent other than $a$ to broadcast $m_j$ with value $v'$, and let $\run_j$ be the prefix of $\run$ up until that broadcast. The $v'$-input $w''_j$ of $a_j$ in $\run_j$ is a subword of the sequence of messages broadcast with value $v'$ in $\run_j$, which decomposes as $\decsymb'_j = (w'_0, m_1, w_1, \ldots, w'_{j-1})$, hence $w''_j \in \langdecdown{\decsymb'_j}$.
 		
 		As the last step of $\run$ is a broadcast of $v$ and $v' \neq v$, all $\run_j$ are shorter than $\run$. Furthermore for all $j$, $\run_j$ satisfies the specification $(\decsymb_j, m_j)$.		
 		
-		By induction hypothesis, for all $j$ there exists a "tree unfolding" satisfying $(\decsymb_j, m_j)$. We add all those trees as children of our root.
+		By induction hypothesis, for all $j$ there exists a "tree unfolding" satisfying $(w''_j, m_j)$. We add all those trees as children of our root.
 		
 		\item If $v'$ is not an initial value of $u$ then let $w'$ be the $v'$-input of $u$. 
 		 As $\run$ ends with a broadcast of $v$ and $v' \neq v$, we can remove the last step of $\run$ to obtain a run $\run'$. As $w'$ is a subword of the sequence of messages broadcast in $\run$ with value $v'$, it is also the case for $\run'$.
@@ -315,13 +314,14 @@ When building the run a follower node means that there exists a "partial run" wh
 	If there exists a finite "tree unfolding" labelled by local runs of $\prot$ satisfying a "boss specification" $bw \in \messages^*$ then there exists  a finite "run" $\run$ of $\prot$ satisfying $bw$.
 \end{restatable}
 
-The proof can be found in the appendix.
+The proof can be found in Appendix~\ref{app:tree-to-run}.
 
 
 \begin{lemma}
 	\label{lem:local-to-global}
 	If two protocols $\prot_1, \prot_2$ are such that for all local run $u_1$ of $\prot_1$, there is a local run $u_2$ of $\prot_2$ with the same initial values as $u_1$ and such that $\Input{u_1} = \Input{u_2}$ and $\Output{u_1} = \Output{u_2}$, then for all "boss specification" $bw \in \messages^*$, if $\prot_1$ has a run satisfying $\spec$ then so does $\prot_2$.
 \end{lemma}
+\cortoin{Only useful for the local equality test elimination}
 \ifproofs
 \begin{proof}
 	We infer this statement from the "tree unfoldings".
@@ -344,10 +344,11 @@ The proof can be found in the appendix.
 
 
 \begin{lemma}
+	\label{lem:increasing-bosses}
 	Let $\tree$ be a "tree unfolding" satisfying a specification $\spec$.
-	Let $\node, \node'$ be two "boss nodes" of $\tree$, $\bossspec$ and $\bossspec'$ their specification labels.
+	Let $\node, \node'$ be two "boss nodes" of $\tree$.
 	
-	If $\node$ is an ancestor of $\node'$ and $\bossspec$ is a subword of $\bossspec'$ then there exists a smaller "tree unfolding" satisfying $\spec$.  
+	If $\node$ is an ancestor of $\node'$ and $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$ then there exists a smaller "tree unfolding" satisfying $\spec$.  
 \end{lemma}
 
 \ifproofs
@@ -355,46 +356,39 @@ The proof can be found in the appendix.
 	Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
 	Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
 	
-	If $\node$ is the root of $\tree$, then $\tree'$ is a "tree unfolding" with $\node'$ as root. As $\node$ is a "boss node" and $\tree$ satisfies $spec$, $spec$ is a "boss specification", and a subword of $w$. 
-	As $w$ is a subword of $w'$, $spec$ is a subword of $w'$ and thus $\tree'$ satisfies $spec$.
+	If $\node$ is the root of $\tree$, then $\tree'$ is a "tree unfolding" with $\node'$ as root. As $\node$ is a "boss node" and $\tree$ satisfies $\spec$, $\spec$ is a "boss specification", and a subword of $\bosslabel{\node}$.
+	As $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$, $\spec$ is a subword of $\bosslabel{\node'}$ and thus $\tree'$ satisfies $\spec$.
 	
-	If  $\node'$ is not the root of $\tree'$ then let $\node''$ be the father of $\node$. We have to check that $\tree'$ is a "tree unfolding". 
-	All nodes other than $\node''$ have the same children as before, thus the conditions of "tree unfoldings" are still respected for them.
+	If $\node$ is not the root of $\tree$ then let $\node''$ be its father. We have to check that $\tree'$ is a "tree unfolding". 
+	All nodes other than $\node''$ have the same label and children as before, thus the conditions of "tree unfoldings" are still respected for them.
 	As for $\node''$, it has the same "follower" children, hence conditions \ref{unfoldingC1} and \ref{unfoldingC3.1} are respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
 	
-	Finally, let $u''$ be the "local run" labelling $\node''$ and let $v'$ be a value that is not initial in $u''$. Either $\node''$ has a "boss" child other than $\node'$ such that $\vinput{v'}{u''}$ is a subword of its label, or $\vinput{v'}{u''}$ is a subword of $w$, which is a subword of $w'$, hence condition \ref{unfoldingC3.2} is satisfied. 
+	Finally, let $v'$ be a value that is not initial in $\localrunlabel{\node''}$. Either $\node''$ has a "boss" child other than $\node'$ such that $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of its label, or $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of $\bosslabel{\node}$, which is a subword of $\bosslabel{\node'}$, hence condition \ref{unfoldingC3.2} is satisfied. 
 	
-	As a result, in both cases $\tree'$ is a "tree unfolding" smaller than $\tree$ that satisfies $spec$. 
+	As a result, in both cases $\tree'$ is a "tree unfolding" smaller than $\tree$ that satisfies $\spec$. 
 \end{proof}
 \fi
 
 \begin{lemma}
-	Let $\tree$ be a "tree unfolding" satisfying a specification $spec$.
-	Let $\node, \node'$ be two "follower nodes" of $\tree$, $(\decsymb,m)$ and $(\decsymb',m')$ the associated specifications.
-	If $\node$ is an ancestor of $\node'$, $\decsymb' \subdec \decsymb$ and $m=m'$ then there exists a smaller "tree unfolding" satisfying $spec$. 
+	\label{lem:increasing-followers}
+	Let $\tree$ be a "tree unfolding" satisfying a specification $\spec$.
+	Let $\node, \node'$ be two "follower nodes" of $\tree$.
+	If $\node$ is an ancestor of $\node'$, $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$ then there exists a smaller "tree unfolding" satisfying $\spec$. 
 \end{lemma}
 
 \ifproofs
 \begin{proof}
-		Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
+	Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
 	Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
 	
-	If $\node$ is the root of $\tree$, then $\tree'$ is a "tree unfolding" with $\node'$ as root. As $\node$ is a "follower node" and $\tree$ satisfies $spec$, $spec$ is a "follower specification". Let $(\decsymb_{spec}, m_{spec}) = spec$, we have $\decsymb \preceq \decsymb_{spec}$ and $m = m_{spec}$. 
-	Hence we have $\decsymb' \preceq \decsymb \preceq \decsymb_{spec}$ and $m' = m = m_{spec}$, thus $\tree'$ satisfies $spec$.
+	If $\node$ is the root of $\tree$, then $\tree'$ is a "tree unfolding" with $\node'$ as root. As $\node$ is a "follower node" and $\tree$ satisfies $\spec$, $\spec$ is a "follower specification". Let $(\followwordspec, \followmessagespec) = \spec$, we have $\followlabelword{\node} \subword \followwordspec$ and $\followlabelmessage{\node} = \followmessagespec$. 
+	Hence we have $\followlabelword{\node'} \subword \followlabelword{\node} \subword \followwordspec $ and $\followlabelmessage{\node'} = \followlabelmessage{\node} = \followmessagespec$, thus $\tree'$ satisfies $\spec$.
 	
-	If  $\node'$ is not the root of $\tree'$ then let $\node''$ be the father of $\node$. We have to check that $\tree'$ is a "tree unfolding". 
+	If  $\node$ is not the root of $\tree$ then let $\node''$ be the father of $\node$. We have to check that $\tree'$ is a "tree unfolding". 
 	All nodes other than $\node''$ have the same children as before, thus the conditions of "tree unfoldings" are still respected for them.
 	As for $\node''$, it has the same "boss" children, hence condition \ref{unfoldingC3.2} is respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
 	
-	Let $u''$ and $v''$ be the local run and value labelling $\node''$.
-	For condition \ref{unfoldingC1}, suppose $\node''$ is a "boss node" labelled by a word $w''$, then $v''$ is an initial value in $u''$. There exists a decomposition $\decsymb'' = (w_0, m_1, \ldots, w_\ell)$ such that $\voutput{v''}{u''} = w_0\cdots w_\ell$, $w''\in \langdecdown{\decsymb}$ and for all $j \in [1,\ell]$, $\node''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subdec (w_0, m_1, \ldots, w_{j-1})$ in $\tree$.
-	For all $j$, either $\node''$ has a child labelled $(\decsymb,m_j)$ with $\decsymb \subdec (w_0, m_1, \ldots, w_{j-1})$ in $\tree$ besides $\node$, in which case this child is still there in $\tree'$, or $\node$ is labelled $(\decsymb,m_j)$ for some $\decsymb \subdec (w_0, m_1, \ldots, w_{j-1})$, in which case $\node'$ is labelled $(\decsymb', m_j)$ with  $\decsymb' \subdec \decsymb \subdec (w_0, m_1, \ldots, w_{j-1})$.
-	Condition \ref{unfoldingC1} is still satisfied.
-	
-	Finally, let $v' \neq v''$ an initial value of $u$ broadcast or received at some point.
-	Then there exists a decomposition $\decsymb'' = (w'_0, m'_1, \ldots, w'_\ell)$ such that $\voutput{v''}{u''} = w'_0\cdots w'_\ell$, and for all $j \in [1,\ell]$, all receptions of $m'_j$ with value $v'$ in $u''$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in [1,\ell]$ $\node$ has a child in $\tree$ which is a "follower node" with a label $\decsymb \subdec (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
-	If that child is not $\node$ then it is still there in $\tree'$. If it is $\node$, in $\tree'$ $\node''$ has $\node'$ as child, with a label $\decsymb' \subdec \decsymb \subdec (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
-	In both cases condition \ref{unfoldingC3.1} is satisfied.
+	For conditions \ref{unfoldingC1} and \ref{unfoldingC3.1}, we can check that they are still satisfied by observing that since $\followlabelword{\node'} \subword \followlabelword{\node}$, for all "decomposition" $\decsymb$, if $\followlabelword{\node} \in \langdecdown{\decsymb}$ then $\followlabelword{\node'} \in \langdecdown{\decsymb}$. One can see that both conditions are satisfied by using the same "decompositions" and applying this fact.
 	
 	As a result, in both cases $\tree'$ is a "tree unfolding" smaller than $\tree$ that satisfies $\spec$. 
 \end{proof}
@@ -405,10 +399,8 @@ The proof can be found in the appendix.
 
 % \begin{figure}
 % 	\input{Figures/fig-illustration-pumping}
-% 	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. Lines correspond to registers, and vertical separations are times at which the value of that register changes. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed. We can then obtain a shorter run by glueing them together as in the picture.}
+% \caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. Lines correspond to registers, and vertical separations are times at which the value of that register changes. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed. We can then obtain a shorter run by glueing them together as in the picture.}
 % \end{figure}
-
-
 
 
 \begin{lemma}
@@ -522,56 +514,89 @@ Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of
 
 Let $\aval' \in \nats \setminus V$. Either $\aval'$ does not appear in $\sigma$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "external message" steps with value $\phi(\aval)$ correspond to "external message" steps in $\localrun_a$ with value $\aval$, and similarly for the second half with $\localrun_b$. This proves the condition for every $\aval'$ that does not appear in $\localrun$.
 
-Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies the properties on the "$v$-inputs" and that is strictly shorter that $\localrun$. This process may be iterated to obtain a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$; on further iterations, one must simply make sure that fresh values chosen by $\phi$ appear in no message of previous iterations, \emph{i.e.}, that $V$ only increases at each iteration.
-
-	% We will show the following result, which directly implies the lemma:
-	% Let $\prot$ be a protocol with $r$ registers, let $u$ be a "local run" of $\prot$ from "local configuration" $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$ with an input $I$. If $\size{u} \geq TOWER$, then there exists a shorter local run $u'$ from $(q_0, \nu_0)$ to $(q_{end}, \nu_{end})$, with a smaller "input" and such that the sequence of local actions in $u'$ is a subword of the one in $u$.
-	% We proceed by induction on $r$.
-	
-	% If $r=0$ then if $\size{u} > TOWER = \size{Q}$ then $u$ visits twice the same state, hence the same local configuration as there are no registers, and the sequence between those two moments can be deleted, yielding the result.
-	
-	% Let $r>0$, suppose the proposition holds for $r-1$.
-	% Let $u$ be a run of $\prot$, a protocol with $r$ registers, with $\size{u} > TOWER$.
-	
-	% \begin{itemize}
-	% 	\item If there exists $i \in [1,r]$ such that $u$ has a factor $u_f$ in which the value of register $i$ does not change and with $\size{u_f} > TOWER$, then let $\Tilde{\prot}$ be $\prot$ where every operation $op$ over $i$ has been replaced with a local action $a_{op}$. Note that $\Tilde{\prot}$ only uses $r-1$ registers. 
-	% 	Let $\Tilde{u_f}$ be the run following $u_f$ in $\prot$, where every transition $q \xrightarrow{op} q'$ with an operation on $i$ has been replaced with $q \xrightarrow{a_{op}} q'$.
-		
-	% 	By induction hypothesis we have that there exists $\Tilde{u'_f}$ shorter than $\Tilde{u_f}$, with the same start and end local configurations, a smaller input, and a sequence of local actions that is a subword of the one of $\Tilde{u_f}$.
-		
-	% 	We conclude that the corresponding sequence of transitions $u_f'$ in $\prot$ is a local run with the same initial and final local configurations as $u_f$, as the value of register $i$ stays the same throughout both runs. By replacing $u_f$ with $u_f'$ in $u$, we obtain a shorter local run $u'$ of $\prot$. Let $v$ be the value that register $i$ keeps through $u_f$, the $v$-input of $u'$ 
-		
-	% 	\item If no register keeps the same value for more than $TOWER$ steps, then any run $u$ of length at least $M_{r-1} ((\size{\Delta})^{M_{r-1}} +1)$ can be split into $(\size{\Delta})^{M_{r-1}} +1$ segments of size $M_{r-1}$. There are $\size{\Delta}^{M_{r-1}}$ different sequences of transitions, thus by the pigeonhole principle we have $u = \pi_1 \sigma_1 \pi_2 \sigma_2 \pi_3$ with $\size{\sigma_1} = \size{\sigma_2} = M_{r-1}$ and such that  $\sigma_1$ and $\sigma_2$ have the same sequence of transitions.
-		
-	% 	Furthermore as all registers change their values every $M_{r-1}$ steps, we know that $\sigma_1$ and $\sigma_2$ contain operations of the form $\rec{m}{i}{\enregact}$ for all $i \in [1,r]$.
-		
-	% 	Let $(q_1, \nu_1)$ be the local configuration at the beginning of $\sigma_1$, $(q_2, \nu_2)$ the one at the end of $\sigma_2$.
-	% 	\cortoin{TO FINISH}
-	% \end{itemize}
-	
+Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies the properties on the "$v$-inputs" and that is strictly shorter that $\localrun$. This process may be iterated to obtain a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$; on further iterations, one must simply make sure that fresh values chosen by $\phi$ appear in no message of previous iterations, \emph{i.e.}, that $V$ only increases at each iteration.	
 \end{proof}
 \fi 
 
 \begin{remark}
-	The tower bound of Lemma~\ref{lem:short-local-runs} is tight, in the sense that some local runs may need to have length a tower of exponentials of height the number of registers.
+	The tower bound of Lemma~\ref{lem:short-local-runs} is tight, in the sense that some local runs may need to have length a tower of exponentials of linear height in the number of registers.
 	It also holds for pushdown automata, and for all transition systems which have some kind of pumping lemma.
+	\cortoin{To formalize}
 \end{remark}
+
+
+\begin{lemma}
+	Let $\prot$ be a "protocol", $\localrun$ a local run of $\prot$. 
+	Let $w_{in} \in (\messages\times \nats)^*$ be a subword of $\Output{\localrun}$.
+	
+	Then there is a run $\localrun'$ of $\prot$ such that $\size{\localrun'}\leq \towerfun(\size{\prot})(r) \size{w_{in}}$, $w_{in} \subword \Output{\localrun'}$ and  
+	\begin{enumerate}
+		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item for all $\aval \in \nats$ appearing in some message in $\localrun$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	Let $(m_1, v_1) \cdots (m_k, v_k) = w_{in}$, as $w_{in} \subword \Output{\localrun}$ we can split $\localrun$ into $(q_0, \nu_0) \step{u_1} (q'_1, \nu'_1) \intstep{\delta_1} (q_1, \nu_1) \step{u_2} (q'_2, \nu'_2) \intstep{\delta_2} (q_2, \nu_2) \cdots \step{u_k}  (q'_k, \nu'_k) \intstep{\delta_k} (q_k, \nu_k) \step{u_{k+1}} (q'_{k+1}, \nu'_{k+1})$ where for all $j \in [1,k]$ $\delta_i$ applies a broadcast operation $\br{m_j}{i_j}$ with $\nu'_{j} (i_j) = v_j$.
+	
+	By Lemma~\ref{lem:short-local-runs}, for all $j \in [1,k]$ there exists a run $\Tilde{\localrun}_j$ of length $\length{\Tilde{\localrun}_j} \leq \towerfun(\size{\prot})(r)$ from $(q_{j-1}, \nu_{j-1})$ to $(q'_{j}, \nu'_{j})$ such that for all $v' \in \nats$, either $\vinput{v'}{\Tilde{\localrun}_j} \subword \vinput{v'}{\localrun_j}$ or $v'$ does not appear in $\localrun_j$ and there exists $v \in \nats$ such that $\vinput{v'}{\Tilde{\localrun}_j} \subword \vinput{v}{\localrun_j}$.
+	
+	For each $j$, we can apply an injective renaming to the values in $\Tilde{\localrun}_j$ so that all values appearing in the "local configurations" $(q_{j-1}, \nu_{j-1})$ and $(q'_{j}, \nu'_{j})$ stay the same and all others are mapped to fresh distinct values. We call the resulting run $\localrun'_j$.
+	
+	This way all values appearing in $\localrun'_j$ only appear there, besides those in $(q_{j-1}, \nu_{j-1})$ and $(q'_{j}, \nu'_{j})$. As the values in the start and end configurations are the same, $\localrun'_j$ is still a "local run" from $(q_{j-1}, \nu_{j-1})$ to $(q'_{j}, \nu'_{j})$. Further, for all $v' \in \nats$,
+	\begin{itemize}
+		\item either $v'$ appears in $(q_{j-1}, \nu_{j-1})$ or $(q'_{j}, \nu'_{j})$, hence in $\localrun_j$, and $\vinput{v'}{\localrun'_j} = \vinput{v'}{\Tilde{\localrun}_j} \subword \vinput{v'}{\localrun_j}$,
+		
+		\item or $v'$ does not appear in $(q_{j-1}, \nu_{j-1})$ or $(q'_{j}, \nu'_{j})$, hence by definition of $\localrun'_j$ it is a fresh value \corto{define fresh} and in particular it does not appear in $\localrun_j$. There exists a value $\Tilde{v}$ of $\Tilde{\localrun}$ such that $\vinput{v'}{\localrun'} = \vinput{\Tilde{v}}{\Tilde{\localrun}}$ and by definition of $\Tilde{\localrun}$ there exists $v$ such that $\vinput{\Tilde{v}}{\Tilde{\localrun}_j} \subword \vinput{v}{\localrun_j}$, thus $\vinput{v'}{\localrun'_j} \subword \vinput{v}{\localrun_j}$.
+	\end{itemize}
+
+	We now define $\localrun'$ as $(q_0, \nu_0) \step{u'_1} (q'_1, \nu'_1) \intstep{\delta_1} (q_1, \nu_1) \step{u'_2} (q'_2, \nu'_2) \intstep{\delta_2} (q_2, \nu_2) \cdots \step{u'_k}  (q'_k, \nu'_k) \intstep{\delta_k} (q_k, \nu_k)$. As the local steps $(q'_j, \nu'_j) \intstep{\delta_j} (q_j, \nu_j)$ are unchanged, we have $w_{in} \subword \Output{\localrun}$.
+	
+	Moreover, for all $v' \in \nats$, 
+	\begin{itemize}
+		\item either $v'$ appears in $\localrun$, then for all $j$ 
+		\begin{itemize}
+			\item either $v'$ appears in $(q_{j-1}, \nu_{j-1})$ or $(q'_{j}, \nu'_{j})$, in which case it appears in $\localrun_j$ hence $\vinput{v'}{\localrun'_j} \subword \vinput{v'}{\localrun_j}$,
+			
+			\item or $v'$ does not appear in $(q_{j-1}, \nu_{j-1})$ or $(q'_{j}, \nu'_{j})$, hence $\vinput{v'}{\localrun'_j} = \epsilon$ after the renaming.
+		\end{itemize}
+		As a consequence, for all $j$ we have $\vinput{v'}{\localrun'_j} \subword \vinput{v'}{\localrun_j}$, thus $\vinput{v'}{\localrun'} \subword \vinput{v'}{\localrun}$.
+		
+		\item or $v'$ does not appear in $\localrun$, thus by definition of $\localrun'_j$ it appears in at most one of the $\localrun'_j$ and if there is such a $j$ then there exists $v \in \nats$ such that $\vinput{v'}{\localrun'_j} \subword \vinput{v}{\localrun_j}$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
+	\end{itemize}
+	This concludes our proof.
+\end{proof}
 
 \begin{lemma}
 	\label{lem:short-dec}
-	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a decomposition, and for all $i\in [0,\ell]$ let $\decsymb_i = (w_0, \ldots, w_i)$.
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a decomposition, and for all $i\in [0,\ell]$ let $\decsymb_i = (w_0, m_1, \ldots, w_i)$.
 	Let $w'_0, \ldots, w'_\ell$ be such that $w'_i \in \langdecdown{\decsymb_i}$ for all $i$.
 	
-	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that $w'_i \in \langdecdown{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$) for all $i$ and $\sum_{i=1}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=1}^{\ell} \size{w'_i}$. 
+	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that, for all $i$, $\widehat{w}_i \subword w_i$ and $w'_i \in \langdecdown{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$), and $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \size{w'_i}$. 
 \end{lemma}
 
+\begin{proof}
+	For all $i$, as $w'_i \in \langdecdown{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. \corto{define pi as word projection}
+	
+	For all $j \in [0, \ell]$, for all $i\geq j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
+	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of size at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
+
+	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$ $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
+	
+	We obtain that for all $i$, $w'_i = v_{i,0} \cdots v_{i,i}$ with, for all $j \in [0,i]$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_j}} \subword \widehat{w}_j$. Hence we have $w'_i \in \langdecdown{\decsymb_i}$.
+	
+	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{v_{i,j}} = \sum_{i=0}^{\ell} \size{w'_i}$.
+\end{proof}
+
+
 \begin{lemma}
+	\label{lem:bound-successor-height}
 	Let $\prot$ be a "protocol", let $\node$ be a node of a "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$.
 	Let $\node_1, \ldots, \node_k$ be its "follower" children. If $\node$ is not the root of $\tree$ then let $\mu'$ be its father.
 	We have the following properties:
 	
-	\begin{itemize}
-		\item $k \leq \size{\messages}(r + 1)$
+	\begin{enumerate}
+		\item $k \leq \size{\messages}r$ \corto{correct in following proofs}
 		
 		\item The root of $\tree$ is a "boss node".
 				
@@ -585,19 +610,47 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 		\end{itemize}
 	
 		\item If $\node$ is a "follower node" then 
-		\begin{itemize}
+		\begin{itemize}			
+			\item $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}}$
+			
 			\item $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r) +1)\Big[ 1 + \sum_{i=1}^k \size{\followlabelword{\node_i}} \Big]$
 			
-			\item $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}}$
 		\end{itemize}
-	\end{itemize}
+	\end{enumerate}
 \end{lemma}
 
 \ifproofs
 \begin{proof}
-	\cortoin{TODO}
+	Let $\node$ be a node of $\tree$. \corto{properly define trees and nodes}
+	Let $V$ be the set of "initial values" being broadcast or received in $\localrunlabel{\node}$. We have $\size{V}\leq r$ as there is at most one such value for each register.  
+	
+	For each $v \in V$, if $v \neq \valuelabel{\node}$ (resp. if $v = \valuelabel{\node}$), let $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ be a "decomposition" and $\node_{v,1}, \ldots, \node_{v, \ell_v}$ "follower" children of $\node$ such that condition \ref{unfoldingC3.1} (resp. \ref{unfoldingC1}) is respected.
+	
+	We can delete all other "follower" children of $\node$ and still have a "tree unfolding" satisfying $w$ as the $\node_{v,i}$ suffice to satisfy conditions \ref{unfoldingC1} and \ref{unfoldingC3.1} and the other conditions do not depend on "follower" children.
+	As we assumed $\tree$ to be of minimal size, $\node$ does not have "follower" children besides the $\node_{v,i}$. As $\size{V} \leq r$ and $\ell_v \leq \size{\messages}$ for all $v$ (by definition of a "decomposition", as the $(m_{v,i})_{1\leq i \leq \ell_v}$ are all distinct), $\node$ has at most $\size{\messages}r$ "follower" children, proving property 1.
+	
+	Property 2 follows immediately from the fact that $\tree$ satisfies a "boss specification" $w$, which by definition implies that its root is a "boss node".
+	
+	Let $\node$ be a "boss node". If $\node$ is the root, then as $\tree$ satisfies $w$ we have $w \subword \bosslabel{\node}$. If $w \neq \bosslabel{\node}$, we can replace $\bosslabel{\node}$ with $w$: As $w \subword \bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdecdown{\decsymb}$ then $w \in \langdecdown{\decsymb}$, hence condition~\ref{unfoldingC1} is still satisfied, and the other conditions of a "tree unfolding" are unaffected by this change.
+	Furthermore the resulting "tree unfolding" still satisfies $w$. This contradicts the minimality of $\tree$, hence we have $\bosslabel{\node} = w$.
+	
+	If $\node$ is not the root, then let $\node'$ be its father. 
+	Let $V'$ be the set of non-initial values $v'$ of $\node'$ such that $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$.
+	
+	We can construct a subword $\bossspec'$ of $\bosslabel{\node}$ of length at most $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}}$ such that all $\vinput{v'}{\localrunlabel{\node'}}$ are subwords of $\bossspec'$. It suffices to select for each $v'$ a set of positions in $\bosslabel{\node}$ forming $\vinput{v'}{\localrunlabel{\node'}}$, and then taking the word formed by the union of those sets of positions.
+	Observe that we necessarily have $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}}$, thus $\size{\bossspec'} \leq \size{\localrunlabel{\node'}}$.
+	
+	Like in the previous case, as $\bossspec'$ is a subword of $\bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdecdown{\decsymb}$ then $\bossspec' \in \langdecdown{\decsymb}$. As a result, condition~\ref{unfoldingC1} is still satisfied after switching the label $\bosslabel{\node}$ to $\bossspec'$. Furthermore, by definition of $V'$ and $\bossspec'$, for all non-initial value $v'$ in $\localrunlabel{\node'}$, if $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$ then  $\vinput{v'}{\localrunlabel{\node'}} \subword \bossspec'$, hence condition~\ref{unfoldingC3.2} is still satisfied as well. Other conditions are unaffected by this change.
+	
+	Hence if $\size{\bosslabel{\node}} > \size{\localrunlabel{\node'}}$ we can obtain a "tree unfolding" smaller than $\tree$ and satisfying $w$, contradicting the minimality of $\tree$. As a result, $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$.
+	
+	We have shown the first two points of property 3. For the third one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "tree unfolding conditions" and then bound the number of steps between those broadcasts using Lemma~\ref{lem:short-local-runs}.
+	
+	
+	\cortoin{TO FINISH}
 \end{proof}
 \fi
+
 
 \begin{definition}
 	We define the ""altitude"" of a node $\node$, written $\altitude{\node}$, in a "tree unfolding" recursively as follows:
@@ -613,12 +666,12 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 \begin{lemma}
 	\label{lem:bound-length-at-height-h}
 	Let $\prot$ be a protocol, let $\node$ be a node of a "tree unfolding" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$.
-	Let $\altmax$ be the maximal "altitude" in $\tau$, let $N = \size{w} + \size{\prot} +1$ and let $f_0 : \nats \to \nats$ be the function mapping each $n \in \nats$ to $f_0(n)=(N^2 (\towerfun(N)(N) + 2))^{n}$ 
+	Let $\altmax$ be the maximal "altitude" in $\tau$, let $N = \size{w} + \size{\prot} +1$ and let $f_0 : \nats \to \nats$ be the function mapping each $n \in \nats$ to $f_0(n)=(N^2 (\towerfun(N)(N) + 1))^{n+1}$ 
 	
 	\begin{itemize}
-		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node}} \leq f_0(\altmax + 1 - \altitude{\node})$.
+		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node}-1)$ and $\size{\localrunlabel{\node}} \leq f_0(\altmax - \altitude{\node})$.
 		
-		\item If $\node$ is a "follower node" then $\size{\localrunlabel{\node}} \leq \size{\followlabelword{\node}} \leq  f_0(\altmax + 1 - \altitude{\node})$.
+		\item If $\node$ is a "follower node" then $\size{\localrunlabel{\node}} \leq \size{\followlabelword{\node}} \leq  f_0(\altmax - \altitude{\node})$.
 	\end{itemize} 
 	
 	
@@ -627,119 +680,197 @@ Overall, we have proven the existence of a "local run" $\localrun': (q_i,\locald
 
 \ifproofs
 \begin{proof}
-	We prove this by induction on $altmax-\altitude{\node}$.
+	We prove this by strong induction on $\altmax-\altitude{\node}$.
 	
-	If $\altitude{\node} = \altmax$ then $\node$ has no "follower nodes" as children and is either the root or a "follower node" (otherwise its father would have a greater height).
+	Let $\node$ be a node, suppose that the inequalities hold for all nodes of greater "altitude". 
+	Let $\node_1, \ldots, \node_k$ be its "follower" children. If $\node$ is not the root of $\tree$ then let $\mu'$ be its father.
 	
-	If $\node$ is the root and has no "follower" children then by Lemma~\ref{lem:bound-successor-height} we have $\size{\localrunlabel{\node}} \leq \size{w}(\towerfun(\prot)(r))$ and thus $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)$.
+	If it is a "boss node" then by Lemma~\ref{lem:bound-successor-height} if it is the root we have $\size{\bosslabel{\node}} = \size{w} \leq N$, and if not we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}} \leq f_0(\altmax - \altitude{\node} -1)$ by induction hypothesis. In both cases we have $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node} -1)$.	
+	In all cases we obtain $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r)+1) \Big[f_0(\altmax-\altitude{\node} -1) + \sum_{i=1}^k \size{\followlabelword{\node_i}}\Big]$
+	
+	By Lemma~\ref{lem:bound-successor-height} we have $k \leq \size{\messages}(r+1)$.
+	Moreover, by induction hypothesis for all $i$ we have 
+	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node} -1)$. As a result,
+	
+	$\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r)+1) f_0(\altmax-\altitude{\node} -1)(\size{\messages} (r+1) +1) \leq N^2(\towerfun(N)(N) +1) f_0(\altmax - \altitude{\node} -1) \leq f_0(\altmax - \altitude{\node})$.
 	
 	If $\node$ is a "follower node" then by Lemma~\ref{lem:bound-successor-height} we have 
-	$\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r)$ and therefore $\size{\localrunlabel{\node}} \leq \size{w}(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)$.
-	
-	Now suppose $\altitude{\node} < \altmax$. Let $\node_1, \ldots, \node_k$ be its "follower" children. 
-	As $\localrunlabel{\node}$ has $r$ initial values, there are at most $r$ initial values that are broadcast or received in it.
-	For each one of them, at most $\size{\messages}$ "follower" children are required to witness the condition \ref{unfoldingC3.1}.
-	We may need $\size{\messages}$ extra children to satisfy \ref{unfoldingC1}.
-	As a result, as $\tree$ is of minimal size \corto{define size of a tree and of a protocol}, we have $k \leq \size{\messages}(r+1)$.
-	
-	By induction hypothesis for all $i$ we have 
-	\[
-	\size{\localrunlabel{\node_i}} \leq \size{w} \Big[(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)\Big]^{\altmax-\altitude{\node}}
-	\]
-	
-	If $\node$ is the root, then we can directly apply Lemma~\ref{lem:bound-successor-height} to obtain 
-	
-	
-	\[
-	\size{\localrunlabel{\node}} \leq \size{w} + \size{\messages}(r+1) \Big[(\size{\messages}(r+1)+1) \towerfun(\size{\prot})(r)\Big]^{\altmax-\altitude{\node}}
-	\]
-	
-	\cortoin{To finish}
+	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r) +1 \leq f_0(\altmax - \altitude{\node})$.
 \end{proof}
 \fi
 
 \begin{lemma}
 	\label{lem:bound-max-height}
-	There exists a function $f_1$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the maximal altitude of a node of $\tree$ is bounded by $f_1(\size{\prot} + \size{w})$.
+	There exists a function $f_1$ of the class $\Falpha{\omega^{\size{\messages}}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the maximal altitude of a node of $\tree$ is bounded by $f_1(\size{\prot} + \size{w}+1)$.
 \end{lemma}
 
 \ifproofs
 \begin{proof}
-	\cortoin{TODO}
+	Let $\tree$ be a "tree unfolding" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$. Let $\altmax$ be the maximal altitude of a node in $\tree$. Let $\node_0, \ldots, \node_m$ be nodes of $\tree$ such that $\node_0$ is its root, $\altitude{\node_m} = \altmax$, and for all $i\in [1, m]$, $\node_i$ is a child of $\node_{i-1}$.
+	For all $a \in [1, \altmax]$, let $j_a$ be the minimal index such that $\altitude{\node_{j_a}} = a$. This index exists as $\altitude{\node_0} = 0$, $\altitude{\node_m} = \altmax$ and for all $i$, $\altitude{\node_{i}} \leq \altitude{\node_{i-1}}+1$.
+	Furthermore as $j_a$ is the minimal such index, we cannot have $\altitude{\node_j} \geq a$ for any $j < j_a$ as otherwise there would be a $j'$ such that $j' \leq j < j_a$ with $\altitude{\node_{j'}} = a$.
+	
+	As a consequence, we have $j_1 < j_2 < \ldots < j_{\altmax}$. Moreover, $\node_{j_a}$ is necessarily a "follower node" as otherwise we would have $\altitude{\node_{j_a-1}} = a+1 \geq a$.
+	
+	Let $\#$ be a fresh letter, and let $N = \size{w} + \size{\prot}+1$. For all $i \in [1, \altmax]$ let $\node'_i = \node_{j_{\altmax - i+1}}$ and $w_i = \followlabelword{\node'_{i}} \# \followlabelmessage{\node'_{i}} \in (\messages \cup \set{\#})^*$.
+	
+	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
+	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\followlabelword{\node'_{i_1}} \subword \followlabelword{\node'_{i_2}}$ and $\followlabelmessage{\node'_{i_1}} = \followlabelword{\node'_{i_2}}$.
+	Therefore, as $\node_{i_1}$ is a descendant of $\node_{i_2}$, by Lemma~\ref{lem:increasing-followers} there would exist a "tree unfolding" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
+	
+	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
+	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\altmax-i+1) = (N^2(\towerfun(N)(N)+1))^{i}$.
+	
+	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n)(n)+1))n+2$. Clearly for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N)(N)+1))^{i} \geq N$.
+	As a consequence, for all $a$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(N) + 2 \leq g^{(i)}(N)$
+	
+	By Theorem 5.3 in \cite{SchmitzS2011upperHigman}, there exists a function $f_1 \in \Falpha{\omega^{\size{\messages}}}$ such that all  "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
+	
+	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(N) = f_1(\size{\prot} + \size{w} + 1)$ elements, thus $\altmax \leq f_1(\size{\prot} + \size{w} + 1)$.
 \end{proof}
 \fi
 
-\begin{corollary}
-	There exists a function $f_2$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, if we call $\node$ its root then $\size{\bosslabel{\node}}$ and $\size{\localrunlabel{\node}}$ are both bounded by $f_2(\size{\prot} + \size{w})$.
-\end{corollary}
-
-\ifproofs
-\begin{proof}
-	Consequence of Lemmas~\ref{lem:bound-length-at-height-h} and~\ref{lem:bound-max-height} as $F_{\omega^{\size{\messages}+1}}$ is closed by composition with primitive recursive functions.
-\end{proof}
-\fi
 
 \begin{lemma}
 	\label{lem:bound-min-height}
-	There exists a function $f_3$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the absolute value of the minimal "altitude" of a node of $\tree$ is bounded by $f_3(\size{\prot} + \size{w})$.
+	There exists a function $f_2$ of the class $\Falpha{\omega^{\size{\messages}}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the absolute value of the minimal "altitude" of a node of $\tree$ is bounded by $f_2(\size{\prot} + \size{w}+1)$.
 \end{lemma}
 
 \ifproofs
 \begin{proof}
-	\cortoin{TODO}
+	We proceed similarly as in the proof of Lemma~\ref{lem:bound-max-height}. 
+	
+	Let $\tree$ be a "tree unfolding" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$. Let $\altmin$ be the minimal altitude of a node in $\tree$. Let $\node_0, \ldots, \node_m$ be nodes of $\tree$ such that $\node_0$ is its root, $\altitude{\node_m} = \altmin$, and for all $i\in [1, m]$, $\node_i$ is a child of $\node_{i-1}$.
+	For all $a \in [\altmin, 0]$, let $j_a$ be the minimal index such that $\altitude{\node_{j_a}} = a$. This index exists as $\altitude{\node_0} = 0$, $\altitude{\node_m} = \altmin$ and for all $i$, $\altitude{\node_{i}} \geq \altitude{\node_{i-1}}-1$.
+	Furthermore as $j_a$ is the minimal such index, we cannot have $\altitude{\node_j} \leq a$ for any $j < j_a$ as otherwise there would be a $j'$ such that $j' \leq j < j_a$ with $\altitude{\node_{j'}} = a$.
+	
+	As a consequence, we have $j_0 < j_1 < j_2 < \ldots < j_{\altmin}$. Moreover, $\node_{j_a}$ is necessarily a "boss node" for all $a<0$ as otherwise we would have $\altitude{\node_{j_a-1}} = a-1 \leq a$, and $\node_{j_0}$ is the root and therefore also a "boss node" as $\tau$ satisfies $w$.
+	
+	Let $N = \size{w} + \size{\prot}+1$. For all $i \in [0, -\altmin]$ let $\node'_i = \node_{j_{-i}}$ and $w_i = \bosslabel{\node'_{i}} \in \messages^*$.
+	
+	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
+	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\bosslabel{\node'_{i_1}} \subword \bosslabel{\node'_{i_2}}$, hence, as $\node_{i_2}$ is a descendant of $\node_{i_1}$, by Lemma~\ref{lem:increasing-bosses} there would exist a "tree unfolding" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
+	
+	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
+	By Lemma~\ref{lem:bound-length-at-height-h}, for all $\node'_i$ we have $\size{\bosslabel{\node'_i}} \leq f_0(\altmax - \altitude{\node'_i}) = f_0(\altmax +i)$.
+	By Lemma~\ref{lem:bound-max-height}, we have $\altmax \leq f_1(N)$ and thus $\size{\bosslabel{\node'_i}} \leq  f_0(f_1(N) +i)$
+	
+	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n)(n)+1))n+2$. 
+	Let $M = f_0(f_1(N))$. Clearly for all $i\geq 0$ we have $g^{(i)}(M) \geq (N^2(\towerfun(N)(N)+1))^{f_1(N) + i}$.
+	
+	We have $\size{w_0} \leq M = g^{(0)}(N)$ and for all $i>0$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{f_1(N) + i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(M) + 2 \leq g^{(i)}(M)$
+	
+	By definition of the function $f_1 \in \Falpha{\omega^{\size{\messages}}}$, all "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
+	
+	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(M)$ elements, thus $\altmin \leq f_1(M) = f_1(f_0(f_1(N)))$.
+	We define $f_2$ as $f_1 \circ f_0 \circ f_1$. It is a function of $\Falpha{\omega^{\size{\messages}}}$ as $f_0$ and $f_1$ are and $\Falpha{\omega^{\size{\messages}}}$ is closed by composition.
 \end{proof}
 \fi
 
 
 \begin{corollary}
-	\label{lem:bound-node-size}
-	There exists a function $f_4$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, for all node $\node$ of $\tree$,
+	\label{cor:bound-node-size}
+	There exists a function $f_3$ of the class $\Falpha{\omega^{\size{\messages}}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, for all node $\node$ of $\tree$,
 	
 		\begin{itemize}
-		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node}} \leq f_4(\size{\prot}+ \size{w})$.
+		\item $\size{\localrunlabel{\node}} \leq f_3(\size{\prot}+ \size{w})$
+			
+		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq f_3(\size{\prot}+ \size{w})$.
 		
-		\item If $\node$ is a "follower node" then $\size{\localrunlabel{\node}} \leq \size{\followlabelword{\node}} \leq f_4(\size{\prot}+ \size{w})$.
+		\item If $\node$ is a "follower node" then $\size{\followlabelword{\node}} \leq f_3(\size{\prot}+ \size{w})$.
 	\end{itemize} 
 \end{corollary}
 
 \ifproofs
 \begin{proof}
-	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $F_{\omega^{\size{\messages}+1}}$ is closed by composition with primitive recursive functions.
+	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $\Falpha{\omega^{\size{\messages}}}$ is closed by composition.
 \end{proof}
 \fi
 
 
 \begin{proposition}
-	There exists a function $f_5$ of the class $F_{\omega^{\size{\messages} +1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f_5(\size{\prot} + \size{w})$.
+	\label{prop:bound-tree-size}
+	There exists a function $f_4$ of the class $\Falpha{\omega^{\size{\messages}}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f_4(\size{\prot} + \size{w}+1)$.
 \end{proposition}
 
 \ifproofs
 \begin{proof}
-	\cortoin{TODO}
+	Let $\tree$ be a "tree unfolding" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$. Let $N = \size{\prot} + \size{w}+1$.
+
+	We first bound the height of $\tree$, then its arity (the maximal number of children of a node), which allows us to obtain a bound on the number of nodes.
+	
+	By Corollary~\ref{cor:bound-node-size}, for all "boss node" $\node$ in $\tree$ we have $\size{\bosslabel{\node}} \leq f_3(N)$.
+	If a branch contains more than $\sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ "follower nodes", then there are two nodes in it with the same "boss" label, hence $\tree$ can be reduced and still satisfy $w$, contradicting the minimality of $\tree$.
+	
+	Similarly, by Corollary~\ref{cor:bound-node-size}, for all "follower node" $\node$ in $\tree$ we have $\size{\followlabelword{\node}} \leq f_3(N)$.
+	If a branch contains more than $\size{\messages}\sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ "follower nodes", then there are two nodes in it with the same "follower" label, hence $\tree$ can be reduced and still satisfy $w$, contradicting the minimality of $\tree$.
+	
+	As a result, each branch of $\tree$ contains at most $1+ (\size{\messages}+1) \sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ nodes. We simplify this expression: let $H = (f_3(N)+2)(N+1)^{f_3(N)+1}$, each branch of $\tree$ has at most $H$ nodes.
+	
+	Furthermore, by Lemma~\ref{lem:bound-successor-height}, each node has at most $\size{\messages}(r+1)$ "follower" children. We now bound its number of "boss" children.
+	
+	Let $\node$ be a node of $\tree$, let $V$ be the set of non-initial values appearing in $\localrunlabel{\node}$ apart from $\valuelabel{\node}$.
+	By condition~\ref{unfoldingC3.2}, for each $v' \in V$, $\node$ has a "boss" child $\node_{v'}$ such that $\vinput{v'}{\localrunlabel{\node}} \subword \bosslabel{\node_{v'}}$.
+	
+	We simply observe that $\size{V} \leq \size{\localrunlabel{\node}}$ as every non-initial value needs to be received at some point in $\localrunlabel{\node}$. We also note that all other "boss" children of $\node$ can be removed, and the resulting tree still satisfies $w$ and is still a "tree unfolding". By minimality of $\tree$, this means that $\mu$ has at most $\size{\localrunlabel{\node}}$ "boss" children, hence at most $f_3(N)$ by Corollary~\ref{cor:bound-node-size}.
+	
+	As a consequence, each node in $\tree$ has at most $f_3(N) + \size{\messages}(r+1)$ children.
+	
+	By combining the bounds on the size of branches and the arity of nodes, we obtain that $\tree$ has at most $\sum_{h=0}^{H} (f_3(N) + \size{\messages}(r+1))^h$ nodes. We again simplify this: $\sum_{h=0}^{H} (f_3(N) + \size{\messages}(r+1))^h \leq (H+1)(f_3(N) + N^2)^H$.
+	
+	Finally, we obtain a bound on the size of $\tau$ by taking the product of the bounds on the number of nodes and on the size of each node label: 
+	
+	\[ \size{\tree} \leq  (H+1)(f_3(N) + N^2)^H (2f_3(N) +1)\]
+	
+	Let $f_4$ be such that $f_4(n) = ((f_3(n)+2)(n+1)^{f_3(n)+1} +1) (f_3(n) + n^2)^{(f_3(n)+2)(n+1)^{f_3(n)+1}}(2f_3(n) +1)$ for all $n$. It is the composition of $f_3$ with an elementary function, hence as $f_3 \in \Falpha{\omega^{\messages}}$ and $\Falpha{\omega^{\messages}}$ is closed by composition, $f_4 \in \Falpha{\omega^{\messages}}$.
+	
+	Furthermore, we have shown that the size of a minimal "tree unfolding" satisfying a "boss specification" $w$ and labelled by a "protocol" $\prot$ is bounded by $f_4(\size{\prot} + \size{w} +1)$.
 \end{proof}
 \fi
-%\begin{lemma}
-%	Given a protocol $\prot$, one can construct in polynomial time a protocol $\prot'$ with no $*$ operation satisfying the same specifications as $\prot$.
-%\end{lemma}
-%
-%\begin{proof}
-%	Let $r$ be the number of registers of $\prot$.
-%	We simply add a register $r+1$ to $\prot$ and turn all $\rec{m}{i}{*}$ transitions into $\rec{m}{r+1}{\enregact}$. 
-%	An easy induction shows that for all local run of $\prot$ there exists a local run of $\prot'$ with the same input and output, and vice-versa.
-%\end{proof}
-
 
 
 
 
 \begin{theorem}
-	The BNRA coverability problem is decidable in time $F_{\omega^\omega}$\corto{proper notation} and there is no $\alpha < \omega^\omega$ such that this problem can be solved in time $F_{\alpha}$.
+	The BNRA coverability problem is decidable in time $\Falpha{\omega^\omega}$ and there is no $\alpha < \omega^\omega$ such that this problem can be solved in time $\Falpha{\alpha}$.
 	The lower bound holds even with two registers and no local tests.
 \end{theorem}
 
 \ifproofs
 \begin{proof}
-	\cortoin{TODO}
+	The lower bound is given by the reduction from "lossy channel systems" reachability in Proposition~\ref{prop:reduction-LCS} and by the fact that there is no algorithm in time $\Falpha{\alpha}$ for LCS reachability with $\alpha < \omega^\omega$.
+	
+	For the upper bound, let $\prot$ be a "protocol" with $r \geq 1$ registers over messages $\messages$ and $q$ one of its states. We add a new message $m$ to $\messages$ and a new transition $\br{m}{1}$ from $q$ to itself broadcasting $m$. 
+	
+	Clearly the new "protocol" $\prot'$ satisfies the "boss specification" $m$ if and only if $q$ is coverable in $\prot$.
+	
+	By Lemmas~\ref{lem:run-to-tree} and \ref{lem:tree-to-run}, there is a run of $\prot'$ satisfying $m$ if and only if there is a "tree unfolding" satisfying $m$.
+	
+	By Lemma~\ref{prop:bound-tree-size}, there is such a "tree unfolding" if and only if there is one of size at most $f_4(\size{\prot}+2)$, where $f_4$ is a function of the class $\Falpha{\omega^{\size{\messages}}}$.
+	
+	The last problem we have is that the size of a "tree unfolding" does not take into account the values used in it. This can be solved by noticing that the conditions in the definition of a "tree unfolding" and the condition to satisfy a "specification" still hold after applying an injective renaming to the values. 
+	
+	Suppose there exists $\tree$ a "tree unfolding" satisfying $m$, let $V$ be the set of values appearing in that tree. In a node $\node$ the values appearing are
+	\begin{itemize}
+		\item $\valuelabel{\node}$
+		
+		\item The initial values of $\localrunlabel{\node}$ (there are $r$ such values)
+		
+		\item The non-initial values (at most $\size{\localrunlabel{\node}}$ as they all need to be received)
+	\end{itemize}
+
+	Hence there are at most $\size{\localrunlabel{\node}} + r +1$ different values appearing in each node.
+	In total there are thus at most $\sum_{\node \in \tree} \size{\localrunlabel{\node}} + r +1$ different values in $\tree$, which is less than $(r+2)\size{\tree}$.
+	
+	We can apply an injective renaming $V \to [1,(r+2)\size{\tree}]$ to the values to obtain another "tree unfolding" satisfying $m$ and whose values do not exceed $(r+2)\size{\tree}$.
+	
+	Hence there exists a "tree unfolding" satisfying $m$ if and only if there is one of size at most $f_4(\size{\prot}+2)$ in which values do not exceed $f_4(\size{\prot}+2)$. A description of such a tree requires a space that is polynomial in its size.
+	
+	As a result, we can bound the size of the description of such a "tree unfolding" by a function of $\Falpha{\omega^{\size{\messages}}}$.
+	An algorithm for the coverability problem thus consists in enumerating all trees labelled by local runs of $\prot$ of size at most $f_4(\size{\prot}+2)$ with values not exceeding $f_4(\size{\prot}+2)$, and accepting if and only if one of them satisfies the conditions to be a "tree unfolding" satisfying $m$.
+	
+	This can all be done in exponential time in $f_4(\size{\prot}+2)$, thus this algorithm terminates in time $f_5(\size{\prot})$ where $f_5$ is a function of $\Falpha{\omega^{\size{\messages}}}$.
+	
+	The BNRA coverability problem is thus decidable in time $\Falpha{\omega^\omega}$.
 \end{proof}
 \fi
-

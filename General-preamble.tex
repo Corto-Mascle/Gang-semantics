@@ -60,6 +60,7 @@
 % \newcommand{\nexpt}{\textsc{NExpTime}\xspace}
 % \newcommand{\exps}{\textsc{ExpSpace}\xspace}
 \multidef{\text{\sc{#1}}\xspace}{co,coNP,NP,PSPACE,coPSPACE,NPSPACE,PTIME,EXPTIME,EXPSPACE,NEXPTIME, LOGSPACE, TOWER}
+\newcommand{\Falpha}[1]{\mathcal{F}_{#1}}
 
 %%% Genral definition
 \newcommand{\prot}{\mathcal{P}} %protocol
@@ -110,6 +111,7 @@
 %messages
 \newcommand{\messages}{\mathcal{M}}
 \newcommand{\amessage}{m}
+\newcommand{\wordproj}[2]{\pi_{#2}(#1)}
 \newcommand{\regnum}{r}
 \newcommand{\operations}{\mathsf{Op}}
 \newcommand{\op}{\mathsf{op}}
@@ -208,8 +210,9 @@
 \newcommand{\inc}[1]{\ensuremath{\mathtt{#1}+}}
 \newcommand{\testz}[1]{\ensuremath{\mathtt{#1}=0}}
 \newcommand{\stepMM}[1]{\xrightarrow{#1}}
-\newcommand{\altitude}[1]{\mathbf{alt(#1)}}
+\newcommand{\altitude}[1]{\mathbf{alt}(#1)}
 \newcommand{\altmax}{\mathbf{altmax}}
+\newcommand{\altmin}{\mathbf{altmin}}
 
 
 %local stuff

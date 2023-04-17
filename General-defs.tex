@@ -1,11 +1,8 @@
 \section{Definitions}
 
-A ""Broadcast Network of Register Automata"" (BNRA) \cite{DST2013} is defined by a finite transition system describing the behavior of an agent, which can broadcast and receive messages with integer values, store them in local registers, or make equality tests.
+A ""Broadcast Network of Register Automata"" (BNRA) \cite{DST2013} is a model describing a network of agents with local registers communicating by broadcasts. It is represented by a finite transition system describing the behaviour of an agent, which can broadcast and receive messages with integer values, store them in local registers, or make equality tests. 
 We consider that when a message is broadcast by an agent, each other agent independently may or may not receive it. 
-We study the behaviour of an arbitrary number of agents communicating this way.
-
-We use $r \geq 0$ to denote the number of registers in each node. 
-%We consider a finite alphabet $\messages$ of messages.
+We study the set of runs of an arbitrary number of agents communicating this way.
 
 \begin{definition}[Protocols]
 	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with 
@@ -20,7 +17,7 @@ We use $r \geq 0$ to denote the number of registers in each node.
 The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
 $\quotemarks{\eqtestact}$ is an equality test, $\quotemarks{\diseqtestact}$ is a disequality test, $\quotemarks{\enregact}$ is a store action and $\quotemarks{\dummyact}$ is a dummy action with no effect.
 	
-A ""simple protocol"" is a "protocol" that does not have receptions with action $\quotemarks{\dummyact}$ or local tests with action $\quotemarks{\eqtestact}$.
+%A ""simple protocol"" is a "protocol" that does not have receptions with action $\quotemarks{\dummyact}$ or local tests with action $\quotemarks{\eqtestact}$.
 	
 %	\cortoin{TODO : remarquer que pour r=1 on peut ignorer les actions locales}
 \end{definition}
@@ -28,7 +25,7 @@ A ""simple protocol"" is a "protocol" that does not have receptions with action 
 
 \begin{definition}[Semantics]
 	Let $(Q,\messages, \transitions, q_0)$ be a "protocol", and $\agents \subseteq \nats$ a finite set of \emph{agents}.
-	A ""configuration"" over a set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats^{\regnum}$, associating a state to each agent and a ""register value"" to each of its registers. 
+	A ""configuration"" over a set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats^{\regnum}$, mapping each agent to a state and ""register values"" for each of its registers. 
 	We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component.
 	An \emph{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and for all $a, a' \in \agents$, $i, i' \in \nset{1}{\regnum}$, if $\data{\config}(a, i) = \data{\config}(a', i')$ then $a=a'$ and $i=i'$.
 	

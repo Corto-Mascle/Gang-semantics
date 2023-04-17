@@ -28,10 +28,10 @@
 		\caption{init}\label{fig:target:init}
 	\end{figure}
 
-%\begin{figure}
-%	\input{Figures/target-init}
-%	\caption{init}\label{fig:target-init}
-%\end{figure}
+\begin{figure}
+	\input{Figures/target-init}
+	\caption{init}\label{fig:target-init}
+\end{figure}
 
 	\begin{figure}
 		\includegraphics[scale = 0.3]{Figures/cycle-knowledge.png}
@@ -41,10 +41,10 @@
 
 
 
-%	\begin{figure}
-%	\input{Figures/cycle-knowledge}
-%	\caption{ck}\label{fig:target-cycle-knowledge}
-%\end{figure}
+	\begin{figure}
+	\input{Figures/cycle-knowledge}
+	\caption{ck}\label{fig:target-cycle-knowledge}
+\end{figure}
 	
 	Fix a "Minsky Machine" $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$. The simulation will go as follows: 
 	\begin{itemize}
@@ -62,7 +62,6 @@
 		\item once the leader agent reaches $\ell_f$, it sends the message $\mathtt{end}$ to its successor, when an agent receives the message $\mathtt{end}$, it reaches $\ell_f$ and forwards it to its successor.
 		
 		\item If there are two agents (or more) in the cycle of knowledge, they should all simulate the same machine execution. All agents in between two leaders will simulate counters' values of one execution, and if two agents make different choices, it will block the run of the protocol. \lu{to explain better...}
-		
 	\end{itemize}
 \end{proof}
 \fi
