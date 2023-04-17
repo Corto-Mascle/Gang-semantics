@@ -3,6 +3,9 @@ To prove that the "query coveravility problem" is in NP in the special case wher
 
 In order to make proofs easier, and simplify the problem, we first present some preliminaries lemmas which allow us to (i) reduce our analysis to protocols that does not have receptions with actions $\quotemarks{\ne}$, or local tests, (ii) only consider "non-contradictory" queries.
 
+
+\luin{exemples + rappel copy cat (sous angle de r = 1) + lemma no diseq}
+
 \subsection{Preliminaries}
 
 
@@ -11,8 +14,9 @@ In order to make proofs easier, and simplify the problem, we first present some 
 %	Given two runs $\run, \run'$ over sets of agents $\agents, \agents'$ respectively, we define their ""parallel composition"" as the run over $\agents\times \set{0} \cup \agents'\times \set{1}$ defined as follows: 
 %\end{definition}
 
-\cortoin{Copycats are not used in the proofs. Remove?}
-\luin{sometimes "copycat principle"}
+
+\luin{changer copycat -> go dans partie 2 }
+
 
 In this model, given a run, we can clone it. Take a disjoint set of agents, with a disjoint set of initial values, each agent can mimick the behaviour of one agent of the initial run and reach the same state than its original agent. This idea is formalized in the following lemma.
 
@@ -58,6 +62,7 @@ Decompose $\run$ into $\run_p: \config_0 \step{*} \config_{m,1}$, $\apath_i: \co
  \end{proof}
 \fi
 
+
 \begin{corollary}
 \label{cor:removing_diseq_tests}
 Let $(\prot, \query)$ an instance of the "query coverability problem". This instance is positive if and only if $(\tilde{\prot}, \query)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
@@ -78,11 +83,12 @@ We first mimic this broadcast step at the end of $\run_{k-1}$, making any agent 
 
 Thanks to Corollary~\ref{cor:removing_diseq_tests}, we shall from now on suppose that all considered protocols have no disequality tests. 
 
-\begin{definition}
-	Given a set of states $K \subseteq Q$, $\config$ a "configuration" over a set of agents $\agents$ and $\aval \in \nats$, we say that the pair $\config, \aval$ satisfies $K$ if for all $q \in K$, there exists $a \in \agents$ such that $\config(a) = (q,\aval)$.
-	A configuration $\config$ satisfies $K$ if there exists $\aval \in \nats$ such that $\config, \aval $ satisfies $K$. 
-	A "run" satisfies $K$ if its final configuration does.
-\end{definition}
+
+%\begin{definition}
+%	Given a set of states $K \subseteq Q$, $\config$ a "configuration" over a set of agents $\agents$ and $\aval \in \nats$, we say that the pair $\config, \aval$ satisfies $K$ if for all $q \in K$, there exists $a \in \agents$ such that $\config(a) = (q,\aval)$.
+%	A configuration $\config$ satisfies $K$ if there exists $\aval \in \nats$ such that $\config, \aval $ satisfies $K$. 
+%	A "run" satisfies $K$ if its final configuration does.
+%\end{definition}
 Note that if a "run" satisfies $K$, then it covers every state in $K$. The converse is not true as, in order to satisfy $K$, one needs to have agents of every state of $K$ that all share the same register value. See for instance the example below.
 
 \begin{example}
@@ -158,7 +164,7 @@ For each $C_i$ we define $K_i = \set{q \in Q \mid \exists \varz \in C_i, q(\varz
 
 We are now ready to define our abstraction.
 
-\subsubsection{Abstraction}
+\subsection{Abstraction}
 \label{sec:abstraction}
 
 The abstraction should keep track of a particular state (the state of the process with the initial register value) and a set of states in which any number of processes can be on with the same non-initial value. We name this tuple a "gang" which we define formally below.

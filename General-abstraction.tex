@@ -1,4 +1,6 @@
-\section{Bounded witnesses for reachability}
+\section{Cover decidability}
+
+\subsection{Set-up}
 
 \ifintuition
 \subsection{Intuition}
@@ -85,6 +87,8 @@ We say that a local run is cheaper than another one if the set of children it sp
 % 			\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) =v$
 % 			\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) \ne v$.
 % 		\end{itemize}
+
+%\subsubsection{Definitions}
 \begin{definition}[Local runs]			
 	A ""local configuration"" is a pair $(q, \localdata) \in Q \times ([1,r] \to \nats)$. Intuitively, it describes the configuration of a single agent. 
 
@@ -112,6 +116,7 @@ We say that a local run is cheaper than another one if the set of children it sp
 	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\localrun}{\aval}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$. 
 \end{definition}
 
+
 We start by proving that we may in fact get rid of local equality tests:
 
 \begin{restatable}{lemma}{SimpleReduction}
@@ -122,10 +127,15 @@ We start by proving that we may in fact get rid of local equality tests:
 The proof can be found in Appendix~\ref{sec:proof-simple} \corto{A corriger}. In fact, the exponential cost of the reduction will have no impact the complexity results proven below.
 In the following, we will assume that the considered protocol has no "local equality tests". 
 
+
+
+\subsection{Decomposition trees}
+
 A key ingredient of our construction is the decomposition of words of messages. Say we have an execution and a value $v$ such that the sequence of messages broadcast in that execution with value $v$ is $w$. Let $w'$ the subword of $w$ of messages sent by the agent $a$ which had that value originally. Let $m$ be the first message sent by another agent with value $v$. This means that from the messages sent by $a$ before there is a set of agents that receives some of these messages and eventually sends back message $m$ with value $v$. An important remark is that we can copy this set of agents many times to obtain as many broadcasts with message $m$ and value $v$ as we want from this point in the run.
 
 In general, if an agent other than $a$ sends a message with value $v$ then we can add agents to obtain that message with that value as many times as we want.
 Therefore, we will describe the sequences of messages sent with a value $v$ as tuples $(w_0, m_1, \ldots, m_\ell, w_\ell)$, where $w_0 \cdots w_\ell$ is the sequence of messages sent by the agent $a$ which has that value initially and the $m_i$ mark, for every message of $\messages$ the first moment at which some agent other than $a$ broadcasts it with value $v$ (if that happens).
+
 
 \begin{definition}
 	A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. The set of decompositions over $\messages$ is denoted $\decset{\messages}$.
@@ -343,6 +353,7 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 \fi
 
 
+\subsection{Shortening branches}
 
 \begin{lemma}
 	\label{lem:increasing-bosses}
@@ -403,6 +414,7 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 % \caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. Lines correspond to registers, and vertical separations are times at which the value of that register changes. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed. We can then obtain a shorter run by glueing them together as in the picture.}
 % \end{figure}
 
+\subsection{Local bounds}
 
 \begin{lemma}
 	\label{lem:short-local-runs}
@@ -668,6 +680,7 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 \end{proof}
 \fi
 
+\subsection{Tree bounds}
 
 \begin{definition}
 	We define the ""altitude"" of a node $\node$, written $\altitude{\node}$, in a "tree unfolding" recursively as follows:
@@ -847,7 +860,7 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 
 
 
-
+\subsection{Decidability}
 \begin{theorem}
 	The BNRA coverability problem is decidable in time $\Falpha{\omega^\omega}$ and there is no $\alpha < \omega^\omega$ such that this problem can be solved in time $\Falpha{\alpha}$.
 	The lower bound holds even with two registers and no local tests.
