@@ -75,7 +75,6 @@ We say that a local run is cheaper than another one if the set of children it sp
 \subsection{Formal proof}
 \fi
 
-\textbf{For now we assume that the BRNA do not contain $*$ operations and apply only one operation for each message received. The general case reduces to this one (lemma \ref{lem:simple-reduction}).}
 
 \begin{definition}[Local runs]			
 	A ""local configuration"" is a pair $(q, \localdata) \in Q \times ([1,r] \to \nats)$. Intuitively, it describes the configuration of a single agent. 
@@ -111,12 +110,12 @@ We start by proving that we may in fact get rid of local equality tests:
 	There exists an exponential-time reduction from the "coverability problem" to the coverability problem on protocols with no "local equality tests" $\loc{i}{j}{=}$.
 \end{restatable}
 
-The proof can be found in Appendix~\ref{sec:proof-simple} \corto{A corriger}. In fact, the exponential cost of the reduction will have no impact the complexity results proven below.
-In the following, we will assume that the considered protocol has no "local equality tests". 
+The proof can be found in Appendix~\ref{sec:proof-simple}. In fact, the exponential cost of the reduction will have no impact on the complexity results proven below.
+\textbf{In all that follows, we will assume that the considered protocol has no "local equality tests". 
+}
 
 
-
-\subsection{Decomposition trees}
+\subsection{Tree unfoldings}
 
 A key ingredient of our construction is the decomposition of words of messages. Say we have an execution and a value $v$ such that the sequence of messages broadcast in that execution with value $v$ is $w$. Let $w'$ the subword of $w$ of messages sent by the agent $a$ which had that value originally. Let $m$ be the first message sent by another agent with value $v$. This means that from the messages sent by $a$ before there is a set of agents that receives some of these messages and eventually sends back message $m$ with value $v$. An important remark is that we can copy this set of agents many times to obtain as many broadcasts with message $m$ and value $v$ as we want from this point in the run.
 
@@ -130,9 +129,6 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 	We say that a word $w \in \messages^*$ ""decomposes as"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w = w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding some letters from $\set{m_1, \ldots, m_{j-1}}$.
 	
 	The language $\langdec{\decsymb}$ of $\decsymb$ is the set of words that decompose as $\decsymb$. We write $\langdecdown{\decsymb}$ for the subword closure of $\langdec{\decsymb}$.
-	
-	We define a preorder on decompositions:
-	$\decsymb \subdec \decsymb'$ if $\langdecdown{\decsymb} \subseteq \langdecdown{\decsymb'}$.
 \end{definition}
 
 

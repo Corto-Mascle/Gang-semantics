@@ -101,17 +101,16 @@ The following remark formalizes the intuition that, because the only way to take
 	%We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
 
-\begin{lemma}
-	For all "query" $\query$ with $k$ variables and "protocol" $\prot$ with $r$ registers, there exists a "protocol" $\prot'$ with $\size{\prot}^k$ states and $kr$ registers and a state $q$ such that there is a run of $\prot$ satisfying $\query$ if and only if there is a run of $\prot'$ covering $q$.
-	Furthermore if $r = 1$ then $\prot'$ only needs $\size{\prot}+k+1$ states and one register.
-\end{lemma}
-
-\ifproofs
-\begin{proof}
-	\cortoin{TODO}
-\end{proof}
-\fi
+\begin{remark}
+	Given a "protocol" $\prot$ with $r$ registers and a "query" $\query$ with $k$ variables, we can construct a "protocol" $\prot'$ with $\size{\prot}^k$ states and $kr$ registers that allows each agent to simulate $k$ agents of the previous system (by taking as states $k$-tuples of states of $\prot$, using the $kr$ registers to store the values of the registers of the $k$ agents and adapting the transitions accordingly).
+	There is a run of the first BNRA satisfying $\query$ if and only if there is a run of the second in which one agent simulates the $k$ agents satisfying $\query$, which can be checked locally by that agent, which enters a special state $q_f$. if it happens. 
 	
+	This reduction is exponential, but this does not hinder our complexity result as we are concerned with a complexity class stable by exponential reductions.
+	
+	In the case of one register, we even have a polynomial-time reduction: We add a transition from every state to a sink state allowing an agent to stop at any moment and send its local configuration (state and register value) in a single broadcast.
+	Also, at any moment, an agent may enter a series of transitions in which it receives the configurations of $k$ agents and checks that they satisfy the query, then enters a special state $q_f$. An agent can reach $q_f$ if and only if some agents could reach a configuration satisfying $\query$in the first BNRA.
+\end{remark}
+
 	
 \ifbasic
 \section{Basic properties}
@@ -257,6 +256,16 @@ Note that if a "run" satisfies $K$, then it covers every state in $K$. The conve
 \subsection{Classical definitions}
 \luin{here comes definitions of complexity classes, wqo and anything not related to our model}
 
+\paragraph*{Fast-growing hierarchy}
+
+In this paper we will use the notation $\Falpha{\alpha}$, with $\alpha$ an ordinal in Cantor normal form, to denote the complexity class corresponding to level $\alpha$.
+We lack space to properly define this notion, but the interested reader may find the formal definitions of those classes in \corto{ref}.
+
+For this paper, we will only need two theorems from the literature to prove $\Falpha{\omega^\omega}$-completeness of our problem: The first one is that Lossy Channel Systems are hard for the $\Falpha{\omega^\omega}$ complexity class (for the lower bound), the second one is the "Length function theorem" recalled below (for the upper bound). 
+
+The reader should keep in mind that our result is mainly the decidability of that problem, and that we add the completeness result because it adds a very small overhead in the proofs, and fits our work nicely in the landscape of high-complexity problems stemming from well quasi-orders.
+\nicoin{Reformuler}
+
 \paragraph*{Well-quasi orders}
 
 In order to prove our main decidability result, we need to rely on the theory of well quasi-orders. We recall bellow some definitions and results in the context of the subword ordering.
@@ -269,14 +278,7 @@ A sequence of words $w_0, w_1, \ldots$ is ""good"" if there exist $i<j$ such tha
 \end{lemma}
 
 We, however, need a more precise result, that bounds the length of a "bad" sequence. In order to obtain such a bound, it is necessary to bound the growth of the sequence of words. 
-
-Bounding "bad" sequences in well quasi-orders leads to very large functions, such as the Ackermann function for vectors of natural numbers. A convenient formalism for those functions is the "Fast-growing hierarchy" defined below.
-
-Let $\alpha$ be an ordinal in Cantor normal form. We define $\Falpha{\alpha}$ as follows:
-
  
-
-
 We will use the following result, known as the "Length function theorem" from \cite{SchmitzS2011upperHigman}:
 
 \begin{theorem}[Length function theorem \cite{SchmitzS2011upperHigman}]
