@@ -6,7 +6,7 @@ We consider that when a message is broadcast by an agent, each other agent indep
 We study the set of runs of an arbitrary number of agents communicating this way.
 
 \begin{definition}[Protocols]
-	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with 
+	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0, \regnum)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with 
 	\begin{multline*}
 	\operations = \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq \regnum} \\ \cup  
 	\set{\loc{i}{j}{\eqtestact}, \loc{i}{j}{\diseqtestact} \mid 1 \leq i,j \leq \regnum}
@@ -43,7 +43,7 @@ $\quotemarks{\eqtestact}$ is an equality test, $\quotemarks{\diseqtestact}$ is a
 			\item or $\anact = \quotemarks{\diseqtestact}$ and $\data{\config}(a,i) \neq \data{\config}(a,j)$
 		\end{itemize}
 		
-		\item there exist $\amessage \in \messages$, $a_0 \in \agents$ and $i \in [1,r]$ such that $(\st{\config}(a_0),\br{\amessage}{i}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and for all $a \in \agents\setminus \set{a_0}$, either $\config'(a) = \config(a)$ or there exists a transition $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a))$
+		\item there exist $\amessage \in \messages$, $a_0 \in \agents$ and $i \in \nset{1}{r}$ such that $(\st{\config}(a_0),\br{\amessage}{i}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and for all $a \in \agents\setminus \set{a_0}$, either $\config'(a) = \config(a)$ or there exists a transition $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a))$
 		such that $\data{\config'}(a, j') = \data{\config}(a, j')$ for all $j' \neq j$ and one of the following cases holds:
 		\begin{itemize}
 				\item $\anact = \quotemarks{\dummyact}$ 
@@ -81,7 +81,7 @@ The following remark formalizes the intuition that, because the only way to take
 	\end{definition}
 	
 	\begin{definition}
-		A ""query"" $\query$ is a finite set of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z}')}$, $\quotemarks{R_j(\var{z}) \neq R_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$ and $j,j' \in [1,r]$.
+		A ""query"" $\query$ is a finite set of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z}')}$, $\quotemarks{R_j(\var{z}) \neq R_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$ and $j,j' \in \nset{1}{r}$.
 		It is \emph{satisfied} by a "configuration" $\config$ if there is a valuation $\nu : \varset \to \agentsof{\config}$ such that:
 		\begin{itemize}
 			\item for all $\quotemarks{q(\var{z})} \in \query$, $\st{\config}(\nu(\var{z})) = q$,
@@ -126,7 +126,7 @@ The following remark formalizes the intuition that, because the only way to take
 %	Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ a "run" over set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\st{\config_f}(a_m) = q$. There exists $\agents' \subseteq \nats$ finite s.t. $\agents \cap \agents' = \emptyset$, $a_c \in \agents'$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ such that:
 %	\begin{itemize}
 %		\item for all $a \in \agents$, $\config_f'(a) = \config_f(a)$ (agents of $\agents$ end the same in $\run$ and $\run'$),
-%		\item for all $a \in \agents$, $a' \in \agents'$, $j, j' \in [1,r]$, $\data{\config_f}(a)(j) \ne \data{\config_f'}(a')(j')$,
+%		\item for all $a \in \agents$, $a' \in \agents'$, $j, j' \in\nset{1}{r}$, $\data{\config_f}(a)(j) \ne \data{\config_f'}(a')(j')$,
 %		\item $\st{\config_f}(a_m) = \st{\config_f'}(a_c)$.
 %	\end{itemize}
 %\end{lemma}
@@ -139,16 +139,16 @@ The following remark formalizes the intuition that, because the only way to take
 %	The constructed "run" $\run'$ starts on configuration $\config_0'$ and is composed of two parts. 
 %	The first part consists in mimicking the sequence of steps of $\run$ with agents of $\agents$, while agents in $\agents'$ remain idle. This defines a run $\run_p' : \config_0' \step{*}  \config_m'$.  
 %	The second part consists in a path $\apath': \config_m' \step{*} \config_f'$ which replicates the sequence of actions of $\run$ but on agents of $\agents'$: if an agent $a \in \agents$ takes a transition at step $i$ of $\run$, we make $\psi(a)$ take that transition at step $i$ of $\apath'$. As $\apath'$ is identical to $\run_p'$ up to renaming of the agents and values, a straightforward induction shows that this is always a valid transition.
-%	In this second part, agents of $\agents$ are left idle. $\run'$ is obtained by concatenating $\run_p'$ and $\apath'$. Since agents of $\agents$ behave the same in $\run$ and $\run'$, for all $a \in \agents$, $\config_f(a) = \config_f'(a')$. Also, $\psi(a_m)$ took the same transitions as $a_m$ hence $\st{\config_f}(\psi(a_m)) = q$. Finally, thanks to Lemma~\ref{prop:run_no_new_register_values}, the register values of agents of $\agents'$ are in the set $\data{\config_0'}(\agents')([1,r])$ while the register values of agents of $\agents$ are in $\data{\config_0'}(\agents)([1,r])$; both sets are disjoint as $\config_0'$ is initial and thus for all $a \in \agents, a' \in \agents'$, $j,j' \in [1,r]$, $\data{\config_f'}(a) \ne \data{\config_f'}(a'_q)$.
+%	In this second part, agents of $\agents$ are left idle. $\run'$ is obtained by concatenating $\run_p'$ and $\apath'$. Since agents of $\agents$ behave the same in $\run$ and $\run'$, for all $a \in \agents$, $\config_f(a) = \config_f'(a')$. Also, $\psi(a_m)$ took the same transitions as $a_m$ hence $\st{\config_f}(\psi(a_m)) = q$. Finally, thanks to Lemma~\ref{prop:run_no_new_register_values}, the register values of agents of $\agents'$ are in the set $\data{\config_0'}(\agents')(\nset{1}{r})$ while the register values of agents of $\agents$ are in $\data{\config_0'}(\agents)(\nset{1}{r})$; both sets are disjoint as $\config_0'$ is initial and thus for all $a \in \agents, a' \in \agents'$, $j,j' \in \nset{1}{r}$, $\data{\config_f'}(a) \ne \data{\config_f'}(a'_q)$.
 %\end{proof}
 %\fi
 
 %\begin{lemma}[Strong copycat]\label{lem:strong_copycat}
-%	Let $\run : \config_0 \step{*} \config_f$ a "run" over set of agents $\agents$ with some distinguished agent $a_m \in \agents$ and register $j_m \in [1,r]$ such that $\data{\config_f}(a_m)(j_m) \ne \data{\config_0}(a_m)(j_m)$. % note that this condition may be relaxed to : a_m's register value did not stay the same throughout all of $\run$. 
+%	Let $\run : \config_0 \step{*} \config_f$ a "run" over set of agents $\agents$ with some distinguished agent $a_m \in \agents$ and register $j_m \in \nset{1}{r}$ such that $\data{\config_f}(a_m)(j_m) \ne \data{\config_0}(a_m)(j_m)$. % note that this condition may be relaxed to : a_m's register value did not stay the same throughout all of $\run$. 
 %	There exist $\agents' \subseteq \nats$ s.t. $\agents \cap \agents' = \emptyset$, $a_c \in \nats\setminus (\agents \cup \agents')$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents' \cup \set{a_c}$ such that:
 %	\begin{itemize}
 %		\item for all $a \in \agents$, $\config_f'(a) = \config_f(a)$ (agents of $\agents$ behave the same in $\run$ and $\run'$),
-%		\item for all $a \in \agents$, $a' \in \agents'$, $j, j' \in [1,r]$, $\data{\config_f}(a)(j) \ne \data{\config_f'}(a')(j')$,
+%		\item for all $a \in \agents$, $a' \in \agents'$, $j, j' \in \nset{1}{r}$, $\data{\config_f}(a)(j) \ne \data{\config_f'}(a')(j')$,
 %		\item $\st{\config_f'}(a_c) = \st{\config_f'}(a_m)$ and $\data{\config_f'}(a_c)(j_m) = \data{\config_f'}(a_m)(j_m)$.
 %	\end{itemize}
 %\end{lemma}
@@ -299,7 +299,7 @@ In some initial phase, agents decide whether they are ""root"" (at the beginning
 A "link" agent first receives a broadcast with an identifier which it decides to be the one of its predecessor. It then broadcasts its own identifier. This construction guarantees that "link" agents have exactly one predecessor. It does not guarantee, however, than all agents are in the same chain or that any agent is the predecessor of less than one agent. In practice, there exists a sequence of transitions from $q_0$ labeled by $\rec{\mathsf{init}}{2}{\enregact}, \br{\mathsf{init}}{1}$ that gets to $\waitstate \in Q$. 
 
 From $\waitstate$, there is, for every $\lstate \in \lstates$, a transition labeled by $\rec{\mathsf{\lstate}}{2}{\eqtestact}$ that goes to state $\startstate{\lstate} \in Q$. 
-For every transition $\ltrans = (\lstate, \mathsf{op}, \lstate') \in \ltransitions$ in $\los$ (\emph{i.e.}, every transition of $\ltransitions$ whose source is location $\lstate$), there is a transition in $\prot$ labeled by $\br{\mathsf{\lstate'}}{1}$ that goes from $\startstate{\lstate}$ to $\transstateone{\ltrans} \in Q$. 
+For every transition $\ltrans = (\lstate, \op, \lstate') \in \ltransitions$ in $\los$ (\emph{i.e.}, every transition of $\ltransitions$ whose source is location $\lstate$), there is a transition in $\prot$ labeled by $\br{\mathsf{\lstate'}}{1}$ that goes from $\startstate{\lstate}$ to $\transstateone{\ltrans} \in Q$. 
 Transitions from $\transstateone{\ltrans}$ in $\prot$ depend on $\ltrans$:
 \begin{itemize}
 \item If $\ltrans=(\lstate, u,?, \lstate')$ is a "pop" then $\prot$ has a sequence of transitions from $\transstateone{\ltrans}$ to $\transstatetwo{\ltrans} \in Q$ labeled by $\rec{\mathsf{u_1}}{2}{\eqtestact}, \rec{\mathsf{u_2}}{2}{\eqtestact}, \dots, \rec{\mathsf{u_k}}{2}{\eqtestact}$ where $u = u_1 u_2 \cdots u_k$. Moreover, there is, for every $x \in \Sigma$, a loop on $\transstatetwo{\ltrans}$ labeled with sequence of actions $\rec{\mathsf{x}}{2}{\eqtestact}, \br{\mathsf{x}}{1}$. There is also a sequence of  transitions from $\transstatetwo{\ltrans}$ to $\finstate{\lstate'}$ labeled by $\rec{\mathsf{\#}}{2}{\eqtestact}, \br{\mathsf{\#}}{1}$.
@@ -311,7 +311,7 @@ Note that, in this protocol, register $1$ is broadcast-only, therefore acting as
 
 We claim that $(\prot, q_f)$ is a positive instance of \COVER if and only if $(\los, \lstate_f)$ is a positive instance of the reachability problem for "lossy channel systems".
 First, suppose that there exists $w \in \Sigma^*$ such that $(\lstate_0, \epsilon) \lstep{*} (\lstate_f, w)$. Decompose the witness into $(\lstate_0, w_0) \lstep{} (\lstate_1, w_1) \lstep{} (\lstate_2, w_2) \cdots \lstep{} (\lstate_n,w_n)$ with $\lstate_n = \lstate_f$ and $w_n =w$. 
-We build an execution of $\prot$ that covers $q_f$ as follows. It has set of agents $\agents := \set{0,\dots, n}$. Agent $0$ becomes the "root" and for all $i \geq 1$, agent $i$ becomes a "link" with predecessor agent $i-1$. By induction on $i$, we build an execution using agents $0$ to $i$ such that agent $i$ ends on state $\finstate{\ltrans_i}$ and the sequence of messages sent by agent $i$ admits as subword $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w_i \cdot \mathsf{\#}$. For $i=0$, this condition is met as agent $0$ becomes "root". When the construction has been done up until agent $i$, we make agent $i+1$ do the following. It first places itself after agent $i$ in the chain and goes to $\waitstate$. It then received from agent $i$ state $l_i$ and goes to $\startstate{l_i}$. It then moves to $\transstateone{\ltrans}$ where $\ltrans = (\lstate_i, \mathsf{op}, \lstate_{i+1})$ is the transition of step $(\lstate_i, w_i) \lstep{} (\lstate_{i+1}, w_{i+1})$. Doing so, it broadcasts $\mathsf{\lstate_{i+1}}$. Its behavior then depends on $\ltrans$.
+We build an execution of $\prot$ that covers $q_f$ as follows. It has set of agents $\agents := \set{0,\dots, n}$. Agent $0$ becomes the "root" and for all $i \geq 1$, agent $i$ becomes a "link" with predecessor agent $i-1$. By induction on $i$, we build an execution using agents $0$ to $i$ such that agent $i$ ends on state $\finstate{\ltrans_i}$ and the sequence of messages sent by agent $i$ admits as subword $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w_i \cdot \mathsf{\#}$. For $i=0$, this condition is met as agent $0$ becomes "root". When the construction has been done up until agent $i$, we make agent $i+1$ do the following. It first places itself after agent $i$ in the chain and goes to $\waitstate$. It then received from agent $i$ state $l_i$ and goes to $\startstate{l_i}$. It then moves to $\transstateone{\ltrans}$ where $\ltrans = (\lstate_i, \op, \lstate_{i+1})$ is the transition of step $(\lstate_i, w_i) \lstep{} (\lstate_{i+1}, w_{i+1})$. Doing so, it broadcasts $\mathsf{\lstate_{i+1}}$. Its behavior then depends on $\ltrans$.
 \begin{itemize}
 \item if $\ltrans =(\lstate_i, u,!, \lstate_{i+1})$ is a "push" then $w_{i+1} \subword w_i \cdot u$; write $w_{i+1} = w_{i}' \cdot u'$ where $w_i' \subword w_i$ and $u' \subword u$. Agent $i+1$ receives every message in $w_i'$ and rebroadcasts it while looping on $\transstateone{\ltrans}$. It then broadcasts $u$ to get to $\transstatetwo{\ltrans}$. It finally receives $\mathsf{\#}$ from agent $i$ and rebroadcasts it, going to state $\finstate{\lstate_{i+1}}$. Overall the word broadcast by agent $i+1$ is $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w'_i \cdot u \cdot \mathsf{\#}$ which admits as subword $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w_{i+1} \cdot \mathsf{\#}$.
 \item if $\ltrans =(\lstate_i, u,?, \lstate_{i+1})$ is a "pop" then $u \cdot w_{i+1} \subword w_i$; write $w_{i} = u' \cdot w_{i+1}'$ where $w_{i+1} \subword w_{i+1}'$ and $u \subword u'$. Overall, agent $i+1$ receives from agent $i$ sequence of messages $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot u \cdot w_{i+1}' \cdot \mathsf{\#}$ (some messages get lost). 
