@@ -1,12 +1,13 @@
 %\subsection{Upper bound}
-To prove that the "cover problem" is in NP in the special case 1-BNRAs, we will present an abstraction on "configurations" and "runs". Intuitively, our abstraction keeps track of a set of reachable states and what we shall name a "gang". A "gang" represents a "boss" state and a set of "followers" states, it should represent all configurations in which a process is on the "boss" state and kept its initial value $v$ and other processes are on the "followers" states with register value $\val$. We will define an abstract semantics, and prove it to be sound and complete. Finally, we will present a NP-algorithm on this abstraction to answer the "cover problem".
+To prove that the "cover problem" is in NP in the special case of 1-BNRAs, we will present an abstraction on "configurations" and "runs". Intuitively, our abstraction keeps track of a set of reachable states and what we shall name a "gang". A "gang" represents a "boss" state and a set of "followers" states, it should represent all configurations in which a process is on the "boss" state and kept its initial value $v$ and other processes are on the "followers" states with the same register value $\val$. We will define an abstract semantics, and prove it to be sound and complete. Finally, we will present a NP-algorithm on this abstraction to answer the "cover problem". The rest of this section is dedicated to prove that the "cover problem" for 1-BNRAs is in NP, we will first present the abstraction and then present the NP-algorithm.
 
-In order to make proofs easier, and simplify the problem, we first present some preliminaries lemmas which allow us to (i) reduce our analysis to protocols that does not have receptions with actions $\quotemarks{\ne}$, or local tests, (ii) only consider "non-contradictory" queries.
+\subsection{Abstraction }
+In order to make proofs easier, and simplify the problem, we first present a lemma allowing us to only consider protocols which does not contain any reception transition with actions $\quotemarks{\ne}$.
+
+The intuition is the following, we can transform a protocol with 1 register and with disequality tests to the same protocol where all disequality test are replaced by a $\quotemarks{\dummyact}$. Then, for any run of the transformed protocol, we can build a run of the initial protocol in the following way: when a transition with action $\quotemarks{\dummyact}$ is taken by an agent, we apply the copycat principle in order to obtain a run leading to a configuration in which each original agent has a clone in the same state but with a different value. This way, the broadcasting agent of the initial run has a clone able to send the same message but with a fresh value. Now, the agent orginally taking the transition with action $\quotemarks{\dummyact}$ when receiving the message can take the corresponding transition with action $\quotemarks{\diseqtestact}$  by receiving the same message but this time, the message is sent by the cloned agent.
 
 
-\luin{exemples + rappel copy cat (sous angle de r = 1) + lemma no diseq}
 
-\subsection{Preliminaries}
 
 
 
@@ -15,73 +16,74 @@ In order to make proofs easier, and simplify the problem, we first present some 
 %\end{definition}
 
 
-\luin{changer copycat -> go dans partie 2 }
 
-
-In this model, given a run, we can clone it. Take a disjoint set of agents, with a disjoint set of initial values, each agent can mimick the behaviour of one agent of the initial run and reach the same state than its original agent. This idea is formalized in the following lemma.
-
-\begin{lemma}[Weak copycat]\label{lem:weak_copycat}
-Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ a "run" over a set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\st{\config_f}(a_m) = q$. There exist $\agents' \subseteq \nats$ finite s.t. $\agents \cap \agents' = \emptyset$, $a_c \in \agents'$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ such that:
-\begin{itemize}
-\item for all $a \in \agents$, $\config_f'(a) = \config_f(a)$ (agents of $\agents$ end the same in $\run$ and $\run'$),
-\item for all $a \in \agents$, $a' \in \agents'$, $\data{\config_f}(a) \ne \data{\config_f'}(a')$,
-\item $\st{\config_f}(a_m) = \st{\config_f'}(a_c)$.
-\end{itemize}
-\end{lemma}
-
-
-\ifproofs
-\begin{proof}
-Let $\agents' \subseteq \nats$ such that $|\agents'|= |\agents|$ and $\agents \cap \agents' = \emptyset$.
-There exists a bijection $\psi: \agents \mapsto \agents'$. Let $\config_0'$ an initial configuration over $\agents \cup \agents'$ which is equal to $\config_0$ on every agent of $\agents$. 
-The constructed "run" $\run'$ starts on configuration $\config_0'$ and is composed of two parts. 
-The first part consists in mimicking the sequence of steps of $\run$ with agents of $\agents$, while agents in $\agents'$ remain idle. This defines a run $\run_p' : \config_0' \step{*}  \config_m'$.  
-The second part consists in a path $\apath': \config_m' \step{*} \config_f'$ which replicates the sequence of actions of $\run$ but on agents of $\agents'$: if an agent $a \in \agents$ takes a transition at step $i$ of $\run$, we make $\psi(a)$ take that transition at step $i$ of $\apath'$.
-In this second part, agents of $\agents$ are left idle. $\run'$ is obtained by concatenating $\run_p'$ and $\apath'$. Since agents of $\agents$ behave the same in $\run$ and $\run'$, for all $a \in \agents$, $\config_f(a) = \config_f'(a')$. Also, $\psi(a_m)$ took the same transitions as $a_m$ hence $\st{\config_f}(\psi(a_m)) = q$. Finally, thanks to Remark~\ref{rem:run_no_new_register_values}, the register values of agents of $\agents'$ are in the set $\data{\config_0'}(\agents')$ while the register values of agents of $\agents$ are in $\data{\config_0'}(\agents')$; both sets are disjoint as $\config_0'$ is initial and for all $a \in \agents, a' \in \agents'$, $\data{\config_f'}(a) \ne \data{\config_f'}(a'_q)$.
-\end{proof}
-\fi
-
-
-We can also clone some agents with their values. 
-Take any run in which one agent broadcast its initial value, each time it sends its value, any number of processes can receive it. If one process stores the value at one point, any number of agents can do the same. This way, we can create run with any arbitrary number of processes storing the same value of the initial agent. This idea is formalized in the following lemma.
-
-\begin{lemma}[Strong copycat]\label{lem:strong_copycat}
-Let $\run : \config_0 \step{*} \config_f$ a "run" over a set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\data{\config_f}(a_m) \ne \data{\config_0}(a_m)$. % note that this condition may be relaxed to : a_m's register value did not stay the same throughout all of $\run$. 
- There exist $\agents' \in \nats$ st. $\agents \cap \agents' = \emptyset$, $a_c \in \nats\setminus (\agents \cup \agents')$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents' \cup \set{a_c}$ such that:
-\begin{itemize}
-\item for all $a \in \agents$, $\config_f'(a) = \config_f(a)$ (agents of $\agents$ behave the same in $\run$ and $\run'$),
-\item for all $a \in \agents$, $a' \in \agents'$, $\data{\config_f}(a) \ne \data{\config_f'}(a')$,
-\item $\st{\config_f'}(a_c) = \st{\config_f'}(a_m)$ and $\data{\config_f'}(a_c) = \data{\config_f'}(a_m)$.
-\end{itemize}
-\end{lemma}
-
-\ifproofs
-\begin{proof}
-Write $\aval := \data{\config_f}(a_m)$. Since $a_m$ does not start with $v$, $a_m$ does a $\quotemarks{\enregact}$ action in $\run$.
-Decompose $\run$ into $\run_p: \config_0 \step{*} \config_{m,1}$, $\apath_i: \config_{m,1} \step{} \config_{m,2}$ and $\apath_s: \config_{m,2} \step{*} \config_f$ where $\apath_i$ is the step where $a_m$ does a $\quotemarks{\enregact}$ action for the last time; write $(q,\rec{\amessage}{\enregact},q') \in\transitions$ the transition taken by $a_m$ in $\apath_i$. By applying weak copycat on $\run_p : \config_0 \step{*} \config$, we add an agent $a_c$ on state $q$ at the cost of adding a set of agents $\agents'$ whose data is disjoint from  the one of agents in $\agents$. Agents of $\agents'$ are left idle in subsequent steps. We make $a_c$ take the $\quotemarks{\enregact}$ transition at the same time as $a_m$, so that there are both on $q'$ with value $v$. We finally make $a_c$ mimick $a_m$ throughout $\apath_s$: to do so, whenever $a_m$ takes a reception transition, we make $a_c$ take the same transition in the same step (which is possible as they have the same register value). When $a_m$ broadcasts, we duplicate the broadcast step to make $a_c$ broadcast immediatly after, although no agent receives $a_c$'s broadcast. We end up with $a_m$ and $a_c$ on the same state with the same register value, which concludes the proof. 
- \end{proof}
-\fi
-
+%
+%In this model, given a run, we can clone it. Take a disjoint set of agents, with a disjoint set of initial values, each agent can mimick the behaviour of one agent of the initial run and reach the same state than its original agent. This idea is formalized in the following lemma.
+%
+%\begin{lemma}[Weak copycat]\label{lem:weak_copycat}
+%Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ a "run" over a set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\st{\config_f}(a_m) = q$. There exist $\agents' \subseteq \nats$ finite s.t. $\agents \cap \agents' = \emptyset$, $a_c \in \agents'$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ such that:
+%\begin{itemize}
+%\item for all $a \in \agents$, $\config_f'(a) = \config_f(a)$ (agents of $\agents$ end the same in $\run$ and $\run'$),
+%\item for all $a \in \agents$, $a' \in \agents'$, $\data{\config_f}(a) \ne \data{\config_f'}(a')$,
+%\item $\st{\config_f}(a_m) = \st{\config_f'}(a_c)$.
+%\end{itemize}
+%\end{lemma}
+%
+%
+%\ifproofs
+%\begin{proof}
+%Let $\agents' \subseteq \nats$ such that $|\agents'|= |\agents|$ and $\agents \cap \agents' = \emptyset$.
+%There exists a bijection $\psi: \agents \mapsto \agents'$. Let $\config_0'$ an initial configuration over $\agents \cup \agents'$ which is equal to $\config_0$ on every agent of $\agents$. 
+%The constructed "run" $\run'$ starts on configuration $\config_0'$ and is composed of two parts. 
+%The first part consists in mimicking the sequence of steps of $\run$ with agents of $\agents$, while agents in $\agents'$ remain idle. This defines a run $\run_p' : \config_0' \step{*}  \config_m'$.  
+%The second part consists in a path $\apath': \config_m' \step{*} \config_f'$ which replicates the sequence of actions of $\run$ but on agents of $\agents'$: if an agent $a \in \agents$ takes a transition at step $i$ of $\run$, we make $\psi(a)$ take that transition at step $i$ of $\apath'$.
+%In this second part, agents of $\agents$ are left idle. $\run'$ is obtained by concatenating $\run_p'$ and $\apath'$. Since agents of $\agents$ behave the same in $\run$ and $\run'$, for all $a \in \agents$, $\config_f(a) = \config_f'(a')$. Also, $\psi(a_m)$ took the same transitions as $a_m$ hence $\st{\config_f}(\psi(a_m)) = q$. Finally, thanks to Remark~\ref{rem:run_no_new_register_values}, the register values of agents of $\agents'$ are in the set $\data{\config_0'}(\agents')$ while the register values of agents of $\agents$ are in $\data{\config_0'}(\agents')$; both sets are disjoint as $\config_0'$ is initial and for all $a \in \agents, a' \in \agents'$, $\data{\config_f'}(a) \ne \data{\config_f'}(a'_q)$.
+%\end{proof}
+%\fi
+%
+%
+%We can also clone some agents with their values. 
+%Take any run in which one agent broadcast its initial value, each time it sends its value, any number of processes can receive it. If one process stores the value at one point, any number of agents can do the same. This way, we can create run with any arbitrary number of processes storing the same value of the initial agent. This idea is formalized in the following lemma.
+%
+%\begin{lemma}[Strong copycat]\label{lem:strong_copycat}
+%Let $\run : \config_0 \step{*} \config_f$ a "run" over a set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\data{\config_f}(a_m) \ne \data{\config_0}(a_m)$. % note that this condition may be relaxed to : a_m's register value did not stay the same throughout all of $\run$. 
+% There exist $\agents' \in \nats$ st. $\agents \cap \agents' = \emptyset$, $a_c \in \nats\setminus (\agents \cup \agents')$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents' \cup \set{a_c}$ such that:
+%\begin{itemize}
+%\item for all $a \in \agents$, $\config_f'(a) = \config_f(a)$ (agents of $\agents$ behave the same in $\run$ and $\run'$),
+%\item for all $a \in \agents$, $a' \in \agents'$, $\data{\config_f}(a) \ne \data{\config_f'}(a')$,
+%\item $\st{\config_f'}(a_c) = \st{\config_f'}(a_m)$ and $\data{\config_f'}(a_c) = \data{\config_f'}(a_m)$.
+%\end{itemize}
+%\end{lemma}
+%
+%\ifproofs
+%\begin{proof}
+%Write $\aval := \data{\config_f}(a_m)$. Since $a_m$ does not start with $v$, $a_m$ does a $\quotemarks{\enregact}$ action in $\run$.
+%Decompose $\run$ into $\run_p: \config_0 \step{*} \config_{m,1}$, $\apath_i: \config_{m,1} \step{} \config_{m,2}$ and $\apath_s: \config_{m,2} \step{*} \config_f$ where $\apath_i$ is the step where $a_m$ does a $\quotemarks{\enregact}$ action for the last time; write $(q,\rec{\amessage}{\enregact},q') \in\transitions$ the transition taken by $a_m$ in $\apath_i$. By applying weak copycat on $\run_p : \config_0 \step{*} \config$, we add an agent $a_c$ on state $q$ at the cost of adding a set of agents $\agents'$ whose data is disjoint from  the one of agents in $\agents$. Agents of $\agents'$ are left idle in subsequent steps. We make $a_c$ take the $\quotemarks{\enregact}$ transition at the same time as $a_m$, so that there are both on $q'$ with value $v$. We finally make $a_c$ mimick $a_m$ throughout $\apath_s$: to do so, whenever $a_m$ takes a reception transition, we make $a_c$ take the same transition in the same step (which is possible as they have the same register value). When $a_m$ broadcasts, we duplicate the broadcast step to make $a_c$ broadcast immediatly after, although no agent receives $a_c$'s broadcast. We end up with $a_m$ and $a_c$ on the same state with the same register value, which concludes the proof. 
+% \end{proof}
+%\fi
+%
 
 \begin{corollary}
 \label{cor:removing_diseq_tests}
-Let $(\prot, \query)$ an instance of the "query coverability problem". This instance is positive if and only if $(\tilde{\prot}, \query)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
+Let $(\prot, q_f)$ an instance of the "coverability problem". This instance is positive if and only if $(\tilde{\prot}, q_f)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
 \end{corollary}
 
-\ifproofs
-\begin{proof}
-First, if $(\prot, \query)$ is positive then so is $(\tilde{\prot}, \query)$, as one can easily lift any "run" in $\prot$ to an equivalent "run" in $\tilde{\prot}$ (transitions are less guarded  in $\tilde{\prot}$ that in $\prot$). 
+The proof can be found on the appendix \ref{app:cover-one-reg}.
 
-Suppose now that $(\tilde{\prot}, \query)$ is a positive instance of the "query coverability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that satisfies $\query$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (Remark~\ref{rem:bigger_config_query} then allows us to conclude). 
+%\ifproofs
+%\begin{proof}
+%First, if $(\prot, q_f)$ is positive then so is $(\tilde{\prot}, q_f)$, as one can easily lift any "run" in $\prot$ to an equivalent "run" in $\tilde{\prot}$ (transitions are less guarded  in $\tilde{\prot}$ that in $\prot$). 
+%
+%Suppose now that $(\tilde{\prot}, q_f)$ is a positive instance of the "coverability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that covers $q_f$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (Remark~\ref{rem:bigger_config_query} then allows us to conclude). 
+%
+%If $\config = \config_0$ then $\run = \tilde{\run}$ suffices. Suppose that $\tilde{\run}$ has length $k \geq 1$, and that the result if true for "runs" of length $k-1$. Decompose $\tilde{\run}$ into $\tilde{\run_{k-1}}: \tilde{\config_0} \step{*} \tilde{\config_{k-1}}$ of length $k-1$ and a final step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. 
+%By induction hypothesis, there exists $\run_{k-1}: \config_0 \step{*} \config_{k-1}$ such that $\tilde{\config_{k-1}} \lessthan \config_{k-1}$: there exists an injective function $\pi : \tilde{\agents} \rightarrow \agents$
+% such that, for all $a \in \tilde{\agents}$, $\tilde{\config_{k-1}}(a) = \config_{k-1}(\pi(a))$, where $\tilde{\agents} := \agentsof{\tilde{\run}}$ and $\agents := \agentsof{\run}$. If $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ involves no reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$, then we directly lift this step into a step appended at the end of $\run_{k-1}$ (making $\pi(a)$ take a transition whenever $a$ does so in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$). Otherwise, write $\tilde{\agents}_{\diseqtestact}$ the subset of $\tilde{\agents}$ corresponding to agents taking in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ a reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$ . Write $(q, \brone{m}, q') \in \transitions$ the broadcast transition used in this step.  Using the copycat principle, we add to $\config_{k-1}$ a fresh agent $a_{\mathsf{new}}$ with state $q$ and a register value that does not appear in $\config_{k-1}$. 
+%We first mimic this broadcast step at the end of $\run_{k-1}$, making any agent $\pi(a) \in \pi(\tilde{\agents} \setminus \tilde{\agents}_{\diseqtestact})$ take the transition that $a$ takes in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. We then add a new step where $a_{\mathsf{new}}$ broadcasts using transition $(q, \brone{m}, q')$, and every agent $\pi(a) \in \pi(\tilde{\agents}_{\diseqtestact})$ takes the transition corresponding to the transition taken by $a$ in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. Such a transition is a reception with action $\quotemarks{\diseqtestact}$ in $\prot$; however, because $a_{\mathsf{new}}$ does not share its register value with any process from $\tilde{\agents}$, all disequality conditions are satisfied and this step is valid. In this end, every agent $\pi(a) \in \pi(\tilde{\agents})$ has taken the transition in $\prot$ corresponding to the one $a$ took in $\tilde{\prot}$ in step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$, hence the configuration $\config_k$ reached by the constructed run is such that $\tilde{\config_k} \lessthan \config_k$. 
+%\end{proof}
+%\fi
 
-If $\config = \config_0$ then $\run = \tilde{\run}$ suffices. Suppose that $\tilde{\run}$ has length $k \geq 1$, and that the result if true for "runs" of length $k-1$. Decompose $\tilde{\run}$ into $\tilde{\run_{k-1}}: \tilde{\config_0} \step{*} \tilde{\config_{k-1}}$ of length $k-1$ and a final step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. 
-By induction hypothesis, there exists $\run_{k-1}: \config_0 \step{*} \config_{k-1}$ such that $\tilde{\config_{k-1}} \lessthan \config_{k-1}$: there exists an injective function $\pi : \tilde{\agents} \rightarrow \agents$
- such that, for all $a \in \tilde{\agents}$, $\tilde{\config_{k-1}}(a) = \config_{k-1}(\pi(a))$, where $\tilde{\agents} := \agentsof{\tilde{\run}}$ and $\agents := \agentsof{\run}$. If $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ involves no reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$, then we directly lift this step into a step appended at the end of $\run_{k-1}$ (making $\pi(a)$ take a transition whenever $a$ does so in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$). Otherwise, write $\tilde{\agents}_{\diseqtestact}$ the subset of $\tilde{\agents}$ corresponding to agents taking in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ a reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$ . Write $(q, \brone{m}, q') \in \transitions$ the broadcast transition used in this step.  Using Lemma~\ref{lem:weak_copycat}, we add to $\config_{k-1}$ a fresh agent $a_{\mathsf{new}}$ with state $q$ and a register value that does not appear in $\config_{k-1}$. 
-We first mimic this broadcast step at the end of $\run_{k-1}$, making any agent $\pi(a) \in \pi(\tilde{\agents} \setminus \tilde{\agents}_{\diseqtestact})$ take the transition that $a$ takes in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. We then add a new step where $a_{\mathsf{new}}$ broadcasts using transition $(q, \brone{m}, q')$, and every agent $\pi(a) \in \pi(\tilde{\agents}_{\diseqtestact})$ takes the transition corresponding to the transition taken by $a$ in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. Such a transition is a reception with action $\quotemarks{\diseqtestact}$ in $\prot$; however, because $a_{\mathsf{new}}$ does not share its register value with any process from $\tilde{\agents}$, all disequality conditions are satisfied and this step is valid. In this end, every agent $\pi(a) \in \pi(\tilde{\agents})$ has taken the transition in $\prot$ corresponding to the one $a$ took in $\tilde{\prot}$ in step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$, hence the configuration $\config_k$ reached by the constructed run is such that $\tilde{\config_k} \lessthan \config_k$. 
-\end{proof}
-\fi
-
-Thanks to Corollary~\ref{cor:removing_diseq_tests}, we shall from now on suppose that all considered protocols have no disequality tests. 
+%Thanks to Corollary~\ref{cor:removing_diseq_tests}, we shall from now on suppose that all considered protocols have no disequality tests. 
 
 
 %\begin{definition}
@@ -89,85 +91,80 @@ Thanks to Corollary~\ref{cor:removing_diseq_tests}, we shall from now on suppose
 %	A configuration $\config$ satisfies $K$ if there exists $\aval \in \nats$ such that $\config, \aval $ satisfies $K$. 
 %	A "run" satisfies $K$ if its final configuration does.
 %\end{definition}
-Note that if a "run" satisfies $K$, then it covers every state in $K$. The converse is not true as, in order to satisfy $K$, one needs to have agents of every state of $K$ that all share the same register value. See for instance the example below.
-
-\begin{example}
-	Consider the "protocol" displayed in Figure~\ref{fig:no-clique}.
-	We can obtain configurations satisfying $\set{1,2}$, $\set{2,3}$ or $\set{1,3}$, but we cannot obtain one satisfying $\set{1,2,3}$.
-	
-	\begin{figure}[h]
-		\input{Figures/fig-no-clique}
-		\caption{An illustrating example}
-		\label{fig:no-clique}
-	\end{figure}
-\end{example}
-
-
-The rest of this subsection aims to prove that one can only consider "non-contradictory" queries. We formalize this term in the following definition.
-\begin{definition}
-We say that a "query" $\query$ is ""contradictory"" if either:
-	\begin{itemize}
-		\item there exists $\varz$ and $q \neq q' \in Q$ such that $\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$ or
-		
-		\item there exist $\var{z_1}, \ldots, \var{z_k} \in \varset$ with $k\geq 1$ such that $\quotemarks{R(\varz_{i}) = R(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R(\varz_k) \neq R(\varz_1)} \in \query$.
-	\end{itemize}
-\end{definition}
-
-\begin{proposition}
-A "query" $\query$ is "contradictory" if and only if there exists no configuration satisfying $\query$. Additionnaly, one may decide whether $\query$ is contradictory in time polynomial in $\size{\prot} + \size{\query}$. 
-\end{proposition}
-
-\ifproofs
-\begin{proof}
-Suppose first that $\query$ is "contradictory". If there exist $q \ne q'$ such that
- $\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$,  then a "configuration" satisfying $\query$ would need to have a single agent in two distinct states. If there exist $\var{z_1}, \ldots, \var{z_k}$ distinct variables with $k>1$ such that $\quotemarks{R(\varz_{i}) = R(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R(\varz_k) \neq R(\varz_1)} \in \query$, then in any configuration satisfying $\query$, $\varz_k$ and $\varz_1$ must have the same register value but also distinct register values, which is a contradiction. 
-
-Suppose now that the $\query$ is not "contradictory" and show that there exists some configuration satisfying $\query$.
-
-We consider the graph $G$ whose vertices are variables of $\varset$ appearing in $\query$ and with an edge between $\varz$ and $\varz'$ if and only if $R(\varz) = R(\varz') \in \query$. Since $\query$ is not "contradictory", for any $\varz, \varz'$ in the same connected component of $G$, $\quotemarks{R(\varz) \ne R(\varz')} \notin \query$. We construct a configuration satisfying $\query$ with an agent $a_\varz$ for every $\varz$ such that:
-\begin{itemize}
-\item if $\quotemarks{q(\varz)} \in \query$ then $a_\varz$ is in state $q$,
-\item the agents of the variables of a connected component of $G$ have all the same register value.  
-\end{itemize}
-The built configuration satisfies $\query$, which concludes the proof. 
-\end{proof}
-\fi
-
-\begin{lemma}
-\label{lem:query-decomposition}
-Let $\query$ a  "non-contradictory" "query". There exist $K_1, \ldots, K_p \subseteq Q$ with $p \leq \size{\query}$ with the following property: there exists a "run" satisfying $\query$ if and only if for all $i \in \set{1,\ldots, p}$, there is a run satisfying $K_i$. Moreover,such sets $K_1, \dots, K_p$ may be computed in time polynomial in $\size{\prot}$. 
-\end{lemma}
-
-\ifproofs
-\begin{proof}
-
-	We consider the same graph $G$ as in the previous proof. We decompose $G$ into connected components $C_1, \ldots, C_p$. 
-For each $C_i$ we define $K_i = \set{q \in Q \mid \exists \varz \in C_i, q(\varz) \in \query}$. Note that $K_i$ may be empty when there is no constraints on the states of the variables in $C_i$. An empty set is satisfied by any "run". This is coherent with the fact that, when $K_i = \emptyset$, it suffices to assign all variables in $C_i$ to an agent that stays in $q_0$ for the whole "run".
-
-	Suppose there is a "run" satisfying $\query$, let $\config$ be its final configuration, let $\nu$ be a valuation witnessing the satisfaction of $\query$ by $\config$.
-	Let $i \in \set{1,\ldots, p}$, we show that $\config$ satisfies $K_i$. For all $\varz \in C_i$, let $(q_\varz,\aval_\varz) = \config(\nu(\varz))$. As $C_i$ is a connected component of $G$ and $\config$ satisfies $\query$, all $\nu(\varz)$ with $\varz \in C_i$ have the same register value, which we call $\aval$. 
-	For all $q \in K_i$, there exists $\varz \in C_i$ such that $q(\varz) \in \query$ and thus $q_\varz =q$ and $\aval_\varz =\aval$, thus $C_i$ is satisfied.
-	
-	For the converse implication, suppose for all $i$ we have a run $\run_i$ over a set of agents $\agents_i$ satisfying $K_i$. We rename agents so that the $\agents_i$ are pairwise disjoint, we introduce fresh agents $a_1, \ldots, a_p$ and we set $\agents = \set{a_1, \ldots, a_p} \sqcup \bigsqcup_{i=1}^p \agents_i$. We consider $\run: \config_0 \step{*} \config$ a "run" in which the sequences of actions of each $\run_i$ are executed sequently by agents from $\agents_i$. In $\run$, agents $a_1$ to $a_p$ are left idle on $q_0$. We build the valuation $\nu$ witnessing that $\run$ satisfies $\query$ as follows. Let $i \in \nset{1}{p}$. If $K_i = \emptyset$ then $\nu$ assigns $a_i$ to every variable of $C_i$. Otherwise, we know that $\config|_{\agents_i}$ satisfies $K_i$ because the final configuration of $\run_i$ does: there exists $\aval_i \in \nats$ such that, for all $q \in K_i$, some agent $a_{i,q}$ has state $q$ and register value $\aval_i$ in $\config$. Let $\varz \in C_i$. If, for some $q \in Q$, $\quotemarks{q(\varz)} \in \query$, $\nu$ assigns agent $a_{i,q}$ to $\varz$ ($q$ is unique as $\query$ is not "contradictory"). If $\query$ has no constraint about the state of $\varz$, $\nu$ assigns to $\varz$ some $a_{i,q}$ with $q \in k_i$ arbitrary. 
-	
-	% We define a valuation $\nu$ as follows. Let $\varz \in \varset$ and $i$ so that $C_i$ is the connected component of $\varz$ in $G$. If  for some $q$, then this $q$ is unique as $\query$ is not "contradictory". We set $\nu(\varz) = a_q^i$.
-	% If there is no $q(\varz)$ for any $q \in Q$ in $\query$ but there is one of the form $q'(\varz')$ with $\varz' \in C_i$, then we set $\nu(\varz) = \nu(\varz')$.
-	% Otherwise we set $\nu(\varz) = a_i$.
-	% This fully defines our valuation $\nu$.
-	
-	Clearly all formulas of the form $q(\varz)$ or $R(\varz) = R(\varz')$ are satisfied.
-	For the formulas of the form $R(\varz) \neq R(\varz')$, we observe that as $\query$ is not "contradictory", $\varz$ and $\varz'$ are not in the same connected component of $G$. Because the runs $\run_i$ worked with disjoint sets of register values ($\config_0$ is initial), the agents assigned to $\varz$ and $\varz'$ end the run with distinct register values.
-	Hence $\data{\config}(\nu(\varz)) \neq \data{\config}(\nu(\varz'))$. As a result, $\query$ is satisfied by $\run$.
-\end{proof}
-\fi
+%Note that if a "run" satisfies $K$, then it covers every state in $K$. The converse is not true as, in order to satisfy $K$, one needs to have agents of every state of $K$ that all share the same register value. See for instance the example below.
+%
+%\begin{example}
+%	Consider the "protocol" displayed in Figure~\ref{fig:no-clique}.
+%	We can obtain configurations satisfying $\set{1,2}$, $\set{2,3}$ or $\set{1,3}$, but we cannot obtain one satisfying $\set{1,2,3}$.
+%	
+%	\begin{figure}[h]
+%		\input{Figures/fig-no-clique}
+%		\caption{An illustrating example}
+%		\label{fig:no-clique}
+%	\end{figure}
+%\end{example}
 
 
-We are now ready to define our abstraction.
+%The rest of this subsection aims to prove that one can only consider "non-contradictory" queries. We formalize this term in the following definition.
+%\begin{definition}
+%We say that a "query" $\query$ is ""contradictory"" if either:
+%	\begin{itemize}
+%		\item there exists $\varz$ and $q \neq q' \in Q$ such that $\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$ or
+%		
+%		\item there exist $\var{z_1}, \ldots, \var{z_k} \in \varset$ with $k\geq 1$ such that $\quotemarks{R(\varz_{i}) = R(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R(\varz_k) \neq R(\varz_1)} \in \query$.
+%	\end{itemize}
+%\end{definition}
+%
+%\begin{proposition}
+%A "query" $\query$ is "contradictory" if and only if there exists no configuration satisfying $\query$. Additionnaly, one may decide whether $\query$ is contradictory in time polynomial in $\size{\prot} + \size{\query}$. 
+%\end{proposition}
+%
+%\ifproofs
+%\begin{proof}
+%Suppose first that $\query$ is "contradictory". If there exist $q \ne q'$ such that
+% $\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$,  then a "configuration" satisfying $\query$ would need to have a single agent in two distinct states. If there exist $\var{z_1}, \ldots, \var{z_k}$ distinct variables with $k>1$ such that $\quotemarks{R(\varz_{i}) = R(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R(\varz_k) \neq R(\varz_1)} \in \query$, then in any configuration satisfying $\query$, $\varz_k$ and $\varz_1$ must have the same register value but also distinct register values, which is a contradiction. 
+%
+%Suppose now that the $\query$ is not "contradictory" and show that there exists some configuration satisfying $\query$.
 
-\subsection{Abstraction}
+%We consider the graph $G$ whose vertices are variables of $\varset$ appearing in $\query$ and with an edge between $\varz$ and $\varz'$ if and only if $R(\varz) = R(\varz') \in \query$. Since $\query$ is not "contradictory", for any $\varz, \varz'$ in the same connected component of $G$, $\quotemarks{R(\varz) \ne R(\varz')} \notin \query$. We construct a configuration satisfying $\query$ with an agent $a_\varz$ for every $\varz$ such that:
+%\begin{itemize}
+%\item if $\quotemarks{q(\varz)} \in \query$ then $a_\varz$ is in state $q$,
+%\item the agents of the variables of a connected component of $G$ have all the same register value.  
+%\end{itemize}
+%The built configuration satisfies $\query$, which concludes the proof. 
+%\end{proof}
+%\fi
+
+%\begin{lemma}
+%\label{lem:query-decomposition}
+%Let $\query$ a  "non-contradictory" "query". There exist $K_1, \ldots, K_p \subseteq Q$ with $p \leq \size{\query}$ with the following property: there exists a "run" satisfying $\query$ if and only if for all $i \in \set{1,\ldots, p}$, there is a run satisfying $K_i$. Moreover,such sets $K_1, \dots, K_p$ may be computed in time polynomial in $\size{\prot}$. 
+%\end{lemma}
+%
+%\ifproofs
+%\begin{proof}
+%
+%	We consider the same graph $G$ as in the previous proof. We decompose $G$ into connected components $C_1, \ldots, C_p$. 
+%For each $C_i$ we define $K_i = \set{q \in Q \mid \exists \varz \in C_i, q(\varz) \in \query}$. Note that $K_i$ may be empty when there is no constraints on the states of the variables in $C_i$. An empty set is satisfied by any "run". This is coherent with the fact that, when $K_i = \emptyset$, it suffices to assign all variables in $C_i$ to an agent that stays in $q_0$ for the whole "run".
+%
+%	Suppose there is a "run" satisfying $\query$, let $\config$ be its final configuration, let $\nu$ be a valuation witnessing the satisfaction of $\query$ by $\config$.
+%	Let $i \in \set{1,\ldots, p}$, we show that $\config$ satisfies $K_i$. For all $\varz \in C_i$, let $(q_\varz,\aval_\varz) = \config(\nu(\varz))$. As $C_i$ is a connected component of $G$ and $\config$ satisfies $\query$, all $\nu(\varz)$ with $\varz \in C_i$ have the same register value, which we call $\aval$. 
+%	For all $q \in K_i$, there exists $\varz \in C_i$ such that $q(\varz) \in \query$ and thus $q_\varz =q$ and $\aval_\varz =\aval$, thus $C_i$ is satisfied.
+%	
+%	For the converse implication, suppose for all $i$ we have a run $\run_i$ over a set of agents $\agents_i$ satisfying $K_i$. We rename agents so that the $\agents_i$ are pairwise disjoint, we introduce fresh agents $a_1, \ldots, a_p$ and we set $\agents = \set{a_1, \ldots, a_p} \sqcup \bigsqcup_{i=1}^p \agents_i$. We consider $\run: \config_0 \step{*} \config$ a "run" in which the sequences of actions of each $\run_i$ are executed sequently by agents from $\agents_i$. In $\run$, agents $a_1$ to $a_p$ are left idle on $q_0$. We build the valuation $\nu$ witnessing that $\run$ satisfies $\query$ as follows. Let $i \in \nset{1}{p}$. If $K_i = \emptyset$ then $\nu$ assigns $a_i$ to every variable of $C_i$. Otherwise, we know that $\config|_{\agents_i}$ satisfies $K_i$ because the final configuration of $\run_i$ does: there exists $\aval_i \in \nats$ such that, for all $q \in K_i$, some agent $a_{i,q}$ has state $q$ and register value $\aval_i$ in $\config$. Let $\varz \in C_i$. If, for some $q \in Q$, $\quotemarks{q(\varz)} \in \query$, $\nu$ assigns agent $a_{i,q}$ to $\varz$ ($q$ is unique as $\query$ is not "contradictory"). If $\query$ has no constraint about the state of $\varz$, $\nu$ assigns to $\varz$ some $a_{i,q}$ with $q \in k_i$ arbitrary. 
+%	
+%	% We define a valuation $\nu$ as follows. Let $\varz \in \varset$ and $i$ so that $C_i$ is the connected component of $\varz$ in $G$. If  for some $q$, then this $q$ is unique as $\query$ is not "contradictory". We set $\nu(\varz) = a_q^i$.
+%	% If there is no $q(\varz)$ for any $q \in Q$ in $\query$ but there is one of the form $q'(\varz')$ with $\varz' \in C_i$, then we set $\nu(\varz) = \nu(\varz')$.
+%	% Otherwise we set $\nu(\varz) = a_i$.
+%	% This fully defines our valuation $\nu$.
+%	
+%	Clearly all formulas of the form $q(\varz)$ or $R(\varz) = R(\varz')$ are satisfied.
+%	For the formulas of the form $R(\varz) \neq R(\varz')$, we observe that as $\query$ is not "contradictory", $\varz$ and $\varz'$ are not in the same connected component of $G$. Because the runs $\run_i$ worked with disjoint sets of register values ($\config_0$ is initial), the agents assigned to $\varz$ and $\varz'$ end the run with distinct register values.
+%	Hence $\data{\config}(\nu(\varz)) \neq \data{\config}(\nu(\varz'))$. As a result, $\query$ is satisfied by $\run$.
+%\end{proof}
+%\fi
 \label{sec:abstraction}
 
-The abstraction should keep track of a particular state (the state of the process with the initial register value) and a set of states in which any number of processes can be on with the same non-initial value. We name this tuple a "gang" which we define formally below.
+We are now ready to define our abstraction. As we said, it should keep track of a particular state (the state of the process with the initial register value) and a set of states in which any number of processes can be on with the same non-initial value. We name this tuple a "gang" which we define formally below.
 
 \begin{definition}
 	Let $(Q,\transitions, q_0)$ be a protocol.
@@ -262,7 +259,7 @@ The \emph{initial abstract configuration} is $\aconfiginit := (\set{q_0}, q_0, \
 As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 = \aconfiginit$ is the initial configuration and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Similarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
 \end{definition}
 
-The gang reset will help us doing the following, if one wants to check if one state is reachable, it should be the abstract run leading to it. Once it is done, the reachable state is added to $S$, we are now ready to check something else, for example, if another state is reachable. This way, it can do a "gang reset" step in order to restart with some new boss but it keeps in mind the states it knows to be reachable, so it can use it later on. \lu{c'est une première formulation un peu moche, il faut repasser dessus}
+The gang reset will help us doing the following, if one wants to check if one state is reachable, one should check the presence of an abstract run leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new boss but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a sate in $S$).\lu{c'est une première formulation un peu moche, il faut repasser dessus}
 
 \begin{lemma}
 	\label{lem:short-run}
@@ -281,88 +278,108 @@ We can hence enforce in the abstract semantics that, at least every $|Q|+2$ step
 We now prove that our abstraction is sound and complete for our problem of interest. 
 
 \subsection{Completeness}
-This subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
+
+To prove the completeness of our abstraction, we take a concrete "run" $\run$ in our model and any value $v$ appearing in the reached configuration. We prove that there exists an abstract run leading to the abstract configuration $(\statesin{\run}, \gangof{v}{\run})$. Note that $\statesin{\run}$ is the set of all states appearing in $\run$ and $\gangof{v}{\run} = (\boss, \clique)$ is the gang of agents with value $v$ at the end of $\run$, i.e: if the agent starting with value $v$ has still the same value, $\boss$ denotes its state, and otherwise $\boss = \bot$, and, $\clique$ is the set of states on which there is an agent having value $v$ at the end of $\run$.
+
+To construct the abstract run, we will first show that, for all concrete run $\run$ and for all value $v$, $(\statesin{\run}, q_0, \emptyset) \step{\ast}(\statesin{\run}, \gangof{v}{\run})$. To do this, it suffices to follow steps by steps how agents with value $v$ evolve and find the fitting abstract step such that we follow exactly the evolution of the gang associated to value $v$. 
+\luin{s'il reste de la place, mettre ici l'exemple d'un des cas de la preuve du lemme \ref{lem:proof_completeness_covset_constant}}
+Then, it is left to show that for all concrete run $\run$ and for all value $v$, $\aconfiginit \step{\ast} (\statesin{\run}, q_0, \emptyset)$. We shall prove this by induction on the size of $\statesin{\run}$. The base case is handled by the first property we proved. For the induction case, we will argue that there exists a prefix run $\rho'$ such that $\statesin{\rho'} \subsetneq \statesin{\rho}$ and by completing $\rho'$ of one more step, we obtain a prefix $\rho''$ of $\rho$ such that $\statesin{\rho''} = \statesin{\rho}$, we also need to distinguish the value $v_{\mathbf{br}}$. By induction hypothesis and our first property, we prove that $\aconfiginit \step{\ast} (\statesin{\run'}, q_0, \emptyset) \step{\ast} (\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'})$. By going one step forward, we prove that $(\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'}) \step{} (\statesin{\run''}, \gangof{v_{\mathbf{br}}}{\run''})$. By doing a "gang reset" step, we have that $\aconfiginit \step{\ast} (\statesin{\run''}, q_0, \emptyset)$, and by applying the first property we finally get that $\aconfiginit \step{\ast} \absproj{v}{\run}$.
+
+The proofs of the following lemmas can be found on the appendix.
 
 \begin{lemma}
-\label{lem:abstraction_complete}
-If $\run$ is a (concrete) "run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
+	\label{lem:proof_completeness_covset_constant}
+	For all "runs" $\run: \config_0 \step{*} \config$ and $\aval \in \valsof{\run}$, $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. 
 \end{lemma}
-
-
-% The following lemma shall later be useful:
-% \begin{lemma}
-% \label{lem:adding_states_in_covset}
-% If $\aconfig = (\covset, \gang), \aconfig' = (\covset', \gang') \in \allaconfigs$ are such that $\aconfig \step{*} \aconfig'$ then $\covset \subseteq \covset'$ and, for all $T \subseteq Q$, $(\covset \cup T, \gang) \step{*} (\covset' \cup T, \gang')$. 
-% \end{lemma}
-% \begin{proof}
-% To prove the first statement, in suffices to observe that, in a step of the abstract semantics, the set $\covset$ may not decrease.
-% To prove the second statement, it suffices to notice in the abstract semantics that a larger $\covset$ may never hinder a step. 
-% \end{proof}
 
 \begin{lemma}
-\label{lem:proof_completeness_covset_constant}
-For all "runs" $\run: \config_0 \step{*} \config$ and $\aval \in \valsof{\run}$, $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. 
+	\label{lem:abstraction_complete}
+	If $\run$ is a (concrete) "run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
 \end{lemma}
 
-\ifproofs
-\begin{proof}
-Let $\covset := \statesin{\run}$ and $\agents = \agentsof{\run}$.
-
-Thanks to Remark~\ref{rem:run_no_new_register_values},  $\aval$ appears in $\config_0$; let $a_0$ be the (unique) agent such that $\data{\config_0}(a_0) = \aval$. We write $\run : \config_0 \step{} \config_1 \step{} \dots \step{} \config_k = \config$. For every $i \leq k$, let $\run_i : \config_0 \step{*} \config_i$ be the prefix of $\run$ of length $i$, and write $\aconfig^i := (\covset, \gangof{\aval}{\run_i})$. Note that $\gangof{\aval}{\run_0} = (q_0, \emptyset)$ hence $\aconfig^0 = (\covset, q_0, \emptyset)$. Also, we write $(\covset, \boss_i, \clique_i) := \aconfig^i$.
-
-We prove by induction on $i$ that $\aconfig^0 \step{*} \aconfig^i$.
-The statement is trivially true for $i =0$. 
-
-Suppose now that $(\covset, \emptyset, \noboss) \step{*} \aconfig^i$. 
-If suffices to prove that $\aconfig^i \step{} \aconfig^{i+1}$. First of all we clearly have, by definition, $K_{i+1} \subseteq S$ and $\boss_{i+1}\in S\cup\set{\noboss}$. We consider the last step of $\run_{i+1}$, which is referred to under the name $s_{i+1}$ in what follows; $s_{i+1}: \config_i \step{} \config_{i+1}$. Let $\agentbr$ the agent making the broadcast transition in $s_{i+1}$ and $A_{\recsymb}$ the set of agents receiving this broadcast in $s_{i+1}$. Let $(\statebr, \brone{\amessage}, \statebr') \in \transitions$ denote the transition taken by $\agentbr$ in $s_{i+1}$.
-
-We now make the following case distinction to determine the type of the abstract step $\aconfig^i \step{} \aconfig^{i+1}$:
-\begin{enumerate}
-\item\label{proof_completeness:case_broadcast_clique} if $\data{\config_{i}}(\agentbr) = \aval$ but there exists $j<i$ such that $\data{\config_{j}}(\agentbr) \ne \aval$ then it is a ``broadcast from clique'',
-\item\label{proof_completeness:case_broadcast_boss} if, for all $j \leq i$, $\data{\config_j}(\agentbr) = \aval$ then it is a ``broadcast from boss'',
-\item\label{proof_completeness:case_external_broadcast} otherwise it is an ``external broadcast''. 
-\end{enumerate}
-Note that $\agentbr$ may not change its register value in $s_{i+1}$ hence $\data{\config_i}(\agentbr) = \data{\config_{i+1}}(\agentbr)$. 
-
-Let $\agentboss$ the agent such that $\data{\config_0}(\agentboss) = \aval$. In case~\ref{proof_completeness:case_broadcast_boss}, $\agentboss = \agentbr$; in the other two cases, $\agentboss \ne \agentbr$. 
-
-We now prove the other conditions:
-\begin{enumerate}[i]
-\item In case~\ref{proof_completeness:case_broadcast_clique}, since $\agentbr$ has value $\aval$ in $\config_i$ and $\config_{i+1}$ but not in every $\config_j$ for $j \leq i$, we directly have $\statebr \in \clique_i$ and $\statebr' \in \clique_{i+1}$. In case~\ref{proof_completeness:case_broadcast_boss}, it suffices to note that $\boss_i = \st{\config}(\agentbr)$ and $\boss_{i+1} = \st{\config_{i+1}}(\agentbr)$. In case~\ref{proof_completeness:case_external_broadcast}, it suffices to note that $\statebr, \statebr' \in \covset$ as both states appear in $\run$.
-\item In case~\ref{proof_completeness:case_broadcast_boss}, this condition is automatically satisfied. In the other two cases, we look at what $\agentboss$ does in $s_{i+1}$. If it remains idle then we have $\boss_i = \boss_{i+1}$. Otherwise it takes a reception transition as $\agentbr \ne \agentboss$. 
-In case~\ref{proof_completeness:case_external_broadcast}, this reception may not have action $\quotemarks{\eqtestact}$ as the broadcast is from an agent with register value that is not $\aval$ ($\data{\config_i}(\agentbr) \ne \aval$ by hypothesis). For the same reason, if this reception has action $\quotemarks{\enregact}$ then $\boss_{i+1}= \noboss$. If this reception has action $\quotemarks{\dummyact}$ and $\boss_i \ne \noboss$ then $\boss_{i+1} \ne \noboss$ as $\agentboss$ keeps value $\aval$.
-\item We have $\clique_i \subseteq \clique_{i+1}$ because $\run_{i}$ is a prefix of $\run_{i+1}$; also, in case~\ref{proof_completeness:case_broadcast_clique}, $\statebr' \in \clique_{i+1}$ because of $\agentbr$. Let $q' \in \clique_{i+1} \setminus \clique_i$ with, in case~\ref{proof_completeness:case_broadcast_clique}, $q' \ne \statebr'$. There exist $q\in \covset$ and an agent $a$ that takes a reception transition $(q, \rec{\amessage}{\anact}, q')$ in $s_{i+1}$ and has value $\aval$ in $\config_{i+1}$. In cases~\ref{proof_completeness:case_broadcast_clique} and \ref{proof_completeness:case_broadcast_boss}, the broadcast has value $\aval$ hence if $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ then $a$ has value $\aval$ in $\config_i$ and $q \in \clique_i$. In case~\ref{proof_completeness:case_external_broadcast}, the broadcast has value $\ne \aval$ hence $a$ may have value $\aval$ in $\config_{i+1}$ only when $\anact = \quotemarks{\dummyact}$ and $a$ had value $\aval$ in $\config_i$, which implies $q \in \clique_i$. 
-\item It suffices to note that the first components of $\aconfig^i$ and $\aconfig^{i+1}$ are equal to $\covset$ and $\statebr' \in \covset$, and $\boss_{i+1} \in \covset \cup \set{\bot}$. 
-\end{enumerate}
- 
-Overall, we have proven that $\aconfig^i \step{} \aconfig^{i+1}$, which concludes the induction step. Appyling the result with $i = k$ proves Lemma~\ref{lem:proof_completeness_covset_constant}. 
-
-\end{proof}
-\fi
-
-\ifproofs
-We may now prove Lemma~\ref{lem:abstraction_complete}. 
-
-\begin{proof}[Proof of Lemma~\ref{lem:abstraction_complete}]
-Let $\run$ a run.
-We proceed by induction on the size of the set $\statesin{\run}$. 
-First, if $\statesin{\run}$ is of size $1$ then $\statesin{\run} = \set{q_0}$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} directly gives $\aconfiginit = (\set{q_0}, q_0, \noboss) \step{*} \absproj{\aval}{\run}$.
-
-
-Suppose now that the statement is true for any $\run$ such that $\statesin{\run}$ is of size $k$, and suppose that we have a run $\run$ such that $\statesin{\run}$ is of size $k+1$. Let $\aval \in \valsof{\run}$. Let $\run_p: \config_0 \step{*}\config_p$ the longest suffix of $\run$ such that $\statesin{\run} \ne \statesin{\run_p}$. By induction hypothesis, we know that for all $\aval \in \valsof{\run}$, $\aconfiginit \step{*} \absproj{\aval}{\run_p}$. Write $s$ the step immediatly after $\run_p$ in $\run$. By maximality of $\run_p$, $\run_p s$ covers all states in $\statesin{\run} \setminus \statesin{\run_p}$. 
-
-Write $\agentbr$ the agent broadcasting in $s$, $(\statebr, \brone{\amessage}, \statebr')$ the corresponding transition and $\avalbr$ the broadcast value. By induction hypothesis applied to $\run_p$ and $\avalbr$, $\aconfiginit \step{*} \absproj{\avalbr}{\run_p}$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} on $\run$ and $\aval$ gives that $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. Therefore, it remains to prove that $\absproj{\aval}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset)$. It suffices to prove that there exists $\boss, \clique$ such that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$, a "gang reset" allowing us to then reach $(\statesin{\run}, q_0, \emptyset)$. In other words, we prove that, from $\absproj{\avalbr}{\run_p}$, one may cover all states in $\statesin{\run}$ in just one abstract step.
-
-We aim at proving that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$ for well-chosen $\boss$ and $\clique$.
-Just like in the proof of Lemma~\ref{lem:proof_completeness_covset_constant}, we make a case disjunction to prove that the broadcast in $s$ may be mimicked in the abstraction from $\absproj{\avalbr}{\run_p}$. The type obtained is either a "broadcast from clique" or a "broadcast from boss", because by hypothesis the agent broadcasting has value $\avalbr$ and therefore its state before the broadcast is either the boss or in the clique in $\absproj{\avalbr}{\run_p}$. 
-
-Because we may choose $\boss$ and $\clique$ freely, the only challenging condition is \ref{item:broadcast_from_clique_covset}.
-Let $q' \in \statesin{\run} \setminus \statesin{\run_p}$, $q' \ne \statebr'$. 
-There exists an agent $a$ that takes a reception transition $(q,\rec{m}{\anact},q')$ in $s$. 
-If $\anact = \quotemarks{\eqtestact}$, then agent $a$ has value $\avalbr$ at the end of $\run_p$ hence $q$ is in the clique of $\absproj{\avalbr}{\run_p}$ and condition \ref{item:broadcast_from_clique_covset} is satisfied. Otherwise, one has $q \in \statesin{\run_p}$ and condition \ref{item:broadcast_from_clique_covset} is satisfied.
-In the end, there exist $\boss$, $\clique$ such that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$. By a "gang reset", this implies that $\absproj{\avalbr}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset)$; we have proven that $\aconfiginit \step{*}\absproj{\avalbr}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$ which concludes the proof. 
-\end{proof}
-\fi
+%\luin{donner de l'intuition sur lemma 37/38}
+%This subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
+%
+%\begin{lemma}
+%\label{lem:abstraction_complete}
+%If $\run$ is a (concrete) "run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
+%\end{lemma}
+%
+%
+%% The following lemma shall later be useful:
+%% \begin{lemma}
+%% \label{lem:adding_states_in_covset}
+%% If $\aconfig = (\covset, \gang), \aconfig' = (\covset', \gang') \in \allaconfigs$ are such that $\aconfig \step{*} \aconfig'$ then $\covset \subseteq \covset'$ and, for all $T \subseteq Q$, $(\covset \cup T, \gang) \step{*} (\covset' \cup T, \gang')$. 
+%% \end{lemma}
+%% \begin{proof}
+%% To prove the first statement, in suffices to observe that, in a step of the abstract semantics, the set $\covset$ may not decrease.
+%% To prove the second statement, it suffices to notice in the abstract semantics that a larger $\covset$ may never hinder a step. 
+%% \end{proof}
+%
+%\begin{lemma}
+%\label{lem:proof_completeness_covset_constant}
+%For all "runs" $\run: \config_0 \step{*} \config$ and $\aval \in \valsof{\run}$, $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. 
+%\end{lemma}
+%
+%\ifproofs
+%\begin{proof}
+%Let $\covset := \statesin{\run}$ and $\agents = \agentsof{\run}$.
+%
+%Thanks to Remark~\ref{rem:run_no_new_register_values},  $\aval$ appears in $\config_0$; let $a_0$ be the (unique) agent such that $\data{\config_0}(a_0) = \aval$. We write $\run : \config_0 \step{} \config_1 \step{} \dots \step{} \config_k = \config$. For every $i \leq k$, let $\run_i : \config_0 \step{*} \config_i$ be the prefix of $\run$ of length $i$, and write $\aconfig^i := (\covset, \gangof{\aval}{\run_i})$. Note that $\gangof{\aval}{\run_0} = (q_0, \emptyset)$ hence $\aconfig^0 = (\covset, q_0, \emptyset)$. Also, we write $(\covset, \boss_i, \clique_i) := \aconfig^i$.
+%
+%We prove by induction on $i$ that $\aconfig^0 \step{*} \aconfig^i$.
+%The statement is trivially true for $i =0$. 
+%
+%Suppose now that $(\covset, \emptyset, \noboss) \step{*} \aconfig^i$. 
+%If suffices to prove that $\aconfig^i \step{} \aconfig^{i+1}$. First of all we clearly have, by definition, $K_{i+1} \subseteq S$ and $\boss_{i+1}\in S\cup\set{\noboss}$. We consider the last step of $\run_{i+1}$, which is referred to under the name $s_{i+1}$ in what follows; $s_{i+1}: \config_i \step{} \config_{i+1}$. Let $\agentbr$ the agent making the broadcast transition in $s_{i+1}$ and $A_{\recsymb}$ the set of agents receiving this broadcast in $s_{i+1}$. Let $(\statebr, \brone{\amessage}, \statebr') \in \transitions$ denote the transition taken by $\agentbr$ in $s_{i+1}$.
+%
+%We now make the following case distinction to determine the type of the abstract step $\aconfig^i \step{} \aconfig^{i+1}$:
+%\begin{enumerate}
+%\item\label{proof_completeness:case_broadcast_clique} if $\data{\config_{i}}(\agentbr) = \aval$ but there exists $j<i$ such that $\data{\config_{j}}(\agentbr) \ne \aval$ then it is a ``broadcast from clique'',
+%\item\label{proof_completeness:case_broadcast_boss} if, for all $j \leq i$, $\data{\config_j}(\agentbr) = \aval$ then it is a ``broadcast from boss'',
+%\item\label{proof_completeness:case_external_broadcast} otherwise it is an ``external broadcast''. 
+%\end{enumerate}
+%Note that $\agentbr$ may not change its register value in $s_{i+1}$ hence $\data{\config_i}(\agentbr) = \data{\config_{i+1}}(\agentbr)$. 
+%
+%Let $\agentboss$ the agent such that $\data{\config_0}(\agentboss) = \aval$. In case~\ref{proof_completeness:case_broadcast_boss}, $\agentboss = \agentbr$; in the other two cases, $\agentboss \ne \agentbr$. 
+%
+%We now prove the other conditions:
+%\begin{enumerate}[i]
+%\item In case~\ref{proof_completeness:case_broadcast_clique}, since $\agentbr$ has value $\aval$ in $\config_i$ and $\config_{i+1}$ but not in every $\config_j$ for $j \leq i$, we directly have $\statebr \in \clique_i$ and $\statebr' \in \clique_{i+1}$. In case~\ref{proof_completeness:case_broadcast_boss}, it suffices to note that $\boss_i = \st{\config}(\agentbr)$ and $\boss_{i+1} = \st{\config_{i+1}}(\agentbr)$. In case~\ref{proof_completeness:case_external_broadcast}, it suffices to note that $\statebr, \statebr' \in \covset$ as both states appear in $\run$.
+%\item In case~\ref{proof_completeness:case_broadcast_boss}, this condition is automatically satisfied. In the other two cases, we look at what $\agentboss$ does in $s_{i+1}$. If it remains idle then we have $\boss_i = \boss_{i+1}$. Otherwise it takes a reception transition as $\agentbr \ne \agentboss$. 
+%In case~\ref{proof_completeness:case_external_broadcast}, this reception may not have action $\quotemarks{\eqtestact}$ as the broadcast is from an agent with register value that is not $\aval$ ($\data{\config_i}(\agentbr) \ne \aval$ by hypothesis). For the same reason, if this reception has action $\quotemarks{\enregact}$ then $\boss_{i+1}= \noboss$. If this reception has action $\quotemarks{\dummyact}$ and $\boss_i \ne \noboss$ then $\boss_{i+1} \ne \noboss$ as $\agentboss$ keeps value $\aval$.
+%\item We have $\clique_i \subseteq \clique_{i+1}$ because $\run_{i}$ is a prefix of $\run_{i+1}$; also, in case~\ref{proof_completeness:case_broadcast_clique}, $\statebr' \in \clique_{i+1}$ because of $\agentbr$. Let $q' \in \clique_{i+1} \setminus \clique_i$ with, in case~\ref{proof_completeness:case_broadcast_clique}, $q' \ne \statebr'$. There exist $q\in \covset$ and an agent $a$ that takes a reception transition $(q, \rec{\amessage}{\anact}, q')$ in $s_{i+1}$ and has value $\aval$ in $\config_{i+1}$. In cases~\ref{proof_completeness:case_broadcast_clique} and \ref{proof_completeness:case_broadcast_boss}, the broadcast has value $\aval$ hence if $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ then $a$ has value $\aval$ in $\config_i$ and $q \in \clique_i$. In case~\ref{proof_completeness:case_external_broadcast}, the broadcast has value $\ne \aval$ hence $a$ may have value $\aval$ in $\config_{i+1}$ only when $\anact = \quotemarks{\dummyact}$ and $a$ had value $\aval$ in $\config_i$, which implies $q \in \clique_i$. 
+%\item It suffices to note that the first components of $\aconfig^i$ and $\aconfig^{i+1}$ are equal to $\covset$ and $\statebr' \in \covset$, and $\boss_{i+1} \in \covset \cup \set{\bot}$. 
+%\end{enumerate}
+% 
+%Overall, we have proven that $\aconfig^i \step{} \aconfig^{i+1}$, which concludes the induction step. Appyling the result with $i = k$ proves Lemma~\ref{lem:proof_completeness_covset_constant}. 
+%
+%\end{proof}
+%\fi
+%
+%\ifproofs
+%We may now prove Lemma~\ref{lem:abstraction_complete}. 
+%
+%\begin{proof}[Proof of Lemma~\ref{lem:abstraction_complete}]
+%Let $\run$ a run.
+%We proceed by induction on the size of the set $\statesin{\run}$. 
+%First, if $\statesin{\run}$ is of size $1$ then $\statesin{\run} = \set{q_0}$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} directly gives $\aconfiginit = (\set{q_0}, q_0, \noboss) \step{*} \absproj{\aval}{\run}$.
+%
+%
+%Suppose now that the statement is true for any $\run$ such that $\statesin{\run}$ is of size $k$, and suppose that we have a run $\run$ such that $\statesin{\run}$ is of size $k+1$. Let $\aval \in \valsof{\run}$. Let $\run_p: \config_0 \step{*}\config_p$ the longest suffix of $\run$ such that $\statesin{\run} \ne \statesin{\run_p}$. By induction hypothesis, we know that for all $\aval \in \valsof{\run}$, $\aconfiginit \step{*} \absproj{\aval}{\run_p}$. Write $s$ the step immediatly after $\run_p$ in $\run$. By maximality of $\run_p$, $\run_p s$ covers all states in $\statesin{\run} \setminus \statesin{\run_p}$. 
+%
+%Write $\agentbr$ the agent broadcasting in $s$, $(\statebr, \brone{\amessage}, \statebr')$ the corresponding transition and $\avalbr$ the broadcast value. By induction hypothesis applied to $\run_p$ and $\avalbr$, $\aconfiginit \step{*} \absproj{\avalbr}{\run_p}$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} on $\run$ and $\aval$ gives that $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. Therefore, it remains to prove that $\absproj{\aval}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset)$. It suffices to prove that there exists $\boss, \clique$ such that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$, a "gang reset" allowing us to then reach $(\statesin{\run}, q_0, \emptyset)$. In other words, we prove that, from $\absproj{\avalbr}{\run_p}$, one may cover all states in $\statesin{\run}$ in just one abstract step.
+%
+%We aim at proving that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$ for well-chosen $\boss$ and $\clique$.
+%Just like in the proof of Lemma~\ref{lem:proof_completeness_covset_constant}, we make a case disjunction to prove that the broadcast in $s$ may be mimicked in the abstraction from $\absproj{\avalbr}{\run_p}$. The type obtained is either a "broadcast from clique" or a "broadcast from boss", because by hypothesis the agent broadcasting has value $\avalbr$ and therefore its state before the broadcast is either the boss or in the clique in $\absproj{\avalbr}{\run_p}$. 
+%
+%Because we may choose $\boss$ and $\clique$ freely, the only challenging condition is \ref{item:broadcast_from_clique_covset}.
+%Let $q' \in \statesin{\run} \setminus \statesin{\run_p}$, $q' \ne \statebr'$. 
+%There exists an agent $a$ that takes a reception transition $(q,\rec{m}{\aval}{\anact},q')$ in $s$. 
+%If $\anact = \quotemarks{\eqtestact}$, then agent $a$ has value $\avalbr$ at the end of $\run_p$ hence $q$ is in the clique of $\absproj{\avalbr}{\run_p}$ and condition \ref{item:broadcast_from_clique_covset} is satisfied. Otherwise, one has $q \in \statesin{\run_p}$ and condition \ref{item:broadcast_from_clique_covset} is satisfied.
+%In the end, there exist $\boss$, $\clique$ such that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$. By a "gang reset", this implies that $\absproj{\avalbr}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset)$; we have proven that $\aconfiginit \step{*}\absproj{\avalbr}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$ which concludes the proof. 
+%\end{proof}
+%\fi
 
 \input{correctness}
 

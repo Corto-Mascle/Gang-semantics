@@ -66,7 +66,7 @@
 		The resulting $u'$ satisfies the conditions as $(q', map') = (q, map')$, $\Tilde{map'} = map'$, the final configurations of $u$ and $u'$ are the same as the ones of $\Tilde{u}$ and $\Tilde{u}'$, and $\trace{u'} = \trace{\Tilde{u}'} (m,\Tilde{\nu}'(\Tilde{map}'(i)),out) = \trace{\Tilde{u}} (m,\Tilde{\nu}(i),out) = \trace{u}$.
 		
 		\item 
-		If the last step of $u$ is an "external broadcast" $(\Tilde{q}, \Tilde{\nu}) \extbr{m, v} (q, \nu)$ then let $j\in [1,r+1]$ be such that $\Tilde{map}'^{-1}(j) = \emptyset$ (such a $j$ exists as $\size{map([1,r])} = r < r+1$). There is a transition $\Tilde{q} \xrightarrow{\rec{m}{i_0}{\alpha}} q$ in $\prot$ such that $\nu(i)=\Tilde{\nu}(i)$ for all $i\neq i_0$ and we are in one of the following cases:
+		If the last step of $u$ is an "external message" $(\Tilde{q}, \Tilde{\nu}) \extbr{m, v} (q, \nu)$ then let $j\in [1,r+1]$ be such that $\Tilde{map}'^{-1}(j) = \emptyset$ (such a $j$ exists as $\size{map([1,r])} = r < r+1$). There is a transition $\Tilde{q} \xrightarrow{\rec{m}{i_0}{\alpha}} q$ in $\prot$ such that $\nu(i)=\Tilde{\nu}(i)$ for all $i\neq i_0$ and we are in one of the following cases:
 		
 		\begin{itemize}
 			\item $\alpha=\enregact$, $\nu(i_0) = v$ and there exists $i_1 \neq i_0$ such that $\nu(i_1) = v$. Let $j_1=\Tilde{map}'(i_1)$

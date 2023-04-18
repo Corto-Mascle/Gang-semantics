@@ -46,11 +46,11 @@
 	We apply a renaming to the values of $\run'$ so that $v'$ is mapped to $v$ and all other values are mapped to distinct values that do not appear in $\run$.
 	Hence the only value appearing in both runs is $v$, and it is initial only in $\run'$. As a consequence, the configuration $\config_0 \sqcup \config'_0$ is an "initial configuration".
 	
-	We then construct the desired run $\Tilde{\run}$ over $\agents \cup \agents'$ by matching the "external broadcasts" in $\run$ with the broadcasts in $\run'$ and executing the rest of the run in parallel.
+	We then construct the desired run $\Tilde{\run}$ over $\agents \cup \agents'$ by matching the "external messages" in $\run$ with the broadcasts in $\run'$ and executing the rest of the run in parallel.
 	
 	We have $\Tilde{\run} = \config_0 \sqcup \config'_0 \step{\run_0} \overline{\config}_0 \sqcup \config'_0 \step{\run'_0} \overline{\config}_0 \sqcup \overline{\config}'_0 \step{m_1, v} \config_{1} \sqcup \config'_1 \step{\run_1} \cdots \step{m_k,v} \config_{k}  \sqcup \config'_{k} \step{\run_k}  \overline{\config}_k \sqcup \config'_k \step{\run'_k} \overline{\config}_k \sqcup \overline{\config}'_k$.
 	
-	We indeed have $\overline{\config}_{j-1} \sqcup \overline{\config}'_{j-1} \step{m_j, v} \config_{j} \sqcup \config'_j$ as we can make all agents in $\agents$ that receive an "external broadcast" with message $m_j$ and value $v$ receive the broadcast made in $\agents'$ instead.
+	We indeed have $\overline{\config}_{j-1} \sqcup \overline{\config}'_{j-1} \step{m_j, v} \config_{j} \sqcup \config'_j$ as we can make all agents in $\agents$ that receive an "external messages" with message $m_j$ and value $v$ receive the broadcast made in $\agents'$ instead.
 	
 	Hence we obtain a run with 
 	\begin{itemize}		
@@ -117,7 +117,7 @@
 	
 	We then proceed in a similar way as in Lemma~\ref{lem:boss-composition}.
 	We can rename agents so that $\run$ and $\run'_j$ are on disjoint sets of agents, and apply a renaming of values in $\run_j'$ so that $v_j$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
-	We then construct a series of runs by executing in parallel $\run_{j',i}'$ and $\run_i$ for all $i\in [1,\ell]$. As $w_i \subword \voutput{v}{\run_i}$, we can match the "internal messages" of $\run_j$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
+	We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\run_i$ for all $i\in [1,\ell]$. As $w_i \subword \voutput{v}{\run_i}$, we can match the "internal messages" of $\run_j$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
 	We obtain, for each $i \in [1,j'-1]$, a run $\run''_i$ from $\config_{i-1} \sqcup \config_{j', i-1}$ to $\config_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
 	
 	For each $i \in [j'+1, j-1]$, let $\run''_i$ be the run that goes from $\config_{i-1} \sqcup \config_{j', j'}$ to $\config_{i} \sqcup \config_{j', j'}$ by executing $\run_i$ on the first part and staying idle on the second one.
@@ -195,7 +195,7 @@ There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinpu
 Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in [1, j'-1]$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
 
 We can rename agents so that the $\widehat{\run}_i$ and $\run'_{j',i}$ are on disjoint sets of agents, and apply a renaming of values in $\run'_{j'}$ so that $v_{j'}$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
-We then construct a series of runs by executing in parallel $\run_{j',i}'$ and $\widehat{\run}_i$ for all $i\in [1,\ell]$. As $w_i \subword \voutput{v}{\widehat{\run}_i}$, we can match the "internal messages" of $\widehat{\run}_i$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
+We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\widehat{\run}_i$ for all $i\in [1,\ell]$. As $w_i \subword \voutput{v}{\widehat{\run}_i}$, we can match the "internal messages" of $\widehat{\run}_i$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
 We obtain, for each $i \in [1,j'-1]$, a run $\run''_i$ from $\widehat{\config}_{i-1} \sqcup \config_{j', i-1}$ to $\widehat{\config}_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
 
 For each $i \in [j'+1, j-1]$, let $\run''_i$ be the run that goes from $\widehat{\config}_{i-1} \sqcup \config_{j', j'}$ to $\widehat{\config}_{i} \sqcup \config_{j', j'}$ by executing $\widehat{\run}_i$ on the first part and staying idle on the second one.
