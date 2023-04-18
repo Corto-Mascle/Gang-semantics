@@ -59,7 +59,7 @@
 % \newcommand{\expt}{\textsc{ExpTime}\xspace}
 % \newcommand{\nexpt}{\textsc{NExpTime}\xspace}
 % \newcommand{\exps}{\textsc{ExpSpace}\xspace}
-\multidef{\text{\sc{#1}}\xspace}{co,coNP,NP,PSPACE,coPSPACE,NPSPACE,PTIME,EXPTIME,EXPSPACE,NEXPTIME, LOGSPACE, TOWER}
+\multidef{\text{\sc{#1}}\xspace}{co,coNP,NP,PSPACE,coPSPACE,NPSPACE,PTIME,EXPTIME,EXPSPACE,NEXPTIME, LOGSPACE, TOWER, COVER, TARGET, BNRA}
 \newcommand{\Falpha}[1]{\mathcal{F}_{#1}}
 
 %%% Genral definition
@@ -238,4 +238,12 @@
 \newcommand{\lstep}[1]{\xrightarrow{#1}_{\los}}
 
 \newcommand{\lstates}{L}
-\newcommand{\alstate}{l}
+\newcommand{\lstate}{l}
+\newcommand{\ltrans}{d}
+\newcommand{\ltransitions}{D}
+\newcommand{\startstate}[1]{\mathbf{start}(#1)}
+\newcommand{\transstateone}[1]{\mathbf{tr}_1(#1)}
+\newcommand{\transstatetwo}[1]{\mathbf{tr}_2(#1)}
+\newcommand{\finstate}[1]{\mathbf{end}(#1)} %final states of protocol for encoding of LCS, argument is corresponding state of the LCS
+\newcommand{\waitstate}{\mathbf{wait}}
+

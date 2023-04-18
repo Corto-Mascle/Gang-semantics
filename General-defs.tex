@@ -94,9 +94,9 @@ The following remark formalizes the intuition that, because the only way to take
 		\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is a "run" of this protocol whose last "configuration" satisfies the query.
 	\end{definition}
 
-	\AP The ""cover problem"" is to determine, given a "protocol" and a state $q$, whether there is a "run" of this protocol whose last "configuration" satisfies the "query" with the single formula $\quotemarks{q(\var{z})}$.
+	\AP The ""cover problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this protocol whose last "configuration" satisfies the "query" with the single formula $\quotemarks{q_f(\var{z})}$.
 	
-	\AP The ""target reachability problem"" is to determine, given a "protocol" and a state $q$, whether there is a "run" of this protocol whose last "configuration" $\config$ is such that $\st{\config}(\agentsof{\gamma}) = \{q\}$, i.e all agents reached $q$.
+	\AP The ""target reachability problem"" is to determine, given a "protocol" and a state $q$, whether there is a "run" of this protocol whose last "configuration" $\config$ is such that $\st{\config}(\agentsof{\gamma}) = \{q_f\}$, i.e all agents reached $q_f$.
 	
 	\begin{remark}
 		\label{rem:bigger_config_query}
@@ -266,6 +266,9 @@ Note that if a "run" satisfies $K$, then it covers every state in $K$. The conve
 \subsection{Link with LCS}
 \luin{here comes defintions of LCS and the reduction}
 
+
+""Lossy channel systems""  are systems where finite-state processes communicate via send messages from a finite alphabet through unbounded FIFO channels through which messages may be lost. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AK95,AbdullaJ1996undec}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and in fact lays at level $\mathcal{F}_{\omega^{\omega}}$ in the Fast-Growing Function Hierarchy \cite{ChambartS2008ordinal}.
+
 We now prove that the coverability problem in BNRA is at least as hard as the reachability problem for "lossy channel system", and that this already hold for $2$-BNRAs.  
 \begin{proposition}
 	\label{prop:reduction-LCS}
@@ -274,27 +277,45 @@ We now prove that the coverability problem in BNRA is at least as hard as the re
 
 \ifproofs
 \begin{proof}
-	It is in fact sufficient to prove that it is as hard as reachability for lossy channel systems with a single channel, which corresponds to a single finite-state machine that buffering symbols in a lossy FIFO channel \cite{Schnoebelen2002verifying}.
-	Let $\los := (\lstates,\Sigma,\Delta)$ be a "lossy channel system", where $\lstates$ is a finite set of states, $\Sigma$ is a finite set of symbols and $\Delta \subseteq \lstates \times \Sigma^* \times \set{!, ?} \times \lstates$; $\quotemarks{!}$ corresponds to writing to the channel and $\quotemarks{?}$ to reading from the channel. A configuration of $\los$ is a pair of $\lstates \times \Sigma^*$ denoting the state of the system and the content of the channel. There exists a step from $(\alstate,w)$ to $(\alstate',w')$ using transition $\delta \in \Delta$, denoted $(\alstate,w) \lstep{\delta} (\alstate',w')$, when, by denoting $\subword$ for the "subword relation":
-	\begin{itemize}
-		\item $\delta = (\alstate,u,!,\alstate')$ for some $u \in \Sigma^*$ and $w' \subword w \cdot u$ (a ""push"", $u$ is written at the end of the channel), or
-		\item $\delta = (\alstate,u,?,\alstate')$ for some $u \in \Sigma^*$ and $u \cdot w' \subword w$ (a ""pop"", $u$ is read at the beginning of the channel).
-	\end{itemize}
-	The lossiness of the channel is encoded with the subword relations (instead of equalities for non-lossy channels); intuitively, it expresses the fact that letters in the channel may get lost. 
-	
-	The existence of such a transition for some $\delta \in \transitions$ is denoted $(\alstate,w) \lstep{} (\alstate',w')$, and its transitive closure is denoted $\lstep{*}$. The ""reachability problem@@lcs"" asks, given $\los$ and two states $\alstate_i, \alstate_f \in \lstates$, whether $(\alstate_i,\epsilon) \step{*} (\alstate_f, \epsilon)$. 
-	
-	We aim at constructing a $2$-BNRA $\prot$ with a distinguished state $q_f$ such that $q_f$ may be covered if and only if $(\los, q_i, q_f)$ is a positive instance of the "reachability problem@@lcs".
-	The intuition of $\prot$ is the following. Agents will form chains, each agent of the chain is meant to encode a configuration of $\lstates \times \Sigma$ along an execution of the "lossy channel system". 
-	An agent of the chain will only listen to message of their predecessor in the chain, from which they will obtain a state of the system and the content of the channel. It will then broadcast the new state of the system and the new, modified content of the register to the next agent of the chain. 
-	
-	Note that the content of the channel might be big, therefore agents will not store it, but rather rebroadcast it letter by letter, only applying a small modification at the beginning of the channel word if it decides to apply a "pop" transition and and at the end of the channel if it decides to apply a "push" transition. Messages might get lost, which is why we are able to encode "lossy channel systems" but not non-lossy ones.
-	
-	In some initial phase, agents decide whether their are at the beginning of their chain or not. An agent that decides to be at the beginning of their chain receive no message; they simply broadcast their identifiers, followed by 
-	It starts with a gadget allowed every agent to non-deterministically decide whether it is a
+It is sufficient to prove that it is as hard as reachability for lossy channel systems with a single channel, which corresponds to a single finite-state machine that has the ability to buffer symbols in a lossy FIFO queue \cite{Schnoebelen2002verifying}.
+Let $\los := (\lstates,\Sigma)$ be a "lossy channel system", where $\lstates$ is a finite set of locations, $\Sigma$ is a finite set of symbols and $\ltransitions \subseteq \lstates \times \Sigma^* \times \set{!, ?} \times \lstates$; $\quotemarks{!}$ corresponds to a ""push"" (writing at the end of the channel) and $\quotemarks{?}$ to a ""pop"" (reading at the beginning the channel). A configuration of $\los$ is a pair of $\lstates \times \Sigma^*$ denoting the location of the system and the content of the channel. There exists a step from $(\lstate,w)$ to $(\lstate',w')$ using transition $\ltrans \in \ltransitions$, denoted $(\lstate,w) \lstep{\ltrans} (\lstate',w')$, when
+\begin{itemize}
+\item $\ltrans = (\lstate,u,!,\lstate')$ for some $u \in \Sigma^*$ and $w' \subword w \cdot u$ (a ""push""),
+\item $\ltrans = (\lstate,u,?,\lstate')$ for some $u \in \Sigma^*$ and $u \cdot w' \subword w$ (a ""pop"")
+\end{itemize}
+where $\subword$ denotes the "subword relation".
+This subword relation encodes the lossiness of the channel (a non-lossy channel wuld have equalities instead); intuitively, it expresses the fact that letters in the channel may get lost. 
+
+The existence of such a transition for some $\ltrans \in \transitions$ is denoted $(\lstate,w) \lstep{} (\lstate',w')$, and its transitive closure is denoted $\lstep{*}$. The ""reachability problem@@lcs"" asks, given $\los$ and two locations $\lstate_i, \lstate_f \in \lstates$, whether there exists an exeuction $(\lstate_i,\epsilon) \lstep{*} (\lstate_f, w)$ for some $w$. 
+
+We aim at constructing a $2$-BNRA $\prot$ with a distinguished state $q_f$ such that $q_f$ may be covered if and only if $(\los, q_i, q_f)$ is a positive instance of the "reachability problem@@lcs". 
+The intuition of $\prot$ is the following. Agents will organize in chains so that each agent of a chain knows the identifier of its precedessor in the chain, hence is able to check that messages received come from it. Each agent of the chain is meant to encode a step of the exeuction in the "lossy channel system". 
+An agent of the chain will only listen to their predecessor in the chain, from which they will obtain a location of the system and the content of the channel. It will then broadcast the new location of the system and the new content of the channel to the next agent of the chain. 
+
+Note that the content of the channel might become big in a "lossy channel system", therefore agents will not store it but rather rebroadcast it letter by letter. An agent only applies a small modification at the beginning of the channel if it decides to encode a "pop" transition and at the end of the channel if it decides to encode a "push" transition. Messages might get lost, which is why we are able to encode "lossy channel systems" but not non-lossy ones.
+
+In some initial phase, agents decide whether they are ""root"" (at the beginning of their chain) or ""link"". A "root" agent receives no message; it simply broadcasts its identifiers and the initial confinguration of $\los$ $(\lstate_0,\epsilon)$. To encode this option, in $\prot$, from the initial state $q_0$ one has the possibility to move to a part where the only sequence of transitions possible is $\br{\mathsf{init}}{1}, \br{\mathsf{q_0}}{1}, \br{\mathsf{\#}}{1}$ which gets to $\finstate{\lstate_0} \in Q$. The symbol $\mathsf{\#} \in \Sigma$ is the final symbol meaning that the channel was fully broadcast. 
+ 
+A "link" agent first receives a broadcast with an identifier which it decides to be the one of its predecessor. It then broadcasts its own identifier. This construction guarantees that "link" agents have exactly one predecessor. It does not guarantee, however, than all agents are in the same chain or that any agent is the predecessor of less than one agent. In practice, there exists a sequence of transitions from $q_0$ labeled by $\rec{\mathsf{init}}{2}{\enregact}, \br{\mathsf{init}}{1}$ that gets to $\waitstate \in Q$. 
+
+From $\waitstate$, there is, for every $\lstate \in \lstates$, a transition labeled by $\rec{\mathsf{\lstate}}{2}{\eqtestact}$ that goes to state $\startstate{\lstate} \in Q$. 
+For every transition $\ltrans = (\lstate, \mathsf{op}, \lstate') \in \ltransitions$ in $\los$ (\emph{i.e.}, every transition of $\ltransitions$ whose source is location $\lstate$), there is a transition in $\prot$ labeled by $\br{\mathsf{\lstate'}}{1}$ that goes from $\startstate{\lstate}$ to $\transstateone{\ltrans} \in Q$. 
+Transitions from $\transstateone{\ltrans}$ in $\prot$ depend on $\ltrans$:
+\begin{itemize}
+\item If $\ltrans$ is a "pop" $(\lstate, u,!, \lstate')$ then $\prot$ has a sequence of transitions from $\transstateone{\ltrans}$ to $\transstatetwo{\ltrans} \in Q$ labeled by $\rec{\mathsf{u_1}}{2}{\eqtestact}, \rec{\mathsf{u_2}}{2}{\eqtestact}, \dots, \rec{\mathsf{u_k}}{2}{\eqtestact}$ where $u = u_1 u_2 \cdots u_k$. Moreover, there is, for every $x \in \Sigma$, a loop on $\transstatetwo{\ltrans}$ labeled with sequence of actions $\rec{\mathsf{x}}{2}{\eqtestact}, \br{\mathsf{x}}{1}$. There is also a sequence of  transitions from $\transstatetwo{\ltrans}$ to $\finstate{\lstate'}$ labeled by $\rec{\mathsf{\#}}{2}{\eqtestact}, \br{\mathsf{\#}}{1}$.
+\item If $\ltrans$ is a "push" $\ltrans = (\lstate, u,?, \lstate')$ then there is, for every $x \in \Sigma$, a loop on $q_{\ltrans}$ labeled with sequence of actions $\rec{\mathsf{x}}{2}{\eqtestact}, \br{\mathsf{x}}{1}$ $\prot$. There also is a sequence of transitions from $q_{\ltrans}$ to $\tilde{q}_{\ltrans}$ labeled by $\br{\mathsf{u_1}}{1}, \br{\mathsf{u_2}}{1}, \dots, \br{\mathsf{u_k}}{1}$ where $u = u_1 \cdot u_2 \cdots u_k$; from $\tilde{q}_{\ltrans}$, there only is a sequence of transitions going to $q_{\lstate'}$ labeled by $\rec{\mathsf{\#}}{2}{\eqtestact}, \br{\mathsf{\#}}{1}$.
+\end{itemize}
+
+Finally, there is in $\prot$ a transition from $q_{\lstate_f}$ to $q_f \in Q$ (an internal transition, which we may label by $\br{\mathsf{dummy}}{1}$ to fit the formal definition). 
+
+We claim that $(\prot, q_f)$ is a positive instance of \COVER if and only if $(\los, \lstate_f)$ is a positive instance of the reachability problem for "lossy channel systems".
+First, suppose that there exists $w \in \Sigma^*$ such that $(\lstate_0, \epsilon) \lstep{*} (\lstate_f, w)$. Decompose the witness into $(\lstate_0, w_0) \lstep{} (\lstate_1, w_1) \lstep{} (\lstate_2, w_2) \cdots \lstep{} (\lstate_n,w_n)$ with $\lstate_n = \lstate_f$. 
+We build an execution of $\prot$ that covers $q_f$ as follows. It has $\agents = \set{0,\dots, n}$. Agent $0$ becomes the "root" and for all $i \geq 1$, agent $i$ becomes a "link". For every $i$, agent $i$ is the precedessor of agent $i+1$. By induction on $i$, we build an execution using agents $0$ to $i$ such that agent $i$ ends on state $q_{\lstate_i}$ and the sequence of messages sent by agent $i$ is $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w_i \cdot \mathsf{\#}$. This is easy to satsify for $i=0$ by making agent $0$ become "root". When the construction has been done up until agent $i$, we make agent $i+1$ receive the $\mathsf{init}$ broadcast of agent $i$, then move to 
+
 \end{proof}
 \fi
 
 \begin{remark}
 	The reduction presented in the proof of Proposition~\ref{prop:reduction-LCS} can be adapted to show that the repeat coverability problem is undecidable for BNRA, as it is for LCS.
 \end{remark}
+
