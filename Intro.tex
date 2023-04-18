@@ -25,6 +25,12 @@ core parts of client-server protocols as well as of routing protocols, e.g. rout
 maintainance as in Link Reversal Routing.
 \cortoin{plagiat}
 
+We study a model representing networks of processes communicating by broadcast. We make no assumption on the evolution of the communication graph, i.e., when a process broadcasts a message, each other process, may receive it or not, independently. This models unreliable systems, with unexpected crashes and disconnections, in a pessimistic way. 
+Furthermore, each agent has access to some local registers, containing natural numbers (initially, identifiers). Each broadcast from an agent consists in a message from a finite alphabet and a value from one of their registers. The agents receiving it may store the value in their registers or compare it with its register contents. 
+This allows an agent, for instance, to check that a sequence of messages all come from the same agent.
+
+\cortoin{TO CONTINUE}
+
 This model was introduced in \cite{DST2013}, as a natural extension of Reconfigurable Broadcast Networks. That paper claimed that the coverability problem, i.e., the problem of finding a run from an initial configuration to one where at least one agent is in a designated state, was decidable and even \PSPACE-complete, but the proof turned out to be wrong. As we will see, the complexity of that problem is actually much higher.
 
 In this paper we establish the decidability of the coverability problem. We even prove its completeness for the HyperAckermannian complexity class $\Falpha{\omega^\omega}$, thereby establishing that the problem requires a non-multiply recursive amount of time, and that it is in some sense as hard as lossy channel systems \corto{ref}. 
