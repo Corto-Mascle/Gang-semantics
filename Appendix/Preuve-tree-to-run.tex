@@ -10,7 +10,7 @@
 	
 	An ""external message@global"" from $\config$ to $\config'$, denoted $\config \extmessage{m}{v} \config'$ is defined when for all agents $a$, either there is a "local step" $\config(a) \extbr{m}{v} \config'(a)$ or $\config(a) = \config'(a)$.
 	
-	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \inttest \config_{i}$ or $\config_{i-1} \intmessage{m, v} \config_{i}$ or $\config_{i-1} \extmessage{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
+	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in \nset{1}{k}$, either $\config_{i-1} \inttest \config_{i}$ or $\config_{i-1} \intmessage{m, v} \config_{i}$ or $\config_{i-1} \extmessage{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
 	
 	We define the $v$-projection $\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external message@@global" $\config \extmessage{m}{v} \config'$ to $(m, in)$, every "internal message" $\config \intmessage{m}{v} \config'$ to $(m, out)$, and every "internal step" to $\varepsilon$.
 	
@@ -37,7 +37,7 @@
 	Let $\agents, \agents'$ be the sets of agents of $\run$ and $\run'$, respectively.
 	We can rename agents so that those two sets are disjoint.
 	
-	Let $m_1 \cdots m_k = \vinput{v}{\run}$, $\run$ can be split into $\run = \config_0 \step{\run_0} \overline{\config}_0 \extbr{m_1,v} \config_{1} \step{\run_1} \cdots \extbr{m_k,v} \config_{k} \step{\run_k} \overline{\config}_k$ so that for all $j\in [0,k]$, $\vinput{v}{\run_j} = \varepsilon$.
+	Let $m_1 \cdots m_k = \vinput{v}{\run}$, $\run$ can be split into $\run = \config_0 \step{\run_0} \overline{\config}_0 \extbr{m_1,v} \config_{1} \step{\run_1} \cdots \extbr{m_k,v} \config_{k} \step{\run_k} \overline{\config}_k$ so that for all $j\in \nset{0}{k}$, $\vinput{v}{\run_j} = \varepsilon$.
 	
 	Similarly, as $m_1\cdots m_k \subword \voutput{v}{\run'}$, $\run'$ can be split into $\run' = \config'_0 \step{\run'_0} \overline{\config}'_0 \step{m_1, v} \config'_{1} \step{\run'_1} \cdots \step{m_k,v'} \config'_{k} \step{\run'_k} \overline{\config}'_k$.
 	
@@ -68,9 +68,9 @@
 %	
 %	Suppose also that there exists a run $\run'$ and a value $v'$ such that the $\vinput{}$ 
 %	
-%	$\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in [1,\ell+1]$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $\voutput{v}{\run_j} = w_j$, $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
+%	$\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in\nset{1}{\ell+1}$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $\voutput{v}{\run_j} = w_j$, $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
 %	
-%	Suppose that for all $j \in [1,\ell]$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j}$ "decomposes as" $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\voutput{v_j}{\run'_j}$ contains $m_j$ and $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$.
+%	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j}$ "decomposes as" $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\voutput{v_j}{\run'_j}$ contains $m_j$ and $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$.
 %	
 %	Then there exists a "partial run" $\Tilde{\run}$ such that 
 %	\begin{itemize}
@@ -86,11 +86,11 @@
 
 \begin{lemma}
 	\label{lem:follower-composition-completion}
-	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in [0,\ell]$ there exists a "partial run" $\run_j$ from $\config_{j}$ to $\config_{j+1}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in\nset{0}{\ell}$ there exists a "partial run" $\run_j$ from $\config_{j}$ to $\config_{j+1}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
 	
-	Suppose that for all $j \in [1,\ell]$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdecdown{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
+	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdecdown{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
 	
-	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$ such that for all $j \in [0,\ell]$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
+	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$ such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
 	\begin{itemize}
 		\item $\voutput{v}{\run_j} \subword \voutput{v}{\Tilde{\run}_j}$, 
 		
@@ -113,26 +113,26 @@
 	
 	There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdecdown{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
 	
-	Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in [1, j'-1]$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
+	Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
 	
 	We then proceed in a similar way as in Lemma~\ref{lem:boss-composition}.
 	We can rename agents so that $\run$ and $\run'_j$ are on disjoint sets of agents, and apply a renaming of values in $\run_j'$ so that $v_j$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
-	We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\run_i$ for all $i\in [1,\ell]$. As $w_i \subword \voutput{v}{\run_i}$, we can match the "internal messages" of $\run_j$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
-	We obtain, for each $i \in [1,j'-1]$, a run $\run''_i$ from $\config_{i-1} \sqcup \config_{j', i-1}$ to $\config_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
+	We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\run_i$ for all $i\in\nset{1}{\ell}$. As $w_i \subword \voutput{v}{\run_i}$, we can match the "internal messages" of $\run_j$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
+	We obtain, for each $i \in \nset{1}{j'-1}$, a run $\run''_i$ from $\config_{i-1} \sqcup \config_{j', i-1}$ to $\config_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
 	
-	For each $i \in [j'+1, j-1]$, let $\run''_i$ be the run that goes from $\config_{i-1} \sqcup \config_{j', j'}$ to $\config_{i} \sqcup \config_{j', j'}$ by executing $\run_i$ on the first part and staying idle on the second one.
+	For each $i \in \nset{j'+1}{j-1}$, let $\run''_i$ be the run that goes from $\config_{i-1} \sqcup \config_{j', j'}$ to $\config_{i} \sqcup \config_{j', j'}$ by executing $\run_i$ on the first part and staying idle on the second one.
 	
 	Let $\run''_j$ be the run from $\config_{j-1} \sqcup \config_{j', j'}$ to $\config_{j} \sqcup \config'_{j'}$ by executing $\run_{j}^-$ on the first part, then matching the $\config_j^- \extmessage{m_{j'}}{v} \config_j^+$ step in $\run$ with the last step of $\run'_{j'}$ to obtain a  step $\config_j^- \sqcup \config_{j', j'} \intmessage{m_{j'}}{v} \config_j^+ \sqcup \config'_{j'}$, and then executing $\run_{j}^+$ on the first part.
 	
-	For each $i \in [j+1, \ell]$, let $\run''_i$ be the run that goes from $\config_{i-1} \sqcup \config'_{j'}$ to $\config_{i} \sqcup \config'_{j'}$ by executing $\run_i$ on the first part and staying idle on the second one.
+	For each $i \in \nset{j+1}{\ell}$, let $\run''_i$ be the run that goes from $\config_{i-1} \sqcup \config'_{j'}$ to $\config_{i} \sqcup \config'_{j'}$ by executing $\run_i$ on the first part and staying idle on the second one.
 	
-	Note that for all $i \in [0, \ell]$, for all $v' \neq v$, if $\vproj{v'}{\run_i} \neq \epsilon$ then $\vproj{v'}{\run''_i} = \vproj{v'}{\run_i}$ (as we renamed values so that $\run$ and $\run'_j$ use disjoint sets of values apart from $v$) and if $\vproj{v'}{\run_i} = \epsilon$ then $\vinput{v'}{\run''_i} = \vinput{v'}{\run'_{j',i}} = \epsilon$.
+	Note that for all $i \in \nset{0}{\ell}$, for all $v' \neq v$, if $\vproj{v'}{\run_i} \neq \epsilon$ then $\vproj{v'}{\run''_i} = \vproj{v'}{\run_i}$ (as we renamed values so that $\run$ and $\run'_j$ use disjoint sets of values apart from $v$) and if $\vproj{v'}{\run_i} = \epsilon$ then $\vinput{v'}{\run''_i} = \vinput{v'}{\run'_{j',i}} = \epsilon$.
 	Let $\run''$ be the concatenation of the $\run''_i$.
 	We can apply the induction hypothesis to the runs $\run''_i$ constructed above, as $\size{\vinput{v}{\run''}}_{m_{j'}} < \size{\vinput{v}{\run}}_{m_{j'}}$ and $\size{\vinput{v}{\run''}}_{m_{j''}} = \size{\vinput{v}{\run}}_{m_{j''}}$ for all $j''>j'$.
 	
 	We obtain a family of runs $\Tilde{\run}_0, \ldots, \Tilde{\run}_\ell$ such that, for all $i$, $\voutput{v}{\run''_i} \subword \voutput{v}{\Tilde{\run}_i}$, $\vinput{v}{\Tilde{\run}_i} = \epsilon$, and for all $v' \neq v$, if $\vproj{v'}{\run''_i} \neq \epsilon$ then $\vproj{v'}{\run''_i} = \vproj{v'}{\Tilde{\run}_i}$ and if $\vproj{v'}{\run''_i} = \epsilon$ then $\vinput{v'}{\Tilde{\run}_i} = \epsilon$.
 	
-	As a consequence, we have, for all $i\in [0,\ell]$:
+	As a consequence, we have, for all $i\in\nset{0}{\ell}$:
 	\begin{itemize}
 		\item $\voutput{v}{\run_i} \subword \voutput{v}{\run''_i} \subword \voutput{v}{\Tilde{\run}_i}$
 		
@@ -148,13 +148,13 @@ All the conditions are satisfied, the lemma is proven.
 
 \begin{lemma}
 	\label{lem:follower-composition-output}
-	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $w'_0, \ldots, w'_\ell \in \messages^*$ such that for all $i \in [0, \ell]$, the projection of $w'_i$ on $\messages\setminus \set{m_1, \ldots, m_{i-1}}$ is a subword of $w_i$.
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $w'_0, \ldots, w'_\ell \in \messages^*$ such that for all $i \in \nset{0}{\ell}$, the projection of $w'_i$ on $\messages\setminus \set{m_1, \ldots, m_{i-1}}$ is a subword of $w_i$.
 	
-	Let $\config_0, \ldots, \config_{\ell+1}$ be configurations and $v$ a value such that for all $j \in [1,\ell+1]$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
+	Let $\config_0, \ldots, \config_{\ell+1}$ be configurations and $v$ a value such that for all $j \in\nset{1}{\ell+1}$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
 	
-	Suppose that for all $j \in [1,\ell]$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdecdown{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
+	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdecdown{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
 	
-	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$ such that for all $j \in [0,\ell]$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
+	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$ such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
 \begin{itemize}
 	\item $w'_j \subword \voutput{v}{\Tilde{\run}_j}$, 
 	
@@ -174,7 +174,7 @@ All the conditions are satisfied, the lemma is proven.
 	
 	Suppose it is not the case. Then there exists $j, j'$ such that $j' \leq j$ and $m_{j'}$ appears in $w'_j$. Let $w'_j = w^-_j m_{j'} w^+_j$ and let $w''_j$ be the word $w^-_jw^+_j$.
 	
-	Then, there exist "configurations" $\widehat{\config}_0, \ldots, \widehat{\config}_{\ell+1}$ such that for all $i \in [0,\ell]$, there is a "partial run" $\widehat{\run}_i$ from $\widehat{\config}_i$ to $\widehat{\config}_{i+1}$ and
+	Then, there exist "configurations" $\widehat{\config}_0, \ldots, \widehat{\config}_{\ell+1}$ such that for all $i \in\nset{0}{\ell}$, there is a "partial run" $\widehat{\run}_i$ from $\widehat{\config}_i$ to $\widehat{\config}_{i+1}$ and
 \begin{itemize}
 	\item $w'_i \subword \voutput{v}{\widehat{\run}_i}$ if $i \neq j$,
 	
@@ -192,25 +192,25 @@ From these runs we infer a sequence of "partial runs" that output $w'_0, \ldots,
 We proceed in a similar manner as in Lemma~\ref{lem:follower-composition-completion}.
 There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdecdown{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
 
-Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in [1, j'-1]$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
+Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
 
 We can rename agents so that the $\widehat{\run}_i$ and $\run'_{j',i}$ are on disjoint sets of agents, and apply a renaming of values in $\run'_{j'}$ so that $v_{j'}$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
-We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\widehat{\run}_i$ for all $i\in [1,\ell]$. As $w_i \subword \voutput{v}{\widehat{\run}_i}$, we can match the "internal messages" of $\widehat{\run}_i$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
-We obtain, for each $i \in [1,j'-1]$, a run $\run''_i$ from $\widehat{\config}_{i-1} \sqcup \config_{j', i-1}$ to $\widehat{\config}_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
+We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\widehat{\run}_i$ for all $i\in\nset{1}{\ell}$. As $w_i \subword \voutput{v}{\widehat{\run}_i}$, we can match the "internal messages" of $\widehat{\run}_i$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
+We obtain, for each $i \in \nset{1}{j'-1}$, a run $\run''_i$ from $\widehat{\config}_{i-1} \sqcup \config_{j', i-1}$ to $\widehat{\config}_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
 
-For each $i \in [j'+1, j-1]$, let $\run''_i$ be the run that goes from $\widehat{\config}_{i-1} \sqcup \config_{j', j'}$ to $\widehat{\config}_{i} \sqcup \config_{j', j'}$ by executing $\widehat{\run}_i$ on the first part and staying idle on the second one.
+For each $i \in \nset{j'+1}{j-1}$, let $\run''_i$ be the run that goes from $\widehat{\config}_{i-1} \sqcup \config_{j', j'}$ to $\widehat{\config}_{i} \sqcup \config_{j', j'}$ by executing $\widehat{\run}_i$ on the first part and staying idle on the second one.
 
 We can split $\widehat{\run}$ into $\widehat{\config}_{j} \step{\widehat{\run}^-} \widehat{\config}^- \step{\widehat{\run}^+} \widehat{\config}_{j+1}$
 Let $\run''_j$ be the run from $\widehat{\config}_{j-1} \sqcup \config_{j', j'}$ to $\widehat{\config}_{j} \sqcup \config'_{j'}$ obtained by executing $\widehat{\run}_{j}^-$ on the first part, then executing the last step of $\run'_{j'}$ to broadcast $m_{j'}$ with value $v$ and then executing $\run_{j}^+$ on the first part.
 
-For each $i \in [j+1, \ell]$, let $\run''_i$ be the run that goes from $\widehat{\config}_{i-1} \sqcup \config'_{j'}$ to $\widehat{\config}_{i} \sqcup \config'_{j'}$ by executing $\run_i$ on the first part and staying idle on the second one. \corto{notation sqcup}
+For each $i \in \nset{j+1}{\ell}$, let $\run''_i$ be the run that goes from $\widehat{\config}_{i-1} \sqcup \config'_{j'}$ to $\widehat{\config}_{i} \sqcup \config'_{j'}$ by executing $\run_i$ on the first part and staying idle on the second one. \corto{notation sqcup}
 
-Note that for all $i \in [0, \ell]$, for all $v' \neq v$, if $\vproj{v'}{\run_i} \neq \epsilon$ then $\vproj{v'}{\run''_i} = \vproj{v'}{\run_i}$ (as we renamed values so that $\run$ and $\run'_j$ use disjoint sets of values apart from $v$) and if $\vproj{v'}{\run_i} = \epsilon$ then $\vinput{v'}{\run''_i} = \vinput{v'}{\run'_{j',i}} = \epsilon$.
+Note that for all $i \in \nset{0}{\ell}$, for all $v' \neq v$, if $\vproj{v'}{\run_i} \neq \epsilon$ then $\vproj{v'}{\run''_i} = \vproj{v'}{\run_i}$ (as we renamed values so that $\run$ and $\run'_j$ use disjoint sets of values apart from $v$) and if $\vproj{v'}{\run_i} = \epsilon$ then $\vinput{v'}{\run''_i} = \vinput{v'}{\run'_{j',i}} = \epsilon$.
 
 Note that for all $i$ we have $w'_i \subword \voutput{v}{\widehat{\run}_i}$
 We can apply Lemma~\ref{lem:follower-composition-completion} to the $\widehat{\run}_i$ and the $w'_i$.
 
-We obtain a sequence of runs $\Tilde{\run}_0, \ldots, \Tilde{\run}_\ell$ such that, for all $i\in [0,\ell]$:
+We obtain a sequence of runs $\Tilde{\run}_0, \ldots, \Tilde{\run}_\ell$ such that, for all $i\in\nset{0}{\ell}$:
 \begin{itemize}
 	\item $\voutput{v}{\widehat{\run}_i} \subword \voutput{v}{\Tilde{\run}_i}$
 	
@@ -323,14 +323,14 @@ Now suppose there exists $v \in V \setminus (\set{\valuelabel{\node}} \cup V')$.
 	\item If $v' \in (\nats \setminus V) \cup V''$ then $\vinput{v'}{\run} = \epsilon$
 \end{itemize}
 
-As $v \neq \valuelabel{\node}$, by condition~\ref{unfoldingC3.1} there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in [1, \ell]$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdecdown{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
+As $v \neq \valuelabel{\node}$, by condition~\ref{unfoldingC3.1} there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdecdown{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
 
-By induction hypothesis (on the "tree unfolding"), for each $i \in [1,\ell]$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$. \corto{fix follower spec dec,m vs fw, fm}
+By induction hypothesis (on the "tree unfolding"), for each $i \in\nset{1}{\ell}$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$. \corto{fix follower spec dec,m vs fw, fm}
 
 For each $i$ we consider the shortest prefix $\run''_i$ of $\run'_i$ ending with an "internal message" $\intmessage{\followlabelmessage{\node_i}}{v'_i}$, we have that $\vinput{v'_i}{\run''_i} \subword \vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$.
 
-Furthermore, as $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in [1, \ell]$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$, we can do the same for $\run$ as $v \in V_{init}$ and thus by definition of $\run$ we have $\vproj{v}{\run} = \vproj{v}{u}$.
-Hence we obtain a sequence of runs $\run_0, \ldots, \run_\ell$ such that for all $i \in [1, \ell]$, $w_i \subword \voutput{v}{\run_i}$ and $\vinput{v}{\run_i} \in \set{m_0, \ldots, m_{i-1}}^*$.
+Furthermore, as $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$, we can do the same for $\run$ as $v \in V_{init}$ and thus by definition of $\run$ we have $\vproj{v}{\run} = \vproj{v}{u}$.
+Hence we obtain a sequence of runs $\run_0, \ldots, \run_\ell$ such that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{\run_i}$ and $\vinput{v}{\run_i} \in \set{m_0, \ldots, m_{i-1}}^*$.
 
 We apply Lemma~\ref{lem:follower-composition-completion} to obtain a sequence of runs $\Tilde{\run}_0, \ldots, \Tilde{\run}_\ell$ such that, for all $i$, 
 \begin{itemize}	
@@ -362,7 +362,7 @@ In Section~\ref{sec:tree-to-run-step-two} we constructed a run $\widehat{\run}$ 
 
 We have two cases: either $\mu$ is a "boss node" or a "follower node".
 
-If $\mu$ is a "boss node" then there exists a decomposition $\decsymb=(w_0, m_1, \ldots, w_\ell)$ such that $\bosslabel{\node} \in \langdecdown{\decsymb}$ and $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in [1, \ell]$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdecdown{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
+If $\mu$ is a "boss node" then there exists a decomposition $\decsymb=(w_0, m_1, \ldots, w_\ell)$ such that $\bosslabel{\node} \in \langdecdown{\decsymb}$ and $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdecdown{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
 
 As $\bosslabel{\node} \in \langdecdown{\decsymb}$, we have $\bosslabel{\node} = w'_0 \cdots w'_\ell$ where for all $i$ the projection of $w'_i$ on $\messages\setminus\set{m_1, \ldots, m_{i-1}}$ is a subword of $w_i$. 
 
