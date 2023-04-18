@@ -16,7 +16,7 @@ In order to execute $u$, we need to receive a sequence of broadcast that matches
 
 \begin{itemize}
 	\item 
-	Say $v$ is not an initial value of $u$, let $w \in \messages^*$ be the sequence of broadcasts received by $a$ with value $v$ in $u$. Then the exact value $v$ does not matter, all $a$ needs is to receive a series of broadcasts with the messages of $w$ all with the same value. This is possible if and only if there exists a global run $\run'$ and a value $v'$ such that $w$ is a subword of the series of broadcasts made in that run with value $v'$. Indeed, if there exists such a run, then $u$ can receive selected broadcasts from $\rho'$ (happening in parallel) in order to get the sequence $w$ of messages with the same value. Conversely, if $u$ receives a sequence $w$ all with the same value in $\rho$, then the prefix of $\rho$ ending just before the broadcast of $m_f$ by $u$ is a fitting candidate for $\rho'$.
+	Say $v$ is not an initial value of $u$, let $w \in \messages^*$ be the sequence of broadcasts received by $a$ with value $v$ in $u$. Then the exact value $v$ does not matter, all $a$ needs is to receive a sequence of broadcasts with the messages of $w$ all with the same value. This is possible if and only if there exists a global run $\run'$ and a value $v'$ such that $w$ is a subword of the sequence of broadcasts made in that run with value $v'$. Indeed, if there exists such a run, then $u$ can receive selected broadcasts from $\rho'$ (happening in parallel) in order to get the sequence $w$ of messages with the same value. Conversely, if $u$ receives a sequence $w$ all with the same value in $\rho$, then the prefix of $\rho$ ending just before the broadcast of $m_f$ by $u$ is a fitting candidate for $\rho'$.
 	We do not take $\rho$ directly as witness as we want the runs to get shorter as we make the recursive calls.
 	
 	Here we have our first type of specification, given as a word $w \in \messages^*$. We ask that there exists a global run and a value $v'$ such that $w$ is a subword of the sequence of broadcasts made in the global run with value $v'$.
@@ -25,13 +25,13 @@ In order to execute $u$, we need to receive a sequence of broadcast that matches
 	\item 	
 	Now suppose $v$ is an initial value of $u$. This situation is very different as other processes need $a$ to send some messages with this value in order to be able to send it back to him.
 	The key observation is that once an agent $a'$ other than $a$ has managed to broadcast some message $m$ with value $v$, we have an unlimited supply of such broadcasts:
-	Let $w$ be the series of messages broadcast by $a$ with value $v$ before $a'$ makes that broadcast, we now know that there is a global run which, if presented with an external series of broadcasts $w$ with the same value, can then broadcast $m$ with that value.
-	We then extend this reasoning and consider the series of broadcast made with value $v$ through $\run$. It can be decomposed as  $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ where $w_0 \cdots w_\ell$ is the sequence of broadcasts made by $a$ with that value and the $m_j$ are placed at the moments where another agent manages for the first time to broadcast that message (from then on we have unlimited supplies of broadcasts with that value and message $m_j$). In particular $\ell \leq \size{\messages}$.
+	Let $w$ be the sequence of messages broadcast by $a$ with value $v$ before $a'$ makes that broadcast, we now know that there is a global run which, if presented with an external sequence of messages $w$ with the same value, can then broadcast $m$ with that value.
+	We then extend this reasoning and consider the sequence of broadcast made with value $v$ through $\run$. It can be decomposed as  $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ where $w_0 \cdots w_\ell$ is the sequence of broadcasts made by $a$ with that value and the $m_j$ are placed at the moments where another agent manages for the first time to broadcast that message (from then on we have unlimited supplies of broadcasts with that value and message $m_j$). In particular $\ell \leq \size{\messages}$.
 	
-	All we have to do is to check for all $j$ that there exists a global run in which some agent broadcasts $m_j$ with a value $v$ that is not one of its initial ones, while having received a series of external broadcasts $w'$ which is of the form $w'_0\cdots w'_{j-1}$ where each $w'_i$ is obtained by adding some letters from $\set{m_0, \ldots, m_i}$ in $w_i$.
+	All we have to do is to check for all $j$ that there exists a global run in which some agent broadcasts $m_j$ with a value $v$ that is not one of its initial ones, while having received a sequence of external messages $w'$ which is of the form $w'_0\cdots w'_{j-1}$ where each $w'_i$ is obtained by adding some letters from $\set{m_0, \ldots, m_i}$ in $w_i$.
 	If we have such a run, then with the copycat property we can add an  agent that copies 
 	
-	This forms our second type of specification, given by a decomposition $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}, m_j)$, which asks for a run that broadcasts $m_j$ with some value $v'$ which it does not have initially, while receiving a series of  external broadcasts with value $v'$ that match $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
+	This forms our second type of specification, given by a decomposition $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}, m_j)$, which asks for a run that broadcasts $m_j$ with some value $v'$ which it does not have initially, while receiving a sequence of  external messages with value $v'$ that match $(w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.
 \end{itemize}   
 
 We can decompose any run satisfying one of those specifications into a local run (the one of the agent having the value initially in the first case, the one of the first agent which manages to broadcast $m_j$ while not having the value initially in the second case) and some number of specifications satisfied by smaller runs.
@@ -59,7 +59,7 @@ We say that a local run is cheaper than another one if the set of children it sp
  Now assume we have a bound $M$ on runs of altitude $h$. A run of altitude $h-1$ sees at most $r$ different initial values. Hence it has at most $\size{\messages}r$ children of the second type, and for each corresponding specification it has to make at most $M$ broadcasts, as each of those children makes at most $M$ receiving actions.
  Moreover, if it is of the first type, it also has to provide broadcasts for its father, but again his father has altitude $h$, thus will require at most $M$ broadcasts.
  
- Overall a local run at altitude $h-1$ needs to make a series of at most $M(\size{\messages} r +1)$ broadcasts. If that can be done, it can be done by a local run of length at most $[M(\size{\messages} r +1)](f(\size{\prot})+1)$.
+ Overall a local run at altitude $h-1$ needs to make a sequence of at most $M(\size{\messages} r +1)$ broadcasts. If that can be done, it can be done by a local run of length at most $[M(\size{\messages} r +1)](f(\size{\prot})+1)$.
  
  As a result, we can bound the size of a node of altitude $h$ by $g(\size{\prot}, hmax-h)$, where $hmax$ is the maximal altitude of the tree and $g$ is a primitive recursive function.
  
@@ -77,22 +77,10 @@ We say that a local run is cheaper than another one if the set of children it sp
 
 \textbf{For now we assume that the BRNA do not contain $*$ operations and apply only one operation for each message received. The general case reduces to this one (lemma \ref{lem:simple-reduction}).}
 
-% \begin{definition}
-% 	An ""external broadcast"" is a transition between two configurations $\config \extbr{m, v} \config'$ such that $m \in \messages$, $v \in \nats$ and for all $a \in \agents$, either $\config'(a) = \config(a)$ or there exists a transition $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a))$
-% 	such that $\data{\config'}(a, j') = \data{\config}(a, j')$ for all $j' \neq j$ and one of the following cases holds:
-% 		\begin{itemize}
-% 			\item $\anact = \quotemarks{\dummyact}$ 
-% 			and $\data{\config'}(a,j) = \data{\config}(a,j)$
-% 			\item $\anact = \quotemarks{\enregact}$ and $\data{\config'}(a,j) = v$
-% 			\item $\anact = \quotemarks{\eqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) =v$
-% 			\item $\anact = \quotemarks{\diseqtestact}$ and $\data{\config'}(a,j) = \data{\config}(a,j) \ne v$.
-% 		\end{itemize}
-
-%\subsubsection{Definitions}
 \begin{definition}[Local runs]			
 	A ""local configuration"" is a pair $(q, \localdata) \in Q \times ([1,r] \to \nats)$. Intuitively, it describes the configuration of a single agent. 
 
-	An ""external broadcast"" from $(q,\localdata)$ to $(q',\localdata')$ with transtion $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans = (q,\rec{m}{j}{\anact},q') \in \transitions$
+	An ""external message"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans = (q,\rec{m}{j}{\anact},q') \in \transitions$
 	such that $\localdata(j') = \localdata(j')$ for all $j' \neq j$ and one of the following cases holds:
 		\begin{itemize}
 			\item $\anact = \quotemarks{\dummyact}$ 
@@ -105,13 +93,12 @@ We say that a local run is cheaper than another one if the set of children it sp
 
 	An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\atrans$ is either a "broadcast" or a "local test" and an agent in $(q,\localdata)$ may perform this transition in isolation and get to $(q',\localdata')$. 
 
-	A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either an "external broadcast" or an "internal step". 
-	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$, where for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions}$. The sequence $\locallabel_1, \dots, \locallabel_k$ is called ""schedule"" of $\localrun$.
+	A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either an "external message" or an "internal step". 
+	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$, where for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions}$. 
+	A ""trace"" is a sequence in $(set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" is the "trace" $\trace{\localrun}$ containing the message types and values that it receives and broadcasts. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\tau} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
 
-	The ""trace"" of a "local run" is the sequence $\trace{\localrun} \in (\messages \times \nats \times \set{in, out})^*$ containing the message types and values that it receives and broadcasts, $in$ indicating an "external broadcast" and $out$ a broadcast made in $u$.
-
-	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "external broadcasts".
-	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcasts steps made in $\localrun$.
+	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "external messages".
+	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcast steps made in $\localrun$.
 	
 	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\localrun}{\aval}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$. 
 \end{definition}
@@ -245,7 +232,7 @@ We will now prove that there exists a run satisfying a specification if and only
 Also note that the interpretation of the "follower nodes" changes between the two directions: when building the tree a follower node labelled $(\followwordspec, \followmessagespec)$ means that there exists a global run in which some agent receives the sequence of messages $\followwordspec$ and broadcasts $\followmessagespec$, all with a value $\aval$ that is not one of its initial ones.
 \nico{pas clair}
 
-When building the run a follower node means that there exists a "partial run" which receives a series of external broadcasts which forms the word $fw$, with a value $v$ that it initially does not contain, and eventually broadcasts $m$ with that same value.
+When building the run a follower node means that there exists a "partial run" which receives a sequence of external messages which forms the word $fw$, with a value $v$ that it initially does not contain, and eventually broadcasts $m$ with that same value.
 
 \begin{lemma}
 	\label{lem:run-to-tree}
@@ -456,24 +443,24 @@ there is a $\quotemarks{\enregact}$ transition on every register in $I$. Let $\t
 By Pigeonhole principle two of the sequences $s_i$ are equal (there are $|\transitions|^{2M}$ distinct such sequences and $|\transitions| \leq n$). 
 There exist two infix "local runs" $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have sequence of transitions $s$.
 
-Although $\localrun_a$ and $\localrun_b$ have the same sequence of transitions, their schedules may differ because their "external messages" may have different values.
-We build a schedule $\sigma$ such that $(q_1,\localdata_1) \step{\sigma} (q_4, \localdata_4)$ where the underlying sequence of transitions of $\sigma$ is $s$.
+Although $\localrun_a$ and $\localrun_b$ have the same sequence of transitions, their "traces" may differ because their "external messages" may have different values.
+We build a "trace" $\atrace$ such that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ where the underlying sequence of transitions of $\atrace$ is $s$.
 
 For every active register $i \in I$, let $e_i \in \nset{1}{2M}$ denote the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$ and $f_i \in \nset{1}{2M}$ the index of the last $\quotemarks{\enregact}$ on register $i$ in $s$. By hypothesis, because $s$ is of length $2M$, it contains at least two $\quotemarks{\enregact}$ on register $i$, one in the fist half and one in the second half, hence $e_i \leq M < M +1 \leq f_i$. 
 
-For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define the $j$-th "local step" of $\sigma$ as $\intlabel{\delta_j}$. 
+For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define the $j$-th "local step" of $\atrace$ as $\intlabel{\delta_j}$. 
 Suppose now that $\delta_j$ is a "reception" of the form $\rec{\amessage}{i}{\anact}$. The $j$-th "local step" of $\localrun_a$ (resp. $\localrun_b$) has underlying transition $\delta_j$ hence is an "external message" of the form $\extlabel{\delta_j}{\aval_a}$ for some $\aval_a \in V$ (resp. $\extlabel{\delta_j}{\aval_b}$ for some $\aval_b \in V$).
 Because $V$ is finite, there exists a function $\phi: V \rightarrow \nats \setminus V$ injective.
-We define the $j$-th "local step" of $\sigma$ to be $\extlabel{\delta_j}{\aval}$ where:
+We define the $j$-th "local step" of $\atrace$ to be $\extlabel{\delta_j}{\aval}$ where:
 \begin{itemize} 
 \item if $j < e_i$, $\aval = \aval_a$,
 \item if $e_i \leq j < f_i$, $\aval = \phi(\aval_a)$,
 \item if $f_i \leq j$, $\aval = \aval_b$.
 \end{itemize}
-We now claim that $(q_1,\localdata_1) \step{\sigma} (q_4,\localdata_4)$. 
-First, for every active register $i$, the last $\quotemarks{\enregact}$ step on register $i$ has value $\localdata_4(i)$ in $\sigma$ (as we are in the case $f_i \leq j$). Hence if every "local step" is valid then the final "local configuration" is $(q_4, \localdata_4)$.
-For every $l \in \nset{0}{2M}$, let $\sigma_l$ denote the prefix of $\sigma$ of length $l$.
-We prove by induction on $l$ that $\sigma_l$ is valid from $(q_1, \localdata_1)$. It is trivially true for $l =0$. Assume that we have $(q_1, \localdata_1) \step{\sigma_l} (q, \localdata)$ and let $\locallabel$ such that $\sigma_l \cdot \locallabel = \sigma_{l+1}$. Let $\atrans$ the underlying transition of $\locallabel$.
+We now claim that $(q_1,\localdata_1) \step{\atrace} (q_4,\localdata_4)$. 
+First, for every active register $i$, the last $\quotemarks{\enregact}$ step on register $i$ has value $\localdata_4(i)$ in $\atrace$ (as we are in the case $f_i \leq j$). Hence if every "local step" is valid then the final "local configuration" is $(q_4, \localdata_4)$.
+For every $l \in \nset{0}{2M}$, let $\atrace_l$ denote the prefix of $\atrace$ of length $l$.
+We prove by induction on $l$ that $\atrace_l$ is valid from $(q_1, \localdata_1)$. It is trivially true for $l =0$. Assume that we have $(q_1, \localdata_1) \step{\atrace_l} (q, \localdata)$ and let $\locallabel$ such that $\atrace_l \cdot \locallabel = \atrace_{l+1}$. Let $\atrans$ the underlying transition of $\locallabel$.
 First, $q$ is the initial state of $\atrans$ because $\locallabel$ is valid at step $l+1$ of $\localrun_a$ (and $\localrun_b$). Hence if $\atrans$ is a "broadcast" then $\locallabel$ is valid from $(q,\localdata)$.
 
 For every $i \in I$, let $\localdata_a, \localdata_b$ the content of register $i$ after the $l$-th step in $\localrun_a$ and $\localrun_b$ respectively.
@@ -485,7 +472,7 @@ In this case, we prove that $\binrel{\aval}{\anact}{\localdata(i)}$ with $\anact
 \begin{itemize}
 \item $l+1<e_i$: $\localdata(i)= \localdata_a(i)$, $\aval = \aval_a$ and $\binrel{\localdata_a(i)}{\anact}{\aval_a}$. 
 \item $e_i \leq l+1 < f_i$: We have $\aval = \phi(\aval_a)$. 
-Moreover, because $e_i < l+1$, there is at least one $\quotemarks{\enregact}$ on register $i$ in $\sigma_l$. Consider the last such "transition" in $\sigma_l$; its index $j$ satisfies $e_i \leq j < f_i$ by definition of $e_i$, hence the value of the corresponding "external message" in $\localrun_a$ is $\localdata_a(i)$ and its value in $\sigma_{l}$ is $\phi(\localdata_a(i))$. One has $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ therefore (by injectivity of $\phi$ for $\anact = \quotemarks{\diseqtestact}$)
+Moreover, because $e_i < l+1$, there is at least one $\quotemarks{\enregact}$ on register $i$ in $\atrace_l$. Consider the last such "transition" in $\atrace_l$; its index $j$ satisfies $e_i \leq j < f_i$ by definition of $e_i$, hence the value of the corresponding "external message" in $\localrun_a$ is $\localdata_a(i)$ and its value in $\atrace_{l}$ is $\phi(\localdata_a(i))$. One has $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ therefore (by injectivity of $\phi$ for $\anact = \quotemarks{\diseqtestact}$)
  $\binrel{\phi(\localdata_a(i))}{\anact}{\phi(\aval_a)}$.
 \item$f_i \leq l+1$: $\localdata(i)= \localdata_b(i)$ and $\aval = \aval_b$, and because the "internal step" is valid in $\localrun_b$ we have $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. 
 \end{itemize}
@@ -516,16 +503,16 @@ If $i \in I$ and $i' \in I$, recall that $e_i \leq M < f_{i'}$ and $e_{i'} \leq 
 \end{itemize}
 
 This proves that $\locallabel$ is valid from $(q,\localdata)$ which concludes the induction. 
-We have proven that $(q_1,\localdata_1) \step{\sigma} (q_4, \localdata_4)$; however $\sigma$ is of length $2M$ and there are at least $2M+1$ steps between $(q_1,\localdata_1)$ and $(q_4, \localdata_4)$ in $\localrun$. Therefore, replacing this part of $\localrun$ with $(q_1,\localdata_1) \step{\sigma} (q_4, \localdata_4)$ yields a "local run" $\localrun': (q_i, \localdata_i) \step{*} (q_f,\localdata_f)$ with strictly less steps that $\localrun$. 
+We have proven that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$; however $\atrace$ is of length $2M$ and there are at least $2M+1$ steps between $(q_1,\localdata_1)$ and $(q_4, \localdata_4)$ in $\localrun$. Therefore, replacing this part of $\localrun$ with $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ yields a "local run" $\localrun': (q_i, \localdata_i) \step{*} (q_f,\localdata_f)$ with strictly less steps that $\localrun$. 
 
 It remains to prove the conditions on the "$v$-inputs" of $\localrun'$. If suffices to prove the condition for the part between $(q_1, \localdata_1)$ to $(q_4, \localdata_4)$,
  because the rest of $\localrun$ is left untouched. 
 
-Let $(q_m, \localdata_m)$ the "local configuration" after $M$ steps of $\sigma$ from $(q_1, \localdata_1)$; write $\localrun_1$ the local run from $(q_1,\localdata_1)$ to $(q_m, \localdata_m)$ corresponding to the first $M$ steps of $\sigma$ in $\localrun'$, and $\localrun_2$ the "local run" from $(q_m, \localdata_m)$ to $(q_4, \localdata_4)$ corresponding to the last $M$ steps of $\sigma$ in $\localrun'$.  
+Let $(q_m, \localdata_m)$ the "local configuration" after $M$ steps of $\atrace$ from $(q_1, \localdata_1)$; write $\localrun_1$ the local run from $(q_1,\localdata_1)$ to $(q_m, \localdata_m)$ corresponding to the first $M$ steps of $\atrace$ in $\localrun'$, and $\localrun_2$ the "local run" from $(q_m, \localdata_m)$ to $(q_4, \localdata_4)$ corresponding to the last $M$ steps of $\atrace$ in $\localrun'$.  
 
-Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\sigma$, the "external message" steps in the first $M$ steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the last $M$ steps. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval \in V$ and values of $V$ satisfy conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues}. 
+Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\atrace$, the "external message" steps in the first $M$ steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the last $M$ steps. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval \in V$ and values of $V$ satisfy conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues}. 
 
-Let $\aval' \in \nats \setminus V$; $\aval$ does not appear in $\localrun$. Either $\aval'$ does not appear in $\sigma$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "external message" steps with value $\phi(\aval)$ correspond to "external message" steps in $\localrun_a$ with value $\aval$, and similarly for $\localrun_2$ and $\localrun_b$. This proves condition \ref{item:shorterrun_anyvalue} for every $\aval' \in \nats \setminus V$.
+Let $\aval' \in \nats \setminus V$; $\aval$ does not appear in $\localrun$. Either $\aval'$ does not appear in $\atrace$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "external message" steps with value $\phi(\aval)$ correspond to "external message" steps in $\localrun_a$ with value $\aval$, and similarly for $\localrun_2$ and $\localrun_b$. This proves condition \ref{item:shorterrun_anyvalue} for every $\aval' \in \nats \setminus V$.
 Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues} and that is strictly shorter that $\localrun$, which proves the "shortening property".
 
 We build a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot})(\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup W$ where $W$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.

@@ -6,7 +6,6 @@
 \item mettre au bon endroit la definition de "partial run": 
 	% A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in [1, k]$, either $\config_{i-1} \step{} \config_{i}$ or $\config_{i-1} \extbr{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
     \item passer $\regnum$ dans le tuple du protocole
-    \item reflechir nomenclature internal broadcast et autres -> external message
     \item decompose as -> peut créer des ambiguités: machintruc decomposition 
     \item reduction query vers cover un registre
     \item reduction query vers cover dans le cas d'un registre à l'aide d'une habile remarque
@@ -17,11 +16,13 @@
     \item[nico] remarque on a besoin de tower
     \item remarques automates à pile    
     \item harmoniser bnra - protocol
-    \item remplacer schedule par trace
     \item modifier le lemme 21 pour qu'il facilite la preuve du lemme 23
+    \item verifier que la notation de $r$-BNRA est uniforme et bien definie
+    \item  verifier broadcasted -> broadcast
 \end{itemize}
 
 A discuter:
 \begin{itemize}
 \item toutes les valeurs dans les différents registres sont différentes ? Cela me semble étrange vis-à-vis de la notion d'identifiant
+\item external message -> ambiguite entre message et step 
 \end{itemize}
