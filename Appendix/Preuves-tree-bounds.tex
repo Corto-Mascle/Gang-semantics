@@ -1,0 +1,113 @@
+\section{Proofs of Section~\ref{sec:tree-bounds}}
+
+\lemBoundLengthHeightH*
+
+\begin{proof}
+	We prove this by strong induction on $\altmax-\altitude{\node}$.
+	
+	Let $\node$ be a node, suppose that the inequalities hold for all nodes of greater "altitude". 
+	Let $\node_1, \ldots, \node_k$ be its "follower" children. If $\node$ is not the root of $\tree$ then let $\mu'$ be its father.
+	
+	If it is a "boss node" then by Lemma~\ref{lem:bound-successor-height} if it is the root we have $\size{\bosslabel{\node}} = \size{w} \leq N$, and if not we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}} \leq f_0(\altmax - \altitude{\node} -1)$ by induction hypothesis. In both cases we have $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node} -1)$.	
+	In all cases we obtain $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r)+1) \Big[f_0(\altmax-\altitude{\node} -1) + \sum_{i=1}^k \size{\followlabelword{\node_i}}\Big]$
+	
+	By Lemma~\ref{lem:bound-successor-height} we have $k \leq \size{\messages}r$.
+	Moreover, by induction hypothesis for all $i$ we have 
+	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node} -1)$. As a result,
+	
+	$\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r)+1) f_0(\altmax-\altitude{\node} -1)(\size{\messages} r +1) \leq N^2(\towerfun(N)(N) +1) f_0(\altmax - \altitude{\node} -1) \leq f_0(\altmax - \altitude{\node})$.
+	
+	If $\node$ is a "follower node" then by Lemma~\ref{lem:bound-successor-height} we have 
+	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r) +1 \leq f_0(\altmax - \altitude{\node})$.
+\end{proof}
+
+\lemBoundMaxHeight*
+
+\begin{proof}
+	Let $\tree$ be a "tree unfolding" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$. Let $\altmax$ be the maximal altitude of a node in $\tree$. Let $\node_0, \ldots, \node_m$ be nodes of $\tree$ such that $\node_0$ is its root, $\altitude{\node_m} = \altmax$, and for all $i\in \nset{1}{m}$, $\node_i$ is a child of $\node_{i-1}$.
+	For all $a \in \nset{1}{\altmax}$, let $j_a$ be the minimal index such that $\altitude{\node_{j_a}} = a$. This index exists as $\altitude{\node_0} = 0$, $\altitude{\node_m} = \altmax$ and for all $i$, $\altitude{\node_{i}} \leq \altitude{\node_{i-1}}+1$.
+	Furthermore as $j_a$ is the minimal such index, we cannot have $\altitude{\node_j} \geq a$ for any $j < j_a$ as otherwise there would be a $j'$ such that $j' \leq j < j_a$ with $\altitude{\node_{j'}} = a$.
+	
+	As a consequence, we have $j_1 < j_2 < \ldots < j_{\altmax}$. Moreover, $\node_{j_a}$ is necessarily a "follower node" as otherwise we would have $\altitude{\node_{j_a-1}} = a+1 \geq a$.
+	
+	Let $\#$ be a fresh letter, and let $N = \size{w} + \size{\prot}+1$. For all $i \in \nset{1}{\altmax}$ let $\node'_i = \node_{j_{\altmax - i+1}}$ and $w_i = \followlabelword{\node'_{i}} \# \followlabelmessage{\node'_{i}} \in (\messages \cup \set{\#})^*$.
+	
+	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
+	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\followlabelword{\node'_{i_1}} \subword \followlabelword{\node'_{i_2}}$ and $\followlabelmessage{\node'_{i_1}} = \followlabelword{\node'_{i_2}}$.
+	Therefore, as $\node_{i_1}$ is a descendant of $\node_{i_2}$, by Lemma~\ref{lem:increasing-followers} there would exist a "tree unfolding" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
+	
+	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
+	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\altmax-i+1) = (N^2(\towerfun(N)(N)+1))^{i}$.
+	
+	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n)(n)+1))n+2$. Clearly for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N)(N)+1))^{i} \geq N$.
+	As a consequence, for all $a$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(N) + 2 \leq g^{(i)}(N)$
+	
+	By Theorem 5.3 in \cite{SchmitzS2011upperHigman}, there exists a function $f_1 \in \Falpha{\omega^{\size{\messages}}}$ such that all  "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
+	
+	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(N) = f_1(\size{\prot} + \size{w} + 1)$ elements, thus $\altmax \leq f_1(\size{\prot} + \size{w} + 1)$.
+\end{proof}
+
+\lemBoundMinHeight*
+
+\begin{proof}
+	We proceed similarly as in the proof of Lemma~\ref{lem:bound-max-height}. 
+	
+	Let $\tree$ be a "tree unfolding" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$. Let $\altmin$ be the minimal altitude of a node in $\tree$. Let $\node_0, \ldots, \node_m$ be nodes of $\tree$ such that $\node_0$ is its root, $\altitude{\node_m} = \altmin$, and for all $i\in \nset{1}{m}$, $\node_i$ is a child of $\node_{i-1}$.
+	For all $a \in \nset{\altmin}{0}$, let $j_a$ be the minimal index such that $\altitude{\node_{j_a}} = a$. This index exists as $\altitude{\node_0} = 0$, $\altitude{\node_m} = \altmin$ and for all $i$, $\altitude{\node_{i}} \geq \altitude{\node_{i-1}}-1$.
+	Furthermore as $j_a$ is the minimal such index, we cannot have $\altitude{\node_j} \leq a$ for any $j < j_a$ as otherwise there would be a $j'$ such that $j' \leq j < j_a$ with $\altitude{\node_{j'}} = a$.
+	
+	As a consequence, we have $j_0 < j_1 < j_2 < \ldots < j_{\altmin}$. Moreover, $\node_{j_a}$ is necessarily a "boss node" for all $a<0$ as otherwise we would have $\altitude{\node_{j_a-1}} = a-1 \leq a$, and $\node_{j_0}$ is the root and therefore also a "boss node" as $\tau$ satisfies $w$.
+	
+	Let $N = \size{w} + \size{\prot}+1$. For all $i \in \nset{0}{-\altmin}$ let $\node'_i = \node_{j_{-i}}$ and $w_i = \bosslabel{\node'_{i}} \in \messages^*$.
+	
+	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
+	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\bosslabel{\node'_{i_1}} \subword \bosslabel{\node'_{i_2}}$, hence, as $\node_{i_2}$ is a descendant of $\node_{i_1}$, by Lemma~\ref{lem:increasing-bosses} there would exist a "tree unfolding" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
+	
+	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
+	By Lemma~\ref{lem:bound-length-at-height-h}, for all $\node'_i$ we have $\size{\bosslabel{\node'_i}} \leq f_0(\altmax - \altitude{\node'_i}) = f_0(\altmax +i)$.
+	By Lemma~\ref{lem:bound-max-height}, we have $\altmax \leq f_1(N)$ and thus $\size{\bosslabel{\node'_i}} \leq  f_0(f_1(N) +i)$
+	
+	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n)(n)+1))n+2$. 
+	Let $M = f_0(f_1(N))$. Clearly for all $i\geq 0$ we have $g^{(i)}(M) \geq (N^2(\towerfun(N)(N)+1))^{f_1(N) + i}$.
+	
+	We have $\size{w_0} \leq M = g^{(0)}(N)$ and for all $i>0$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{f_1(N) + i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(M) + 2 \leq g^{(i)}(M)$
+	
+	By definition of the function $f_1 \in \Falpha{\omega^{\size{\messages}}}$, all "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
+	
+	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(M)$ elements, thus $\altmin \leq f_1(M) = f_1(f_0(f_1(N)))$.
+	We define $f_2$ as $f_1 \circ f_0 \circ f_1$. It is a function of $\Falpha{\omega^{\size{\messages}}}$ as $f_0$ and $f_1$ are and $\Falpha{\omega^{\size{\messages}}}$ is closed by composition.
+\end{proof}
+
+\PropBoundTreeSize*
+
+\begin{proof}
+	Let $\tree$ be a "tree unfolding" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$. Let $N = \size{\prot} + \size{w}+1$.
+	
+	We first bound the height of $\tree$, then its arity (the maximal number of children of a node), which allows us to obtain a bound on the number of nodes.
+	
+	By Corollary~\ref{cor:bound-node-size}, for all "boss node" $\node$ in $\tree$ we have $\size{\bosslabel{\node}} \leq f_3(N)$.
+	If a branch contains more than $\sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ "follower nodes", then there are two nodes in it with the same "boss" label, hence $\tree$ can be reduced and still satisfy $w$, contradicting the minimality of $\tree$.
+	
+	Similarly, by Corollary~\ref{cor:bound-node-size}, for all "follower node" $\node$ in $\tree$ we have $\size{\followlabelword{\node}} \leq f_3(N)$.
+	If a branch contains more than $\size{\messages}\sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ "follower nodes", then there are two nodes in it with the same "follower" label, hence $\tree$ can be reduced and still satisfy $w$, contradicting the minimality of $\tree$.
+	
+	As a result, each branch of $\tree$ contains at most $1+ (\size{\messages}+1) \sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ nodes. We simplify this expression: let $H = (f_3(N)+2)(N+1)^{f_3(N)+1}$, each branch of $\tree$ has at most $H$ nodes.
+	
+	Furthermore, by Lemma~\ref{lem:bound-successor-height}, each node has at most $\size{\messages}r$ "follower" children. We now bound its number of "boss" children.
+	
+	Let $\node$ be a node of $\tree$, let $V$ be the set of non-initial values appearing in $\localrunlabel{\node}$ apart from $\valuelabel{\node}$.
+	By condition~\ref{unfoldingC3.2}, for each $v' \in V$, $\node$ has a "boss" child $\node_{v'}$ such that $\vinput{v'}{\localrunlabel{\node}} \subword \bosslabel{\node_{v'}}$.
+	
+	We simply observe that $\size{V} \leq \size{\localrunlabel{\node}}$ as every non-initial value needs to be received at some point in $\localrunlabel{\node}$. We also note that all other "boss" children of $\node$ can be removed, and the resulting tree still satisfies $w$ and is still a "tree unfolding". By minimality of $\tree$, this means that $\mu$ has at most $\size{\localrunlabel{\node}}$ "boss" children, hence at most $f_3(N)$ by Corollary~\ref{cor:bound-node-size}.
+	
+	As a consequence, each node in $\tree$ has at most $f_3(N) + \size{\messages}(r+1)$ children.
+	
+	By combining the bounds on the size of branches and the arity of nodes, we obtain that $\tree$ has at most $\sum_{h=0}^{H} (f_3(N) + \size{\messages}r)^h$ nodes. We again simplify this: $\sum_{h=0}^{H} (f_3(N) + \size{\messages}r)^h \leq (H+1)(f_3(N) + N^2)^H$.
+	
+	Finally, we obtain a bound on the size of $\tau$ by taking the product of the bounds on the number of nodes and on the size of each node label: 
+	\[ \size{\tree} \leq  (H+1)(f_3(N) + N^2)^H (2f_3(N) +1)\]
+	
+	Let $f_4$ be such that $f_4(n) = ((f_3(n)+2)(n+1)^{f_3(n)+1} +1) (f_3(n) + n^2)^{(f_3(n)+2)(n+1)^{f_3(n)+1}}(2f_3(n) +1)$ for all $n$. It is the composition of $f_3$ with an elementary function, hence as $f_3 \in \Falpha{\omega^{\messages}}$ and $\Falpha{\omega^{\messages}}$ is closed by composition with elementary functions, $f_4 \in \Falpha{\omega^{\messages}}$.
+	
+	Furthermore, we have shown that the size of a minimal "tree unfolding" satisfying a "boss specification" $w$ and labelled by a "protocol" $\prot$ is bounded by $f_4(\size{\prot} + \size{w} +1)$.
+\end{proof}

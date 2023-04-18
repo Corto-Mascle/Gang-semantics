@@ -75,33 +75,36 @@ The following remark formalizes the intuition that, because the only way to take
 		We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
 	\end{definition}
 	
-	\begin{definition}
-		A ""query"" $\query$ is a finite set of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z}')}$, $\quotemarks{R_j(\var{z}) \neq R_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$ and $j,j' \in \nset{1}{r}$.
-		It is \emph{satisfied} by a "configuration" $\config$ if there is a valuation $\nu : \varset \to \agentsof{\config}$ such that:
-		\begin{itemize}
-			\item for all $\quotemarks{q(\var{z})} \in \query$, $\st{\config}(\nu(\var{z})) = q$,
-			
-			\item for all $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z}))(j) = \data{\config}(\nu(\var{z'}))(j')$,
-			
-			\item for all $\quotemarks{R(\var{z}) \neq R(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z}))(j) \neq \data{\config}(\nu(\var{z'}))(j')$.
-		\end{itemize}
-		
-		\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is a "run" of this protocol whose last "configuration" satisfies the query.
-	\end{definition}
+%	\begin{definition}
+%		A ""query"" $\query$ is a finite set of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z}')}$, $\quotemarks{R_j(\var{z}) \neq R_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$ and $j,j' \in \nset{1}{r}$.
+%		It is \emph{satisfied} by a "configuration" $\config$ if there is a valuation $\nu : \varset \to \agentsof{\config}$ such that:
+%		\begin{itemize}
+%			\item for all $\quotemarks{q(\var{z})} \in \query$, $\st{\config}(\nu(\var{z})) = q$,
+%			
+%			\item for all $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z}))(j) = \data{\config}(\nu(\var{z'}))(j')$,
+%			
+%			\item for all $\quotemarks{R(\var{z}) \neq R(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z}))(j) \neq \data{\config}(\nu(\var{z'}))(j')$.
+%		\end{itemize}
+%		
+%		\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is a "run" of this protocol whose last "configuration" satisfies the query.
+%	\end{definition}
 
 	\AP The ""cover problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this protocol whose last "configuration" satisfies the "query" with the single formula $\quotemarks{q_f(\var{z})}$.
 	
 	\AP The ""target reachability problem"" is to determine, given a "protocol" and a state $q$, whether there is a "run" of this protocol whose last "configuration" $\config$ is such that $\st{\config}(\agentsof{\gamma}) = \{q_f\}$, i.e all agents reached $q_f$.
 	
-	\begin{remark}
-		\label{rem:bigger_config_query}
-		If some "configuration" $\config$ satisfies a "query" $\query$, then every configuration $\config'$ such that $\config \lessthan \config'$ satisfies $\query$. 
-	\end{remark}
+%	\begin{remark}
+%		\label{rem:bigger_config_query}
+%		If some "configuration" $\config$ satisfies a "query" $\query$, then every configuration $\config'$ such that $\config \lessthan \config'$ satisfies $\query$. 
+%	\end{remark}
 	
 	%We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
 
 \begin{remark}
+	In \cite{DST2013}, the authors considered ``queries'', which are conjunctions of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z}')}$, $\quotemarks{R_j(\var{z}) \neq R_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$, $q$ a state and $j,j' \in \nset{1}{r}$. A configuration satisfies a query $\query$ if we can assign agents to each of the variables of $\query$ so that all conjuncts are satisfied.
+	In this paper we will only study the "cover problem", but we argue here that we can reduce from the query satisfaction problem to it:
+	
 	Given a "protocol" $\prot$ with $r$ registers and a "query" $\query$ with $k$ variables, we can construct a "protocol" $\prot'$ with $\size{\prot}^k$ states and $kr$ registers that allows each agent to simulate $k$ agents of the previous system (by taking as states $k$-tuples of states of $\prot$, using the $kr$ registers to store the values of the registers of the $k$ agents and adapting the transitions accordingly).
 	There is a run of the first BNRA satisfying $\query$ if and only if there is a run of the second in which one agent simulates the $k$ agents satisfying $\query$, which can be checked locally by that agent, which enters a special state $q_f$. if it happens. 
 	
@@ -296,67 +299,12 @@ We will use the following result, known as the "Length function theorem" from \c
 ""Lossy channel systems""  are systems where finite-state processes communicate via send messages from a finite alphabet through unbounded FIFO channels through which messages may be lost. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AK95,AbdullaJ1996undec}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and in fact lays at level $\mathcal{F}_{\omega^{\omega}}$ in the Fast-Growing Function Hierarchy \cite{ChambartS2008ordinal}.
 
 We now prove that the coverability problem in BNRA is at least as hard as the reachability problem for "lossy channel system", and that this already hold for $2$-BNRAs.  
-\begin{proposition}
+\begin{restatable}{proposition}{propReductionLCS}
 	\label{prop:reduction-LCS}
 	There is a polynomial-time reduction from the coverability problem for lossy channel systems to the coverability problem for BNRA with two registers.
-\end{proposition}
+\end{restatable}
 
-\ifproofs
-\begin{proof}
-It is sufficient to prove that it is as hard as reachability for lossy channel systems with a single channel, which corresponds to a single finite-state machine that has the ability to buffer symbols in a lossy FIFO queue \cite{Schnoebelen2002verifying}.
-Let $\los := (\lstates,\Sigma)$ be a "lossy channel system", where $\lstates$ is a finite set of locations, $\Sigma$ is a finite set of symbols and $\ltransitions \subseteq \lstates \times \Sigma^* \times \set{!, ?} \times \lstates$; $\quotemarks{!}$ corresponds to a ""push"" (writing at the end of the channel) and $\quotemarks{?}$ to a ""pop"" (reading at the beginning the channel). A configuration of $\los$ is a pair of $\lstates \times \Sigma^*$ denoting the location of the system and the content of the channel. There exists a step from $(\lstate,w)$ to $(\lstate',w')$ using transition $\ltrans \in \ltransitions$, denoted $(\lstate,w) \lstep{\ltrans} (\lstate',w')$, when
-\begin{itemize}
-\item $\ltrans = (\lstate,u,!,\lstate')$ for some $u \in \Sigma^*$ and $w' \subword w \cdot u$ (a ""push""),
-\item $\ltrans = (\lstate,u,?,\lstate')$ for some $u \in \Sigma^*$ and $u \cdot w' \subword w$ (a ""pop"")
-\end{itemize}
-where $\subword$ denotes the "subword relation".
-This subword relation encodes the lossiness of the channel (a non-lossy channel wuld have equalities instead); intuitively, it expresses the fact that letters in the channel may get lost. 
-
-The existence of such a transition for some $\ltrans \in \transitions$ is denoted $(\lstate,w) \lstep{} (\lstate',w')$, and its transitive closure is denoted $\lstep{*}$. The ""reachability problem@@lcs"" asks, given $\los$ and two locations $\lstate_i, \lstate_f \in \lstates$, whether there exists an execution $(\lstate_i,\epsilon) \lstep{*} (\lstate_f, w)$ for some $w$. 
-
-We aim at constructing a $2$-BNRA $\prot$ with a distinguished state $q_f$ such that $q_f$ may be covered if and only if $(\los, q_i, q_f)$ is a positive instance of the "reachability problem@@lcs". 
-The intuition of $\prot$ is the following. Agents will organize in chains so that each agent of a chain knows the identifier of its precedessor in the chain, hence is able to check that messages received come from it. Each agent of the chain is meant to encode a step of the exeuction in the "lossy channel system". 
-An agent of the chain will only listen to their predecessor in the chain, from which they will obtain a location of the system and the content of the channel. It will then broadcast the new location of the system and the new content of the channel to the next agent of the chain. 
-
-Note that the content of the channel might become big in a "lossy channel system", therefore agents will not store it but rather rebroadcast it letter by letter. An agent only applies a small modification at the beginning of the channel if it decides to encode a "pop" transition and at the end of the channel if it decides to encode a "push" transition. Messages might get lost, which is why we are able to encode "lossy channel systems" but not non-lossy ones.
-
-In some initial phase, agents decide whether they are ""root"" (at the beginning of their chain) or ""link"". A "root" agent receives no message; it simply broadcasts its identifiers and the initial confinguration of $\los$ $(\lstate_0,\epsilon)$. To encode this option, in $\prot$, from the initial state $q_0$ one has the possibility to move to a part where the only sequence of transitions possible is $\br{\mathsf{init}}{1}, \br{\mathsf{q_0}}{1}, \br{\mathsf{\#}}{1}$ which gets to $\finstate{\lstate_0} \in Q$. The symbol $\mathsf{\#} \in \Sigma$ is the final symbol meaning that the channel was fully broadcast. 
- 
-A "link" agent first receives a broadcast with an identifier which it decides to be the one of its predecessor. It then broadcasts its own identifier. This construction guarantees that "link" agents have exactly one predecessor. It does not guarantee, however, than all agents are in the same chain or that any agent is the predecessor of less than one agent. In practice, there exists a sequence of transitions from $q_0$ labeled by $\rec{\mathsf{init}}{2}{\enregact}, \br{\mathsf{init}}{1}$ that gets to $\waitstate \in Q$. 
-
-From $\waitstate$, there is, for every $\lstate \in \lstates$, a transition labeled by $\rec{\mathsf{\lstate}}{2}{\eqtestact}$ that goes to state $\startstate{\lstate} \in Q$. 
-For every transition $\ltrans = (\lstate, \op, \lstate') \in \ltransitions$ in $\los$ (\emph{i.e.}, every transition of $\ltransitions$ whose source is location $\lstate$), there is a transition in $\prot$ labeled by $\br{\mathsf{\lstate'}}{1}$ that goes from $\startstate{\lstate}$ to $\transstateone{\ltrans} \in Q$. 
-Transitions from $\transstateone{\ltrans}$ in $\prot$ depend on $\ltrans$:
-\begin{itemize}
-\item If $\ltrans=(\lstate, u,?, \lstate')$ is a "pop" then $\prot$ has a sequence of transitions from $\transstateone{\ltrans}$ to $\transstatetwo{\ltrans} \in Q$ labeled by $\rec{\mathsf{u_1}}{2}{\eqtestact}, \rec{\mathsf{u_2}}{2}{\eqtestact}, \dots, \rec{\mathsf{u_k}}{2}{\eqtestact}$ where $u = u_1 u_2 \cdots u_k$. Moreover, there is, for every $x \in \Sigma$, a loop on $\transstatetwo{\ltrans}$ labeled with sequence of actions $\rec{\mathsf{x}}{2}{\eqtestact}, \br{\mathsf{x}}{1}$. There is also a sequence of  transitions from $\transstatetwo{\ltrans}$ to $\finstate{\lstate'}$ labeled by $\rec{\mathsf{\#}}{2}{\eqtestact}, \br{\mathsf{\#}}{1}$.
-\item If $\ltrans= (\lstate, u,!, \lstate')$ is a "push" then there is, for every $x \in \Sigma$, a loop on $\transstateone{\ltrans}$ labeled with sequence of actions $\rec{\mathsf{x}}{2}{\eqtestact}, \br{\mathsf{x}}{1}$. There also is a sequence of transitions from $\transstateone{\ltrans}$ to $\transstatetwo{\ltrans}$ labeled by $\br{\mathsf{u_1}}{1}, \br{\mathsf{u_2}}{1}, \dots, \br{\mathsf{u_k}}{1}$ where $u = u_1 \cdot u_2 \cdots u_k$. From $\transstatetwo{\ltrans}$, there is  a sequence of transitions going to $\finstate{\lstate'}$ labeled by $\rec{\mathsf{\#}}{2}{\eqtestact}, \br{\mathsf{\#}}{1}$.
-\end{itemize}
-Finally, the objective state of our system is $q_f := \finstate{\lstate_f}$.
-
-Note that, in this protocol, register $1$ is broadcast-only, therefore acting as a signature for message, and register $2$ is reception-only, therefore used to check the signature of messages.
-
-We claim that $(\prot, q_f)$ is a positive instance of \COVER if and only if $(\los, \lstate_f)$ is a positive instance of the reachability problem for "lossy channel systems".
-First, suppose that there exists $w \in \Sigma^*$ such that $(\lstate_0, \epsilon) \lstep{*} (\lstate_f, w)$. Decompose the witness into $(\lstate_0, w_0) \lstep{} (\lstate_1, w_1) \lstep{} (\lstate_2, w_2) \cdots \lstep{} (\lstate_n,w_n)$ with $\lstate_n = \lstate_f$ and $w_n =w$. 
-We build an execution of $\prot$ that covers $q_f$ as follows. It has set of agents $\agents := \set{0,\dots, n}$. Agent $0$ becomes the "root" and for all $i \geq 1$, agent $i$ becomes a "link" with predecessor agent $i-1$. By induction on $i$, we build an execution using agents $0$ to $i$ such that agent $i$ ends on state $\finstate{\ltrans_i}$ and the sequence of messages sent by agent $i$ admits as subword $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w_i \cdot \mathsf{\#}$. For $i=0$, this condition is met as agent $0$ becomes "root". When the construction has been done up until agent $i$, we make agent $i+1$ do the following. It first places itself after agent $i$ in the chain and goes to $\waitstate$. It then received from agent $i$ state $l_i$ and goes to $\startstate{l_i}$. It then moves to $\transstateone{\ltrans}$ where $\ltrans = (\lstate_i, \op, \lstate_{i+1})$ is the transition of step $(\lstate_i, w_i) \lstep{} (\lstate_{i+1}, w_{i+1})$. Doing so, it broadcasts $\mathsf{\lstate_{i+1}}$. Its behavior then depends on $\ltrans$.
-\begin{itemize}
-\item if $\ltrans =(\lstate_i, u,!, \lstate_{i+1})$ is a "push" then $w_{i+1} \subword w_i \cdot u$; write $w_{i+1} = w_{i}' \cdot u'$ where $w_i' \subword w_i$ and $u' \subword u$. Agent $i+1$ receives every message in $w_i'$ and rebroadcasts it while looping on $\transstateone{\ltrans}$. It then broadcasts $u$ to get to $\transstatetwo{\ltrans}$. It finally receives $\mathsf{\#}$ from agent $i$ and rebroadcasts it, going to state $\finstate{\lstate_{i+1}}$. Overall the word broadcast by agent $i+1$ is $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w'_i \cdot u \cdot \mathsf{\#}$ which admits as subword $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w_{i+1} \cdot \mathsf{\#}$.
-\item if $\ltrans =(\lstate_i, u,?, \lstate_{i+1})$ is a "pop" then $u \cdot w_{i+1} \subword w_i$; write $w_{i} = u' \cdot w_{i+1}'$ where $w_{i+1} \subword w_{i+1}'$ and $u \subword u'$. Overall, agent $i+1$ receives from agent $i$ sequence of messages $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot u \cdot w_{i+1}' \cdot \mathsf{\#}$ (some messages get lost). 
-From $\transstateone{\ltrans}$, agent $i+1$ receives $u$ and goes to $\transstatetwo{\ltrans}$. It then receives every message in $w_{i+1}'$ and rebroadcasts it while looping on $\transstatetwo{\ltrans}$. It finally received $\mathsf{\#}$ from agent $i$ and rebroadcasts it, going to state $\finstate{\lstate_{i+1}}$. Overall the word broadcast by agent $i+1$ is $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w_{i+1}'  \cdot \mathsf{\#}$ which admits as subword $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot w_{i+1} \cdot \mathsf{\#}$.
-\end{itemize}
-This concludes the induction step.
-When applied to $i=n$, this builds an execution where agent $n$ ends on $\finstate{\lstate_n}$, which is a witness that $(\prot, q_f)$ is positive.
-
-Suppose now that $(\prot, q_f)$ is positive. Let $\run: \aconfig_0 \step{*} \aconfig_f$ where $\config_f$ covers $q_f$. 
-Write $\agents$ the set of agents in $\run$. Observe that, in $\prot$, one may never change the value of register $1$. 
-Moreover, any agent either keeps its original value in register $2$ or changes it exactly once to take the value of some other agent's register $1$. Therefore, we define a function $\predfun: \agents \rightarrow \agents \cup \set{\bot}$ that associates to every agent $a$ the agent $\agentbr$ whose initial value in register $1$ eventually becomes the value in register $2$ of $a$ (and $\bot$ if such an agent does not exist). Consider $a_f$ the agent that first covers $q_f$ in $\config_f$. Let $a_1, \dots ,a_n$ the sequence of agents such that $a_f = a_n$, $\predfun(a_{i+1}) = a_i$ for all $i \in \nset{0}{n-1}$ and $\predfun(a_0) = \bot$. 
-Because $a_n$ covers $\finstate{\lstate_f}$, for all $i$, agent $i$ eventually broadcasts $\mathsf{\#}$ and it ends on some $\finstate{l_i}$ for $l_i \in \lstates$. Because $\predfun(a_0) = \bot$, $a_0$ has taken the "root" branch and therefore broadcasts sequence $\mathsf{init} \cdot \mathsf{\lstate_0} \cdot \mathsf{\#}$. 
-By structure of the protocol, because agent $i$ ends of $\finstate{\lstate_i}$, its broadcast sequence is of the form $\mathsf{init} \cdot \mathsf{\lstate_i} \cdot \mathsf{w_i} \cdot \mathsf{\#}$ where $w_i \in \Sigma^*$. 
-We prove by induction that, for every $i$, $(\lstate_i, w_i) \lstep{\ltrans_{i+1}} (\lstate_{i+1}, w_{i+1})$ where $\ltrans_{i+1}$ is such that agent $a_{i+1}$ goes through states $\transstateone{\ltrans_{i+1}}$ and $\transstatetwo{\ltrans_{i+1}}$ ($\ltrans_{i+1}$ is unique by construction of $\prot$).
- By construction, $\ltrans_{i+1}$ has source $\lstate_i$ (it is the value broadcast by $a_i$) and destination $\lstate_{i+1}$ ($a_{i+1}$ ends on $\finstate{\lstate_{i+1}$}). 
- Moreover, in order to get through $\transstateone{\ltrans_{i+1}}$ and $\transstatetwo{\ltrans_{i+1}}$, $a_{i+1}$ must indeed apply on the channel the "push" or "pop" that corresponds to transition $\ltrans_{i+1}$; because it receives stack $w_i$ from $a_i$, we have $(\lstate_i, w_i) \lstep{\ltrans_{i+1}} (\lstate_{i+1}, w_{i+1})$. 
- Since $w_0 = \epsilon$, we have proven that $(\lstate_0, \epsilon) \lstep{*} (\lstate_f, w_n)$ and the instance of $\los$ is positive. 
-\end{proof}
-\fi
+The proof is in Appendix~\ref{app:reduction-lcs}.
 
 \begin{remark}
 	The reduction presented in the proof of Proposition~\ref{prop:reduction-LCS} can be adapted to show that the repeat coverability problem is undecidable for BNRA, as it is for LCS.

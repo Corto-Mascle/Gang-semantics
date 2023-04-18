@@ -1,5 +1,42 @@
 \section{Introduction}
 
+\cortoin{plagiat}
+We introduce a formal model of data-sensitive distributed protocols, called Broad-
+cast Networks of Register Automata (BNRA), aimed at modelling both the local
+knowledge of distributed nodes as well as their interaction via broadcast com-
+munication. 
+
+
+A network is modelled via a finite graph where each node runs an
+instance of a common protocol. A protocol is specified via a register automaton,
+an automaton equipped with a finite set of registers [20]. Each register assumes
+values taken from the set of natural numbers. Node interaction is specified via
+broadcast communication, well-suited to model scenarios in which individual
+nodes have partial information aboutDST-RP13 the network topology. Messages are al-
+lowed to carry data, that can be assigned to or tested against the local registers
+of receivers. 
+
+Dynamic updates of the current configuration are modelled via
+non-deterministic reconfigurations of the underlying connectivity graph. A node
+may disconnect from its neighbours and connect to other ones at any time of the
+execution. This behaviour models in a natural way unexpected power-off and
+dynamic movement of devices. The resulting model can be used to reason about
+core parts of client-server protocols as well as of routing protocols, e.g. route
+maintainance as in Link Reversal Routing.
+\cortoin{plagiat}
+
+This model was introduced in \cite{DST2013}, as a natural extension of Reconfigurable Broadcast Networks. That paper claimed that the coverability problem, i.e., the problem of finding a run from an initial configuration to one where at least one agent is in a designated state, was decidable and even \PSPACE-complete, but the proof turned out to be wrong. As we will see, the complexity of that problem is actually much higher.
+
+In this paper we establish the decidability of the coverability problem. We even prove its completeness for the HyperAckermannian complexity class $\Falpha{\omega^\omega}$, thereby establishing that the problem requires a non-multiply recursive amount of time, and that it is in some sense as hard as lossy channel systems \corto{ref}. 
+We contrast it with the undecidability of the target problem (asking for a run at the end of which all agents are in a given state) on one side, and with the \NP-completeness of the cover ability problem when each agent has only one register. 
+
+\paragraph*{Related work}
+
+
+\paragraph*{Overview}
+
+
+
 	\textbf{Broadcast protocols}
 
 	\cite{emerson1998model} -> Introduction of broadcast protocols (no reconfiguration, reliable broadcasts)
