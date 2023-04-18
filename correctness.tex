@@ -39,13 +39,15 @@
 %\end{proof}
 
 
+	\luin{donner de l'intuition sur lemma 39}
+
 \begin{lemma}
 	\label{lem:correctness-construction}
 	
-	\luin{donner de l'intuition sur lemma 39}
+
 	Let $\sigma_0 \in \aconfiginitset$, and $\sigma_0 \to \sigma_1 \to \cdots \to \sigma_n$ an abstract run. For all $i$ let $(S_i, b_i, K_i) := \sigma_i$. Let $M = \size{\Delta}+1$.
 	
-	For all $i$, there exist a set of agents $\agents_i$, a configuration $\config_i$, a run $\run_i : \config_0 \step{*} \config_i$ over $\agents_i$, agents $a_0, \cdots, a_n \in \agents_i$ and values $v_0, \ldots, v_n \in \nats$ such that:
+	For all $i$, there exists a set of agents $\agents_i$, a configuration $\config_i$, a run $\run_i : \config_0 \step{*} \config_i$ over $\agents_i$, agents $a_0, \cdots, a_n \in \agents_i$ and values $v_0, \ldots, v_n \in \nats$ such that:
 	\begin{itemize}
 		\item for all $s \in S_i$, there are at least $M^{n-i}$ agents (different from $a_i$) in state $s$ 
 		
