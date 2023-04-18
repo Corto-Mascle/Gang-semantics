@@ -41,6 +41,8 @@
 
 \begin{lemma}
 	\label{lem:correctness-construction}
+	
+	\luin{donner de l'intuition sur lemma 39}
 	Let $\sigma_0 \in \aconfiginitset$, and $\sigma_0 \to \sigma_1 \to \cdots \to \sigma_n$ an abstract run. For all $i$ let $(S_i, b_i, K_i) := \sigma_i$. Let $M = \size{\Delta}+1$.
 	
 	For all $i$, there exist a set of agents $\agents_i$, a configuration $\config_i$, a run $\run_i : \config_0 \step{*} \config_i$ over $\agents_i$, agents $a_0, \cdots, a_n \in \agents_i$ and values $v_0, \ldots, v_n \in \nats$ such that:
@@ -126,12 +128,15 @@ This concludes our induction.
 
 \begin{corollary}
 	\label{cor:soundness}
-	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
+%	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ 
+%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
+	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$, for all $s \in S$, there exists a reachable configuration $\gamma$ covering $s$.
+%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
 \end{corollary}
 
 \ifproofs
 \begin{proof}
-	We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$.
-	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
+	We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$ by setting $i = n$.
+%	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
 \end{proof}
 \fi
