@@ -405,14 +405,11 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 	As a result, in both cases $\tree'$ is a "tree unfolding" smaller than $\tree$ that satisfies $\spec$. 
 \end{proof}
 \fi
-%\begin{lemma}
-%	Let $u_1$, $u_2$ be two local runs of a protocol $\prot$ with the same sequence of transitions, $(q_1, \nu_1)$ the first local configuration of $u_1$, $(q_2, \nu_2)$ the last one of $u_2$. Then there is a local run $u$ with the same sequence of transitions as $u_1$ and $u_2$ from $(q_1, \nu_1)$ to $(q_2, \nu_2)$. 
-%\end{lemma}
 
-% \begin{figure}
-% 	\input{Figures/fig-illustration-pumping}
+ \begin{figure}
+ 	\input{Figures/fig-illustration-pumping}
 % \caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. Lines correspond to registers, and vertical separations are times at which the value of that register changes. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed. We can then obtain a shorter run by glueing them together as in the picture.}
-% \end{figure}
+ \end{figure}
 
 \subsection{Local bounds}
 
@@ -725,11 +722,11 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 	If it is a "boss node" then by Lemma~\ref{lem:bound-successor-height} if it is the root we have $\size{\bosslabel{\node}} = \size{w} \leq N$, and if not we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}} \leq f_0(\altmax - \altitude{\node} -1)$ by induction hypothesis. In both cases we have $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node} -1)$.	
 	In all cases we obtain $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r)+1) \Big[f_0(\altmax-\altitude{\node} -1) + \sum_{i=1}^k \size{\followlabelword{\node_i}}\Big]$
 	
-	By Lemma~\ref{lem:bound-successor-height} we have $k \leq \size{\messages}(r+1)$.
+	By Lemma~\ref{lem:bound-successor-height} we have $k \leq \size{\messages}r$.
 	Moreover, by induction hypothesis for all $i$ we have 
 	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node} -1)$. As a result,
 	
-	$\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r)+1) f_0(\altmax-\altitude{\node} -1)(\size{\messages} (r+1) +1) \leq N^2(\towerfun(N)(N) +1) f_0(\altmax - \altitude{\node} -1) \leq f_0(\altmax - \altitude{\node})$.
+	$\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r)+1) f_0(\altmax-\altitude{\node} -1)(\size{\messages} r +1) \leq N^2(\towerfun(N)(N) +1) f_0(\altmax - \altitude{\node} -1) \leq f_0(\altmax - \altitude{\node})$.
 	
 	If $\node$ is a "follower node" then by Lemma~\ref{lem:bound-successor-height} we have 
 	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r) +1 \leq f_0(\altmax - \altitude{\node})$.
@@ -820,7 +817,7 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 
 \ifproofs
 \begin{proof}
-	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $\Falpha{\omega^{\size{\messages}}}$ is closed by composition.
+	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $\Falpha{\omega^{\size{\messages}}}$ is closed by composition with elementary functions.
 \end{proof}
 \fi
 
@@ -844,7 +841,7 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 	
 	As a result, each branch of $\tree$ contains at most $1+ (\size{\messages}+1) \sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ nodes. We simplify this expression: let $H = (f_3(N)+2)(N+1)^{f_3(N)+1}$, each branch of $\tree$ has at most $H$ nodes.
 	
-	Furthermore, by Lemma~\ref{lem:bound-successor-height}, each node has at most $\size{\messages}(r+1)$ "follower" children. We now bound its number of "boss" children.
+	Furthermore, by Lemma~\ref{lem:bound-successor-height}, each node has at most $\size{\messages}r$ "follower" children. We now bound its number of "boss" children.
 	
 	Let $\node$ be a node of $\tree$, let $V$ be the set of non-initial values appearing in $\localrunlabel{\node}$ apart from $\valuelabel{\node}$.
 	By condition~\ref{unfoldingC3.2}, for each $v' \in V$, $\node$ has a "boss" child $\node_{v'}$ such that $\vinput{v'}{\localrunlabel{\node}} \subword \bosslabel{\node_{v'}}$.
@@ -853,13 +850,12 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 	
 	As a consequence, each node in $\tree$ has at most $f_3(N) + \size{\messages}(r+1)$ children.
 	
-	By combining the bounds on the size of branches and the arity of nodes, we obtain that $\tree$ has at most $\sum_{h=0}^{H} (f_3(N) + \size{\messages}(r+1))^h$ nodes. We again simplify this: $\sum_{h=0}^{H} (f_3(N) + \size{\messages}(r+1))^h \leq (H+1)(f_3(N) + N^2)^H$.
+	By combining the bounds on the size of branches and the arity of nodes, we obtain that $\tree$ has at most $\sum_{h=0}^{H} (f_3(N) + \size{\messages}r)^h$ nodes. We again simplify this: $\sum_{h=0}^{H} (f_3(N) + \size{\messages}r)^h \leq (H+1)(f_3(N) + N^2)^H$.
 	
 	Finally, we obtain a bound on the size of $\tau$ by taking the product of the bounds on the number of nodes and on the size of each node label: 
-	
 	\[ \size{\tree} \leq  (H+1)(f_3(N) + N^2)^H (2f_3(N) +1)\]
 	
-	Let $f_4$ be such that $f_4(n) = ((f_3(n)+2)(n+1)^{f_3(n)+1} +1) (f_3(n) + n^2)^{(f_3(n)+2)(n+1)^{f_3(n)+1}}(2f_3(n) +1)$ for all $n$. It is the composition of $f_3$ with an elementary function, hence as $f_3 \in \Falpha{\omega^{\messages}}$ and $\Falpha{\omega^{\messages}}$ is closed by composition, $f_4 \in \Falpha{\omega^{\messages}}$.
+	Let $f_4$ be such that $f_4(n) = ((f_3(n)+2)(n+1)^{f_3(n)+1} +1) (f_3(n) + n^2)^{(f_3(n)+2)(n+1)^{f_3(n)+1}}(2f_3(n) +1)$ for all $n$. It is the composition of $f_3$ with an elementary function, hence as $f_3 \in \Falpha{\omega^{\messages}}$ and $\Falpha{\omega^{\messages}}$ is closed by composition with elementary functions, $f_4 \in \Falpha{\omega^{\messages}}$.
 	
 	Furthermore, we have shown that the size of a minimal "tree unfolding" satisfying a "boss specification" $w$ and labelled by a "protocol" $\prot$ is bounded by $f_4(\size{\prot} + \size{w} +1)$.
 \end{proof}

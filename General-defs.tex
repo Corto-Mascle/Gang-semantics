@@ -17,14 +17,9 @@ We study the set of runs of an arbitrary number of agents communicating this way
 	Given a reception $\rec{\amessage}{i}{\anact}$ or a local test $\loc{i}{j}{\anact}$, $\anact$ is the ""action"" of the reception (resp. local test). 
 The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
 $\quotemarks{\eqtestact}$ is an equality test, $\quotemarks{\diseqtestact}$ is a disequality test, $\quotemarks{\enregact}$ is a store action and $\quotemarks{\dummyact}$ is a dummy action with no effect.
-
-
-	
-%A ""simple protocol"" is a "protocol" that does not have receptions with action $\quotemarks{\dummyact}$ or local tests with action $\quotemarks{\eqtestact}$.
-	
-%	\cortoin{TODO : remarquer que pour r=1 on peut ignorer les actions locales}
 \end{definition}
 
+We now define the semantics of those systems. Essentially, we have a finite set of agents, each with their own registers, which initially all contain distinct values. A step of a run consists in either one agent executing a local action, or one agent broadcasting a message and some of the other agents receiving it.
 
 \begin{definition}[Semantics]
 	Let $(Q,\messages, \transitions, q_0)$ be a "protocol", and $\agents \subseteq \nats$ a finite set of \emph{agents}.
@@ -121,7 +116,6 @@ The following remark formalizes the intuition that, because the only way to take
 \ifbasic
 \section{Basic properties}
 
-%
 %\begin{lemma}[Weak copycat]\label{lem:weak_copycat}
 %	Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ a "run" over set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\st{\config_f}(a_m) = q$. There exists $\agents' \subseteq \nats$ finite s.t. $\agents \cap \agents' = \emptyset$, $a_c \in \agents'$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ such that:
 %	\begin{itemize}
@@ -262,6 +256,36 @@ Note that if a "run" satisfies $K$, then it covers every state in $K$. The conve
 
 \subsection{Classical definitions}
 \luin{here comes definitions of complexity classes, wqo and anything not related to our model}
+
+\paragraph*{Well-quasi orders}
+
+In order to prove our main decidability result, we need to rely on the theory of well quasi-orders. We recall bellow some definitions and results in the context of the subword ordering.
+
+Let $\Sigma$ be a finite alphabet, $w_1, w_2 \in \Sigma^*$, we say that $w_1$ is a ""subword"" of $w_2$ and write $w_1 \subword w_2$ when $w_1$ can be obtained by erasing some letters from $w_2$. 
+A sequence of words $w_0, w_1, \ldots$ is ""good"" if there exist $i<j$ such that $w_i \subword w_j$, and ""bad"" otherwise. 
+
+\begin{lemma}[Higman's lemma]
+	Every "bad" sequence of \corto{ref} words over a finite alphabet is finite.
+\end{lemma}
+
+We, however, need a more precise result, that bounds the length of a "bad" sequence. In order to obtain such a bound, it is necessary to bound the growth of the sequence of words. 
+
+Bounding "bad" sequences in well quasi-orders leads to very large functions, such as the Ackermann function for vectors of natural numbers. A convenient formalism for those functions is the "Fast-growing hierarchy" defined below.
+
+Let $\alpha$ be an ordinal in Cantor normal form. We define $\Falpha{\alpha}$ as follows:
+
+ 
+
+
+We will use the following result, known as the "Length function theorem" from \cite{SchmitzS2011upperHigman}:
+
+\begin{theorem}[Length function theorem \cite{SchmitzS2011upperHigman}]
+	\label{lem:lengthfcttheorem}
+	Let $\Sigma$ be a finite alphabet, let $g : \nats \to \nats$ be a primitive recursive function, $n\in \nats$.
+	Then there exists a function $f \in \Falpha{\omega^{\size{\Sigma} - 1}}$ such that every "bad sequence" $w_0, w_1, \ldots$ such that $\size{w_i} \leq g^{(i)}(n)$ for all $i$ is of length at most $f(n)$. 
+\end{theorem}
+
+
 
 \subsection{Link with LCS}
 \luin{here comes defintions of LCS and the reduction}
