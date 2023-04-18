@@ -17,14 +17,9 @@ We study the set of runs of an arbitrary number of agents communicating this way
 	Given a reception $\rec{\amessage}{i}{\anact}$ or a local test $\loc{i}{j}{\anact}$, $\anact$ is the ""action"" of the reception (resp. local test). 
 The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
 $\quotemarks{\eqtestact}$ is an equality test, $\quotemarks{\diseqtestact}$ is a disequality test, $\quotemarks{\enregact}$ is a store action and $\quotemarks{\dummyact}$ is a dummy action with no effect.
-
-
-	
-%A ""simple protocol"" is a "protocol" that does not have receptions with action $\quotemarks{\dummyact}$ or local tests with action $\quotemarks{\eqtestact}$.
-	
-%	\cortoin{TODO : remarquer que pour r=1 on peut ignorer les actions locales}
 \end{definition}
 
+We now define the semantics of those systems. Essentially, we have a finite set of agents, each with their own registers, which initially all contain distinct values. A step of a run consists in either one agent executing a local action, or one agent broadcasting a message and some of the other agents receiving it.
 
 \begin{definition}[Semantics]
 	Let $(Q,\messages, \transitions, q_0)$ be a "protocol", and $\agents \subseteq \nats$ a finite set of \emph{agents}.
@@ -106,22 +101,20 @@ The following remark formalizes the intuition that, because the only way to take
 	%We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
 
-\begin{lemma}
-	For all "query" $\query$ with $k$ variables and "protocol" $\prot$ with $r$ registers, there exists a "protocol" $\prot'$ with $\size{\prot}^k$ states and $kr$ registers and a state $q$ such that there is a run of $\prot$ satisfying $\query$ if and only if there is a run of $\prot'$ covering $q$.
-	Furthermore if $r = 1$ then $\prot'$ only needs $\size{\prot}+k+1$ states and one register.
-\end{lemma}
-
-\ifproofs
-\begin{proof}
-	\cortoin{TODO}
-\end{proof}
-\fi
+\begin{remark}
+	Given a "protocol" $\prot$ with $r$ registers and a "query" $\query$ with $k$ variables, we can construct a "protocol" $\prot'$ with $\size{\prot}^k$ states and $kr$ registers that allows each agent to simulate $k$ agents of the previous system (by taking as states $k$-tuples of states of $\prot$, using the $kr$ registers to store the values of the registers of the $k$ agents and adapting the transitions accordingly).
+	There is a run of the first BNRA satisfying $\query$ if and only if there is a run of the second in which one agent simulates the $k$ agents satisfying $\query$, which can be checked locally by that agent, which enters a special state $q_f$. if it happens. 
 	
+	This reduction is exponential, but this does not hinder our complexity result as we are concerned with a complexity class stable by exponential reductions.
+	
+	In the case of one register, we even have a polynomial-time reduction: We add a transition from every state to a sink state allowing an agent to stop at any moment and send its local configuration (state and register value) in a single broadcast.
+	Also, at any moment, an agent may enter a series of transitions in which it receives the configurations of $k$ agents and checks that they satisfy the query, then enters a special state $q_f$. An agent can reach $q_f$ if and only if some agents could reach a configuration satisfying $\query$in the first BNRA.
+\end{remark}
+
 	
 \ifbasic
 \section{Basic properties}
 
-%
 %\begin{lemma}[Weak copycat]\label{lem:weak_copycat}
 %	Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ a "run" over set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\st{\config_f}(a_m) = q$. There exists $\agents' \subseteq \nats$ finite s.t. $\agents \cap \agents' = \emptyset$, $a_c \in \agents'$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ such that:
 %	\begin{itemize}
@@ -262,6 +255,39 @@ Note that if a "run" satisfies $K$, then it covers every state in $K$. The conve
 
 \subsection{Classical definitions}
 \luin{here comes definitions of complexity classes, wqo and anything not related to our model}
+
+\paragraph*{Fast-growing hierarchy}
+
+In this paper we will use the notation $\Falpha{\alpha}$, with $\alpha$ an ordinal in Cantor normal form, to denote the complexity class corresponding to level $\alpha$.
+We lack space to properly define this notion, but the interested reader may find the formal definitions of those classes in \corto{ref}.
+
+For this paper, we will only need two theorems from the literature to prove $\Falpha{\omega^\omega}$-completeness of our problem: The first one is that Lossy Channel Systems are hard for the $\Falpha{\omega^\omega}$ complexity class (for the lower bound), the second one is the "Length function theorem" recalled below (for the upper bound). 
+
+The reader should keep in mind that our result is mainly the decidability of that problem, and that we add the completeness result because it adds a very small overhead in the proofs, and fits our work nicely in the landscape of high-complexity problems stemming from well quasi-orders.
+\nicoin{Reformuler}
+
+\paragraph*{Well-quasi orders}
+
+In order to prove our main decidability result, we need to rely on the theory of well quasi-orders. We recall bellow some definitions and results in the context of the subword ordering.
+
+Let $\Sigma$ be a finite alphabet, $w_1, w_2 \in \Sigma^*$, we say that $w_1$ is a ""subword"" of $w_2$ and write $w_1 \subword w_2$ when $w_1$ can be obtained by erasing some letters from $w_2$. 
+A sequence of words $w_0, w_1, \ldots$ is ""good"" if there exist $i<j$ such that $w_i \subword w_j$, and ""bad"" otherwise. 
+
+\begin{lemma}[Higman's lemma]
+	Every "bad" sequence of \corto{ref} words over a finite alphabet is finite.
+\end{lemma}
+
+We, however, need a more precise result, that bounds the length of a "bad" sequence. In order to obtain such a bound, it is necessary to bound the growth of the sequence of words. 
+ 
+We will use the following result, known as the "Length function theorem" from \cite{SchmitzS2011upperHigman}:
+
+\begin{theorem}[Length function theorem \cite{SchmitzS2011upperHigman}]
+	\label{lem:lengthfcttheorem}
+	Let $\Sigma$ be a finite alphabet, let $g : \nats \to \nats$ be a primitive recursive function, $n\in \nats$.
+	Then there exists a function $f \in \Falpha{\omega^{\size{\Sigma} - 1}}$ such that every "bad sequence" $w_0, w_1, \ldots$ such that $\size{w_i} \leq g^{(i)}(n)$ for all $i$ is of length at most $f(n)$. 
+\end{theorem}
+
+
 
 \subsection{Link with LCS}
 \luin{here comes defintions of LCS and the reduction}
