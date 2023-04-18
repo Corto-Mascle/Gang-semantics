@@ -31,8 +31,11 @@
 % \fi
 
 \begin{proof}
-	We construct $\prot'$ as follows: It has one more register than $\prot$, but stores in its state the current state of $\prot$ and a mapping $map : \nset{1}{r} \to \nset{1}{r+1}$ from registers of $\prot$ to its own registers.
+	We construct a "protocol" $\prot'$ with no "local equality tests" so that any "run" in $\prot$ may be turned into an execution in $\prot'$ and vice-versa. 
+	The intuition is as followed. $\prot'$ fundamentally encodes the same behavior as $\prot$; the only difference being how registers are treated. In $\prot'$, we abstract registers be remembering equality relations between them, so that a value shared into ""memory slots"", whose role is to remember the values of the registers while avoiding abstract layer  The registers of $\prot'$, which we dub ""memory slots"" to distinguish them from the ones of $\prot$, will be used to store the values of the registers of $\prot$ so that, if registers of $\prot$ have the same value $\aval$, then $\aval$ will be stored in a single memory 
+	 It has one more register than $\prot$, but stores in its state the current state of $\prot$ and a mapping $map : \nset{1}{r} \to \nset{1}{r}$ from registers of $\prot$ to its own registers.
 	
+	The intuition 
 	Intuitively, it is going to use its registers to store the different values that are in the registers of $\prot$ and the mapping to keep track of which registers contain which values.
 	When a value is received it guesses whether it is one of the existing values or a fresh one, and updates the registers and the mapping accordingly.
 	The extra register of $\prot'$ is not necessary but simplifies the proof.
@@ -40,14 +43,14 @@
 	
 	
 	Let $\prot = (Q, \messages, \transitions', q_0, \regnum)$. 
-	We define $\prot' := (Q', \messages, \transitions', q_0', \regnum +1)$ as follows. The set of states is $Q' := Q \times (\nset{1}{r} \to \nset{1}{r+1})$, its initial state is $q_0' := (q_0, \idmap)$ where $\idmap(i) = i$ for all $i \in \nset{1}{r}$. 
+	We define $\prot' := (Q', \messages, \transitions', q_0', \regnum +1)$ as follows. The set of states is $Q' := Q \times (\nset{1}{r} \to \nset{1}{r})$, its initial state is $q_0' := (q_0, \idmap)$ where $\idmap(i) = i$ for all $i \in \nset{1}{r}$. 
 	
 	The set of transitions $\transitions'$ is defined as follows.
-	For all $q,q' \in Q$ and $\map, \map' \in \nset{1}{r} \to \nset{1}{r+1}$, we have $((q, \map), \op, (q', \map')) \in \transitions'$ in the following cases:
+	For all $q,q' \in Q$ and $\map, \map' \in \nset{1}{r} \to \nset{1}{r}$, we have $((q, \map), \op, (q', \map')) \in \transitions'$ in the following cases:
 	
 	\begin{itemize}
 		\item $\op = \br{m}{j}$, 
-		$\map = \map'$ and $(q, \br{m}{i}, q') \in \transitions$ for some $i$ such that $\map(i) = j$.
+		$\map = \map'$ and $(q, \br{m}{i}, q') \in \transitions$ for some $i$ such that $\map(i) = j$ (we broadcast the value ).
 		
 		\item $\op=\rec{m}{j}{\enregact}$, $\map^{-1}(j) =\emptyset$ and there is a transition $(q, \rec{m}{i_0}{\enregact}, q')$ in $\prot$ such that for all $i \in \nset{1}{r}$, if $i \ne i_0$ then $\map'(i) = \map(i)$ and $\map'(i_0) = j$.
 		
