@@ -168,7 +168,7 @@ Therefore, we will describe the sequences of messages sent with a value $v$ as t
 		\begin{itemize} 
 			\item $\aval$ is an initial value of $\localrun$, 
 			\item there exists a "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that $\bosslabel{\node} \in \langdecdown{\decsymb}$, 
-			\item $\localrun$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $\voutput{\aval}{\localrun_i} \subword w_i$ and $\vinput{\aval}{\localrun_i} \in \set{m_0, \dots, m_{i-1}}^*$, and
+			\item $\localrun$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{\aval}{\localrun_i}$ and $\vinput{\aval}{\localrun_i} \in \set{m_0, \dots, m_{i-1}}^*$, and
 			\item  for all $i \in [1,\ell]$, $\node$ has a child $\node_i$ which is a "follower node" such that $\followlabelmessage{\node_i} = m_i$ and $\followlabelword{\node_i} \in\langdecdown{\decsymb_i}$ where $\decsymb_i = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.
 		\end{itemize}
 		\item[C2\namedlabel{unfoldingC2}{C2}] If $\node$ is a "follower node" then $\aval$ is not an initial value of $\localrun$, $\vinput{\aval}{\localrun} = \followlabelword{\node}$ and 
@@ -418,10 +418,10 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 
 \begin{lemma}
 	\label{lem:short-local-runs}
-	There exists a function $\towerfun(n, \regnum)$ in $O(\intro*\repexp{n}{\regnum})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and:
+	There exists a function $\towerfun(n) (\regnum)$ in $O(\intro*\repexp{n}{\regnum})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$\corto{uniformiser la notation} such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and:
 	\begin{enumerate}
 		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
-		\item \label{item:shorterrun_oldvalues} for all $\aval \in \nats$ appearing in some message in $\localrun$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 		% \item by writing $V := \nats \setminus \set{\localdata_i(k) \mid k \in \nset{1}{\regnum}}$, for every $\aval' \in V$, there exists $\aval \in V$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$.
 	\end{enumerate}
 		%  with an "input" $I$.
@@ -546,44 +546,48 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 
 \begin{lemma}
 	\label{lem:short-run-for-output}
-	Let $\prot$ be a "protocol", $\localrun$ a local run of $\prot$. 
-	Let $w_{in} \in (\messages\times \nats)^*$ be a subword of $\Output{\localrun}$.
+	For every protocol $\prot$ with $r$ registers per process, for every $w_{in} \in (\messages\times \nats)^*$, if there exists a "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$ such that $w_{in} \subword \Output{\localrun}$, then for every $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq (\towerfun(\size{\prot})(r)+1)\size{w_{in}}$, $w_{in} \subword \Output{\localrun'}$ and:
 	
-	Then there is a run $\localrun'$ of $\prot$ such that $\size{\localrun'}\leq \size{w_{in}} (\towerfun(\size{\prot})(r) +1)$, $w_{in} \subword \Output{\localrun'}$ and  
 	\begin{enumerate}
 		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
-		\item for all $\aval \in \nats$ appearing in some message in $\localrun$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
-	Let $(m_1, v_1) \cdots (m_k, v_k) = w_{in}$, as $w_{in} \subword \Output{\localrun}$ we can split $\localrun$ into $(q_0, \nu_0) \step{u_1} (q'_1, \nu'_1) \intstep{\delta_1} (q_1, \nu_1) \step{u_2} (q'_2, \nu'_2) \intstep{\delta_2} (q_2, \nu_2) \cdots \step{u_k}  (q'_k, \nu'_k) \intstep{\delta_k} (q_k, \nu_k) \step{u_{k+1}} (q'_{k+1}, \nu'_{k+1})$ where for all $j \in [1,k]$ $\delta_i$ applies a broadcast operation $\br{m_j}{i_j}$ with $\nu'_{j} (i_j) = v_j$.
 	
-	By Lemma~\ref{lem:short-local-runs}, for all $j \in [1,k]$ there exists a run $\Tilde{\localrun}_j$ of length $\length{\Tilde{\localrun}_j} \leq \towerfun(\size{\prot})(r)$ from $(q_{j-1}, \nu_{j-1})$ to $(q'_{j}, \nu'_{j})$ such that for all $v' \in \nats$, either $\vinput{v'}{\Tilde{\localrun}_j} \subword \vinput{v'}{\localrun_j}$ or $v'$ does not appear in $\localrun_j$ and there exists $v \in \nats$ such that $\vinput{v'}{\Tilde{\localrun}_j} \subword \vinput{v}{\localrun_j}$.
+	We proceed by induction on $\size{w_{in}}$.
 	
-	For each $j$, we can apply an injective renaming to the values in $\Tilde{\localrun}_j$ so that all values appearing in the "local configurations" $(q_{j-1}, \nu_{j-1})$ and $(q'_{j}, \nu'_{j})$ stay the same and all others are mapped to fresh distinct values. We call the resulting run $\localrun'_j$.
+	If $w_{in} = \epsilon$ we simply apply Lemma~\ref{lem:short-local-runs}.
 	
-	This way all values appearing in $\localrun'_j$ only appear there, besides those in $(q_{j-1}, \nu_{j-1})$ and $(q'_{j}, \nu'_{j})$. As the values in the start and end configurations are the same, $\localrun'_j$ is still a "local run" from $(q_{j-1}, \nu_{j-1})$ to $(q'_{j}, \nu'_{j})$. Further, for all $v' \in \nats$,
-	\begin{itemize}
-		\item either $v'$ appears in $(q_{j-1}, \nu_{j-1})$ or $(q'_{j}, \nu'_{j})$, hence in $\localrun_j$, and $\vinput{v'}{\localrun'_j} = \vinput{v'}{\Tilde{\localrun}_j} \subword \vinput{v'}{\localrun_j}$,
-		
-		\item or $v'$ does not appear in $(q_{j-1}, \nu_{j-1})$ or $(q'_{j}, \nu'_{j})$, hence by definition of $\localrun'_j$ it is a fresh value \corto{define fresh} and in particular it does not appear in $\localrun_j$. There exists a value $\Tilde{v}$ of $\Tilde{\localrun}$ such that $\vinput{v'}{\localrun'} = \vinput{\Tilde{v}}{\Tilde{\localrun}}$ and by definition of $\Tilde{\localrun}$ there exists $v$ such that $\vinput{\Tilde{v}}{\Tilde{\localrun}_j} \subword \vinput{v}{\localrun_j}$, thus $\vinput{v'}{\localrun'_j} \subword \vinput{v}{\localrun_j}$.
-	\end{itemize}
-
-	We now define $\localrun'$ as $(q_0, \nu_0) \step{u'_1} (q'_1, \nu'_1) \intstep{\delta_1} (q_1, \nu_1) \step{u'_2} (q'_2, \nu'_2) \intstep{\delta_2} (q_2, \nu_2) \cdots \step{u'_k}  (q'_k, \nu'_k) \intstep{\delta_k} (q_k, \nu_k)$. As the local steps $(q'_j, \nu'_j) \intstep{\delta_j} (q_j, \nu_j)$ are unchanged, we have $w_{in} \subword \Output{\localrun}$.
-	The length of $\localrun'$ is $k + \sum_{j=1}^{k} \length{u'_j} \leq \size{w_{in}} (\towerfun(\size{\prot})(r) +1)$.
+	Otherwise let $w'_{in} (m,v) = w_{in}$.
+	As $w_{in} \subword \Output{\localrun}$ we can split $\localrun$ in three $\localrun_0: (q, \localdata) \step{*} (q_0, \nu_0)$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$, $\localrun_1 :(q_1, \localdata_1) \step{*} (q', \localdata')$ where $\delta$ applies a broadcast operation $\br{m}{i}$ with $\nu'_{m} (i) = v$.
+	
+	Let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, and thus in particular every message value appearing in $\localrun_0$.
+	By induction hypothesis, there exists a "local run" $\localrun_0': (q, \localdata) \step{*} (q_0, \localdata_0)$ such that $\length{\localrun_0'} \leq (\towerfun(\size{\prot})(r)+1)\size{w'_{in}}$, $w'_{in} \subword \Output{\localrun_0'}$ and:
+	
+	\begin{enumerate}
+		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun_0'}$ is a subword of $\vinput{\aval}{\localrun_0}$,
+		\item for all $\aval \in V$, $\vinput{\aval}{\localrun_0'}$ is a subword of $\vinput{\aval}{\localrun_0}$. 
+	\end{enumerate}
+	
+	We set $V'$ as the set of values that either are in $V$ or appear in $\localrun_0$.
+	By Lemma~\ref{lem:short-local-runs}, there exists a "local run" $\localrun_1': (q_1, \localdata_1) \step{*} (q', \localdata')$ such that $\length{\localrun_1'} \leq \towerfun(\size{\prot})(r)$ and:
+	\begin{enumerate}
+		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$,
+		\item for all $\aval \in V$, $\vinput{\aval}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$. 
+	\end{enumerate}
+	
+	Let $\localrun'$ be the concatenation of $\localrun'_0$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$ and $\localrun'_1$. As $w'_{in} \subword \Output{\localrun'_0}$, we have $w_{in} \subword \Output{\localrun}$.
+	The length of $\localrun'$ is $\length{\localrun'_0} + 1 + \length{\localrun'_1}$, which is at most $(\towerfun(\size{\prot})(r)+1)\size{w'_{in}} + 1 + \towerfun(\size{\prot})(r) = (\towerfun(\size{\prot})(r)+1)\size{w_{in}}$.
 	
 	Moreover, for all $v' \in \nats$, 
 	\begin{itemize}
-		\item either $v'$ appears in $\localrun$, then for all $j$ 
-		\begin{itemize}
-			\item either $v'$ appears in $(q_{j-1}, \nu_{j-1})$ or $(q'_{j}, \nu'_{j})$, in which case it appears in $\localrun_j$ hence $\vinput{v'}{\localrun'_j} \subword \vinput{v'}{\localrun_j}$,
-			
-			\item or $v'$ does not appear in $(q_{j-1}, \nu_{j-1})$ or $(q'_{j}, \nu'_{j})$, hence $\vinput{v'}{\localrun'_j} = \epsilon$ after the renaming.
-		\end{itemize}
-		As a consequence, for all $j$ we have $\vinput{v'}{\localrun'_j} \subword \vinput{v'}{\localrun_j}$, thus $\vinput{v'}{\localrun'} \subword \vinput{v'}{\localrun}$.
+		\item either $v'\in V$, and then $\vinput{v'}{\localrun_0'} \subword \vinput{v'}{\localrun_0}$ and $\vinput{v'}{\localrun_1'} \subword \vinput{v'}{\localrun_1}$, thus $\vinput{v'}{\localrun'} \subword \vinput{v'}{\localrun}$.
 		
-		\item or $v'$ does not appear in $\localrun$, thus by definition of $\localrun'_j$ it appears in at most one of the $\localrun'_j$ and if there is such a $j$ then there exists $v \in \nats$ such that $\vinput{v'}{\localrun'_j} \subword \vinput{v}{\localrun_j}$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
+		\item or $v' \in V' \setminus V$ and then $v'$ does not appear in $\localrun$, and there exists $v \in \nats$ such that $\vinput{v'}{\localrun_0'} \subword \vinput{v}{\localrun_0}$. Further, as $v' \in V'$ we have $\vinput{v'}{\localrun_1'} \subword \vinput{v'}{\localrun_1} = \epsilon$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
+		
+		\item or $v' \notin V'$, thus by definition of $V'$ we have $\vinput{v'}{\localrun_0'} = \epsilon$, and there exists $v$ such that $\vinput{v'}{\localrun_1'} \subword \vinput{v}{\localrun_1}$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
 	\end{itemize}
 	This concludes our proof.
 \end{proof}
@@ -669,14 +673,17 @@ The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot
 	
 	Let $v$ be an initial value of $\localrunlabel{\node}$. If $v = \valuelabel{\node}$ then by condition~\ref{unfoldingC1} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_1, \ldots, \node_{\ell_v}$ such that
 	\begin{itemize}
-		\item 
+		\item $\bosslabel{\node} \in \langdecdown{\decsymb_v}$
+		\item $u$ can be split into $u_{v,0}, \ldots, u_{v,\ell_v}$ so that for all $i$, $w_{v,i} \subword \voutput{v}{u_{v,i}}$ and $\vinput{v}{u_{v,i}} \in \set{m_1, \ldots, m_{i-1}}^*$
+		
+		\item for all $i$, $\followlabelword{\node_i} \in \langdecdown{\decsymb_{v,i}}$, with $\decsymb_{v,i}= (w_{v,0}, m_{v,1}, \ldots, w_{v,i-1})$, and $\followlabelmessage{\node_i} = m_i$.
 	\end{itemize}
 	
-	 $\voutput{v}{}$
-	 for all $i$ $\followlabelword{\node_i} \in \langdecdown{\decsymb_{v,i}}$, with $\decsymb_{v,i}= (w_{v,0}, m_{v,1}, \ldots, w_{v,i-1})$, and $\followlabelmessage{\node_i} = m_i$. 
+	Similarly, if $v \neq \valuelabel{\node}$, we set $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$, "follower" children $\node_1, \ldots, \node_{\ell_v}$ and $u_{v,0}, \ldots, u_{v,\ell_v}$ such that Condition~\ref{unfoldingC3.1} is satisfied.
 	
-	By Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \followlabelword{\node_i}$ 
-	\cortoin{TO FINISH}
+	In both cases by Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_i}}$. \corto{A preciser}
+	
+	There exists a subword $x = (m_1, v_1) \cdots (m_k, v_k)$ of $\Output{\localrunlabel{\node}}$ such that for all 
 \end{proof}
 \fi
 
