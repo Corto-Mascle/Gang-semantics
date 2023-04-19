@@ -1,0 +1,63 @@
+\section{Proof of Proposition~\ref{prop:target-undec}}
+
+\propTargetUndecidable*
+
+\begin{proof}
+	We present a reduction of the "halting problem" for "Minsky machines" to "target reachability problem" for BNRA.
+	
+	A "Minsky Machine" is a tuple $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$ where $\Loc$ is a finite set of locations, $\Cpt = \{\cpt_1, \cpt_2\}$ is a set of two counters, $\Delta \subseteq \Loc \times (\{\dec{\cpt}\}_{\cpt \in \Cpt} \cup \{\inc{\cpt}\}_{\cpt \in \Cpt} \cup \{\testz{\cpt}\}_{\cpt \in \Cpt} ) \times \Loc$ is a finite set of transitions, $\ell_0 \in \Loc$ is an initial location, and $\ell_f \in \Loc$ is a final location. A \emph{configuration} of a Minsky machine is a tuple $(\ell, v_1, v_2) \in \Loc \times \nats \times \nats$ where $v_1$ (resp. $v_2$) stands for the value of the counter $\cpt_1$ (resp. $\cpt_2$). The initial configuration is the configuration $(\ell_0, 0, 0)$.
+	For two configurations $(\ell, v_1, v_2)$ and  $(\ell', v'_1, v'_2)$, we note $(\ell, v_1, v_2) \stepMM{} (\ell', v'_1, v'_2)$ if $\exists \delta \in \Delta$ such that one of the following condition holds:
+	\begin{itemize}
+		\item $\delta = (\ell, \inc{\cpt_i}, \ell')$ and $v'_i = v_i+1$, $v_{3-i} = v'_{3-i}$;
+		\item $\delta = (\ell, \dec{\cpt_i}, \ell')$ and $v'_i = v_i-1$, $v_{3-i} = v'_{3-i}$;
+		\item $\delta = (\ell, \testz{\cpt_i}, \ell')$ and $v'_i = v_i = 0$, $v_{3-i} = v'_{3-i}$.
+	\end{itemize}
+	%	We will note $\stepMM{}$ for $\bigcup_{\delta \in \Delta} \stepMM{\delta}$. 
+	An execution of the machine is a sequence $(\ell_1, v_1^1, v_2^1) \stepMM{} (\ell_2, v_1^2, v_2^2) \stepMM{} \dots \stepMM{} (\ell_k, v_1^k, v_2^k)$. We say that an execution is initial if it starts with the initial configuration.
+	The "halting problem" asks whether there exists an initial execution ending with a configuration $(\ell_f, v_1, v_2)$ where $v_1$, $v_2$ are any values in $\nats$. This problem is well-known to be undecidable.
+	%\luin{to make the proof easier, one might require that there is no two transitions doing the same operation from a same location, this does not change the undecidability}
+	
+	
+	%	\begin{figure}
+		%		\includegraphics[scale = 0.25]{Figures/init.png}
+		%		\caption{init}\label{fig:target:init}
+		%	\end{figure}
+	
+	\begin{figure}
+		\input{Figures/target-init}
+		\caption{init}\label{fig:target-init}
+	\end{figure}
+	
+	%	\begin{figure}
+		%		\includegraphics[scale = 0.3]{Figures/cycle-knowledge.png}
+		%		\caption{ck}\label{fig:target:cycle-knowledge}
+		%	\end{figure}
+	
+	
+	
+	
+	\begin{figure}
+		\input{Figures/cycle-knowledge}
+		\caption{Illustration of a cycle of knowledge of 4 agents. Each box represents an agent along with tis register's values.}\label{fig:target-cycle-knowledge}
+	\end{figure}
+	
+	Fix a "Minsky Machine" $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$. The simulation will go as follows: 
+	\begin{itemize}
+		\item each agent will have two registers: one with its identity, which it will broadcast, and another in which it will store the value of a \emph{predecessor} process. To do so, in an initialization phase, each process makes one of the following choice: (i) it starts by broadcasting its first register value and then wait to receive (and store in its second register) a value, (ii) it waits first for a value to store in its second register and then broadcasts its first register value. This initialization part will appear in the protocol as displayed in \cref{fig:target-init}. Note that, after the initialization phase (once all processes reached $q_1$ and $q_2$), there is necessary a \emph{cycle of knowledge} in the reached configuration. A cycle of knowledge in a configuration $\config$ is a subset of agents $\{a_1, \dots a_k\}$ such that for all $1 \leq i < j \leq k$, $\data{\config}(a_i)(1) \ne \data{\config}(a_j)(1)$, for all $2 \leq i \leq k$, $\data{\config}(a_i)(2) = \data{\config}(a_{i-1})(1)$ and $\data{\config}(a_1)(2) = \data{\config}(a_{k})(1)$ (see \cref{fig:target-cycle-knowledge}). Indeed, consider the function wich associates to each agent $a$, an agent $a'$ such that $\data{\config}(a)(2) = \data{\config}(a')(1)$. This function is total as $\gamma$ is such that all agents reached states $q_1$ or $q_2$. By the pigeonhole principle, there exists a cycle of knowledge.
+		
+		%		configurations can be decomposed as an union of \emph{cycles of knowledge} (\cref{fig:target:cycle-knowledge}). A cycle of knowledge in a configuration $\config$ is a subset of agents $\{a_1, \dots a_k\}$ such that for all $1 \leq i < j \leq k$, $\data{\config}(a_i)(1) \ne \data{\config}(a_j)(1)$, for all $2 \leq i \leq k$, $\data{\config}(a_i)(2) = \data{\config}(a_{i-1})(1)$ and $\data{\config}(a_1)(2) = \data{\config}(a_{k})(1)$. Indeed, there exists an injective function from $\agentsof{\gamma}$ into itself associating to each agent $a_1$, any agent $a_2$ such that $\data{\config}(a_2)(2) = \data{\config}(a_1)(1)$. By the pigeonhole principle, the function is a union of cycles. \cortoin{Il peut aussi y avoir des agents sans successeurs, donc des arbres de flèches qui partent d'un cycle mais ne font pas partie d'un cycle.}
+		
+		From now, an agent will broadcast only its first register value (along with some messages) and shall only receive messages sent with its second register value. In other words, every reception transition after the initialisation phase is of the form $\rec{m}{2}{=}$ for some $m \in \messages$ and every broadcast transition after the initialisation  phase is of the form $\br{m}{1}$ for some $m \in \messages$;
+		
+		\item From now, we focus on one cycle of knowledge (any of them suits to simulate the machine). once it is done, the agents which made the first choice (i) during the initialization phase will simulate a machine execution. We shall name this type of agents \emph{leader} agents. Note that there is at least one such agent in the cycle of knowledge, otherwise, no agent sent its value first and the cycle cannot be created. 
+		The other agents of the cycle will simulate the counters' values, each agent chooses one of the two counters to simulate, it is either on the zero-state or in the one-state of the appropriate counter. Given a configuration of the protocol, we associate a machine configuration as follows: the location machine is the state of any leader agent of the cycle, and the value of counter 1 (resp. 2) is the number of agents on the one-state of the counter.
+		
+		\item At the beginning, leader agents are location $\ell_0$ and other agents are all on one of the zero-states. Assume for now there is only one leader agent on the cycle, to a transition $(\ell, \inc{\cpt_1}, \ell')$, the leader agent sends message $\mathtt{inc_1}$ and waits to receive an acknowledgment message $\mathtt{Ainc_1}$ from its predecessor, then it moves to the location $\ell'$. The message $\mathtt{inc_1}$ is received by its successor on the cycle (and only by this agent). When an agent on the cycle receives a message from its predecessor, either it repeats it, either its changes its state (in this case, one agent on the zero-state of counter 1 shall move to the one-state of counter 1) and sends a acknowledgment message that the operation has been made (in this case $\mathtt{Ainc_1}$). If an agent receives an acknowledgment message, it only forwards it to its successor. This way, when the leader receives the acknowledgment message, it knows that one process (and only one) moved to the one-state of counter 1. Note that if one message is lost the run stops. Note as well that if no agent changes state, the run stops as well because a message will be lost. Decrements transitions are simulated in an analogous manner.
+		
+		\item When it comes to reduce halting problem of Minsky Machines, usually the tricky part is to simulate test to 0 of counters. Here, once we have this cycle of knowledge structure, it is quite simple: when the leader wants to simulate a transition $(\ell, \testz{\cpt_1}, \ell')$, it sends a message $\mathtt{test_1}$ to its successor and waits to receive the \emph{same} message from its predecessor before changing its state to $\ell'$. When an agent receives the message from its predecessor, if it is \emph{not} on the one-state of counter 1, it forwards it to its successor, otherwise, it reaches a deadlock state in which it can do anything anymore. It blocks the run.
+		
+		\item once the leader agent reaches $\ell_f$, it sends the message $\mathtt{end}$ to its successor, when an agent receives the message $\mathtt{end}$, it reaches $\ell_f$ and forwards it to its successor.
+		
+		\item If there are two agents (or more) in the cycle of knowledge, they should all simulate the same machine execution. All agents in between two leaders will simulate counters' values of one execution, and if two agents make different choices, it will block the run of the protocol. \lu{to explain better...}
+	\end{itemize}
+\end{proof}
