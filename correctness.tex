@@ -1,4 +1,4 @@
-\subsection{Soundness}
+%\subsection{Soundness}
 \label{sec:soundness}
 
 %\begin{lemma}[Strong copycat]\label{lem:strong-copycat}
@@ -38,20 +38,19 @@
 %	From this we immediately infer the conditions of the lemma.
 %\end{proof}
 
-It is left to prove that our abstraction is sound, in order to do this, consider an abstract run $\aconfiginit \step{\ast} \aconfig = (S, \boss, \clique)$. We shall prove that there exists a concrete run $\run : \config_0 \step{\ast} \config $ such that $\config$ covers all states in $S$, there exists a special agent on state $b$ with value $v$ and for each state $q$ in $\clique$, there is (at least) one agent on $q$ with register value $v$. In order to prove this, we infact prove something stronger: in each of states $s\in S$, we shall prove that we can put an exponential number (in the size of the protocol) of agents in each state $s\in S$ and in each state $k\in \clique$ with value $v$. This stronger property will allow us to do a proof by induction on the length of the run. The formal proof of the following lemma is given in the appendix.
+It is left to prove that our abstraction is sound, in order to do this, consider an abstract run $\aconfiginit \step{\ast} \aconfig = (S, \boss, \clique)$. We shall prove that there exists a concrete run $\run : \config_0 \step{\ast} \config $ such that $\config$ covers all states in $S$, there exists a special agent on state $b$ with value $v$ and for each state $q$ in $\clique$, there is (at least) one agent on $q$ with register value $v$. In order to prove this, we infact prove something stronger: in each of states $s\in S$, we shall prove that we can put an exponential number (in the size of the protocol) of agents in each state $s\in S$ and in each state $k\in \clique$ with value $v$. This stronger property will allow us to do a proof by induction on the length of the run. 
 
-
-\begin{lemma}
-	\label{cor:soundness}
-%	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ 
-%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
-	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$, for all $s \in S$, there exists a reachable configuration $\gamma$ covering $s$.
-%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
-\end{lemma}
-
-\ifproofs
-\begin{proof}
-	We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$ by setting $i = n$.
-%	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
-\end{proof}
-\fi
+%\begin{lemma}
+%	\label{cor:soundness}
+%%	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ 
+%%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
+%	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$, for all $s \in S$, there exists a reachable configuration $\gamma$ covering $s$.
+%%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
+%\end{lemma}
+%
+%\ifproofs
+%\begin{proof}
+%	We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$ by setting $i = n$.
+%%	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
+%\end{proof}
+%\fi

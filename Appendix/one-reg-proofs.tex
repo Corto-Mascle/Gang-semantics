@@ -1,4 +1,6 @@
-\section{Proofs of Section \ref{sec:cover-1BNRA}}
+
+\section{Proofs of section \ref{sec:cover-1BNRA}}
+\luin{Plan : 1) diseq test, 2) Completeness, 3) Soundness, 4) conclusion (abstraction sound and complete, NP hardness, NP-complete)}
 
 \label{app:cover-one-reg}
 \subsection{Removing disequality tests}
@@ -211,3 +213,83 @@ We in fact prove the stronger lemma first.
 %	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
 \end{proof}
 \fi
+
+\subsection{Conclusion}
+
+
+\begin{proposition}
+	\label{prop:sound-and-complete}
+	Let $q_f$ be a state, there exists a reachable "configuration" covering $q_f$ if and only if there exists a reachable "abstract configuration" $(S,b,K)$ with $q_f \in S$.
+	%either $q_f \in K$ or $b \neq \noboss$ and $q_f = b$.  
+\end{proposition}
+
+\begin{proof}
+	The right-to-left direction is given by Corollary~\ref{cor:soundness}.
+	For the left-to-right direction, let $\run$ be a run ending in a configuration $\config$ covering $q_f$. Let $v \in \nats$ be such that $\config$ has some agents with value $v$ in state $q_f$.
+	
+	We construct a suitable "abstract run" as follows: by Lemma~\ref{lem:abstraction_complete} there exists an abstract run from some $\sigma_0 \in \aconfiginitset$ to an abstract configuration $\absproj{v}{\run} = (S, b, K')$ for some $S,b,K$ such that $q_f \in S$ and $q_f \in \set{b} \cup K$.
+	%	
+	%	As $\config, v$ covers $q_f$, either $q_f = b$ or $q_f \neq b$ and there exists an agent with state $q_f$ and value $v$ in $\config$. 	
+	%	By definition of the abstraction $\absproj{v}{\run}$, we have $q_f \in K$ if $b=\noboss$ and $q_f = b$ otherwise, proving the proposition.
+	
+	%	For the left-to-right direction, let $\run$ be a run ending in a configuration $\config$ satisfying $K$. Let $v \in \nats$ be such that $\config$ has some agents with value $v$ in every state of $K$.
+	%	
+	%	We construct a suitable "abstract run" as follows: by Lemma~\ref{lem:abstraction_complete} there exists an abstract run from some $\sigma_0 \in \aconfiginitset$ to an abstract configuration $\absproj{v}{\run} = (S, b, K')$.
+	%	
+	%	As $\config, v$ satisfies $K$, for all $s \in K$ either $s = b$ or $s \neq b$ and there exists an agent with state $s$ and value $v$ in $\config$. 	
+	%	By definition of the abstraction $\absproj{v}{\run}$, we have $K \subseteq K'$ if $b=\noboss$ and $K \subseteq K' \cup \set{b}$ otherwise, proving the proposition.
+\end{proof}
+
+
+
+
+\textbf{NP-hardness.} We present here a reduction of the 3SAT problem to the "cover problem" in 1-BNRAs.
+%\label{sec:lower-bounds}
+
+%\ifproofs
+%\begin{proof}
+\begin{figure}[h]
+	\input{Figures/fig-np-hard}
+	\caption{The "protocol" used for the NP-hardness proof.}
+	\label{fig:np-hard}
+\end{figure}
+
+%We present here a reduction of the 3SAT problem to our problem.
+Let $x_1, \ldots, x_n$ be variables and $\query = \bigwedge_{j=1}^m C_j$ with, for all $j$, $C_j = \ell_j^1 \lor \ell_j^2 \lor \ell_j^3$ and $\ell_j^1, \ell_j^2, \ell_j^3 \in \set{x_i, \neg x_i \mid 1 \leq i \leq n}$. 
+
+Consider the "protocol" displayed in Figure~\ref{fig:np-hard}.
+Our alphabet of messages is the set of literals $\set{x_i, \neg x_i \mid 1 \leq i \leq n}$.
+Each agent may either receive a message, and repeat it forever or it may broadcast one of $x_i, \neg x_i$ for each $i$ and then try to receive a message one of $\ell_j^1, \ell_j^2, \ell_j^3$ for each $j$, with its own register value.
+
+Suppose $\query$ is satisfiable, let $\nu$ be a satisfying assignment, then we set $\agents = \set{a, a_1, \ldots, a_n}$ as our set of agents. First for each $i$ we make $a$ broadcast $x_i$ if $\nu(x_i)= \top$ and $\neg x_i$ otherwise, this broadcast shall be received only by agent $a_i$. Agent $a_i$ will store $a$'s register value.
+Then for each $j$ we select some $\ell_j^p$ satisfied by $\nu$. There exists $i$ such that $a_i$ is in state $\ell_j^p$. It broadcasts $\ell_j^p$ along with the initial register value of $a$, allowing $a$ to go to the next state.
+
+As a result, there is an execution in which agent $a$ reaches $m'$.
+
+Now suppose there is an execution $\run$ over some set of agents $\agents$ such that some agent $a \in \agents$ is in state $m'$ in the final configuration.
+For each $i$, $a$ has broadcast either $x_i$ or $\neg x_i$, but not both.
+Let $\nu$ be the valuation assigning $\top$ to $x_i$ if and only if $a$ has broadcast it.
+The register of $a$ cannot have changed its value throughout the run. 
+For each $j$ it has received one of $\ell_j^1, \ell_j^2, \ell_j^3$ along with its own initial register value (which we call $r$). Let $p_j$ be such that $a$ has received $\ell_j^{p_j}$.
+Hence for all $j$ there exists an agent $a_j \in \agents$ such that at some point in the run the register value of $a_j$ is $r$ and $a_j$ broadcasts $\ell_j^{p_j}$.
+This agent $a_j$ must be in state $\ell_j^{p_j}$ after receiving the broadcast $\brone{\ell_j^{p_j}}$ from $a$ (as all agents start with different register values).
+Hence $\ell_j^{p_j}$ is satisfied by $\nu$. 
+
+As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus satisfies $\query$. This concludes our reduction.
+
+%\end{proof}
+%\fi
+
+\begin{proposition}
+	\label{prop:np-hard-query-cover}
+	The "cover problem" is NP-hard.
+\end{proposition}
+
+
+\begin{proof}
+	The lower bound is given by Proposition~\ref{prop:np-hard-query-cover}.
+	For the upper bound, say we are given a "protocol" $\prot = (Q, \messages, \Delta, q_0, \regnum)$ and a state $q_f$. We have to verify that there exists a reachable configuration $\config_f$ convering $q_f$. By Proposition~\ref{prop:sound-and-complete}, it is the case if and only if there is an "abstract run" to an "abstract configuration" $(S,b, K)$ with $q_f \in S$.
+	Furthermore, by Lemma~\ref{lem:short-run} if there is such an "abstract run" then there is one with at most $(\size{Q}+2)^3$ steps. 
+	Thus we can simply guess such an abstract run and verify it in polynomial time.
+	As a result, the "cover problem" is in \NP. 
+\end{proof}

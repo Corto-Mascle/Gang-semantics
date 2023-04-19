@@ -259,56 +259,19 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 \subsection{Shortening branches}
 \label{sec:decidability-shortening-branches}
 
-\begin{lemma}
+\begin{restatable}{lemma}{lemIncreasingBosses}
 	\label{lem:increasing-bosses}
 	Let $\tree$ be a "tree unfolding" satisfying a specification $\spec$.
 	Let $\node, \node'$ be two "boss nodes" of $\tree$.
-	
 	If $\node$ is an ancestor of $\node'$ and $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$ then there exists a smaller "tree unfolding" satisfying $\spec$.  
-\end{lemma}
+\end{restatable}
 
-\ifproofs
-\begin{proof}
-	Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
-	Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
-	
-	If $\node$ is the root of $\tree$, then $\tree'$ is a "tree unfolding" with $\node'$ as root. As $\node$ is a "boss node" and $\tree$ satisfies $\spec$, $\spec$ is a "boss specification", and a subword of $\bosslabel{\node}$.
-	As $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$, $\spec$ is a subword of $\bosslabel{\node'}$ and thus $\tree'$ satisfies $\spec$.
-	
-	If $\node$ is not the root of $\tree$ then let $\node''$ be its father. We have to check that $\tree'$ is a "tree unfolding". 
-	All nodes other than $\node''$ have the same label and children as before, thus the conditions of "tree unfoldings" are still respected for them.
-	As for $\node''$, it has the same "follower" children, hence conditions \ref{unfoldingC1} and \ref{unfoldingC3.1} are respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
-	
-	Finally, let $v'$ be a value that is not initial in $\localrunlabel{\node''}$. Either $\node''$ has a "boss" child other than $\node'$ such that $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of its label, or $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of $\bosslabel{\node}$, which is a subword of $\bosslabel{\node'}$, hence condition \ref{unfoldingC3.2} is satisfied. 
-	
-	As a result, in both cases $\tree'$ is a "tree unfolding" smaller than $\tree$ that satisfies $\spec$. 
-\end{proof}
-\fi
-
-\begin{lemma}
+\begin{restatable}{lemma}{lemIncreasingFollowers}
 	\label{lem:increasing-followers}
 	Let $\tree$ be a "tree unfolding" satisfying a specification $\spec$.
 	Let $\node, \node'$ be two "follower nodes" of $\tree$.
 	If $\node$ is an ancestor of $\node'$, $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$ then there exists a smaller "tree unfolding" satisfying $\spec$. 
-\end{lemma}
-
-\ifproofs
-\begin{proof}
-	Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
-	Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
-	
-	If $\node$ is the root of $\tree$, then $\tree'$ is a "tree unfolding" with $\node'$ as root. As $\node$ is a "follower node" and $\tree$ satisfies $\spec$, $\spec$ is a "follower specification". Let $(\followwordspec, \followmessagespec) = \spec$, we have $\followlabelword{\node} \subword \followwordspec$ and $\followlabelmessage{\node} = \followmessagespec$. 
-	Hence we have $\followlabelword{\node'} \subword \followlabelword{\node} \subword \followwordspec $ and $\followlabelmessage{\node'} = \followlabelmessage{\node} = \followmessagespec$, thus $\tree'$ satisfies $\spec$.
-	
-	If  $\node$ is not the root of $\tree$ then let $\node''$ be the father of $\node$. We have to check that $\tree'$ is a "tree unfolding". 
-	All nodes other than $\node''$ have the same children as before, thus the conditions of "tree unfoldings" are still respected for them.
-	As for $\node''$, it has the same "boss" children, hence condition \ref{unfoldingC3.2} is respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
-	
-	For conditions \ref{unfoldingC1} and \ref{unfoldingC3.1}, we can check that they are still satisfied by observing that since $\followlabelword{\node'} \subword \followlabelword{\node}$, for all "decomposition" $\decsymb$, if $\followlabelword{\node} \in \langdecdown{\decsymb}$ then $\followlabelword{\node'} \in \langdecdown{\decsymb}$. One can see that both conditions are satisfied by using the same "decompositions" and applying this fact.
-	
-	As a result, in both cases $\tree'$ is a "tree unfolding" smaller than $\tree$ that satisfies $\spec$. 
-\end{proof}
-\fi
+\end{restatable}
 
 
 \subsection{Local bounds}
@@ -435,7 +398,7 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 
 \ifproofs
 \begin{proof}
-	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $\Falpha{\omega^{\size{\messages}}}$ is closed by composition with elementary functions.
+	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $\Falpha{\omega^{\size{\messages}+1}}$ is closed by composition with elementary functions.
 \end{proof}
 \fi
 \begin{restatable}{proposition}{PropBoundTreeSize}

@@ -275,27 +275,24 @@ We can hence enforce in the abstract semantics that, at least every $|Q|+2$ step
 \end{proof}
 \fi
 
-We now prove that our abstraction is sound and complete for our problem of interest. 
-
-\subsection{Completeness}
+ We prove that our abstraction is sound and complete for our problem of interest in the appendix, the rest of this section gives some intuition on the proofs.
 
 To prove the completeness of our abstraction, we take a concrete "run" $\run$ in our model and any value $v$ appearing in the reached configuration. We prove that there exists an abstract run leading to the abstract configuration $(\statesin{\run}, \gangof{v}{\run})$. Note that $\statesin{\run}$ is the set of all states appearing in $\run$ and $\gangof{v}{\run} = (\boss, \clique)$ is the gang of agents with value $v$ at the end of $\run$, i.e: if the agent starting with value $v$ has still the same value, $\boss$ denotes its state, and otherwise $\boss = \bot$, and, $\clique$ is the set of states on which there is an agent having value $v$ at the end of $\run$.
 
 To construct the abstract run, we will first show that, for all concrete run $\run$ and for all value $v$, $(\statesin{\run}, q_0, \emptyset) \step{\ast}(\statesin{\run}, \gangof{v}{\run})$. To do this, it suffices to follow steps by steps how agents with value $v$ evolve and find the fitting abstract step such that we follow exactly the evolution of the gang associated to value $v$. 
-\luin{s'il reste de la place, mettre ici l'exemple d'un des cas de la preuve du lemme \ref{lem:proof_completeness_covset_constant}}
 Then, it is left to show that for all concrete run $\run$ and for all value $v$, $\aconfiginit \step{\ast} (\statesin{\run}, q_0, \emptyset)$. We shall prove this by induction on the size of $\statesin{\run}$. The base case is handled by the first property we proved. For the induction case, we will argue that there exists a prefix run $\run'$ such that $\statesin{\run'} \subsetneq \statesin{\run}$ and by completing $\run'$ of one more step, we obtain a prefix $\run''$ of $\run$ such that $\statesin{\run''} = \statesin{\run}$, we note $v_{\mathbf{br}}$ the value at the end of $\run'$ of the broadcasting agent in this last step from $\run'$ to $\run''$. By induction hypothesis and our first property, we prove that $\aconfiginit \step{\ast} (\statesin{\run'}, q_0, \emptyset) \step{\ast} (\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'})$. By going one step forward and distinguish case to find the fitting case in the abstract semantics, we prove that $(\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'}) \step{} (\statesin{\run''}, \gangof{v_{\mathbf{br}}}{\run''})$. Finally,  $\aconfiginit \step{\ast} (\statesin{\run''}, q_0, \emptyset)$ by the "gang reset" step of the abstract semantics. Putting everything together and applying the first property, we finally get: $\aconfiginit \step{\ast} \absproj{v}{\run}$.
 
-The proofs of the following lemmas can be found on the appendix.
-
-\begin{lemma}
-	\label{lem:proof_completeness_covset_constant}
-	For all "runs" $\run: \config_0 \step{*} \config$ and $\aval \in \valsof{\run}$, $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. 
-\end{lemma}
-
-\begin{lemma}
-	\label{lem:abstraction_complete}
-	If $\run$ is a (concrete) "run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
-\end{lemma}
+%The proofs of the following lemmas can be found on the appendix.
+%
+%\begin{lemma}
+%	\label{lem:proof_completeness_covset_constant}
+%	For all "runs" $\run: \config_0 \step{*} \config$ and $\aval \in \valsof{\run}$, $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. 
+%\end{lemma}
+%
+%\begin{lemma}
+%	\label{lem:abstraction_complete}
+%	If $\run$ is a (concrete) "run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
+%\end{lemma}
 
 %\luin{donner de l'intuition sur lemma 37/38}
 %This subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.

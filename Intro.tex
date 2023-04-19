@@ -17,7 +17,7 @@ A model where messages ranged over a finite alphabet was presented in~\cite{emer
 
 The complexity of parameterized verification problems over RBN have been the subject of an extensive study in recent years~\cite{Delzanno2012complexity, BalasubramanianBM2018parameterized, BalasubramanianGW2022parameterized, ChiniMS2019liveness}. In~\cite{DST2013}, RBN were extended with registers allowing processes to exchange identifiers: this is the model we consider here. It is inspired by the success of register automata, which offer a convenient formalism to express properties of words over an infinite alphabet; see~\cite{segoufin2006automata} for a survey on the subject.
 
-Other approaches exist to define parameterized models with registers, for instance Dynamic register automata, in which processes are allowed to spawn other processes with new identifiers and communicate integers values~\cite{AbdullaAKR2014verification}. While basic problems on these models are in general undecidable, several restrictions on communications allow to recover decidability~\cite{AbdullaAKR2015verification, Rezine2017verification}.
+Other approaches exist to define parameterized models with registers~\cite{BRS21}, for instance Dynamic register automata, in which processes are allowed to spawn other processes with new identifiers and communicate integers values~\cite{AbdullaAKR2014verification}. While basic problems on these models are in general undecidable, several restrictions on communications allow to recover decidability~\cite{AbdullaAKR2015verification, Rezine2017verification}.
 
 Such parameterized verification problems often relate to the theory of well quasi-orders and well-structured transition systems, and the associated high complexities obtained from bounds on so-called ``bad sequences'' in ordered sets. In particular, our model is linked to two classical models from this field: First data nets, which are Petri nets in which tokens are labelled with natural numbers, and can exchange and compare their labels~\cite{lazic2007nets}. In general, inequality tests are allowed, but data nets with only equality have also been studied~\cite{ROSAVELARDO201741}. They do not subsume BNRA as processes can only carry one integer, and not several register values (problems on models of data nets where tokens have tuples of integers as labels are typically undecidable).
 The other closely related model is lossy channel systems (LCS)\cite{AbdullaJ1996undec}, which we will simulate using BNRA. We will also show that BNRA coverability and LCS reachability are complete for the same complexity class $\Falpha{\omega^\omega}$~\cite{ChambartS2008ordinal, Schnoebelen2002verifying}.
@@ -83,5 +83,7 @@ Due to space constraints, we only give proof sketches in the main part of the pa
 %	
 %	\cite{Aiswarya2021network} -> Survey, with some relevant papers 	\cite{Aiswarya2015model},
 %	\cite{AbdullaAA2016data}
+%
+%	\cite{BRS21} -> not really register automata, but systems where each agent has a private register and there are as many shared registers as agents; an agent may change its local value, write it in the global memory and test the number of occurrences of its values. Control-state reachability is \PSPACE-complete.
 	
 	\cortoin{J'ai pris les refs de Scholar, mais il vaut mieux les refaire depuis DBLP}
