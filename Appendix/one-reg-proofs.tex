@@ -98,8 +98,116 @@ We may now prove Lemma~\ref{lem:abstraction_complete}.
 	
 	Because we may choose $\boss$ and $\clique$ freely, the only challenging condition is \ref{item:broadcast_from_clique_covset}.
 	Let $q' \in \statesin{\run} \setminus \statesin{\run_p}$, $q' \ne \statebr'$. 
-	There exists an agent $a$ that takes a reception transition $(q,\rec{m}{\aval}{\anact},q')$ in $s$. 
+	There exists an agent $a$ that takes a reception transition $(q,\recone{m}{\anact},q')$ in $s$. 
 	If $\anact = \quotemarks{\eqtestact}$, then agent $a$ has value $\avalbr$ at the end of $\run_p$ hence $q$ is in the clique of $\absproj{\avalbr}{\run_p}$ and condition \ref{item:broadcast_from_clique_covset} is satisfied. Otherwise, one has $q \in \statesin{\run_p}$ and condition \ref{item:broadcast_from_clique_covset} is satisfied.
 	In the end, there exist $\boss$, $\clique$ such that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$. By a "gang reset", this implies that $\absproj{\avalbr}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset)$; we have proven that $\aconfiginit \step{*}\absproj{\avalbr}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$ which concludes the proof. 
+\end{proof}
+\fi
+
+
+\subsection{Soundness}
+
+\begin{lemma}
+	\label{cor:soundness}
+	%	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ 
+	%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
+	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$, for all $s \in S$, there exists a reachable configuration $\gamma$ covering $s$.
+	%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
+\end{lemma}
+
+\ifproofs
+\begin{proof}
+
+We in fact prove the stronger lemma first.
+
+\begin{lemma}
+	\label{lem:correctness-construction}
+	
+	
+	Let $\sigma_0 \in \aconfiginitset$, and $\sigma_0 \to \sigma_1 \to \cdots \to \sigma_n$ an abstract run. For all $i$ let $(S_i, b_i, K_i) := \sigma_i$. Let $M = \size{\Delta}+1$.
+	
+	For all $i$, there exists a set of agents $\agents_i$, a configuration $\config_i$, a run $\run_i : \config_0 \step{*} \config_i$ over $\agents_i$, agents $a_0, \cdots, a_n \in \agents_i$ and values $v_0, \ldots, v_n \in \nats$ such that:
+	\begin{itemize}
+		\item for all $s \in S_i$, there are at least $M^{n-i}$ agents (different from $a_i$) in state $s$ 
+		
+		\item for all $s \in K_i$, there are at least $M^{n-i}$ agents (different from $a_i$) in state $s$ with value $v_i$
+		
+		\item if $b_i \neq \noboss$, then $a_i$ is in state $b_i$ with value $v_i$.
+	\end{itemize}
+\end{lemma}
+
+\ifproofs
+\begin{proof}
+	
+	We proceed by induction on $i$.
+	We set $\agents_0 = \set{1, \ldots, M^n}$, and we set $\config_0(a) = (q_0, a)$ for all $a$. Clearly $\config_0$ satisfies the requirements with respect to $\sigma_0$, with $a_0 = v_0 \in \agents$.
+	
+	Now assume we constructed $\config_0 \step{*} \cdots \step{*} \config_{i}$ over $\agents_i$ satisfying the conditions of the lemma, we construct $\config_{i+1}$ using a case distinction on the form of the transition $\sigma_i \to \sigma_{i+1}$.
+	For each $s \in S\setminus K$ we define $\agents_{i,s}$ as the set of agents in state $s$ in $\config_{i}$. We have $\size{\agents_{i,s}} \geq M^{n-i}$ thus we can extract $M = \size{\Delta}+1$ disjoint sets of agents $(\agents_{i,s}^d)_{d \in \Delta\cup\set{\epsilon}}$ from it, each set having $M^{n-i-1}$ agents.
+	Similarly, for each $s \in K$ we define $\agents_{i,s}$ as the set of agents in state $s$ \textbf{with value $\mathbf{v_i}$} in $\config_{i}$. We have $\size{\agents_{i,s}} \geq M^{n-i}$ thus we can extract $\size{\Delta}+1$ disjoint sets of agents $(\agents_{i,s}^d)_{d \in \Delta\cup\set{\epsilon}}$ from it each set having $M^{n-i-1}$ agents.
+	\\
+	
+	\textbf{Case 1: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast $d = (q, \brone{m}, q')$ from the clique} with $q \in K_i$, then we make all agents $a \in \agents_{i,q}^{d}$ (which all have value $v_i$) execute that transition one by one.
+	None of those broadcasts are received by any other agent, except for the last one:
+	If $b \neq b'$ then there is a transition $(b, \recone{m}{\alpha}, b')$ and we make $a_i$ execute it upon receiving the broadcast. We then set $a_{i+1} = a_i$.
+	For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \recone{m}{\alpha}, k')$ such that either $\alpha$ is $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
+	In both cases we make all agents of $\agents_{i,k}^{d'}$ take that transition.
+	
+	For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition $d'=(s,\recone{m}{*},s')$ (the operation cannot be $\enregact$ or $\eqtestact$ as otherwise $s$ would be in $K_{i+1}$). We then make all agents of $\agents_{i,s}^{d'}$ follow that transition. 
+	
+	We set $v_{i+1} = v_i$.
+	\\
+	
+	\textbf{Case 2: }If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast $d = (b_i, \brone{m}, b_{i+1})$ from the boss}, then we make $a_i$ (which has value $v_i$) execute that transition, and we set $a_{i+1} = a_i$.
+	The agents receiving that message are as follows:
+	
+	For all $k' \in K_{i+1} \setminus K_i $ there exists a transition $d'=(k, \recone{m}{\alpha}, k')$ such that $\alpha$ is either $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
+	In both cases we make all agents of $\agents_k^{d'}$ take that transition.
+	
+	For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1} \cup \set{b_{i+1}})$ there exists a transition $d'=(s,\recone{m}{*},s')$ (the operation cannot be $\enregact$ or $\eqtestact$ as otherwise $s$ would be in $K_{i+1}$). We then make all agents of $\agents_s^{d'}$ follow that transition. 
+	
+	By definition of an "abstract run", we must have $b_i \in S_i$.
+	Hence we can make all agents of $\agents_{i,s}^{d}$ execute $d$, with no agent receiving the corresponding broadcasts.
+	
+	We set $v_{i+1} = v_i$.
+	\\
+	
+	\textbf{Case 3: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{external broadcast} $d = (q, \brone{m}, q')$ , then we make all agents $a \in \agents_q^{d}$ execute that transition one by one. None of those broadcasts are received by any other agent, except for the last one:
+	If $b_i \neq b_{i+1}$ then there is a transition $(b, \recone{m}{\alpha}, b'')$ and either $b_{i+1} = b'' \neq \noboss$ and $\alpha = *$ or $b_{i+1} = \noboss$ and $\alpha=\enregact$. In both cases we make $a_i$ execute that transition, and we set $a_{i+1} = a_i$.
+	
+	For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \recone{m}{*}, k')$ with $k \in K_i$. We make all agents of $\agents_k^{d'}$ take that transition.
+	
+	For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition $d'=(s,\recone{m}{\alpha},s')$ with $\alpha \in \set{*, \enregact}$. We then make all agents of $\agents_s^{d'}$ follow that transition. 
+	
+	We set $v_{i+1} = v_i$.
+	\\
+	
+	\textbf{Case 4: }  If $\sigma_i \to \sigma_{i+1}$ is a \emph{gang reset} then no agent moves and we select some $a_{i+1}$ in $\agents_{q_0}$ and set $v_{i+1}$ to be its value.
+	\\
+	%\paragraph{In all cases:} After applying the given transitions, we use the copycat property: we add to $\agents_i$ $M^{n-i-1}$ disjoint copies of itself to obtain $\agents_{i+1}$, and repeat the run constructed thus far over each copy separately. This is to ensure that there are $M^{n-i-1}$ agents in $b_{i+1}$ (if it is not $\noboss$) after this step.
+	
+	Throughout the case distinction we have ensured that:
+	\begin{itemize}
+		\item If $b_{i+1} \neq \noboss$ then $a_{i+1}$ is an agent of value $v_{i+1}$.
+		
+		\item For all $k \in K_{i}$, the agents of $\agents_{i,k}^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $k$ and value $v_{i+1}$ in $\config_{i+1}$.
+		
+		\item If the step is not a gang reset, then $v_{i+1} = v_i$ and for all $k' \in K_{i+1} \setminus K_i$, there exists $d \in \Delta$ from some $k$ to $k'$ such that all agents of $\agents_{i,k}^d$ take that transition. Furthermore, if $d$ is of the form $(k,\recone{m}{\enregact},k')$ then the broadcasting process has value $v_i$, thus all those agents keep value $v_i = v_{i+1}$. 
+		%	As $\size{\agents_{i,k}^d}\geq M^{n-i-1}$, there are at least that many agents with value $v_{i+1} = v_i$ in $k'$.
+		
+		\item For all $s \in S_{i}$, the agents of $\agents_{i,s}^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $s$ in $\config_{i+1}$.
+		
+		\item If the step is not a gang reset, for all $s' \in S_{i+1} \setminus (S_i \cup \set{b_{i+1}})$, there exists $d \in \Delta$ from some $s \in S_i$ to $s'$ such that all agents of $\agents_{i,s}^d$ take that transition.
+		
+		\item If the step is a gang reset, the conditions of the lemma hold trivially.
+	\end{itemize}
+	
+	As a result, we have ensured that the conditions of the lemma were respected.
+	This concludes our induction.
+\end{proof}
+\fi
+
+	We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$ by setting $i = n$.
+%	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
 \end{proof}
 \fi
