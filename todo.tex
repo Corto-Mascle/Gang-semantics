@@ -6,7 +6,6 @@
 \item mettre au bon endroit la definition de "partial run": 
 	% A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in \nset{1}{k}$, either $\config_{i-1} \step{} \config_{i}$ or $\config_{i-1} \extbr{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
     \item passer $\regnum$ dans le tuple du protocole
-    \item decompose as -> peut créer des ambiguités: machintruc decomposition 
     \item reduction query vers cover un registre
     \item reduction query vers cover dans le cas d'un registre à l'aide d'une habile remarque
     \item figure lemme tower
@@ -17,7 +16,9 @@
     \item verifier que la notation de $r$-BNRA est uniforme et bien definie
     \item  verifier broadcasted -> broadcast
     \item definir $\nset{1}{n}$
-    \item run pas toujours initial dans les preuvves :-)
+    \item run pas toujours initial dans les preuvves :-) + local run qui n'est pas initial -> il faudrait peut-être changer run pour qu'il ne soit pas forcément initial
+    \item mentionner que si plusieurs valeurs par message, c'est indécidable d'après le papier d'Arnaud
+    
 \end{itemize}
 
 A discuter:
