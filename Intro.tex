@@ -1,42 +1,24 @@
 \section{Introduction}
 
-\cortoin{plagiat}
-We introduce a formal model of data-sensitive distributed protocols, called Broad-
-cast Networks of Register Automata (BNRA), aimed at modelling both the local
-knowledge of distributed nodes as well as their interaction via broadcast com-
-munication. 
-
-
-A network is modelled via a finite graph where each node runs an
-instance of a common protocol. A protocol is specified via a register automaton,
-an automaton equipped with a finite set of registers [20]. Each register assumes
-values taken from the set of natural numbers. Node interaction is specified via
-broadcast communication, well-suited to model scenarios in which individual
-nodes have partial information aboutDST-RP13 the network topology. Messages are al-
-lowed to carry data, that can be assigned to or tested against the local registers
-of receivers. 
-
-Dynamic updates of the current configuration are modelled via
-non-deterministic reconfigurations of the underlying connectivity graph. A node
-may disconnect from its neighbours and connect to other ones at any time of the
-execution. This behaviour models in a natural way unexpected power-off and
-dynamic movement of devices. The resulting model can be used to reason about
-core parts of client-server protocols as well as of routing protocols, e.g. route
-maintainance as in Link Reversal Routing.
-\cortoin{plagiat}
-
 We study a model representing networks of processes communicating by broadcast. We make no assumption on the evolution of the communication graph, i.e., when a process broadcasts a message, each other process, may receive it or not, independently. This models unreliable systems, with unexpected crashes and disconnections, in a pessimistic way. 
 Furthermore, each agent has access to some local registers, containing natural numbers (initially, identifiers). Each broadcast from an agent consists in a message from a finite alphabet and a value from one of their registers. The agents receiving it may store the value in their registers or compare it with its register contents. 
-This allows an agent, for instance, to check that a sequence of messages all come from the same agent.
+This allows an agent, for instance, to check that a sequence of messages all come from the same agent by storing the value of the first message and then checking that all the following ones have the same value.
+This also allows agents to get confirmations that a message was received, by broadcasting it with their identifier and then waiting for a response with that same value.
 
-\cortoin{TO CONTINUE}
+This model was introduced in \cite{DST2013}, as a natural extension of Reconfigurable Broadcast Networks\corto{ref}. That first paper claimed that the coverability problem, i.e., the problem of finding a run from an initial configuration to one where at least one agent is in a designated state, was decidable and even \PSPACE-complete, but the proof turned out to be wrong. As we will see, the complexity of that problem is actually much higher.
 
-This model was introduced in \cite{DST2013}, as a natural extension of Reconfigurable Broadcast Networks. That paper claimed that the coverability problem, i.e., the problem of finding a run from an initial configuration to one where at least one agent is in a designated state, was decidable and even \PSPACE-complete, but the proof turned out to be wrong. As we will see, the complexity of that problem is actually much higher.
-
-In this paper we establish the decidability of the coverability problem. We even prove its completeness for the HyperAckermannian complexity class $\Falpha{\omega^\omega}$, thereby establishing that the problem requires a non-multiply recursive amount of time, and that it is in some sense as hard as lossy channel systems \corto{ref}. 
+In this paper we establish the decidability of the coverability problem. We even prove its completeness for the HyperAckermannian complexity class $\Falpha{\omega^\omega}$, thereby showing that the problem requires a non-multiply recursive amount of time, and that it is in some sense as hard as reachability for lossy channel systems, which are transition systems which can store some letters in an unreliable FIFO memory, in which any message may be erased at any time\corto{ref}. 
 We contrast it with the undecidability of the target problem (asking for a run at the end of which all agents are in a given state) on one side, and with the \NP-completeness of the cover ability problem when each agent has only one register. 
 
 \paragraph*{Related work}
+
+Broadcast protocols are a widely studied class of systems, in which processes are organised in a graph and can send messages to their neighbours. There are however many choices to make when designing a model for those systems: how individual processes are represented, whether the number of communication graph is fixed or can change, the type of messages they can send... 
+A model where messages ranged over a finite alphabet was presented in~\cite{emerson1998model}, over a fixed communication graph. It was rapidly shown that many basic problems were undecidable over that model~\cite{EsparzaFM1999verification}. This negative results, along with similar ones for Ad Hoc networks lead to Reconfigurable Broadcast Networks (RBN), a new formalism where each broadcast can be received by an arbitrary subset of agents~\cite{DelzannoSZ2010Adhoc}.
+
+The complexity of parameterized verification problems over RBN have been the subject of an extensive study in recent years~\cite{Delzanno2012complexity, BalasubramanianBM2018parameterized, BalasubramanianGW2022parameterized, ChiniMS2019liveness}. In~\cite{DST2013}, RBN were extended with registers allowing processes to exchange identifiers: this is the model we consider here. 
+
+Other approaches exist to define parameterized models with registers, for instance Dynamic register automata, in which processes are allowed to spawn other processes with new identifiers and communicate integers values~\cite{AbdullaAKR2014verification}. While basic problems on these models are in general undecidable, several restrictions on communications allow to recover decidability~\cite{AbdullaAKR2015verification, AbdullaAA2016data, Rezine2017verification}.
+
 
 
 \paragraph*{Overview}
@@ -102,15 +84,5 @@ We contrast it with the undecidability of the target problem (asking for a run a
 	
 	\cite{Aiswarya2021network} -> Survey, with some relevant papers 	\cite{Aiswarya2015model},
 	\cite{AbdullaAA2016data}
-	
-	\textbf{Of interest}
-	
-	\cite{BertrandDGGG2018controlling} -> Controlling a population $\heartsuit$
-	
-	\cite{baldoni2009implementing} -> Implementation stuff, probably irrelevant
-	 	
-	\cite{DelzannoSZ2011cliquesAdhoc} -> More ad hoc networks
-	
-	\cite{DBLP:journals/tcs/AbdullaDRST16} -> Even more
 	
 	\cortoin{J'ai pris les refs de Scholar, mais il vaut mieux les refaire depuis DBLP}
