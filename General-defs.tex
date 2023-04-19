@@ -293,18 +293,19 @@ We will use the following result, known as the "Length function theorem" from \c
 
 
 \subsection{Link with LCS}
-\luin{here comes defintions of LCS and the reduction}
 
+""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate via messages from a finite alphabet through unbounded FIFO channels through which messages may be lost. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AK95,AbdullaJ1996undec}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and in fact lays at level $\mathcal{F}_{\omega^{\omega}}$ in the Fast-Growing Function Hierarchy \cite{ChambartS2008ordinal}.
 
-""Lossy channel systems""  are systems where finite-state processes communicate via send messages from a finite alphabet through unbounded FIFO channels through which messages may be lost. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AK95,AbdullaJ1996undec}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and in fact lays at level $\mathcal{F}_{\omega^{\omega}}$ in the Fast-Growing Function Hierarchy \cite{ChambartS2008ordinal}.
+We argue that the "coverability problem" in BNRA is at least as hard as the reachability problem for "LCS", even with two registers. The formal proofs can be found in  Appendix~\ref{app:reduction-lcs}~and presents a reduction from the reachability problem for "LCS" to the "coverability problem" for $2$-BNRAs, however, we give some intuition on how the reduction works. The first register should never be modified and each message sent should be sent among the first register value. Each agent should receive a foreigner identifier which it should store in its second register.  From there, an agent only accepts messages from this identifier (each reception transitions is of the form $\rec{m}{2}{=}$ for some $m \in \messages$). Each agent will simulate a step of the "LCS" execution: an agent should receive a configuration of the "LCS" (current state and channel) and computes a successor configuration in the "LCS" before sending it. It receives first the state of the "LCS" and then, one by one each letter of the channel. Note that some letters of the channel might not be received, hence the lossiness aspect. Once an agent sent its configuration, it goes to a sleeping state, from which nothing happens. Note that one special agent has to start the execution, and send the initial configuration before receiving anything. The final state is the final state of the "LCS" and if one agent reaches it, one can argue that there is an execution of the "LCS" described by the sent messages in the chain of agent starting with an agent sending the initial configuration.
 
-We now prove that the coverability problem in BNRA is at least as hard as the reachability problem for "lossy channel system", and that this already hold for $2$-BNRAs.  
+%We now prove that the coverability problem in BNRA is at least as hard as the reachability problem for "lossy channel system", and that this already hold for $2$-BNRAs.  
 \begin{restatable}{proposition}{propReductionLCS}
 	\label{prop:reduction-LCS}
-	There is a polynomial-time reduction from the coverability problem for lossy channel systems to the coverability problem for BNRA with two registers.
+%	There is a polynomial-time reduction from the coverability problem for lossy channel systems to the coverability problem for BNRA with two registers.
+	The "coverability problem" for BNRAs is $\Falpha{\omega^\omega}$-hard.
 \end{restatable}
 
-The proof is in Appendix~\ref{app:reduction-lcs}.
+%The proof is in Appendix~\ref{app:reduction-lcs}.
 
 \begin{remark}
 	The reduction presented in the proof of Proposition~\ref{prop:reduction-LCS} can be adapted to show that the repeat coverability problem is undecidable for BNRA, as it is for LCS.
