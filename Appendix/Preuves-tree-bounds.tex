@@ -42,7 +42,7 @@
 	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n)(n)+1))n+2$. Clearly for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N)(N)+1))^{i} \geq N$.
 	As a consequence, for all $a$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(N) + 2 \leq g^{(i)}(N)$
 	
-	By Theorem 5.3 in \cite{SchmitzS2011upperHigman}, there exists a function $f_1 \in \Falpha{\omega^{\size{\messages}}}$ such that all  "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
+	By Theorem 5.3 in \cite{SchmitzS2011upperHigman}, there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that all  "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
 	
 	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(N) = f_1(\size{\prot} + \size{w} + 1)$ elements, thus $\altmax \leq f_1(\size{\prot} + \size{w} + 1)$.
 \end{proof}
@@ -72,10 +72,10 @@
 	
 	We have $\size{w_0} \leq M = g^{(0)}(N)$ and for all $i>0$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{f_1(N) + i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(M) + 2 \leq g^{(i)}(M)$
 	
-	By definition of the function $f_1 \in \Falpha{\omega^{\size{\messages}}}$, all "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
+	By definition of the function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$, all "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
 	
 	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(M)$ elements, thus $\altmin \leq f_1(M) = f_1(f_0(f_1(N)))$.
-	We define $f_2$ as $f_1 \circ f_0 \circ f_1$. It is a function of $\Falpha{\omega^{\size{\messages}}}$ as $f_0$ and $f_1$ are and $\Falpha{\omega^{\size{\messages}}}$ is closed by composition.
+	We define $f_2$ as $f_1 \circ f_0 \circ f_1$. It is a function of $\Ffunction{\omega^{\size{\messages}}}$ as $f_0$ and $f_1$ are and $\Ffunction{\omega^{\size{\messages}}}$ is closed by composition.
 \end{proof}
 
 \PropBoundTreeSize*
@@ -107,7 +107,7 @@
 	Finally, we obtain a bound on the size of $\tau$ by taking the product of the bounds on the number of nodes and on the size of each node label: 
 	\[ \size{\tree} \leq  (H+1)(f_3(N) + N^2)^H (2f_3(N) +1)\]
 	
-	Let $f_4$ be such that $f_4(n) = ((f_3(n)+2)(n+1)^{f_3(n)+1} +1) (f_3(n) + n^2)^{(f_3(n)+2)(n+1)^{f_3(n)+1}}(2f_3(n) +1)$ for all $n$. It is the composition of $f_3$ with an elementary function, hence as $f_3 \in \Falpha{\omega^{\messages}}$ and $\Falpha{\omega^{\messages}}$ is closed by composition with elementary functions, $f_4 \in \Falpha{\omega^{\messages}}$.
+	Let $f_4$ be such that $f_4(n) = ((f_3(n)+2)(n+1)^{f_3(n)+1} +1) (f_3(n) + n^2)^{(f_3(n)+2)(n+1)^{f_3(n)+1}}(2f_3(n) +1)$ for all $n$. It is the composition of $f_3$ with an elementary function, hence as $f_3 \in \Ffunction{\omega^{\messages}}$ and $\Ffunction{\omega^{\messages}}$ is closed by composition with elementary functions, $f_4 \in \Ffunction{\omega^{\messages}}$.
 	
 	Furthermore, we have shown that the size of a minimal "tree unfolding" satisfying a "boss specification" $w$ and labelled by a "protocol" $\prot$ is bounded by $f_4(\size{\prot} + \size{w} +1)$.
 \end{proof}

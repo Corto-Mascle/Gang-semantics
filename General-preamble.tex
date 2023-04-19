@@ -21,7 +21,7 @@
 \usepackage{cite}
 \usepackage{multidef}
 \usepackage{xspace}
-
+\usepackage{mathrsfs}
 
 
 \usetikzlibrary{arrows,calc,automata,fit,shapes,positioning}
@@ -60,7 +60,8 @@
 % \newcommand{\nexpt}{\textsc{NExpTime}\xspace}
 % \newcommand{\exps}{\textsc{ExpSpace}\xspace}
 \multidef{\text{\sc{#1}}\xspace}{co,coNP,NP,PSPACE,coPSPACE,NPSPACE,PTIME,EXPTIME,EXPSPACE,NEXPTIME, LOGSPACE, TOWER, COVER, TARGET, BNRA}
-\newcommand{\Falpha}[1]{\mathscr{F}_{#1}}
+\newcommand{\Fcomplexity}[1]{\mathbf{F}_{#1}} % the Falpha complexity class
+\newcommand{\Ffunction}[1]{\mathscr{F}_{#1}}
 
 %%% Genral definition
 \newcommand{\prot}{\mathcal{P}} %protocol

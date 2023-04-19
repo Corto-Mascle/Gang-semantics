@@ -61,7 +61,7 @@
 	\end{itemize}
 	
 	\noindent \textbf{$\locallabel$ is an "internal step"} \\
-	The only problematic case is when $\locallabel =: \loc{i}{i'}{\diseqtestact}$ with $i,i' \in \nset{1}{\regnum}$ (we have no equality tests thanks to Lemma~\ref{lem:simple-reduction}). We have to prove that $\localdata(i) \ne \localdata(i')$. 
+	The only problematic case is when $\locallabel =: \loc{i}{i'}{\diseqtestact}$ with $i,i' \in \nset{1}{\regnum}$ (we have no equality tests thanks to Lemma~\ref{prop:loc-eq-test-elimination}). We have to prove that $\localdata(i) \ne \localdata(i')$. 
 	Because the "local test" is satisfied in $\localrun_a$ and $\localrun_b$, we have $\localdata_a(i) \ne \localdata_a(i')$ and $\localdata_b(i) \ne \localdata_b(i')$.
 	
 	If $i \notin I$ and $i' \notin I$ (none are "active registers") then  $\localdata(i) = \localdata_a(i) \ne \localdata_a(i') = \localdata(i')$.

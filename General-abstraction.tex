@@ -1,5 +1,11 @@
 \section{Cover decidability}
 
+
+
+\begin{restatable}{theorem}{decidablecover}
+\COVER for \BNRA{}s is decidable. Moreover, the problem is $\Fcomplexity{\omega^\omega}$-complete.
+\end{restatable}
+
 \subsection{Set-up}
 
 \ifintuition
@@ -7,9 +13,9 @@
 
 Our aim is to prove the decidability of the coverability problem for BNRA which can only send a single value in each broadcast. The constructions will actually lead us to a decidability proof for specifications of two different types, both subsuming the coverability specification.
 
-\paragraph*{Step 1 : simplification} In Lemma~\ref{lem:simple-reduction} we prove that all protocols, even those which can apply several operations when receiving a broadcast, can be simulated by a protocol with a single operation upon reception of a message and no $*$ operation. A previous lemma already allowed us to remove $\diseqtestact$, thus we only have to prove decidability for systems with one operation per reception and only $\enregact$ and $\eqtestact$ operations.
+\paragraph*{Step 1 : simplification} In Lemma~\ref{prop:loc-eq-test-elimination} we prove that all protocols, even those which can apply several operations when receiving a broadcast, can be simulated by a protocol with a single operation upon reception of a message and no $*$ operation. A previous lemma already allowed us to remove $\diseqtestact$, thus we only have to prove decidability for systems with one operation per reception and only $\enregact$ and $\eqtestact$ operations.
 
-Lemma~\ref{lem:simple-reduction} is placed within the decidability proof as the constructions defined there may simplify the proof of the lemma (they allow us to prove that BRNA can simulate each other simply by proving that their local runs have the same behaviour).
+Lemma~\ref{prop:loc-eq-test-elimination} is placed within the decidability proof as the constructions defined there may simplify the proof of the lemma (they allow us to prove that BRNA can simulate each other simply by proving that their local runs have the same behaviour).
 
 \paragraph*{Step 2 : run decomposition} Say we have a global run $\rho$ in which an agent broadcasts a message $m_f$. We isolate the local run $u$ of the first agent $a$ broadcasting $m_f$.
 In order to execute $u$, we need to receive a sequence of broadcast that matches the sequence of receive transitions in $u$. Let $v$ be a value appearing in $u$.
@@ -110,16 +116,6 @@ We say that a local run is cheaper than another one if the set of children it sp
 \end{definition}
 
 
-We start by proving that we may get rid of local equality tests:
-
-\begin{restatable}{lemma}{SimpleReduction}
-	\label{lem:simple-reduction}
-	There exists an exponential-time reduction from the "coverability problem" to the coverability problem on protocols with no "local equality tests" $\loc{i}{j}{=}$.
-\end{restatable}
-
-The proof can be found in Appendix~\ref{sec:proof-simple}. In fact, the exponential cost of the reduction will have no impact on the complexity results proven below.
-\textbf{In all that follows, we will assume that the considered protocol has no "local equality tests". 
-}
 
 
 \subsection{Tree unfoldings}
@@ -405,20 +401,20 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 
 \begin{restatable}{lemma}{lemBoundMaxHeight}
 	\label{lem:bound-max-height}
-	There exists a function $f_1$ of the class $\Falpha{\omega^{\size{\messages}}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the maximal altitude of a node of $\tree$ is bounded by $f_1(\size{\prot} + \size{w}+1)$.
+	There exists a function $f_1$ of the class $\Ffunction{\omega^{\size{\messages}}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the maximal altitude of a node of $\tree$ is bounded by $f_1(\size{\prot} + \size{w}+1)$.
 \end{restatable}
 
 
 \begin{restatable}{lemma}{lemBoundMinHeight}
 	\label{lem:bound-min-height}
-	There exists a function $f_2$ of the class $\Falpha{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the absolute value of the minimal "altitude" of a node of $\tree$ is bounded by $f_2(\size{\prot} + \size{w}+1)$.
+	There exists a function $f_2$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the absolute value of the minimal "altitude" of a node of $\tree$ is bounded by $f_2(\size{\prot} + \size{w}+1)$.
 \end{restatable}
 
 
 
 \begin{corollary}
 	\label{cor:bound-node-size}
-	There exists a function $f_3$ of the class $\Falpha{\omega^{\size{\messages}+1}}$\corto{corriger les M en M+1} such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, for all node $\node$ of $\tree$,
+	There exists a function $f_3$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$\corto{corriger les M en M+1} such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, for all node $\node$ of $\tree$,
 	
 		\begin{itemize}
 		\item $\size{\localrunlabel{\node}} \leq f_3(\size{\prot}+ \size{w})$
@@ -431,32 +427,29 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 
 \ifproofs
 \begin{proof}
-	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $\Falpha{\omega^{\size{\messages}}}$ is closed by composition with elementary functions.
+	Consequence of Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height} as $\Ffunction{\omega^{\size{\messages}}}$ is closed by composition with elementary functions.
 \end{proof}
 \fi
 \begin{restatable}{proposition}{PropBoundTreeSize}
 	\label{prop:bound-tree-size}
-	There exists a function $f_4$ of the class $\Falpha{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f_4(\size{\prot} + \size{w}+1)$.
+	There exists a function $f_4$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "tree unfolding" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f_4(\size{\prot} + \size{w}+1)$.
 \end{restatable}
 
 
 
 
 \subsection{Decidability}
-\begin{theorem}
-	The BNRA coverability problem is decidable in time $\Falpha{\omega^\omega}$ and there is no $\alpha < \omega^\omega$ such that this problem can be solved in time $\Falpha{\alpha}$.
-	The lower bound holds even with two registers and no local tests.
-\end{theorem}
+
 
 \ifproofs
 \begin{proof}
-	The lower bound is given by the reduction from "lossy channel systems" reachability in Proposition~\ref{prop:reduction-LCS} and by the fact that there is no algorithm in time $\Falpha{\alpha}$ for LCS reachability with $\alpha < \omega^\omega$.
+	The lower bound is given by the reduction from "lossy channel systems" reachability in Proposition~\ref{prop:reduction-LCS}.
 	
 	For the upper bound, let $\prot$ be a "protocol" with $\regnum \geq 1$ registers over messages $\messages$ and $q$ one of its states. We add a new message $m$ to $\messages$ and a new transition $\br{m}{1}$ from $q$ to itself broadcasting $m$. 
 	Clearly the new "protocol" $\prot'$ satisfies the "boss specification" $m$ if and only if $q$ is coverable in $\prot$.
 	
 	By Lemmas~\ref{lem:run-to-tree} and \ref{lem:tree-to-run}, there is a run of $\prot'$ satisfying $m$ if and only if there is a "tree unfolding" satisfying $m$.
-	By Lemma~\ref{prop:bound-tree-size}, there is such a "tree unfolding" if and only if there is one of size at most $f_4(\size{\prot}+2)$, where $f_4$ is a function of the class $\Falpha{\omega^{\size{\messages}}}$.
+	By Lemma~\ref{prop:bound-tree-size}, there is such a "tree unfolding" if and only if there is one of size at most $f_4(\size{\prot}+2)$, where $f_4$ is a function of the class $\Ffunction{\omega^{\size{\messages}}}$.
 	
 	The last problem we have is that the size of a "tree unfolding" does not take into account the values used in it. This can be solved by noticing that the conditions in the definition of a "tree unfolding" and the condition to satisfy a "specification" still hold after applying an injective renaming to the values. 
 	
@@ -467,10 +460,10 @@ The proof can be found in Appendix~\ref{app:tree-to-run}.
 	We can apply an injective renaming $V \to \nset{1}{(r+2)\size{\tree}}$ to the values to obtain another "tree unfolding" satisfying $m$ and whose values do not exceed $(r+2)\size{\tree}$.
 	As a result, there exists a "tree unfolding" satisfying $m$ if and only if there is one of size at most $f_4(\size{\prot}+2)$ in which values do not exceed $f_4(\size{\prot}+2)$. A description of such a tree requires a space that is polynomial in its size.
 	
-	We can therefore bound the size of the description of such a "tree unfolding" by a function of $\Falpha{\omega^{\size{\messages}}}$.
+	We can therefore bound the size of the description of such a "tree unfolding" by a function of $\Ffunction{\omega^{\size{\messages}}}$.
 	An algorithm for the coverability problem thus consists in enumerating all trees labelled by local runs of $\prot$ of size at most $f_4(\size{\prot}+2)$ with values not exceeding $f_4(\size{\prot}+2)$, and accepting if and only if one of them satisfies the conditions to be a "tree unfolding" satisfying $m$.
-	This can all be done in exponential time in $f_4(\size{\prot}+2)$, thus this algorithm terminates in time $f_5(\size{\prot})$ where $f_5$ is a function of $\Falpha{\omega^{\size{\messages}}}$.
+	This can all be done in exponential time in $f_4(\size{\prot}+2)$, thus this algorithm terminates in time $f_5(\size{\prot})$ where $f_5$ is a function of $\Ffunction{\omega^{\size{\messages}}}$.
 	
-	The BNRA coverability problem is thus decidable in time $\Falpha{\omega^\omega}$.
+	The BNRA coverability problem is thus decidable in time $\Ffunction{\omega^\omega}$.
 \end{proof}
 \fi
