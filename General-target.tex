@@ -1,6 +1,11 @@
 \subsection{Undecidability of \Target}
+\label{sec:undec-target}
+
+The proof of the undecidability of \Target~is left in the appendix. Intuitively, the abstraction for the "cover problem" does not hold anymore because here, we can not spawn agents with a specific task and not follow what they will do afterwards. We need to verify the objective: each agent must reach $q_f$.  
+
+\luin{je sèche un peu sur quoi dire pour target...}
 
 \begin{restatable}{proposition}{propTargetUndecidable}
 \label{prop:target-undec}
-	The "target reachability problem" (asking whether there is a run in which all agents reach a state $q_f$) is undecidable for BNRA with two registers.
+	The "target reachability problem" (asking whether there is a run in which all agents reach a state $q_f$) is undecidable for \BNRA with two registers.
 \end{restatable}

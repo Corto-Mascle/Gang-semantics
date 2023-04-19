@@ -15,77 +15,75 @@ We contrast it with the undecidability of the target problem (asking for a run a
 Broadcast protocols are a widely studied class of systems, in which processes are organised in a graph and can send messages to their neighbours. There are however many choices to make when designing a model for those systems: how individual processes are represented, whether the number of communication graph is fixed or can change, the type of messages they can send... 
 A model where messages ranged over a finite alphabet was presented in~\cite{emerson1998model}, over a fixed communication graph. It was rapidly shown that many basic problems were undecidable over that model~\cite{EsparzaFM1999verification}. This negative results, along with similar ones for Ad Hoc networks lead to Reconfigurable Broadcast Networks (RBN), a new formalism where each broadcast can be received by an arbitrary subset of agents~\cite{DelzannoSZ2010Adhoc}.
 
-The complexity of parameterized verification problems over RBN have been the subject of an extensive study in recent years~\cite{Delzanno2012complexity, BalasubramanianBM2018parameterized, BalasubramanianGW2022parameterized, ChiniMS2019liveness}. In~\cite{DST2013}, RBN were extended with registers allowing processes to exchange identifiers: this is the model we consider here. 
+The complexity of parameterized verification problems over RBN have been the subject of an extensive study in recent years~\cite{Delzanno2012complexity, BalasubramanianBM2018parameterized, BalasubramanianGW2022parameterized, ChiniMS2019liveness}. In~\cite{DST2013}, RBN were extended with registers allowing processes to exchange identifiers: this is the model we consider here. It is inspired by the success of register automata, which offer a convenient formalism to express properties of words over an infinite alphabet; see~\cite{segoufin2006automata} for a survey on the subject.
 
-Other approaches exist to define parameterized models with registers, for instance Dynamic register automata, in which processes are allowed to spawn other processes with new identifiers and communicate integers values~\cite{AbdullaAKR2014verification}. While basic problems on these models are in general undecidable, several restrictions on communications allow to recover decidability~\cite{AbdullaAKR2015verification, AbdullaAA2016data, Rezine2017verification}.
+Other approaches exist to define parameterized models with registers~\cite{BRS21}, for instance Dynamic register automata, in which processes are allowed to spawn other processes with new identifiers and communicate integers values~\cite{AbdullaAKR2014verification}. While basic problems on these models are in general undecidable, several restrictions on communications allow to recover decidability~\cite{AbdullaAKR2015verification, Rezine2017verification}.
 
-
+Such parameterized verification problems often relate to the theory of well quasi-orders and well-structured transition systems, and the associated high complexities obtained from bounds on so-called ``bad sequences'' in ordered sets. In particular, our model is linked to two classical models from this field: First data nets, which are Petri nets in which tokens are labelled with natural numbers, and can exchange and compare their labels~\cite{lazic2007nets}. In general, inequality tests are allowed, but data nets with only equality have also been studied~\cite{ROSAVELARDO201741}. They do not subsume BNRA as processes can only carry one integer, and not several register values (problems on models of data nets where tokens have tuples of integers as labels are typically undecidable).
+The other closely related model is lossy channel systems (LCS)\cite{AbdullaJ1996undec}, which we will simulate using BNRA. We will also show that BNRA coverability and LCS reachability are complete for the same complexity class $\Fcomplexity{\omega^\omega}$~\cite{ChambartS2008ordinal, Schnoebelen2002verifying}.
+As a matter of fact, LCS come from distributed models with processes communicating through pairwise channels, which are a rich field of study on their own~\cite{Aiswarya2015model,Aiswarya2021network}.
 
 \paragraph*{Overview}
 
 
+We start with the model definition and some preliminary results in Section~\ref{sec:preliminaries}. We prove the main decidability result in Section~\ref{sec:cover-decidability}, starting with some basic definitions in Section~\ref{sec:decidability-set-up}, then presenting a sound and complete abstraction, tree unfoldings, in~\ref{sec:decidability-tree-unfoldings}, and bounding the size of witnesses in that abstraction in Sections~\ref{sec:decidability-shortening-branches}, \ref{sec:local-bounds} and \ref{sec:tree-bounds}. We establish the coverability decidability theorem in Section~\ref{sec:decidability-end} and the undecidability of a closely-related problem in Section~\ref{sec:undec-target}. Finally, we prove the \NP-completeness of the coverability problem with one register per process in Section~\ref{sec:cover-1BNRA}.
+Due to space constraints, we only give proof sketches in the main part of the paper, while the formal proofs can be found in the appendix.
 
-	\textbf{Broadcast protocols}
-
-	\cite{emerson1998model} -> Introduction of broadcast protocols (no reconfiguration, reliable broadcasts)
-	
-	\cite{EsparzaFM1999verification} -> Undecidability of liveness and safety for this model
-
-	\textbf{Ad hoc Networks}
-
-	\cite{Godskesen2007calculus}, \cite{Merro2007observational} -> From Arnaud's paper
-
-	\textbf{RBN}
-	
-	\cite{DelzannoSZ2010Adhoc} -> Parametrized Model for Ad Hoc networks (undecidable), then switch to RBN
-	
-	\cite{Delzanno2012complexity} -> Complexity of RBN
-	
-	\cite{BouyerMRSS2016} -> ASMS almost-sure reachability
-	
-	\cite{fortin2017model} -> ASMS with stacks and leaders
-	
-	\cite{BalaW2021} -> Equivalence ASMS <-> RBN
-	
-	And some more ! \cite{BalasubramanianBM2018parameterized}, \cite{BalasubramanianGW2022parameterized}, 	\cite{ChiniMS2019liveness} 
-	
-	\textbf{Lossy channel systems}
-	
-	\cite{AbdullaJ1996verif} -> Introduction of LCS
-	
-	\cite{AbdullaJ1996undec} -> Büchi conditions are undecidable for LCS 
-	
-	\cite{SchmitzS2011upperHigman} -> Upper bounds for Higman's lemma
-	
-	\cite{ChambartS2008ordinal} -> Upper bound for LCS coverability 
-	
-	\cite{Schnoebelen2002verifying} -> Lower bound for LCS coverability 
-	
-
-	\textbf{Register automata}
-	
-	\cite{kaminski1994finite} -> Introduction of register automata
-	
-	\cite{segoufin2006automata} -> survey of results for register automata (didn't find anything more recent)
-	
-
-
-	\cite{BRS21} -> not really register automata, but systems where each agent has a private register and there are as many shared registers as agents; an agent may change its local value, write it in the global memory and test the number of occurrences of its values. Control-state reachability is \PSPACE-complete.
-	\textbf{Data nets}
-	
-	\cite{lazic2007nets} -> Introduction of data nets
-	
-	\cite{ROSAVELARDO201741} -> Unordered data nets in $F_{\omega^\omega}$
-	
-	\textbf{Dynamic register automata}
-	
-	La thèse d'Othmane Rezine \cite{Rezine2017verification}, et des papiers associés 
-	\cite{AbdullaAKR2014verification},
-	\cite{AbdullaAKR2015verification}
-	
-	\textbf{Systems communicating via (lossy) channels}
-	
-	\cite{Aiswarya2021network} -> Survey, with some relevant papers 	\cite{Aiswarya2015model},
-	\cite{AbdullaAA2016data}
+%
+%	\textbf{Broadcast protocols}
+%
+%	\cite{emerson1998model} -> Introduction of broadcast protocols (no reconfiguration, reliable broadcasts)
+%	
+%	\cite{EsparzaFM1999verification} -> Undecidability of liveness and safety for this model
+%
+%	\textbf{Ad hoc Networks}
+%
+%	\cite{Godskesen2007calculus}, \cite{Merro2007observational} -> From Arnaud's paper
+%
+%	\textbf{RBN}
+%	
+%	\cite{DelzannoSZ2010Adhoc} -> Parametrized Model for Ad Hoc networks (undecidable), then switch to RBN
+%	
+%	\cite{Delzanno2012complexity} -> Complexity of RBN
+%	
+%	\cite{BouyerMRSS2016} -> ASMS almost-sure reachability
+%	
+%	\cite{fortin2017model} -> ASMS with stacks and leaders
+%	
+%	\cite{BalaW2021} -> Equivalence ASMS <-> RBN
+%	
+%	And some more ! \cite{BalasubramanianBM2018parameterized}, \cite{BalasubramanianGW2022parameterized}, 	\cite{ChiniMS2019liveness} 
+%	
+%	\textbf{Lossy channel systems}
+%	
+%	\cite{AbdullaJ1996verif} -> Introduction of LCS
+%	
+%	\cite{AbdullaJ1996undec} -> Büchi conditions are undecidable for LCS 
+%	
+%	\cite{SchmitzS2011upperHigman} -> Upper bounds for Higman's lemma
+%	
+%	\cite{ChambartS2008ordinal} -> Upper bound for LCS coverability 
+%	
+%	\cite{Schnoebelen2002verifying} -> Lower bound for LCS coverability 
+%	
+%%
+%%	\textbf{Register automata}
+%%	
+%%%	\cite{kaminski1994finite} -> Introduction of register automata
+%%	
+%%	\cite{segoufin2006automata} -> survey of results for register automata (didn't find anything more recent)
+%%	
+%	\textbf{Data nets}
+%	
+%	\cite{lazic2007nets} -> Introduction of data nets
+%	
+%	\cite{ROSAVELARDO201741} -> Unordered data nets in $F_{\omega^\omega}$
+%	
+%	\textbf{Systems communicating via (lossy) channels}
+%	
+%	\cite{Aiswarya2021network} -> Survey, with some relevant papers 	\cite{Aiswarya2015model},
+%	\cite{AbdullaAA2016data}
+%
+%	\cite{BRS21} -> not really register automata, but systems where each agent has a private register and there are as many shared registers as agents; an agent may change its local value, write it in the global memory and test the number of occurrences of its values. Control-state reachability is \PSPACE-complete.
 	
 	\cortoin{J'ai pris les refs de Scholar, mais il vaut mieux les refaire depuis DBLP}
