@@ -7,16 +7,17 @@ This section is devoted to proving the main result of this paper:
 \COVER for \BNRA{}s is decidable. Moreover, the problem is $\Fcomplexity{\omega^\omega}$-complete.
 \end{restatable}
 
-Thanks to Proposition~\ref{prop:loc-eq-test-elimination}, we may suppose that our protocols have no $\quotemarks{\eqtestact}$ (the complexity class $\Fomegaomega$ being stable by exponential reduction). 
+Thanks to Proposition~\ref{prop:loc-eq-test-elimination}, we may suppose that our protocols have no "local equality tests" (the complexity class $\Fomegaomega$ being stable by exponential reduction). 
 
 The intuition of our decidability procedure is as follows. 
 Consider a given run and a given agent $a$ that covers some state $q$. We are interested in what the agent needs from other agents to cover $q$. The agent $a$ might need to receive a sequence $w \in \messages^*$ of messages that all have the same value, so that it stores the value of the first such message then tests equality with the stored value upon reception of following messages. 
-From the other agents' perspective, this means that someone (or several agents) must broadcast $w$ with the same value in every broadcast. We later call this a \emph{"boss specification"}.  
+From the other agents' perspective, this means that someone (or several agents) are required to broadcast $w$ with the same value in every broadcast. We later call such a request a \emph{"boss specification"}.  
 Moreover, the agent $a$ might first broadcast messages with some value $\aval$ that it had initially and require to receive from other agents messages with this same value $\aval$. 
-From the other agent's perspective, this means that someone, after receiving sequence of messages $w$ all with the same value $\aval$, must broadcast a given message $\amessage$ with value $\aval$. We later call this a \emph{"follower specification"}.
+From the other agent's perspective, this means that someone, after receiving sequence of messages $w$ all with the same value $\aval$, is required to broadcast a given message $\amessage$ with value $\aval$. We later call such a request a \emph{"follower specification"}.
 
-The two roles identified previously are the key to the decidability procedure. While, in the original run, it could be that some agent plays several such roles, we will in fact show, thanks to copycat properties, that one might consider that each agent only plays one such role. We will consider a "decomposition trees" where each node provides a witness that a given "role" can be carried out. We will then provide bounds on the size of the "unfolding tree" that we have to consider, and conclude that a decidability procedure can simply guess such a "decomposition tree". 
-
+The two roles identified previously are the key to the decidability procedure. While, in the original run, it could be that some agent plays several such roles\lu{it would be nice to have such an example in the execution example and cite it there}, we will in fact show, thanks to the copycat principle, that one might consider that each agent only plays one such role.
+We will define an "unfolding tree" of a local run where each node provides a witness that a given "role" can be carried out. We will then provide bounds on the size of the "unfolding tree" that we have to consider, and conclude that a decidability procedure can simply guess such a "decomposition tree". 
+//
 We will proceed as follows. In \ref{sec:decidability-def}, we introduce several usefuls notions. In \ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In \ref{sec:decidability-shortening-branches}, we provide useful arguments towards shortening branches of a tree. In \ref{sec:local-bounds}, we provide useful arguments towards bounding the size of a given node of the tree. In \ref{sec:tree-bounds}, we bound the overall size of the tree. In \ref{sec:decidability-end}, we conclude by proving our decidabily procedure. 
 
 \luin{ajouter ici plan de la section, intuition} %nico: j'en ai mis, à relire et modifier
