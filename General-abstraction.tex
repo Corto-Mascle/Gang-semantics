@@ -80,32 +80,21 @@ a finite tree where each node $\node$ has three labels:
 	\item The third one is a ""specification"" $\speclabel{\node}$, which is either a word $\bosslabel{\node} \in \messages^*$ (""boss specification"") or a pair $(\followlabelword{\node}, \followlabelmessage{\node}) \in \messages^* \times \messages$ (""follower specification""). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
 \end{itemize} 
 
-Before stating the conditions that the tree must satisfy, we provide a bit of intuition. Let $\node$ a node of $\tree$; let $\aval := \valuelabel{\node}$ and $\localrun := \localrunlabel{\node}$. In this tree, the children of a local run are the witnesses that this local run may be turned into a real run, as they provide the messages received in the local run. To satisfy a boss specification $\bossspec$, one must certify that $\bossspec$ may be sent with value $\aval$; to do so, \nicoin{todo}
+Before stating the conditions that the tree must satisfy, we provide a bit of intuition. Let $\node$ a node of $\tree$. In this tree, the children of a local run are the witnesses that this local run may be turned into a real run, as they provide the messages received in the local run. To satisfy a boss specification $\bossspec$, one must certify that $\bossspec$ may be sent with value $\valuelabel{\node}$; to do so, \nicoin{todo}
 
+""Initial values"" of a "local run" $\localrun$ are values that appear in $\localrun$ and are present in its first "local configuration"; ""non-initial values"" are values appearing in $\localrun$ which are not "initial".
 
-\begin{itemize}
-	\item[C1\namedlabel{unfoldingC1}{C1}] If it is a "boss node" then:
-	\begin{itemize} 
-		\item $\aval$ is an initial value of $\localrun$, 
-		\item there exists a "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that $\bosslabel{\node} \in \langdec{\decsymb}$, 
-		\item $\localrun$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{\aval}{\localrun_i}$ and $\vinput{\aval}{\localrun_i} \in \set{m_1, \dots, m_{i-1}}^*$, and
-		\item  for all $i \in [1,\ell]$, $\node$ has a child $\node_i$ which is a "follower node" such that $\followlabelmessage{\node_i} = m_i$ and $\followlabelword{\node_i} \in\langdec{\decsymb_i}$ where $\decsymb_i = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.
-	\end{itemize}
-	\item[C2\namedlabel{unfoldingC2}{C2}] If $\node$ is a "follower node" then $\aval$ is not an initial value of $\localrun$, $\vinput{\aval}{\localrun} = \followlabelword{\node}$ and 
+\begin{enumerate}
+	\item \label{item:follower_node} If $\node$ is a "follower node" then $\aval$ is not an initial value of $\localrun$, $\vinput{\aval}{\localrun} = \followlabelword{\node}$ and 
 	$\voutput{\aval}{\localrun}$ contains $\followlabelmessage{\node}$.
-	
-	\item[C3\namedlabel{unfoldingC3}{C3}] In both cases, for all value $\aval' \neq \aval$ broadcast or received at some point in $\localrunlabel{\node}$, one of the two following conditions is satisfied:
+	\item \label{item:non_initial_value} for every non-initial value $\aval$ of $\localrun$, $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval}{\localrun}$ is a subword of $\bosslabel{\node'}$.
+	\item \label{item: initial_value} For every initial value $\aval$ of $\localrun$, there exists a decomposition $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that:
 	\begin{itemize}
-		\item[C3.1\namedlabel{unfoldingC3.1}{C3.1}]
-			$\aval$ is an initial value of $\localrun$, 
-		there exists $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_{\ell'}, w'_{\ell'})$, s.t. $\localrun$ may be split into sucessive "local runs" $\localrun'_0, \dots, \localrun'_{\ell}$ where, for all $i \in \nset{1}{\ell'}$, $\voutput{\aval'}{\localrun'_i} \subword w'_i$ and $\vinput{\aval'}{\localrun'_i} \in \set{m'_0, \dots, m'_{i-1}}^*$, and
-		for all $i \in\nset{1}{\ell'}$, $\node$ has a child $\node'_i$ which is a "follower node" such that $\followlabelmessage{\node'_i} = m'_i$ and $\followlabelword{\node'_i} \in\langdec{\decsymb'_i}$ where $\decsymb'_i = (w'_0, m'_1, w'_1, \ldots, m'_{i-1}, w'_{i-1})$.
-		%  If $\aval'$ is an initial value of $\localrun$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ 
-		% where $w'_0 w'_1 \ldots w'_k = \voutput{\aval'}{\localrunlabel{\node}}$, for all $j \in \nset{1}{k}$ all receptions of $m'_j$ with value $\val'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $\val'$, and for all $j \in [1,k]$ $\node$ has a child $\node'$ which is a "follower node" such that $\followlabelmessage{\node'} = m'_j$ and $\followlabelword{\node'} \in\langdec{\decsymb'_j}$ where $\decsymb'_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$.  
-		
-		\item[C3.2\namedlabel{unfoldingC3.2}{C3.2}] If $\aval'$ is not an initial value of $\localrun$ then $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval'}{\localrun}$ is a subword of $\bosslabel{\node'}$.
+		\item $\localrun$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{\aval}{\localrun_i}$ and $\vinput{\aval}{\localrun_i} \in \set{m_1, \dots, m_{i-1}}^*$
+		\item for all $i \in [1,\ell]$, $\node$ has a child $\node_i$ which is a "follower node" such that $\followlabelmessage{\node_i} = m_i$ and $\followlabelword{\node_i} \in\langdec{\decsymb_i}$ where $\decsymb_i = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.
 	\end{itemize}
-\end{itemize}
+	\item \label{item:boss_node} If $\node$ is a "boss node", there $\valuelabel{\node}$ is an "initial value" of $\localrunlabel{\node}$ and the associated "decomposition" $\decsymb$ is such that $\bosslabel{\node} \in \langdec{\decsymb}$.
+\end{enumerate}
 
 
 %Old def
