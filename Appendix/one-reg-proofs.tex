@@ -4,10 +4,9 @@
 
 \label{app:cover-one-reg}
 \subsection{Removing disequality tests}
-\begin{corollary}
-	\label{cor:removing_diseq_tests}
-	Let $(\prot, q_f)$ an instance of the "coverability problem". This instance is positive if and only if $(\tilde{\prot}, q_f)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
-\end{corollary}
+\label{sec:one-diseq-tests}
+
+\lemRemoveDiseq*
 
 \ifproofs
 \begin{proof}
@@ -23,6 +22,8 @@
 \fi
 
 \subsection{Completeness}
+\label{one-completeness}
+
 This subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
 
 \begin{lemma}
@@ -108,14 +109,12 @@ We may now prove Lemma~\ref{lem:abstraction_complete}.
 
 
 \subsection{Soundness}
+\label{sec:one-soundness}
 
-\begin{lemma}
+\begin{corollary}
 	\label{cor:soundness}
-	%	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$ there exists a reachable configuration $\gamma$ 
-	%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
 	For all $\sigma_0 \in \aconfiginitset$ and $\sigma = (S, b, K) \in \Sigma$ such that $\sigma_0 \step{*} \sigma$, for all $s \in S$, there exists a reachable configuration $\gamma$ covering $s$.
-	%	satisfying $K \cup \set{b}$ if $b \neq \noboss$ and $K$ otherwise.
-\end{lemma}
+\end{corollary}
 
 \ifproofs
 \begin{proof}
@@ -285,6 +284,7 @@ As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus sati
 	The "cover problem" is NP-hard.
 \end{proposition}
 
+\thmNPComplete*
 
 \begin{proof}
 	The lower bound is given by Proposition~\ref{prop:np-hard-query-cover}.

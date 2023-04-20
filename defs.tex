@@ -1,9 +1,10 @@
-	In this section, we only consider "protocols" with one register. Our motivation is to find a restriction in which the "cover problem" is easier than in the general case. We shall call this restriction on our model 1-BNRAs.
+	In this section, we only consider "protocols" with one register. Our motivation is to find a restriction that tempers the high complexity of the general case. We shall call BNRA with one register 1-BNRAs.
 
-	We shall see that in 1-BNRAs, the "cover problem" is much easier than in the general case. Intuitively, it suffices to keep track of the state of one boss agent\lu{please remove if the term boss is not used in the general case} (the one who broadcast its initial value) and a set of states in which any number of processes with the same register's value can be. This way, we can (i) compute the set of reachable states and (ii) decide if a state is coverable or not. In this section, we prove that the "cover problem" for 1-BNRAs is NP-complete.
+	The "cover problem" is much easier in 1-BNRAs than in the general case. Intuitively, it suffices to keep track of the state of one \emph{boss} agent (the one who broadcasts its initial value) and a set of states in which any number of \emph{follower} processes with that same register value can be. This way, we can (i) compute the set of reachable states and (ii) decide if a state is coverable or not. In this section, we prove that the "cover problem" for 1-BNRAs is NP-complete.
 
-	We simplify our notations for "protocols", as now we do not need to consider "local tests": with a single register every local equality test is satisfied and every local disequality test is not.
-	Hence we can delete transitions with disequality tests and replace equality tests with internal transitions that have no effect (which may in turn be encoded in our model using broadcasts of dummy messages).  
+	We simplify notations as in this section we do not need to consider "local tests": with a single register every local equality test is satisfied and every local disequality test is not.
+	Hence we can delete transitions with disequality tests and replace equality tests with internal transitions that have no effect (which may in turn be encoded in our model using broadcasts of dummy messages). 
+	 
 	Furthermore, the register argument in receptions and broadcasts is always $1$, hence we remove it.
 	Our new set of operations is 
 	$
