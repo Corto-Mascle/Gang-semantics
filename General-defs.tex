@@ -2,7 +2,7 @@
 \label{sec:preliminaries}
 
 \subsection{Definitions of the model}
-A ""Broadcast Network of Register Automata"" (BNRA) \cite{DST2013} is a model describing a network of agents with local registers communicating by broadcasts. It is represented by a finite transition system describing the behaviour of an agent, which can broadcast and receive messages with integer values, store them in local registers, or make equality tests. 
+A ""Broadcast Network of Register Automata"" (BNRA) \cite{DelzannoST13} is a model describing a network of agents with local registers communicating by broadcasts. It is represented by a finite transition system describing the behaviour of an agent, which can broadcast and receive messages with integer values, store them in local registers, or make equality tests. 
 We consider that when a message is broadcast by an agent, each other agent independently may or may not receive it. 
 We study the set of runs of an arbitrary number of agents communicating this way.
 
@@ -68,9 +68,11 @@ The following remark formalizes the intuition that, because the only way to take
 	Because a register may only change its value to one that is broadcast from another register, we have that for all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
 \end{remark}
 
-\luin{- transformer les lemmes de copycat comme des paragraphes avec intuitions
-	
-	- mettre le weak copycat dans la partie 2}
+\begin{remark}
+	\label{rem:copycat-principle}
+	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can copy it by copying each agent of $\run$ and make them perform the same sequences of steps independently from the original agents. Note that original agents and cloned agents do not share any registers' value. As a consequence, the copy of the run only allow us to copy some agents in a certain state but not their registers' values. We will refer to this notion as the ""copycat principle"": if a certain state is coverable, then for any integer $n$ there exists an execution which puts $n$ agents on the coverable state, however, none of this $n$ agents share the same register values.
+\end{remark}
+
 	
 	\begin{definition}
 		We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
@@ -103,7 +105,7 @@ The following remark formalizes the intuition that, because the only way to take
 \end{definition}
 
 \begin{remark}
-	In \cite{DST2013}, the authors considered ``queries'', which are conjunctions of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z}')}$, $\quotemarks{R_j(\var{z}) \neq R_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$, $q$ a state and $j,j' \in \nset{1}{r}$. A configuration satisfies a query $\query$ if we can assign agents to each of the variables of $\query$ so that all conjuncts are satisfied.
+	In \cite{DelzannoST13}, the authors considered ``queries'', which are conjunctions of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z}')}$, $\quotemarks{R_j(\var{z}) \neq R_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$, $q$ a state and $j,j' \in \nset{1}{r}$. A configuration satisfies a query $\query$ if we can assign agents to each of the variables of $\query$ so that all conjuncts are satisfied.
 	In this paper we will only study the "cover problem", but we argue here that we can reduce from the query satisfaction problem to it:
 	
 	Given a "protocol" $\prot$ with $r$ registers and a "query" $\query$ with $k$ variables, we can construct a "protocol" $\prot'$ with $\size{\prot}^k$ states and $kr$ registers that allows each agent to simulate $k$ agents of the previous system (by taking as states $k$-tuples of states of $\prot$, using the $kr$ registers to store the values of the registers of the $k$ agents and adapting the transitions accordingly).
@@ -268,7 +270,7 @@ Note that if a "run" satisfies $K$, then it covers every state in $K$. The conve
 
 \paragraph*{Fast-growing hierarchy}
 
-For $\alpha$ an ordinal in Cantor normal form, we will denote by $\Ffunction{\alpha}$ the class of functions corresponding to level $\alpha$ in the Fast-Growing Hierarchy. We will moreover denote by $\Fcomplexity{\alpha}$ the associated complexity class and use the notion of $\Fcomplexity{\alpha}$-completeness. All these notions are defined in \cite{Schmitz13}. We will specifically work with complexity class $\Fcomplexity{\omega^{\omega}}$. For readers unfamiliar with these notions, $\Fcomplexity{\omega^{\omega}}$-complete problems are problems which are decidable but with very high complexity (they are non-primitive recursive, and even hyper-Ackermannian). 
+For $\alpha$ an ordinal in Cantor normal form, we will denote by $\Ffunction{\alpha}$ the class of functions corresponding to level $\alpha$ in the Fast-Growing Hierarchy. We will moreover denote by $\Fcomplexity{\alpha}$ the associated complexity class and use the notion of $\Fcomplexity{\alpha}$-completeness. All these notions are defined in \cite{Schmitz16}. We will specifically work with complexity class $\Fcomplexity{\omega^{\omega}}$. For readers unfamiliar with these notions, $\Fcomplexity{\omega^{\omega}}$-complete problems are problems which are decidable but with very high complexity (they are non-primitive recursive, and even hyper-Ackermannian). 
 
 We highlight that our main result is the decidability of the problem. In fact, proving that the problem lies in $\Fcomplexity{\omega^{\omega}}$ does not complicate our decidability proof significantly. Moreover, this result fits nicely into the landscape of high-complexity problems arising from well quasi-orders. 
 
@@ -290,7 +292,7 @@ We will use the following result, known as the "Length function theorem" \cite{S
 
 \subsection{Link with LCS}
 
-""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate via sending messages from a finite alphabet through unbounded FIFO channels through which messages may be lost. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AK95,AbdullaJ1996undec}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and is in fact $\Fcomplexity{\omega^{\omega}}$-complete \cite{ChambartS2008ordinal}.
+""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate via sending messages from a finite alphabet through unbounded FIFO channels through which messages may be lost. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AbdullaK95,AbdullaJ1996undec}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and is in fact $\Fcomplexity{\omega^{\omega}}$-complete \cite{ChambartS08ordinal}.
 
 We argue that the "coverability problem" in BNRA is at least as hard as the reachability problem for "LCS", even with two registers. The reduction can be found in Appendix~\ref{app:reduction-lcs}; we provide here some intuition. Given a LCS $\los$, we build a protocol $\prot$ with two registers. In this protocol, register $1$ plays the role of the identifier and is read-only. Agents use their second register to store another agent's identifier at the start; an agent only accepts messages with this identifier, using an $\quotemarks{\eqtestact}$ on every reception. This way, agents will form chains where messages propagate in one direction only, with the property that an agent has at most one predecessor in the chain. Each agent of the chain will simulate a step of an execution of $\los$: an agent received from its predecessor a configuration of $\los$, chooses the next configuration of $\los$ and broadcasts it, sending first the location of $\los$ then, letter by letter, the content of the channel. Note that some letters of the channel might not be received, hence the lossiness. 
 % Note that one special agent has to start the execution, and send the initial configuration before receiving anything. The final state is the final state of the "LCS" and if one agent reaches it, one can argue that there is an execution of the "LCS" described by the sent messages in the chain of agent starting with an agent sending the initial configuration.
