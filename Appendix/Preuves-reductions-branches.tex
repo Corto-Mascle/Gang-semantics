@@ -1,4 +1,21 @@
-\section{Proofs of Section~\ref{sec:decidability-shortening-branches}}
+\section{Proofs of Lemma~\ref{lem:shortening-branches}}
+\label{app:proofs-reduction-branches}
+We prove the following two lemmas:
+
+\begin{restatable}{lemma}{lemIncreasingBosses}
+	\label{lem:increasing-bosses}
+	Let $\tree$ be a "unfolding tree" satisfying a specification $\spec$.
+	Let $\node, \node'$ be two "boss nodes" of $\tree$.
+	If $\node$ is an ancestor of $\node'$ and $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$ then there exists a smaller "unfolding tree" satisfying $\spec$.  
+\end{restatable}
+
+\begin{restatable}{lemma}{lemIncreasingFollowers}
+	\label{lem:increasing-followers}
+	Let $\tree$ be a "unfolding tree" satisfying a specification $\spec$.
+	Let $\node, \node'$ be two "follower nodes" of $\tree$.
+	If $\node$ is an ancestor of $\node'$, $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$ then there exists a smaller "unfolding tree" satisfying $\spec$. 
+\end{restatable}
+
 
 \lemIncreasingBosses*
 
