@@ -221,9 +221,10 @@
 
 %partial runs
 
-\newcommand{\inttest}{\xrightarrow{\locsymb}}
-\newcommand{\intmessage}[2]{\xrightarrow{\brsymb, #1, #2}}
-\newcommand{\extmessage}[2]{\xrightarrow{\recsymb, #1, #2}}
+\newcommand{\pstep}[1]{\step{#1}_{p}}
+\newcommand{\inttest}{\pstep{\locsymb}}
+\newcommand{\intmessage}[2]{\pstep{\brsymb, #1, #2}}
+\newcommand{\extmessage}[2]{\pstep{\recsymb, #1, #2}}
 	
 %bounding functions
 \newcommand{\towerfun}{\mathsf{tow}}
