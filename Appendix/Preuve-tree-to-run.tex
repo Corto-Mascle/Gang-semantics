@@ -70,7 +70,7 @@
 %	
 %	$\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in\nset{1}{\ell+1}$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $\voutput{v}{\run_j} = w_j$, $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
 %	
-%	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j}$ "decomposes as" $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\voutput{v_j}{\run'_j}$ contains $m_j$ and $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$.
+%	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j}$ "admits decomposition" $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\voutput{v_j}{\run'_j}$ contains $m_j$ and $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$.
 %	
 %	Then there exists a "partial run" $\Tilde{\run}$ such that 
 %	\begin{itemize}
@@ -88,7 +88,7 @@
 	\label{lem:follower-composition-completion}
 	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value such that for all $j \in\nset{0}{\ell}$ there exists a "partial run" $\run_j$ from $\config_{j}$ to $\config_{j+1}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
 	
-	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdecdown{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
+	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
 	
 	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$ such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
 	\begin{itemize}
@@ -111,7 +111,7 @@
 	
 	If $\vinput{v}{\run} \neq \epsilon$, then let $j$ be such that $\vinput{v}{\run_j} \neq \epsilon$, then we can decompose $\run_j$ as $\run_j = \config_{j} \step{\run_j^-} \config_j^- \extmessage{m_{j'}}{v} \config_j^+ \step{\run_j^+} \config_{j+1}$ with $j'\leq j$. 
 	
-	There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdecdown{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
+	There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
 	
 	Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
 	
@@ -152,7 +152,7 @@ All the conditions are satisfied, the lemma is proven.
 	
 	Let $\config_0, \ldots, \config_{\ell+1}$ be configurations and $v$ a value such that for all $j \in\nset{1}{\ell+1}$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
 	
-	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdecdown{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
+	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
 	
 	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$ such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
 \begin{itemize}
@@ -190,7 +190,7 @@ All the conditions are satisfied, the lemma is proven.
 From these runs we infer a sequence of "partial runs" that output $w'_0, \ldots, w'_\ell$ but have a non-empty $v$-input. We then use Lemma~\ref{lem:follower-composition-completion} to obtain the desired runs with an empty $v$-input.
 
 We proceed in a similar manner as in Lemma~\ref{lem:follower-composition-completion}.
-There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdecdown{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
+There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
 
 Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
 
@@ -238,9 +238,9 @@ Hence the $\Tilde{\run}_i$ satisfy all the required conditions.
 \LemTreeToRun*
 
 
-	We prove the following statement by strong induction on the "tree unfolding". \cortoin{notation for t.u.}
+	We prove the following statement by strong induction on the "unfolding tree". \cortoin{notation for t.u.}
 	
-	For all "tree unfolding" $\tau$, 
+	For all "unfolding tree" $\tau$, 
 	
 	\begin{itemize}
 		\item if $\tau$ satisfies a "boss specification" $w \in \messages^*$, then there exists a run $\run$ satisfying $w$.
@@ -248,7 +248,7 @@ Hence the $\Tilde{\run}_i$ satisfy all the required conditions.
 		\item if $\tau$ satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ then there exists a "partial run" $\run$ and a value $v$ such that $\Input{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \subword \followwordspec$, and $\voutput{v}{\run}$ contains $\followmessagespec$.
 	\end{itemize}
 	
-	Let $\tau$ be a "tree unfolding", let $\node$ be its root.
+	Let $\tau$ be a "unfolding tree", let $\node$ be its root.
 	
 	We see $\localrunlabel{\node}$ as a "partial run" with a single agent.
 	We are going to compose $\localrunlabel{\node}$ with some runs given by the children of $\node$ to construct a run satisfying the properties above.
@@ -277,7 +277,7 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 	\end{itemize}
 
 	As $v \neq \valuelabel{\node}$, by condition~\ref{unfoldingC3.2} $\node$ has a child $\node'$ such that $\vinput{v}{\localrunlabel{\mu}} \subword  \bosslabel{\node'}$.
-	By induction hypothesis (on the "tree unfolding"), as the subtree rooted in $\mu'$ satisfies the "boss specification" $\vinput{v}{\mu}$, there exists a run $\run_v$ satisfying $\vinput{v}{\localrunlabel{\mu}}$.
+	By induction hypothesis (on the "unfolding tree"), as the subtree rooted in $\mu'$ satisfies the "boss specification" $\vinput{v}{\mu}$, there exists a run $\run_v$ satisfying $\vinput{v}{\localrunlabel{\mu}}$.
 	
 	Let $v' \in \nats$ be such that $\vinput{v}{\localrunlabel{\node}} \subword \voutput{v'}{\run_v}$. 
 	
@@ -323,9 +323,9 @@ Now suppose there exists $v \in V \setminus (\set{\valuelabel{\node}} \cup V')$.
 	\item If $v' \in (\nats \setminus V) \cup V''$ then $\vinput{v'}{\run} = \epsilon$
 \end{itemize}
 
-As $v \neq \valuelabel{\node}$, by condition~\ref{unfoldingC3.1} there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdecdown{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
+As $v \neq \valuelabel{\node}$, by condition~\ref{unfoldingC3.1} there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdec{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
 
-By induction hypothesis (on the "tree unfolding"), for each $i \in\nset{1}{\ell}$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$. \corto{fix follower spec dec,m vs fw, fm}
+By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$. \corto{fix follower spec dec,m vs fw, fm}
 
 For each $i$ we consider the shortest prefix $\run''_i$ of $\run'_i$ ending with an "internal message" $\intmessage{\followlabelmessage{\node_i}}{v'_i}$, we have that $\vinput{v'_i}{\run''_i} \subword \vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$.
 
@@ -362,9 +362,9 @@ In Section~\ref{sec:tree-to-run-step-two} we constructed a run $\widehat{\run}$ 
 
 We have two cases: either $\mu$ is a "boss node" or a "follower node".
 
-If $\mu$ is a "boss node" then there exists a decomposition $\decsymb=(w_0, m_1, \ldots, w_\ell)$ such that $\bosslabel{\node} \in \langdecdown{\decsymb}$ and $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdecdown{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
+If $\mu$ is a "boss node" then there exists a decomposition $\decsymb=(w_0, m_1, \ldots, w_\ell)$ such that $\bosslabel{\node} \in \langdec{\decsymb}$ and $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdec{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
 
-As $\bosslabel{\node} \in \langdecdown{\decsymb}$, we have $\bosslabel{\node} = w'_0 \cdots w'_\ell$ where for all $i$ the projection of $w'_i$ on $\messages\setminus\set{m_1, \ldots, m_{i-1}}$ is a subword of $w_i$. 
+As $\bosslabel{\node} \in \langdec{\decsymb}$, we have $\bosslabel{\node} = w'_0 \cdots w'_\ell$ where for all $i$ the projection of $w'_i$ on $\messages\setminus\set{m_1, \ldots, m_{i-1}}$ is a subword of $w_i$. 
 
 We repeat the arguments from Section~\ref{sec:tree-to-run-step-two}, but we use Lemma~\ref{lem:follower-composition-output} instead of Lemma~\ref{lem:follower-composition-completion} to obtain a run $\Tilde{\run}$ such that,
 \begin{itemize}	
