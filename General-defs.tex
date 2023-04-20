@@ -68,9 +68,10 @@ The following remark formalizes the intuition that, because the only way to take
 	Because a register may only change its value to one that is broadcast from another register, we have that for all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
 \end{remark}
 
-\luin{- transformer les lemmes de copycat comme des paragraphes avec intuitions
-	
-	- mettre le weak copycat dans la partie 2}
+\begin{remark}
+	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can copy it by copying each agent of $\run$ and make them perform the same sequences of steps independently from the original agents. Note that original agents and cloned agents do not share any registers' value. As a consequence, the copy of the run only allow us to copy some agents in a certain state but not their registers' values. We will refer to this notion as the ""copycat principle"": if a certain state is coverable, then for any integer $n$ there exists an execution which puts $n$ agents on the coverable state, however, none of this $n$ agents share the same registers' values.
+\end{remark}
+
 	
 	\begin{definition}
 		We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
