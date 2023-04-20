@@ -35,7 +35,7 @@
 	The intuition is as followed. $\prot'$ corresponds to $\prot$, where an abstract layer is added in the treatments of the registers. In $\prot'$, we do not directly store each register but rather equality relations between them, so that a value shared by several registers is only stored once. We dub registers of $\prot'$ ""memory slots"" to distinguish them from the registers of $\prot$. A "memory slot" will be used to store a value shared between registers. 
 	We will need $\regnum$ "memory slots" to do so. Moreover, we will need a mapping $\map : \nset{1}{r} \to \nset{1}{r}$ that tells, for each "register", in which "memory slot" its value is stored. This mapping will be directly encoded in the set of states of $\prot'$, which causes an exponential blowup in the size of the protocol.
 	
-	For simplicity, we allow our protocol $\prot'$ to have internal transitions with no effect (such transitions could be encoded using broadcasts with a dummy message type). 
+	For simplicity, we allow our protocol $\prot'$ to have dummy transitions with no effect (such transitions could be encoded using broadcasts with a dummy message type). 
 	
 	Let $\prot = (Q, \messages, \transitions', q_0, \regnum)$. 
 	We define $\prot' := (Q', \messages, \transitions', q_0', \regnum +1)$ as follows. The set of states is $Q' := Q \times (\nset{1}{r} \to \nset{1}{r})$, its initial state is $q_0' := (q_0, \idmap)$ where $\idmap(i) = i$ for all $i \in \nset{1}{r}$. 
@@ -65,7 +65,7 @@
 		\item $\op = \rec{m}{j}{\dummyact}$ and there is a transition $(q, \rec{m}{i}{\dummyact}, q') \in \transitions$ for some $i \in \nset{1}{r}$.
 	\end{itemize}
 	
-	Additionally, there is an internal transition between $(q,\map)$ and $(q',\map')$ whenever there exist $i_1, i_2$ such that $(q, \loc{i_1}{i_2}{\eqtestact}, q') \in \transitions$ and $\map(i_1) = \map(i_2)$ (an equality test on two registers mapped to the same" memory slot" automatically succeeds).
+	Additionally, there is a dummy transition between $(q,\map)$ and $(q',\map')$ whenever there exist $i_1, i_2$ such that $(q, \loc{i_1}{i_2}{\eqtestact}, q') \in \transitions$ and $\map(i_1) = \map(i_2)$ (an equality test on two registers mapped to the same" memory slot" automatically succeeds).
 
 	Note that we cannot in fact guarantee that values stored in the "memory slots" are all distinct, because, upon reception of a value, we may only perform one test and therefore cannot test that the value is different from all stored values. This is why we still need "local disequality tests" in $\prot'$. In practice, when a agent in $\prot$ performs a $\quotemarks{\enregact}$ reception of a broadcast with a value that is already in one of its "memory slots", the corresponding agent in $\prot'$ may non-deterministically notice that it already has this value in a "memory slot" (corresponds to a $\rec{\amessage}{j}{\eqtestact}$ transition) but it may also store it in a fresh "memory slot" (corresponds to a $\rec{\amessage}{j}{\enregact}$ transition). Therefore, the encoding of the content of the registers into a mapping and "memory slots" is not unique, even up to permutation of the memory slots. However, encodings that do not gather together registers with the same value will simply allow less transitions (it will forbid some equality tests), therefore this is not an issue. 
 

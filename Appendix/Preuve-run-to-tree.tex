@@ -4,63 +4,39 @@
 
 \begin{proof}
 	
-	We proceed by strong induction on the lexicographic order on $\nats \times \set{\text{boss}, \text{follower}}$ with the length of the run as first component and the type of specification as second component, ``boss'' being considered higher than ``follower'' (so that, for a fixed "run" length, we prove it for "boss specifications" then for "follower specifications"). 
+	We proceed by strong induction on the lexicographic order on $\nats \times \set{\text{follower}, \text{boss}}$ with the length of the run as first component and the type of specification as second component, ``boss'' being considered higher than ``follower'' (so that, for a fixed "run" length, we prove it for "boss specifications" then for "follower specifications"). 
 	
 	For runs of length $0$, no specifications are satisfied hence the property is true.
-	Let $\run$ be a run, and assume that the prperty is true for run whose length less than the one of $\run$. 
+	Let $\run$ be a run, and assume that the property is true for runs whose length is less than the one of $\run$. Write $\agents$ the set of agents of $\run$.
 	
-	We split our construction in four parts. The first part applies if $\spec$ is a "boss specification", the second one if $\spec$ is a "follower specification". 
-	Those parts construct a root labelled with a local run $u$ and a value $v$, as well as some children so that conditions \nico{todo}
-	
-	The third and fourth part add children so that \nico{todo}
-	
-	\textbf{Case 1: The specification is a "boss specification"}
-	
-	Assume $\spec$ is a "boss specification" $\bossspec \in \messages^*$.
-	
-	There exists a value $v$ such that $\bossspec$ is a subword of the sequence of messages broadcast with value $v$ in $\run$. Let $w$ the sequence of messages broadcast with value $v$ in $\run$.
-	If $\bossspec$ is empty then the trivially "unfolding tree" with one node and an empty local run satisfies $\bossspec$.	
-	
-	Otherwise let $a$ be the agent which has $v$ as "initial value" and let $u$ be its "local run" in $\run$. We set $u$, $v$ and $w$ to be the labels of the root of the unfolding tree we are constructing.
-	We decompose $w$ as $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$, where $w_0\cdots w_\ell$ is the sequence of messages broadcast by $a$ with value $v$, and the $(m_j)_{1\leq j\leq \ell}$ are the elements of $\messages$, placed at the times at which they are first broadcast by an agents other than $a$ with value $v$. If there is no such broadcast of a message $m$, then it does not appear as an $m_j$. This forms a "decomposition" of $w'$.
-	
-	For all $1 \leq j \leq \ell$ let us write $\decsymb_j$ for the "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$. Let $\run_j$ be the prefix of $\run$ up until the first broadcast of $m_j$ with $v$ by some agent $a_j$ that does not have $v$ as an initial value, and let $\run'_j$ be $\run_j$ without that last step. By definition of $\decsymb$, the sequence of broadcasts with value $v$ in $\run'_j$ "admits decomposition" $\decsymb_j$.
-	In particular, the $v$-input $w'_j$ of $a_j$ before it broadcasts $m_j$ with $v$ must admit decomposition $\decsymb_j$.
-	
-	Hence $(w'_j, m_j)$ is a "follower specification" satisfied by $\run_j$, which has a length smaller or equal to the one of $\run$. By induction hypothesis (recall that we make our induction on the length of $\run$ and on the type of specification), there is a "unfolding tree" satisfying it.
-	
-	We put that "unfolding tree" as a child of our root, hence we satisfy \ref{unfoldingC1}. We satisfy \ref{unfoldingC2} as the root we constructed is not a "follower node".
-	
-	\textbf{Case 2: The specification is a "follower specification"} 
-	
-	Assume $\spec$ is a "follower specification" $\spec = (\followwordspec, \followmessagespec) \in \messages^* \times \messages$. 
-	There exists a value $v$ and an agent $a$ with a local run $u$ whose $v$-input $w$ is a subword of $\followwordspec$ and whose output contains $\followmessagespec$. 
-	
-	We set our root to have as labels $u$, $v$ and $w$, thus satisfying \ref{unfoldingC2}. We satisfy \ref{unfoldingC1} as the root is not a "boss node".
-	
-	\textbf{In both cases}
-	
-	We have constructed an agent $a$ and a value $v$ and set our root to be labelled by the local run $u$ of $a$ and $v$, and added children to that root so that conditions \ref{unfoldingC1} and \ref{unfoldingC2} are satisfied. We will now add some more children to satisfy condition \ref{unfoldingC3}.
-	
-	We can assume that the last step of $\run$ is a broadcast of a message with value $v$, as otherwise we can erase its last step to get a run that still satisfies the specification, but has a smaller length than $\run$, and apply the induction hypothesis.
-	
-	Let $v' \neq v$ be a value broadcast or received in $u$. 
-	
+	Because $\run$ satisfies $\spec$, there exists a value $v$ and an agent $a$ in $\run$ such that:
 	\begin{itemize}
-		\item If $v'$ is an initial value of $u$ then let $w'$ be the $v'$-output of $u$. Let $\decsymb' = (w'_0, m_1, w_1, \ldots, w'_k)$ be such that $w' = w'_0 \cdots w'_k$ and the $m_i$ mark the first time another agent sends each message of $\messages$ with value $v'$ in $\run$, if that happens.  
-		
-		For all $j \in \nset{1}{k}$, all receptions of $m_j$ with value $v'$ in $u$ must happen after another agent has managed to broadcast it, hence after broadcasts of $w'_0 \cdots w'_{j-1}$ with value $v'$ have happened in $u$, by definition of $\decsymb'$.
-		
-		Let $j \in \nset{1}{k}$, let $a_j$ be the first agent other than $a$ to broadcast $m_j$ with value $v'$, and let $\run_j$ be the prefix of $\run$ up until that broadcast. The $v'$-input $w''_j$ of $a_j$ in $\run_j$ is a subword of the sequence of messages broadcast with value $v'$ in $\run_j$, which admits decomposition $\decsymb'_j = (w'_0, m_1, w_1, \ldots, w'_{j-1})$, hence $w''_j \in \langdec{\decsymb'_j}$.
-		
-		As the last step of $\run$ is a broadcast of $v$ and $v' \neq v$, all $\run_j$ are shorter than $\run$. Furthermore for all $j$, $\run_j$ satisfies the specification $(\decsymb_j, m_j)$.		
-		
-		By induction hypothesis, for all $j$ there exists a "unfolding tree" satisfying $(w''_j, m_j)$. We add all those trees as children of our root.
-		
-		\item If $v'$ is not an initial value of $u$ then let $w'$ be the $v'$-input of $u$. 
-		As $\run$ ends with a broadcast of $v$ and $v' \neq v$, we can remove the last step of $\run$ to obtain a run $\run'$. As $w'$ is a subword of the sequence of messages broadcast in $\run$ with value $v'$, it is also the case for $\run'$.
-		Hence $\run'$ satisfies $w'$ as a specification, and has smaller length than $\run$. By induction hypothesis, there is a "unfolding tree" satisfying $w'$. We add it as a child of our root.
+	\item if $\spec= \bossspec$ is a "boss specification", $\bossspec$ is a subword of the sequence of messages sent with value $v$ in $\run$ and $a$ is the agent for which $v$ is an "initial value",
+	\item if $\spec$ is a "follower specification" $(\followwordspec, \followmessagespec)$, then $a$ is an agent which $v$-input is a subword of $\followwordspec$ and that broadcasts $\followmessagespec$ with value $v$. 
 	\end{itemize}
+
+	Observe that, if the last step of $u$ does not include a broadcast with value $v$, then the run obtained by deleting this last step also satisfies the specification so we directly call the induction hypothesis on this new run. From now on, we will suppose that the last step of $\run$ involves a broadcast with value $v$. 
+
+	Let $u$ the local run of $a$ in $\run$. We will build the root $\node$ of our tree $\tree$ to have local run $a$, value $v$ and "specification" $\spec$. 
+
+	The construction is as follows.
+	For every $v' \ne v$ a "non-initial" value of $a$ in $\run$, we do the following. Let $w$ the sequence of messages sent with value $v'$ in $\run$ by agents in $\agents \setminus \set{a}$; $\vinput{v'}{u}$ is a subword of $w$. Because the last step of $\run$ has value $v$, we apply the induction hypothesis to obtain an "unfolding tree" $\tree'$ whose root is a boss node with boss specification $\vinput{v'}{u}$, and we attach $\tree'$ below $\node$ in $\tree$.
+
+
+	For every $v'$ "initial" value of $a$ in $\run$, we do the following.  
+	Let $\mathsf{ext} \in \messages^*$ the sequence of "message types" sent in $\run$ with value $v'$ by agents other that $a$. Let $m_1, \dots, m_\ell \in \messages$ distinct message types so that $m_i$ is the $i$-th message type to appear in $\mathsf{ext}$; in particular, we have $\ell \leq \size{\messages}$. 
+	Let $a_i$ the first agent other than $a$ to broadcast $m_i$ with value $v'$ in $\run$. For every $i \in \nset{0}{\ell}$, let $u_i$ the run between the first broadcast of $m_i$ (included) and the first broadcast of $m_{i+1}$ (excluded) by agents of $\agents \setminus \set{a}$ (before $m_1$ for $i=0$, after $m_\ell$ for $i = \ell$) and let $w_i$ the sequence of messages broadcast by $a$ in $u_i$. This forms a "decomposition" $\decsymb := (w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$.
+	For all $i \in \nset{1}{\ell}$, we write $\decsymb_i$ for the "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.   Let $\run_i$ be the prefix of $\run$ up until the first broadcast of $m_i$ with value $v'$ (included), and $w'_i$ the $v'$-input of $a_i$ in $\run_i$. Agent $a_i$ is a witness that $\run_i$ satisfied "follower specification" $(w'_i, m_i)$. 
+	If $\run_i$ is strictly shorter than $\run$, then by applying the induction we obtain an "unfolding tree" $\tree_i$ satisfying "follower specification" $(w_i', m_i)$. If $\run_i = \run$, then $\run$ ends with a broadcast $(m_\ell,v')$ by agent $a_\ell$; because the last step of $\run$ is a broadcast with value $v$, this implies $v = v'$ therefore $v$ is initial for $a$, which may happen only when $\spec$ is a "boss specification". In that case, because in our induction order "boss specifications" are above "follower specifications", we can also apply the induction hypothesis and obtain an "unfolding tree" $\tree_l$ satisfying "follower specification" $(w_\ell', m_\ell)$. Either way, we have obtained, for every $i \in \nset{1}{\ell}$, an "unfolding tree" $\tree_i$ satisfying "follower specification" $(w_i', m_i)$, which we attach below $\node$. 
 	
-	We added some "unfolding trees" as children of the root so that conditions \ref{unfoldingC1} to \ref{unfoldingC3} are satisfied. We obtain a "unfolding tree" satisfying the specification.
+	We claim that the tree constructed satisfies conditions \ref{item:condition1_non_initial_value} to \ref{item:condition4_boss_node} thus is an "unfolding tree". It suffices to check the conditions at the root $\node$, as all we did is attach "unfolding trees" below that root. 
+	\begin{itemize}
+	\item Condition \ref{item:condition1_non_initial_value} is satisfied by construction of the trees $\tree'$.
+	\item Condition \ref{item:condition2_follower_node}, assuming that $\spec$ is a "follower speification" $(\followwordspec, \followmessagespec)$, is a direct consequence of $a$ being a witness that $\run$ satisfies $(\followwordspec, \followmessagespec)$ with value $v$. 
+	\item For condition \ref{item:condition3_initial_value}, let $v'$ an initial value of $a$ in $u$. We reuse the notations from above. $u$ may be split into successive runs $u_0, \dots, u_\ell$. Moreover, $w_i  = \voutput{v'}{u_i}$ by definition and $\vinput{v}{u_i} \in \set{m_1,\dots,m_{i-1}}$ because $u_i$ is before the first broadcast of $m_i$ by some agent other that $a$. Also, for every $i$, $\tree_i$ satisfies follower specification $(w_i',m_i)$ but $w_i' \in \langdec{\decsymb_i}$ and $w_i'$ is the $v'$-input of $a_i$ in $\run_i$ hence $w_i' \in \langdec{\decsymb_i}$. 
+	\item For condition \ref{item:condition4_boss_node}, assume that $\spec$ is a "boss specification" $\bossspec$. Because $a$ with value $v$ is a witness that $\run$ satisfies $\bossspec$, $v$ is an initial value of $a$. Moreover, let $w$ the sequence of messages broadcast with value $v$ in $\run$ (by all agents). 
+	Because $\run$ satisfies $\bossspec$, $\bossspec \subword w$. However, $w \in \langdec{\decsymb}$ by construction of $\decsymb$, therefore $w \in \langdec{\decsymb}$.
+	\end{itemize}
+
+	We have therefore built an "unfolding tree" $\tree$ satisfying $\spec$. 
 \end{proof}
