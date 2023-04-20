@@ -1,16 +1,21 @@
 \subsection{Proof of Lemma~\ref{lem:tree-to-run}}
 \label{app:tree-to-run}
 
+\LemTreeToRun*
+
+We start with some useful definition. Indeed, in the rest of this paper, we were using the notion of "local run", that corresponds to the behaviour of a given agent in a "run". For the proof of Lemma~\ref{app:tree-to-run}, we need the more general notion of "partial run", which corresponds to the projection of a "run" onto a subset of agents. Note that a "partial run" may receive message from outside, and therefore one cannot automatically turn a partial run into a run. Intuitively, we will make partial runs correspond with "subtrees" of an "unfolding tree" (by ""subtree"", we mean the tree composed of a node of the original tree and every node below it). 
+
+We define a new semantics over the set of configurations, in which some messages may be received from the outside (without any condition as to where those messages come from). We denote the steps of this new semantics with $\pstep{}$.  
 \begin{definition}
-	We extend the notion of "local run" to describe the behaviour of a subset of agents in a "run".
-	
+	Let $\config, \config'$ two configurations. 
+
 	An ""internal test@global"" from $\config$ to $\config'$, denoted $\config \inttest \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent does a "local test". 
 	
 	An ""internal message@global"" from $\config$ to $\config'$, denoted $\config \intmessage{m}{v} \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent broadcasts a message $m$ with value $v$. 
 	
 	An ""external message@global"" from $\config$ to $\config'$, denoted $\config \extmessage{m}{v} \config'$ is defined when for all agents $a$, either there is a "local step" $\config(a) \extbr{m}{v} \config'(a)$ or $\config(a) = \config'(a)$.
 	
-	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in \nset{1}{k}$, either $\config_{i-1} \inttest \config_{i}$ or $\config_{i-1} \intmessage{m, v} \config_{i}$ or $\config_{i-1} \extmessage{m, v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
+	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in \nset{1}{k}$, either $\config_{i-1} \inttest \config_{i}$ or $\config_{i-1} \intmessage{m}{v} \config_{i}$ or $\config_{i-1} \extmessage{m}{v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
 	
 	We define the $v$-projection $\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external message@@global" $\config \extmessage{m}{v} \config'$ to $(m, in)$, every "internal message" $\config \intmessage{m}{v} \config'$ to $(m, out)$, and every "internal step" to $\varepsilon$.
 	
@@ -37,7 +42,7 @@
 	Let $\agents, \agents'$ be the sets of agents of $\run$ and $\run'$, respectively.
 	We can rename agents so that those two sets are disjoint.
 	
-	Let $m_1 \cdots m_k = \vinput{v}{\run}$, $\run$ can be split into $\run = \config_0 \step{\run_0} \overline{\config}_0 \extbr{m_1,v} \config_{1} \step{\run_1} \cdots \extbr{m_k,v} \config_{k} \step{\run_k} \overline{\config}_k$ so that for all $j\in \nset{0}{k}$, $\vinput{v}{\run_j} = \varepsilon$.
+	Let $m_1 \cdots m_k = \vinput{v}{\run}$, $\run$ can be split into $\run = \config_0 \pstep{\run_0} \overline{\config}_0 \extbr{m_1,v} \config_{1} \pstep{\run_1} \cdots \extbr{m_k,v} \config_{k} \pstep{\run_k} \overline{\config}_k$ so that for all $j\in \nset{0}{k}$, $\vinput{v}{\run_j} = \varepsilon$.
 	
 	Similarly, as $m_1\cdots m_k \subword \voutput{v}{\run'}$, $\run'$ can be split into $\run' = \config'_0 \step{\run'_0} \overline{\config}'_0 \step{m_1, v} \config'_{1} \step{\run'_1} \cdots \step{m_k,v'} \config'_{k} \step{\run'_k} \overline{\config}'_k$.
 	
@@ -48,9 +53,9 @@
 	
 	We then construct the desired run $\Tilde{\run}$ over $\agents \cup \agents'$ by matching the "external messages" in $\run$ with the broadcasts in $\run'$ and executing the rest of the run in parallel.
 	
-	We have $\Tilde{\run} = \config_0 \sqcup \config'_0 \step{\run_0} \overline{\config}_0 \sqcup \config'_0 \step{\run'_0} \overline{\config}_0 \sqcup \overline{\config}'_0 \step{m_1, v} \config_{1} \sqcup \config'_1 \step{\run_1} \cdots \step{m_k,v} \config_{k}  \sqcup \config'_{k} \step{\run_k}  \overline{\config}_k \sqcup \config'_k \step{\run'_k} \overline{\config}_k \sqcup \overline{\config}'_k$.
+	We have $\Tilde{\run} = \config_0 \sqcup \config'_0 \pstep{\run_0} \overline{\config}_0 \sqcup \config'_0 \pstep{\run'_0} \overline{\config}_0 \sqcup \overline{\config}'_0 \pstep{m_1, v} \config_{1} \sqcup \config'_1 \pstep{\run_1} \cdots \pstep{m_k,v} \config_{k}  \sqcup \config'_{k} \pstep{\run_k}  \overline{\config}_k \sqcup \config'_k \pstep{\run'_k} \overline{\config}_k \sqcup \overline{\config}'_k$.
 	
-	We indeed have $\overline{\config}_{j-1} \sqcup \overline{\config}'_{j-1} \step{m_j, v} \config_{j} \sqcup \config'_j$ as we can make all agents in $\agents$ that receive an "external messages" with message $m_j$ and value $v$ receive the broadcast made in $\agents'$ instead.
+	We indeed have $\overline{\config}_{j-1} \sqcup \overline{\config}'_{j-1} \pstep{m_j, v} \config_{j} \sqcup \config'_j$ as we can make all agents in $\agents$ that receive an "external messages" with message $m_j$ and value $v$ receive the broadcast made in $\agents'$ instead.
 	
 	Hence we obtain a run with 
 	\begin{itemize}		
@@ -109,11 +114,11 @@
 	
 	If $\vinput{v}{\run} = \epsilon$ then we can set $\Tilde{\run} = \run$ to obtain the result.
 	
-	If $\vinput{v}{\run} \neq \epsilon$, then let $j$ be such that $\vinput{v}{\run_j} \neq \epsilon$, then we can decompose $\run_j$ as $\run_j = \config_{j} \step{\run_j^-} \config_j^- \extmessage{m_{j'}}{v} \config_j^+ \step{\run_j^+} \config_{j+1}$ with $j'\leq j$. 
+	If $\vinput{v}{\run} \neq \epsilon$, then let $j$ be such that $\vinput{v}{\run_j} \neq \epsilon$, then we can decompose $\run_j$ as $\run_j = \config_{j} \pstep{\run_j^-} \config_j^- \extmessage{m_{j'}}{v} \config_j^+ \pstep{\run_j^+} \config_{j+1}$ with $j'\leq j$. 
 	
 	There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
 	
-	Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
+	Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \pstep{\run_{{j'},1}'} \config_{{j'},1} \cdots \pstep{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
 	
 	We then proceed in a similar way as in Lemma~\ref{lem:boss-composition}.
 	We can rename agents so that $\run$ and $\run'_j$ are on disjoint sets of agents, and apply a renaming of values in $\run_j'$ so that $v_j$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
@@ -192,7 +197,7 @@ From these runs we infer a sequence of "partial runs" that output $w'_0, \ldots,
 We proceed in a similar manner as in Lemma~\ref{lem:follower-composition-completion}.
 There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
 
-Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \step{\run_{{j'},1}'} \config_{{j'},1} \cdots \step{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
+Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \pstep{\run_{{j'},1}'} \config_{{j'},1} \cdots \pstep{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
 
 We can rename agents so that the $\widehat{\run}_i$ and $\run'_{j',i}$ are on disjoint sets of agents, and apply a renaming of values in $\run'_{j'}$ so that $v_{j'}$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
 We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\widehat{\run}_i$ for all $i\in\nset{1}{\ell}$. As $w_i \subword \voutput{v}{\widehat{\run}_i}$, we can match the "internal messages" of $\widehat{\run}_i$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
@@ -200,7 +205,7 @@ We obtain, for each $i \in \nset{1}{j'-1}$, a run $\run''_i$ from $\widehat{\con
 
 For each $i \in \nset{j'+1}{j-1}$, let $\run''_i$ be the run that goes from $\widehat{\config}_{i-1} \sqcup \config_{j', j'}$ to $\widehat{\config}_{i} \sqcup \config_{j', j'}$ by executing $\widehat{\run}_i$ on the first part and staying idle on the second one.
 
-We can split $\widehat{\run}$ into $\widehat{\config}_{j} \step{\widehat{\run}^-} \widehat{\config}^- \step{\widehat{\run}^+} \widehat{\config}_{j+1}$
+We can split $\widehat{\run}$ into $\widehat{\config}_{j} \pstep{\widehat{\run}^-} \widehat{\config}^- \pstep{\widehat{\run}^+} \widehat{\config}_{j+1}$
 Let $\run''_j$ be the run from $\widehat{\config}_{j-1} \sqcup \config_{j', j'}$ to $\widehat{\config}_{j} \sqcup \config'_{j'}$ obtained by executing $\widehat{\run}_{j}^-$ on the first part, then executing the last step of $\run'_{j'}$ to broadcast $m_{j'}$ with value $v$ and then executing $\run_{j}^+$ on the first part.
 
 For each $i \in \nset{j+1}{\ell}$, let $\run''_i$ be the run that goes from $\widehat{\config}_{i-1} \sqcup \config'_{j'}$ to $\widehat{\config}_{i} \sqcup \config'_{j'}$ by executing $\run_i$ on the first part and staying idle on the second one. \corto{notation sqcup}

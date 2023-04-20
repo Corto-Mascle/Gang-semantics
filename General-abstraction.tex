@@ -18,10 +18,8 @@ From the other agent's perspective, this means that someone, after receiving seq
 The two roles identified previously are the key to the decidability procedure. While, in the original run, it could be that some agent plays several such roles\lu{it would be nice to have such an example in the execution example and cite it there}, we will in fact show, thanks to the copycat principle, that one might consider that each agent only plays one such role. We will use what we will name an "unfolding tree" as a way to list all "roles" needed for a local run to happen, and, in the same time, to verify that each of this "role" can be carried out.
 %We will define an "unfolding tree" of a local run where each node provides a witness that a given "role" can be carried out. 
 We will then provide bounds on the size of the "unfolding tree" that we have to consider, and conclude that a decidability procedure can simply guess such an "unfolding tree". 
-\\
-We will proceed as follows. In \ref{sec:decidability-defs}, we introduce several usefuls notions. In \ref{sec:decidability-tree-unfoldings}, we define the "unfolding tree". In \ref{sec:decidability-shortening-branches}, we provide useful arguments towards shortening branches of a tree. In \ref{sec:local-bounds}, we provide useful arguments towards bounding the size of a given node of the tree. In \ref{sec:tree-bounds}, we bound the overall size of the tree. In \ref{sec:decidability-end}, we conclude by proving our decidabily procedure. 
 
-
+We will proceed as follows. In Section~\ref{sec:decidability-def}, we introduce several usefuls notions. In \ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In \ref{sec:decidability-shortening-branches}, we provide useful arguments towards shortening branches of a tree. In \ref{sec:local-bounds}, we provide useful arguments towards bounding the size of a given node of the tree. In \ref{sec:tree-bounds}, we bound the overall size of the tree. In \ref{sec:decidability-end}, we conclude by proving our decidability procedure. 
 
 
 \subsection{Useful definitions}
@@ -52,14 +50,14 @@ A ""reception step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition
 	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$ where, for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions}$. 
 	A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ containing the message types and values that $\localrun$ receives and broadcasts. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\tau} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
 	
+
 	Finally, we define the "input" and "output" of a "local run" $\localrun$: the "input", denoted by $\Input{\localrun} \in (\messages \times \nats)^*$, is the sequence containing messages types and values of its "reception steps". The output, denoted by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages types and values broadcast made in the "local run". The $\val$-input $\vinput{\aval}{\localrun} $ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the sequence containing message types of the "reception steps" (resp. the internal broadcasts steps) with value $\val$ made in $\localrun$. Formally, $\vinput{\aval}{\localrun}$ (resp. $\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$. 
-	
+	\nicoin{faire le point sur ce qui peut aller en annexe là-dedans}
 %	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "reception steps".
 %	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcast steps made in $\localrun$.
 %	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\aval}{\localrun}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$. 
 %	
 
-	We are now ready to define unfolding tree.
 
 \subsection{Unfolding trees}
 \label{sec:decidability-tree-unfoldings}
@@ -289,6 +287,7 @@ Let $(\prot,q_f)$ an instance of $\COVER$. $(\prot,q_f)$ is positive if and only
 \subsection{Decidability}
 \label{sec:decidability-end}
 
+\decidablecover*
 
 \ifproofs
 \begin{proof}
