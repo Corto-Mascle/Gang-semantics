@@ -107,8 +107,9 @@ a finite tree where each node $\node$ has three labels:
 	\item The third one is a ""specification"" $\speclabel{\node}$, which is either a word $\bosslabel{\node} \in \messages^*$ (""boss specification"") or a pair $(\followlabelword{\node}, \followlabelmessage{\node}) \in \messages^* \times \messages$ (""follower specification""). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
 \end{itemize} 
 
+A "node" represents a "local run" witnessing that some "role" can be carried out. The role is represented with its "specification" and its value is necessary to check that the "local run" is a valid witness.\lu{pas sure de cette phrase..}
 
-For a ""follower node"" $\node$, we will need to represents the possible sequences for $\followlabelword{\node}$ depending on the available messages. Remember that for the "local run" $\localrun$ of agent $a$ earlier, there was an infinite number of possible sequences $w_0' \cdot w_1' \cdot w_2'$ because any number of $m_1$ and $m_2$ could be added to the subwords of $w_2$. We find a way to describe all the possible sequence from $(w_0, m_1, w_1, m_2, w_2)$ in the following way:
+For a ""follower node"" $\node$, we will need to represent the possible sequences for $\followlabelword{\node}$ depending on the available messages. Remember that for the "local run" $\localrun$ of agent $a$ earlier, there was an infinite number of possible sequences $w_0' \cdot w_1' \cdot w_2'$ because any number of $m_1$ and $m_2$ could be added to the subwords of $w_2$. We find a way to describe all the possible sequence from $(w_0, m_1, w_1, m_2, w_2)$ in the following way:
 
 A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. 
 
@@ -123,7 +124,8 @@ For $\aval$ appearing in a "local run", $\aval$ is ""initial"" if its appears in
 We now state some conditions on the links between a node and its children. Intuitively, the desired property is the following: 
 
 Let $\node$ a node of $\tree$. 
-The conditions expressed below state two things. First, that $\node$ is a witness that its "specification" is carried out. Second, that the "specifications" of its children are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents (\ref{item:condition1_}). It is formalized as follows.
+The conditions expressed below state two things. First, that the "specifications" of its children are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents (Conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value})
+Second, that $\node$ is a witness that its "specification" is carried out (Conditions \ref{item:condition3_follower_node} and \ref{item:condition4_boss_node}).
 \begin{enumerate}[{Condition} (i)]
 	\item \label{item:condition1_non_initial_value} For every non-initial value $\aval \ne \valuelabel{\node}$ of $\localrun$, $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval}{\localrun}$ is a subword of $\bosslabel{\node'}$.
 	
@@ -137,6 +139,8 @@ The conditions expressed below state two things. First, that $\node$ is a witnes
 
 	\item \label{item:condition4_boss_node} If $\node$ is a "boss node", there $\valuelabel{\node}$ is an "initial value" of $\localrunlabel{\node}$ and the associated "decomposition" $\decsymb$ of \ref{item:condition2_initial_value} satisfies that $\bosslabel{\node} \in \langdec{\decsymb}$.
 \end{enumerate}
+
+\luin{here should come more intuitions on the tree and some figures}
 
 There is a strong connection between runs of $\prot$ and "unfolding trees". In fact, the following proposition expresses that \COVER may be expressed as the existence of an "unfolding tree". 
 The proof can be found in Appendix~\ref{app:trees-sound-complete}.
