@@ -19,7 +19,7 @@ The two roles identified previously are the key to the decidability procedure. W
 %We will define an "unfolding tree" of a local run where each node provides a witness that a given "role" can be carried out. 
 We will then provide bounds on the size of the "unfolding tree" that we have to consider, and conclude that a decidability procedure can simply guess such an "unfolding tree". 
 
-We will proceed as follows. In Section~\ref{sec:decidability-def}, we introduce several usefuls notions. In \ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In \ref{sec:decidability-shortening-branches}, we provide useful arguments towards shortening branches of a tree. In \ref{sec:local-bounds}, we provide useful arguments towards bounding the size of a given node of the tree. In \ref{sec:tree-bounds}, we bound the overall size of the tree. In \ref{sec:decidability-end}, we conclude by proving our decidability procedure. 
+We will proceed as follows. In Section~\ref{sec:decidability-defs}, we introduce several usefuls notions. In Section~\ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In Section~\ref{sec:decidability-shortening-branches}, we provide useful arguments towards shortening branches of a tree. In Section~\ref{sec:local-bounds}, we provide useful arguments towards bounding the size of a given node of the tree. In Section~\ref{sec:tree-bounds}, we bound the overall size of the tree. In Section~\ref{sec:decidability-end}, we conclude by proving our decidability procedure. 
 
 
 \subsection{Useful definitions}
@@ -27,9 +27,9 @@ We will proceed as follows. In Section~\ref{sec:decidability-def}, we introduce 
 
 We first need to define what should be the tree root: a "local run". A "local run" may be understood as the projection of a "run" onto a given agent. Among with "local runs", we define "local configurations" and "local steps".  When a "local step" describes the broadcast of a message we name it an "internal step", whereas when it describes a reception of a message with a certain value, we name it an 
 	
-	A ""local configuration"" is a pair $(q, \localdata) \in Q \times \nats^r$. %Intuitively, it describes the configuration of a single agent. 
+	\AP A ""local configuration"" is a pair $(q, \localdata) \in Q \times \nats^r$. %Intuitively, it describes the configuration of a single agent. 
 
-	An ""reception step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans$ is of the form $(q,\rec{m}{j}{\anact},q')$ with $\localdata(j') = \localdata(j')$ for all $j' \neq j$ and one of the following cases holds:
+	\AP An ""reception step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans$ is of the form $(q,\rec{m}{j}{\anact},q')$ with $\localdata(j') = \localdata(j')$ for all $j' \neq j$ and one of the following cases holds:
 	
 	\begin{minipage}[t]{6cm}
 		\begin{itemize}
@@ -47,13 +47,13 @@ We first need to define what should be the tree root: a "local run". A "local ru
 	
 	Said otherwise, $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$ when an agent in $(q,\localdata)$ may perform $\atrans$ upon receiving a message of type $\amessage$ and of value $\aval$.
 
-	An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\atrans$ is either a "broadcast" or a "local test" and an agent in $(q,\localdata)$ may perform this transition in isolation and get to $(q',\localdata')$. 
+	\AP An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\atrans$ is either a "broadcast" or a "local test" and an agent in $(q,\localdata)$ may perform this transition in isolation and get to $(q',\localdata')$. 
 
-	A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either an "reception step" or an "internal step". 
-	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$ where, for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions}$. 
-	A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ containing the message types and values that $\localrun$ receives and broadcasts. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\tau} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
+	\AP A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either an "reception step" or an "internal step". 
+	\AP A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$ where, for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions}$. 
+	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ containing the message types and values that $\localrun$ receives and broadcasts. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\tau} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
 
-	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "reception steps".
+	\AP The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "reception steps".
 	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcast steps made in $\localrun$.
 	
 	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\aval}{\localrun}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$. 
@@ -62,15 +62,15 @@ We first need to define what should be the tree root: a "local run". A "local ru
 \subsection{Unfolding trees}
 \label{sec:decidability-tree-unfoldings}
 
-Consider an agent $a$ that initially has value $\aval$ in one of its registers. After broadcasting some word $w$ with value $\aval$, $a$ may need some other agent to broadcast $\amessage_1$ with value $\aval$. An agent doing so did not have $\aval$ initially, hence it may be cloned at will: we are able to send $\amessage_1$ with value $\aval$ as many times as we want. Then, if $a$, after broadcasting $w_2$ with value $\aval$, must receive a message $\amessage_2$ with value $\aval$, then the agent broadcasting $\amessage_2$ may receive with value $\aval$ a word of the form $w_1 \cdot w_2'$ where $w_2'$ is $w_2$ where some $\amessage_1$ were inserted. Similarly, if $a$ then needs $\amessage_3$ with value $\aval$ after broadcasting $w_3$, then an agent playing that role may beforehand receive with value $\aval$ a word of the form $w_1 \cdot w_2'' \cdot w_3''$ where $w_2''$ is $w_2$ where some $\amessage_1$ were inserted, and $w_3''$ is $w_3$ where some $\amessage_2$ and $\amessage_3$ were inserted. We formalize this observation using "decompositions":
+Consider an agent $a$ that initially has value $\aval$ in one of its registers. After broadcasting some word $w$ with value $\aval$, $a$ may need some other agent to broadcast $\amessage_1$ with value $\aval$. An agent doing so did not have $\aval$ initially, hence it may be cloned at will: we are able to send $\amessage_1$ with value $\aval$ as many times as we want. Then, if $a$, after broadcasting $w_2$ with value $\aval$, must receive a message $\amessage_2$ with value $\aval$, then the agent broadcasting $\amessage_2$ may receive with value $\aval$ a word of the form $w_1 \cdot w_2'$ where $w_2'$ is $w_2$ where some $\amessage_1$ were inserted. Similarly, if $a$ then needs $\amessage_3$ with value $\aval$ after broadcasting $w_3$, then an agent playing that role may beforehand receive with value $\aval$ a word of the form $w_1 \cdot w_2'' \cdot w_3''$ where $w_2''$ is $w_2$ where some $\amessage_1$ were inserted, and $w_3''$ is $w_3$ where some $\amessage_2$ and $\amessage_3$ were inserted. We formalize this observation using decompositions:
 
-A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. 
+\AP A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. 
 
-We say that $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$.
+\AP We say that $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$.
 We denote by $\langdec{\decsymb}$ the language of words that admit decomposition $\decsymb$. 
 
-We may now formally define our "unfolding trees" which abstractly represent executions. 
-An ""unfolding tree"" $\tree$ over $\prot$ is
+We may now formally define our unfolding trees which abstractly represent executions. 
+\AP An ""unfolding tree"" $\tree$ over $\prot$ is
 a finite tree where each node $\node$ has three labels:
 \begin{itemize}
 	\item The first one is a local run of $\prot$, written $\localrunlabel{\node}$. 
@@ -80,7 +80,7 @@ a finite tree where each node $\node$ has three labels:
 	\item The third one is a ""specification"" $\speclabel{\node}$, which is either a word $\bosslabel{\node} \in \messages^*$ (""boss specification"") or a pair $(\followlabelword{\node}, \followlabelmessage{\node}) \in \messages^* \times \messages$ (""follower specification""). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
 \end{itemize} 
 
-For $\aval$ appearing in a "local run", $\aval$ is ""initial"" if its appears in $u$'s first "local configuration", and ""non-initial"" otherwise. \nicoin{a enlever?}
+\AP For $\aval$ appearing in a "local run", $\aval$ is ""initial"" if its appears in $u$'s first "local configuration", and ""non-initial"" otherwise. \nicoin{a enlever?}
 
 Let $\node$ a node of $\tree$. 
 The conditions expressed below state two things. First, that $\node$ is a witness that its "specification" is carried out. Second, that the "specifications" of its children are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents. It is formalized as follows.
@@ -135,7 +135,7 @@ Let $(\prot,q_f)$ an instance of $\COVER$. $(\prot,q_f)$ is positive if and only
 \end{figure}
 \begin{restatable}{lemma}{lemShortLocalRuns}
 	\label{lem:short-local-runs}
-	There exists a function $\towerfun(n) (\regnum)$ in $O(\intro*\repexp{n}{\regnum})$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$\corto{uniformiser la notation} such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and:
+	There exists a primitive recursive function $\towerfun(n) (\regnum)$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$\corto{uniformiser la notation} such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and:
 	\begin{enumerate}
 		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
@@ -148,7 +148,7 @@ Let $(\prot,q_f)$ an instance of $\COVER$. $(\prot,q_f)$ is positive if and only
 
 \begin{remark}
 	The tower bound of Lemma~\ref{lem:short-local-runs} is tight, in the sense that some local runs may need to have length a tower of exponentials of linear height in the number of registers.
-	It also holds for pushdown automata, and for all transition systems which have some kind of pumping lemma.
+	It also holds for pushdown automata, as the .
 	\cortoin{To formalize}
 \end{remark}
 
