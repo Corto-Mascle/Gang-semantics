@@ -1,0 +1,35 @@
+\section{Proof of Proposition~\ref{prop:trees-sound-complete}}
+\label{app:trees-sound-complete}
+
+We here prove that "unfolding trees" are sound and complete for the \COVER problem for \BNRA{}s. 
+We start with a few definitions. 
+
+A "run" $\run$ satisfies a boss specification $\bossspec$ if there exists $\aval \in \nats$ such that $\bossspec$ is a subword of the sequence of messages sent with value $\aval$ in $\run$.
+A "run" $\run$ satisfies a follower specification $(\followwordspec, \followmessagespec)$ if there exists a value $\aval$ and an agent $a$ such that $\aval$ is not an initial value of $a$, the $\aval$-input of $a$ in $\run$ is a subword of $\followwordspec$ and agent $a$ broadcasts $\followmessagespec$ with value $\aval$ at some point.
+
+An "unfolding tree" satisfies a boss specification $\bossspec$ if its root $\node$ is a "boss node" and $\bossspec$ is a subword of its specification label $\bosslabel{\node}$.
+An "unfolding tree" satisfies a follower specification $(\followwordspec, \followmessagespec)$ if its root $\node$ is a "follower node" such that $\followmessagespec=\followlabelmessage{\node}$ and  $\followlabelword{\node}$ is a subword of $\followwordspec$.
+
+Moreover, given a run $\run: \config_0 \step{} \config_1 \step{} \cdot \step{}\config_n$ and a agent $a$, the "local run" of $a$ in $\run$ is the "local run" whose sequence of "local configurations" of $a$ in $\run$ and whose sequence of "local steps" are the local version for $a$ of the steps of $\run$. Formally:
+\begin{itemize}
+\item if $\config_i \step{} \config_{i+1}$ does not involve $a$, then both configurations are projected to a single 
+\end{itemize}
+% Also note that the interpretation of the "follower nodes" changes between the two directions: when building the tree a follower node labelled $(\followwordspec, \followmessagespec)$ means that there exists a global run in which some agent receives the sequence of messages $\followwordspec$ and broadcasts $\followmessagespec$, all with a value $\aval$ that is not one of its initial ones.
+
+% When building the run a follower node means that there exists a "partial run" which receives a sequence of external messages which forms the word $fw$, with a value $v$ that it initially does not contain, and eventually broadcasts $m$ with that same value.
+
+Note that one can modify the system so that the \COVER problem becomes the problem of the existence of a "run" satisfying a "boss specification"; to do so, it suffices to add a broadcast loop on $q_f$ that broadcasts a special message type. Therefore, it suffices to prove that "runs" of $\prot$ and "unfolding trees" satisfy the same "boss specifications". To do so, we prove the two following implications:
+
+\begin{restatable}{lemma}{LemRunToTree}
+	\label{lem:run-to-tree}
+	If there exists a "run" $\run$ of $\prot$ satisfying some "specification" $\spec$ then there exists a finite "unfolding tree" $\tree$ over $\prot$ satisfying $\spec$.
+\end{restatable}
+
+\begin{restatable}{lemma}{LemTreeToRun}
+	\label{lem:tree-to-run}
+	If there exists an "unfolding tree" over $\prot$ satisfying a "boss specification" $bw \in \messages^*$ then there exists a finite "run" $\run$ of $\prot$ satisfying $bw$.
+\end{restatable}
+\input{Appendix/Preuve-run-to-tree}
+
+	\input{Appendix/Preuve-tree-to-run}
+
