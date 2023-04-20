@@ -1,39 +1,12 @@
-\section{Proof of Lemma~\ref{prop:loc-eq-test-elimination}}
+\section{Proof of Proposition~\ref{prop:loc-eq-test-elimination}}
 \label{sec:proof-lol-eq-test-elim}
 
 \SimpleReduction*
 
-
-%old statement to go from local to global, no longer useful 
-% \begin{lemma}
-% 	\label{lem:local-to-global}
-% 	If two protocols $\prot_1, \prot_2$ are such that for all local run $u_1$ of $\prot_1$, there is a local run $u_2$ of $\prot_2$ with the same initial values as $u_1$ and such that $\Input{u_1} = \Input{u_2}$ and $\Output{u_1} = \Output{u_2}$, then for all "boss specification" $bw \in \messages^*$, if $\prot_1$ has a run satisfying $\spec$ then so does $\prot_2$.
-% \end{lemma}
-
-% \cortoin{Only useful for the local equality test elimination}
-% \ifproofs
-% \begin{proof}
-% 	We infer this statement from the "unfolding trees".
-	
-% 	Suppose $\prot_1$ satisfies a specification $\spec$, then by Lemma~\ref{lem:run-to-tree} there exists a "unfolding tree" $\tree_1$ labelled by local runs of $\prot_1$ satisfying $\spec$. 
-	
-% 	Let $\node$ be a node of $\tree_1$ labelled by a "local run" $u_1$ of $\prot_1$, a value $v$ and a "specification" $\spec$.  
-	
-% 	There exists a "local run" $u_2$ of $\prot_2$ with the same initial values, "input" and "output" as $u_1$. In particular they have the same $v$-input and $v$-output.
-	
-% 	We define $\tree_2$ as the tree obtained by replacing in the label of each node the local run of $\prot_1$ by a local run of $\prot_2$ with the same initial values, "input" and "output". The rest of the labels stays the same.
-	
-% 	Conditions \ref{unfoldingC1}, \ref{unfoldingC2} and \ref{unfoldingC3} are still satisfied on every node as they only talk about the initial values, "input" and "output" of each local run label, and the value and specification labels. None of those things have changed.
-% 	Furthermore as the specification label of the root is the same for $\tree_1$ and $\tree_2$, $\tree_2$ satisfies $\spec$.
-	
-% 	By Lemma~\ref{lem:tree-to-run}, as $\spec$ is a "boss specification", there exists a "run" of $\prot_2$ satisfying $\spec$.
-% \end{proof}
-% \fi
-
 \begin{proof}
 	We construct a "protocol" $\prot'$ with no "local equality tests" so that any "run" of $\prot$ may be turned into an execution of $\prot'$ and vice-versa. 
-	The intuition is as followed. $\prot'$ corresponds to $\prot$, where an abstract layer is added in the treatments of the registers. In $\prot'$, we do not directly store each register but rather equality relations between them, so that a value shared by several registers is only stored once. We dub registers of $\prot'$ ""memory slots"" to distinguish them from the registers of $\prot$. A "memory slot" will be used to store a value shared between registers. 
-	We will need $\regnum$ "memory slots" to do so. Moreover, we will need a mapping $\map : \nset{1}{r} \to \nset{1}{r}$ that tells, for each "register", in which "memory slot" its value is stored. This mapping will be directly encoded in the set of states of $\prot'$, which causes an exponential blowup in the size of the protocol.
+	The intuition is as follows. $\prot'$ corresponds to $\prot$, where an abstract layer is added in the treatments of the registers. In $\prot'$, we do not directly store each register but rather equality relations between them, so that a value shared by several registers is only stored once. We dub registers of $\prot'$ ""memory slots"" to distinguish them from the registers of $\prot$. A "memory slot" will be used to store a value shared between registers. 
+	We will need $\regnum$ "memory slots" to do so. Moreover, we will need a mapping $\map : \nset{1}{r} \to \nset{1}{r}$ that tells, for each register, in which "memory slot" its value is stored. This mapping will be directly encoded in the set of states of $\prot'$, which causes an exponential blow-up in the size of the protocol.
 	
 	For simplicity, we allow our protocol $\prot'$ to have dummy transitions with no effect (such transitions could be encoded using broadcasts with a dummy message type). 
 	
@@ -41,7 +14,8 @@
 	We define $\prot' := (Q', \messages, \transitions', q_0', \regnum +1)$ as follows. The set of states is $Q' := Q \times (\nset{1}{r} \to \nset{1}{r})$, its initial state is $q_0' := (q_0, \idmap)$ where $\idmap(i) = i$ for all $i \in \nset{1}{r}$. 
 	
 	The set of transitions $\transitions'$ is defined as follows.
-	For all $q,q' \in Q$ and $\map, \map' \in \nset{1}{r} \to \nset{1}{r}$, we have $((q, \map), \op, (q', \map')) \in \transitions'$ in the following cases:
+	$\prot'$ mimics the operations of $\prot$ step-by-step. When $\prot$ stores a new value, $\prot'$ guesses whether this value is already stored in one of the "memory slots" (then it simply checks that the received value is the one of that memory slot with a $\rec{m}{i}{\eqtestact}$) or is not stored yet (then it stores it in an empty memory slot). In both cases it updates the mapping accordingly.
+	Formally, for all $q,q' \in Q$ and $\map, \map' \in \nset{1}{r} \to \nset{1}{r}$, we have $((q, \map), \op, (q', \map')) \in \transitions'$ in the following cases:
 	
 	\begin{itemize}
 		\item $\op = \br{m}{j}$, 
@@ -53,7 +27,7 @@
 		\begin{itemize}
 			\item there is a transition $(q, \rec{m}{i}{\eqtestact}, q') \in \transitions$ such that $\map(i)=j$ and $\map'=\map$ (to test equality with register $i$, we test equality with the "memory slot" containing value of register $i$), or
 			
-			\item there is a transition $(q, \rec{m}{i_0}{\enregact}, q') \in \transitions$ such that $\map'(i_0)=j$ and $\map'(i) = \map(i)$ for every $i \neq i_0$ (register $i_0$ stores a value that is already in a "memory slot" hence we simply modify the mapping).
+			\item there is a transition $(q, \rec{m}{i_0}{\enregact}, q') \in \transitions$ such that $\map'(i_0)=j$ and $\map'(i) = \map(i)$ for every $i \neq i_0$ (register $i_0$ stores a value that is guessed as being already in a "memory slot" hence we simply modify the mapping).
 		\end{itemize} 
 		
 		\item $\op = \rec{m}{j}{\diseqtestact}$ and there is a transition $(q, \rec{m}{i}{\diseqtestact}, q') \in \transitions$ such that $\map(i)=j$ (to test disequality with register $i$, we test disequality with the "memory slot" containing value of register $i$).
@@ -65,7 +39,7 @@
 		\item $\op = \rec{m}{j}{\dummyact}$ and there is a transition $(q, \rec{m}{i}{\dummyact}, q') \in \transitions$ for some $i \in \nset{1}{r}$.
 	\end{itemize}
 	
-	Additionally, there is a dummy transition between $(q,\map)$ and $(q',\map')$ whenever there exist $i_1, i_2$ such that $(q, \loc{i_1}{i_2}{\eqtestact}, q') \in \transitions$ and $\map(i_1) = \map(i_2)$ (an equality test on two registers mapped to the same" memory slot" automatically succeeds).
+	Additionally, there is a dummy transition between $(q,\map)$ and $(q',\map')$ whenever there exist $i_1, i_2$ such that $(q, \loc{i_1}{i_2}{\eqtestact}, q') \in \transitions$ and $\map(i_1) = \map(i_2)$ (an equality test on two registers mapped to the same "memory slot" automatically succeeds).
 
 	Note that we cannot in fact guarantee that values stored in the "memory slots" are all distinct, because, upon reception of a value, we may only perform one test and therefore cannot test that the value is different from all stored values. This is why we still need "local disequality tests" in $\prot'$. In practice, when a agent in $\prot$ performs a $\quotemarks{\enregact}$ reception of a broadcast with a value that is already in one of its "memory slots", the corresponding agent in $\prot'$ may non-deterministically notice that it already has this value in a "memory slot" (corresponds to a $\rec{\amessage}{j}{\eqtestact}$ transition) but it may also store it in a fresh "memory slot" (corresponds to a $\rec{\amessage}{j}{\enregact}$ transition). Therefore, the encoding of the content of the registers into a mapping and "memory slots" is not unique, even up to permutation of the memory slots. However, encodings that do not gather together registers with the same value will simply allow less transitions (it will forbid some equality tests), therefore this is not an issue. 
 

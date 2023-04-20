@@ -122,11 +122,11 @@ In fact, we may get rid of "local equality tests" at the cost of an exponential 
 
 \begin{restatable}{proposition}{SimpleReduction}
 	\label{prop:loc-eq-test-elimination}
-	There exists an exponential-time reduction from the "coverability problem" to the coverability problem on protocols with no "local equality tests" $\loc{i}{j}{=}$.
+	There is an exponential-time reduction from the general "coverability problem" to the coverability problem on protocols with no "local equality tests" $\loc{i}{j}{=}$.
 \end{restatable}
 The intuition is as follows: from a protocol $\prot$, we build a protocol $\prot'$ whose registers are used to store values of multiple registers of $\prot$ at the same time, so that equality of two registers of $\prot$ correspond to a condition on the states in $\prot'$. To do so, one must store in any state of $\prot'$ which register of $\prot$ is mapped to which register of $\prot'$, hence the exponential blowup. The full proofs may be found in Appendix~\ref{sec:proof-lol-eq-test-elim}.
-\ifbasic
-\section{Basic properties}
+%\ifbasic
+%\section{Basic properties}
 
 %\begin{lemma}[Weak copycat]\label{lem:weak_copycat}
 %	Let $q \in Q$ and  $\run : \config_0 \step{*} \config_f$ a "run" over set of agents $\agents$ with some distinguished agent $a_m \in \agents$ such that $\st{\config_f}(a_m) = q$. There exists $\agents' \subseteq \nats$ finite s.t. $\agents \cap \agents' = \emptyset$, $a_c \in \agents'$ and a "run" $\run': \config_0' \step{*} \config_f'$ over $\agents \cup \agents'$ such that:
@@ -165,105 +165,105 @@ The intuition is as follows: from a protocol $\prot$, we build a protocol $\prot
 %	Since $a_m$ does not start with $v$ in register $j_m$, $a_m$ does a $\quotemarks{\enregact}$ action in $\run$.
 %	Decompose $\run$ into $\run_p: \config_0 \step{*} \config_{m,1}$, $\path_i: \config_{m,1} \step{} \config_{m,2}$ and $\path_s: \config_{m,2} \step{*} \config_f$ where $\path_i$ is the step where $a_m$ does a $\quotemarks{\enregact}$ action for the last time; write $(q,\rec{\amessage}{\enregact},q') \in\transitions$ the transition taken by $a_m$ in $\path_i$. By applying the weak copycat (Lemma~\ref{lem:weak_copycat}) on $\run_p : \config_0 \step{*} \config$, we add an agent $a_c$ on state $q$ at the cost of adding a set of agents $\agents'$ whose data is disjoint from  the one of agents in $\agents$. Agents of $\agents'$ are left idle in subsequent steps. We make $a_c$ take the $\quotemarks{\enregact}$ transition at the same time as $a_m$, so that they are both on $q'$ with value $v$. We finally make $a_c$ mimick $a_m$ throughout $\path_s$: to do so, whenever $a_m$ takes a reception transition, we make $a_c$ take the same transition in the same step (which is possible as they have the same register value). When $a_m$ broadcasts, we duplicate the broadcast step to make $a_c$ broadcast immediately after, although no agent receives $a_c$'s broadcast. We end up with $a_m$ and $a_c$ on the same state with the same register value, which concludes the proof. 
 %\end{proof}
-
-\begin{corollary}
-	\label{cor:removing_diseq_tests}
-	Let $(\prot, \query)$ an instance of the "query coverability problem". This instance is positive if and only if $(\tilde{\prot}, \query)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
-\end{corollary}
-
-\ifproofs
-\begin{proof}
-	First, if $(\prot, \query)$ is positive then so is $(\tilde{\prot}, \query)$, as one can easily lift any "run" in $\prot$ to an equivalent "run" in $\tilde{\prot}$ (transitions are less guarded  in $\tilde{\prot}$ that in $\prot$). 
-	
-	Suppose now that $(\tilde{\prot}, \query)$ is a positive instance of the "query coverability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that satisfies $\query$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (Remark~\ref{rem:bigger_config_query} then allows us to conclude). 
-	
-	If $\config = \config_0$ then $\run = \tilde{\run}$ suffices. Suppose that $\tilde{\run}$ has length $k \geq 1$, and that the result if true for "runs" of length $k-1$. Decompose $\tilde{\run}$ into $\tilde{\run_{k-1}}: \tilde{\config_0} \step{*} \tilde{\config_{k-1}}$ of length $k-1$ and a final step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. 
-	By induction hypothesis, there exists $\run_{k-1}: \config_0 \step{*} \config_{k-1}$ such that $\tilde{\config_{k-1}} \lessthan \config_{k-1}$: there exists an injective function $\pi : \tilde{\agents} \rightarrow \agents$
-	such that, for all $a \in \tilde{\agents}$, $\tilde{\config_{k-1}}(a) = \config_{k-1}(\pi(a))$, where $\tilde{\agents} := \agentsof{\tilde{\run}}$ and $\agents := \agentsof{\run}$. If $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ involves no reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$, then we directly lift this step into a step appended at the end of $\run_{k-1}$ (making $\pi(a)$ take a transition whenever $a$ does so in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$). Otherwise, write $\tilde{\agents}_{\diseqtestact}$ the subset of $\tilde{agents}$ corresponding to agents taking in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ a reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$ . Write $(q, \br{m}, q') \in \transitions$ the broadcast transition used in this step.  Using Lemma~\ref{lem:copycat}, we add to $\config_{k-1}$ a fresh agent $a_{\mathsf{new}}$ with state $q$ and a register value that do not appear in $\config_{k-1}$. 
-	We first mimick this broadcast step at the end of $\run_{k-1}$, making any agent $\pi(a) \in \pi(\tilde{\agents} \setminus \tilde{\agents}_{\diseqtestact})$ take the transition that $a$ takes in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. We then add a new step where $a_{\mathsf{new}}$ broadcasts using transition $(q, \br{m}, q')$, and every agent $\pi(a) \in \pi(\tilde{\agents}_{\diseqtestact})$ takes the transition corresponding to the transition taken by $a$ in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. Such a transition is a reception with action $\quotemarks{\diseqtestact}$ in $\prot$; however, because $a_{\mathsf{new}}$ does not share its register value with any process from $\tilde{\agents}$, all disequality conditions are satisfied and this step is valid. In this end, every agent $\pi(a) \in \pi(\tilde{\agents})$ has taken the transition in $\prot$ corresponding to the one $a$ took in $\tilde{\prot}$ in step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$, hence the configuration $\config_k$ reached by the constructed run is such that $\tilde{\config_k} \lessthan \config_k$. 
-\end{proof}
-\fi
-
-Thanks to Corollary~\ref{cor:removing_diseq_tests}, we shall from now on assume that all considered protocols have no disequality tests. 
-
-\begin{definition}
-	Given a set of states $K \subseteq Q$, we say that a pair $\config, \aval$ with  $\config$ a "configuration" over a set of agents $\agents$ and $\aval \in \nats$ satisfies $K$ if for all $q \in K$, there exists $a \in \agents$ such that $\config(a) = (q,\aval)$.
-	A configuration $\config$ satisfies $K$ if there exists $\aval \in \nats$ such that $\config, \aval $ satisfies $K$. 
-	A "run" satisfies $K$ if its final configuration does.
-\end{definition}
-Note that if a "run" satisfies $K$, then it covers every state in $K$. The converse is not true as, in order to satisfy $K$, one needs to have agents of every state of $K$ that all share the same register value. See for instance the example below.
-
-\begin{example}
-	Consider the "protocol" displayed in Figure~\ref{fig:no-clique}.
-	We can obtain configurations satisfying $\set{1,2}$, $\set{2,3}$ or $\set{1,3}$, but we cannot obtain one satisfying $\set{1,2,3}$.
-	
-	\begin{figure}[h]
-		\input{Figures/fig-no-clique}
-		\caption{An illustrating example}
-		\label{fig:no-clique}
-	\end{figure}
-\end{example}
-
-
-
-\begin{definition}
-	We say that a "query" $\query$ is ""contradictory"" if either:
-	\begin{itemize}
-		\item there exists $\varz$ and $q \neq q' \in Q$ such that $\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$ or
-		
-		\item there exist $\var{z_1}, \ldots, \var{z_k} \in \varset$ and $j_1, \ldots, j_k$ with $k\geq 1$ such that $\quotemarks{R_{j_i}(\varz_{i}) = R_{j_{i+1}}(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R_{j_k}(\varz_k) \neq R_{j_1}(\varz_1)} \in \query$.
-	\end{itemize}
-\end{definition}
-
-\begin{proposition}
-	A "query" $\query$ is "contradictory" if and only if there exists no configuration satisfying $\query$. Additionnaly, one may decide whether $\query$ is contradictory in time polynomial in $\size{\prot} + \size{\query}$. 
-\end{proposition}
-
-\ifproofs
-\begin{proof}
-	Suppose first that $\query$ is "contradictory". If there exist $q \ne q'$ such that
-	$\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$,  then a "configuration" satisfying $\query$ would need to have a single agent in two distinct states. If there exist $\var{z_1}, \ldots, \var{z_k}$ distinct variables with $k\geq 1$ such that $\quotemarks{R(\varz_{i}) = R(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R(\varz_k) \neq R(\varz_1)} \in \query$, then in any configuration satisfying $\query$,  the registers associated with $\varz_k$ and $\varz_1$ must have the same register value but also distinct register values, which is a contradiction. 
-	
-	Suppose now that the $\query$ is not "contradictory" and show that there exists some configuration satisfying $\query$.
-	
-	We consider the graph $G$ whose vertices are variables of $\varset$ appearing in $\query$ and with an edge between $\varz$ and $\varz'$ if and only if $R(\varz) = R(\varz') \in \query$. Since $\query$ is not "contradictory", for any $\varz, \varz'$ in the same connected component of $G$, $\quotemarks{R(\varz) \ne R(\varz')} \notin \query$. We construct a configuration satisfying $\query$ with an agent $a_\varz$ for every $\varz$ such that:
-	\begin{itemize}
-		\item if $\quotemarks{q(\varz)} \in \query$ then $a_\varz$ is in state $q$,
-		\item the agents of the variables of a connected component of $G$ have all the same register value.  
-	\end{itemize}
-	The built configuration satisfies $\query$, which concludes the proof. 
-\end{proof}
-\fi
-
-\begin{lemma}
-	\label{lem:query-decomposition}
-	Let $\query$ a  "non-contradictory" "query". There exist $K_1, \ldots, K_p \subseteq Q$ with $p \leq \size{\query}$ with the following property: there exists a "run" satisfying $\query$ if and only if for all $i \in \set{1,\ldots, p}$, there is a run satisfying $K_i$. Moreover,such sets $K_1, \dots, K_p$ may be computed in time polynomial in $\size{\prot}$. 
-\end{lemma}
-
-
-\ifproofs
-\begin{proof}
-	
-	We consider the same graph $G$ as in the previous proof. We decompose $G$ into connected components $C_1, \ldots, C_p$. 
-	For each $C_i$ we define $K_i = \set{q \in Q \mid \exists \varz \in C_i, q(\varz) \in \query}$. Note that $K_i$ may be empty when there is no constraints on the states of the variables in $C_i$. An empty set is satisfied by any "run". This is coherent with the fact that, when $K_i = \emptyset$, it suffices to assign all variables in $C_i$ to an agent that stays in $q_0$ for the whole "run".
-	
-	Suppose there is a "run" satisfying $\query$, let $\config$ be its final configuration, let $\nu$ be a valuation witnessing the satisfaction of $\query$ by $\config$.
-	Let $i \in \set{1,\ldots, p}$, we show that $\config$ satisfies $K_i$. For all $\varz \in C_i$, let $(q_\varz,\aval_\varz) = \config(\nu(\varz))$. As $C_i$ is a connected component of $G$ and $\config$ satisfies $\query$, all $\nu(\varz)$ with $\varz \in C_i$ have the same register value, which we call $\aval$. 
-	For all $q \in K_i$, there exists $\varz \in C_i$ such that $q(\varz) \in \query$ and thus $q_\varz =q$ and $\aval_\varz =\aval$, thus $C_i$ is satisfied.
-	
-	For the converse implication, suppose for all $i$ we have a run $\run_i$ over a set of agents $\agents_i$ satisfying $K_i$. We rename agents so that the $\agents_i$ are pairwise disjoint, we introduce fresh agents $a_1, \ldots, a_p$ and we set $\agents = \set{a_1, \ldots, a_p} \sqcup \bigsqcup_{i=1}^p \agents_i$. We consider $\run: \config_0 \step{*} \config$ a "run" in which the sequences of actions of each $\run_i$ are executed sequently by agents from $\agents_i$. In $\run$, agents $a_1$ to $a_p$ are left idle on $q_0$. We build the valuation $\nu$ witnessing that $\run$ satisfies $\query$ as follows. Let $i \in \nset{1}{p}$. If $K_i = \emptyset$ then $\nu$ assigns $a_i$ to every variable of $C_i$. Otherwise, we know that $\config|_{\agents_i}$ satisfies $K_i$ because the final configuration of $\run_i$ does: there exists $\aval_i \in \nats$ such that, for all $q \in K_i$, some agent $a_{i,q}$ has state $q$ and register value $\aval_i$ in $\config$. Let $\varz \in C_i$. If, for some $q \in Q$, $\quotemarks{q(\varz)} \in \query$, $\nu$ assigns agent $a_{i,q}$ to $\varz$ ($q$ is unique as $\query$ is not "contradictory"). If $\query$ has no constraint about the state of $\varz$, $\nu$ assigns to $\varz$ some $a_{i,q}$ with $q \in k_i$ arbitrary. 
-	
-	% We define a valuation $\nu$ as follows. Let $\varz \in \varset$ and $i$ so that $C_i$ is the connected component of $\varz$ in $G$. If  for some $q$, then this $q$ is unique as $\query$ is not "contradictory". We set $\nu(\varz) = a_q^i$.
-	% If there is no $q(\varz)$ for any $q \in Q$ in $\query$ but there is one of the form $q'(\varz')$ with $\varz' \in C_i$, then we set $\nu(\varz) = \nu(\varz')$.
-	% Otherwise we set $\nu(\varz) = a_i$.
-	% This fully defines our valuation $\nu$.
-	
-	Clearly all formulas of the form $q(\varz)$ or $R(\varz) = R(\varz')$ are satisfied.
-	For the formulas of the form $R(\varz) \neq R(\varz')$, we observe that as $\query$ is not "contradictory", $\varz$ and $\varz'$ are not in the same connected component of $G$. Because the runs $\run_i$ worked with disjoint sets of register values ($\config_0$ is initial), the agents assigned to $\varz$ and $\varz'$ end the run with distinct register values.
-	Hence $\data{\config}(\nu(\varz)) \neq \data{\config}(\nu(\varz'))$. As a result, $\query$ is satisfied by $\run$.
-\end{proof}
-\fi
-\fi
+%
+%\begin{corollary}
+%	\label{cor:removing_diseq_tests}
+%	Let $(\prot, \query)$ an instance of the "query coverability problem". This instance is positive if and only if $(\tilde{\prot}, \query)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
+%\end{corollary}
+%
+%\ifproofs
+%\begin{proof}
+%	First, if $(\prot, \query)$ is positive then so is $(\tilde{\prot}, \query)$, as one can easily lift any "run" in $\prot$ to an equivalent "run" in $\tilde{\prot}$ (transitions are less guarded  in $\tilde{\prot}$ that in $\prot$). 
+%	
+%	Suppose now that $(\tilde{\prot}, \query)$ is a positive instance of the "query coverability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that satisfies $\query$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (Remark~\ref{rem:bigger_config_query} then allows us to conclude). 
+%	
+%	If $\config = \config_0$ then $\run = \tilde{\run}$ suffices. Suppose that $\tilde{\run}$ has length $k \geq 1$, and that the result if true for "runs" of length $k-1$. Decompose $\tilde{\run}$ into $\tilde{\run_{k-1}}: \tilde{\config_0} \step{*} \tilde{\config_{k-1}}$ of length $k-1$ and a final step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. 
+%	By induction hypothesis, there exists $\run_{k-1}: \config_0 \step{*} \config_{k-1}$ such that $\tilde{\config_{k-1}} \lessthan \config_{k-1}$: there exists an injective function $\pi : \tilde{\agents} \rightarrow \agents$
+%	such that, for all $a \in \tilde{\agents}$, $\tilde{\config_{k-1}}(a) = \config_{k-1}(\pi(a))$, where $\tilde{\agents} := \agentsof{\tilde{\run}}$ and $\agents := \agentsof{\run}$. If $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ involves no reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$, then we directly lift this step into a step appended at the end of $\run_{k-1}$ (making $\pi(a)$ take a transition whenever $a$ does so in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$). Otherwise, write $\tilde{\agents}_{\diseqtestact}$ the subset of $\tilde{agents}$ corresponding to agents taking in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$ a reception transition from $\tilde{\prot}$ whose corresponding transition in $\prot$ has action $\quotemarks{\diseqtestact}$ . Write $(q, \br{m}, q') \in \transitions$ the broadcast transition used in this step.  Using Lemma~\ref{lem:copycat}, we add to $\config_{k-1}$ a fresh agent $a_{\mathsf{new}}$ with state $q$ and a register value that do not appear in $\config_{k-1}$. 
+%	We first mimick this broadcast step at the end of $\run_{k-1}$, making any agent $\pi(a) \in \pi(\tilde{\agents} \setminus \tilde{\agents}_{\diseqtestact})$ take the transition that $a$ takes in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. We then add a new step where $a_{\mathsf{new}}$ broadcasts using transition $(q, \br{m}, q')$, and every agent $\pi(a) \in \pi(\tilde{\agents}_{\diseqtestact})$ takes the transition corresponding to the transition taken by $a$ in $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. Such a transition is a reception with action $\quotemarks{\diseqtestact}$ in $\prot$; however, because $a_{\mathsf{new}}$ does not share its register value with any process from $\tilde{\agents}$, all disequality conditions are satisfied and this step is valid. In this end, every agent $\pi(a) \in \pi(\tilde{\agents})$ has taken the transition in $\prot$ corresponding to the one $a$ took in $\tilde{\prot}$ in step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$, hence the configuration $\config_k$ reached by the constructed run is such that $\tilde{\config_k} \lessthan \config_k$. 
+%\end{proof}
+%\fi
+%
+%Thanks to Corollary~\ref{cor:removing_diseq_tests}, we shall from now on assume that all considered protocols have no disequality tests. 
+%
+%\begin{definition}
+%	Given a set of states $K \subseteq Q$, we say that a pair $\config, \aval$ with  $\config$ a "configuration" over a set of agents $\agents$ and $\aval \in \nats$ satisfies $K$ if for all $q \in K$, there exists $a \in \agents$ such that $\config(a) = (q,\aval)$.
+%	A configuration $\config$ satisfies $K$ if there exists $\aval \in \nats$ such that $\config, \aval $ satisfies $K$. 
+%	A "run" satisfies $K$ if its final configuration does.
+%\end{definition}
+%Note that if a "run" satisfies $K$, then it covers every state in $K$. The converse is not true as, in order to satisfy $K$, one needs to have agents of every state of $K$ that all share the same register value. See for instance the example below.
+%
+%\begin{example}
+%	Consider the "protocol" displayed in Figure~\ref{fig:no-clique}.
+%	We can obtain configurations satisfying $\set{1,2}$, $\set{2,3}$ or $\set{1,3}$, but we cannot obtain one satisfying $\set{1,2,3}$.
+%	
+%	\begin{figure}[h]
+%		\input{Figures/fig-no-clique}
+%		\caption{An illustrating example}
+%		\label{fig:no-clique}
+%	\end{figure}
+%\end{example}
+%
+%
+%
+%\begin{definition}
+%	We say that a "query" $\query$ is ""contradictory"" if either:
+%	\begin{itemize}
+%		\item there exists $\varz$ and $q \neq q' \in Q$ such that $\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$ or
+%		
+%		\item there exist $\var{z_1}, \ldots, \var{z_k} \in \varset$ and $j_1, \ldots, j_k$ with $k\geq 1$ such that $\quotemarks{R_{j_i}(\varz_{i}) = R_{j_{i+1}}(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R_{j_k}(\varz_k) \neq R_{j_1}(\varz_1)} \in \query$.
+%	\end{itemize}
+%\end{definition}
+%
+%\begin{proposition}
+%	A "query" $\query$ is "contradictory" if and only if there exists no configuration satisfying $\query$. Additionnaly, one may decide whether $\query$ is contradictory in time polynomial in $\size{\prot} + \size{\query}$. 
+%\end{proposition}
+%
+%\ifproofs
+%\begin{proof}
+%	Suppose first that $\query$ is "contradictory". If there exist $q \ne q'$ such that
+%	$\quotemarks{q(\varz)}, \quotemarks{q'(\varz)} \in \query$,  then a "configuration" satisfying $\query$ would need to have a single agent in two distinct states. If there exist $\var{z_1}, \ldots, \var{z_k}$ distinct variables with $k\geq 1$ such that $\quotemarks{R(\varz_{i}) = R(\varz_{i+1})} \in \query$ for all $i \in \set{1,\ldots,k-1}$ and $\quotemarks{R(\varz_k) \neq R(\varz_1)} \in \query$, then in any configuration satisfying $\query$,  the registers associated with $\varz_k$ and $\varz_1$ must have the same register value but also distinct register values, which is a contradiction. 
+%	
+%	Suppose now that the $\query$ is not "contradictory" and show that there exists some configuration satisfying $\query$.
+%	
+%	We consider the graph $G$ whose vertices are variables of $\varset$ appearing in $\query$ and with an edge between $\varz$ and $\varz'$ if and only if $R(\varz) = R(\varz') \in \query$. Since $\query$ is not "contradictory", for any $\varz, \varz'$ in the same connected component of $G$, $\quotemarks{R(\varz) \ne R(\varz')} \notin \query$. We construct a configuration satisfying $\query$ with an agent $a_\varz$ for every $\varz$ such that:
+%	\begin{itemize}
+%		\item if $\quotemarks{q(\varz)} \in \query$ then $a_\varz$ is in state $q$,
+%		\item the agents of the variables of a connected component of $G$ have all the same register value.  
+%	\end{itemize}
+%	The built configuration satisfies $\query$, which concludes the proof. 
+%\end{proof}
+%\fi
+%
+%\begin{lemma}
+%	\label{lem:query-decomposition}
+%	Let $\query$ a  "non-contradictory" "query". There exist $K_1, \ldots, K_p \subseteq Q$ with $p \leq \size{\query}$ with the following property: there exists a "run" satisfying $\query$ if and only if for all $i \in \set{1,\ldots, p}$, there is a run satisfying $K_i$. Moreover,such sets $K_1, \dots, K_p$ may be computed in time polynomial in $\size{\prot}$. 
+%\end{lemma}
+%
+%
+%\ifproofs
+%\begin{proof}
+%	
+%	We consider the same graph $G$ as in the previous proof. We decompose $G$ into connected components $C_1, \ldots, C_p$. 
+%	For each $C_i$ we define $K_i = \set{q \in Q \mid \exists \varz \in C_i, q(\varz) \in \query}$. Note that $K_i$ may be empty when there is no constraints on the states of the variables in $C_i$. An empty set is satisfied by any "run". This is coherent with the fact that, when $K_i = \emptyset$, it suffices to assign all variables in $C_i$ to an agent that stays in $q_0$ for the whole "run".
+%	
+%	Suppose there is a "run" satisfying $\query$, let $\config$ be its final configuration, let $\nu$ be a valuation witnessing the satisfaction of $\query$ by $\config$.
+%	Let $i \in \set{1,\ldots, p}$, we show that $\config$ satisfies $K_i$. For all $\varz \in C_i$, let $(q_\varz,\aval_\varz) = \config(\nu(\varz))$. As $C_i$ is a connected component of $G$ and $\config$ satisfies $\query$, all $\nu(\varz)$ with $\varz \in C_i$ have the same register value, which we call $\aval$. 
+%	For all $q \in K_i$, there exists $\varz \in C_i$ such that $q(\varz) \in \query$ and thus $q_\varz =q$ and $\aval_\varz =\aval$, thus $C_i$ is satisfied.
+%	
+%	For the converse implication, suppose for all $i$ we have a run $\run_i$ over a set of agents $\agents_i$ satisfying $K_i$. We rename agents so that the $\agents_i$ are pairwise disjoint, we introduce fresh agents $a_1, \ldots, a_p$ and we set $\agents = \set{a_1, \ldots, a_p} \sqcup \bigsqcup_{i=1}^p \agents_i$. We consider $\run: \config_0 \step{*} \config$ a "run" in which the sequences of actions of each $\run_i$ are executed sequently by agents from $\agents_i$. In $\run$, agents $a_1$ to $a_p$ are left idle on $q_0$. We build the valuation $\nu$ witnessing that $\run$ satisfies $\query$ as follows. Let $i \in \nset{1}{p}$. If $K_i = \emptyset$ then $\nu$ assigns $a_i$ to every variable of $C_i$. Otherwise, we know that $\config|_{\agents_i}$ satisfies $K_i$ because the final configuration of $\run_i$ does: there exists $\aval_i \in \nats$ such that, for all $q \in K_i$, some agent $a_{i,q}$ has state $q$ and register value $\aval_i$ in $\config$. Let $\varz \in C_i$. If, for some $q \in Q$, $\quotemarks{q(\varz)} \in \query$, $\nu$ assigns agent $a_{i,q}$ to $\varz$ ($q$ is unique as $\query$ is not "contradictory"). If $\query$ has no constraint about the state of $\varz$, $\nu$ assigns to $\varz$ some $a_{i,q}$ with $q \in k_i$ arbitrary. 
+%	
+%	% We define a valuation $\nu$ as follows. Let $\varz \in \varset$ and $i$ so that $C_i$ is the connected component of $\varz$ in $G$. If  for some $q$, then this $q$ is unique as $\query$ is not "contradictory". We set $\nu(\varz) = a_q^i$.
+%	% If there is no $q(\varz)$ for any $q \in Q$ in $\query$ but there is one of the form $q'(\varz')$ with $\varz' \in C_i$, then we set $\nu(\varz) = \nu(\varz')$.
+%	% Otherwise we set $\nu(\varz) = a_i$.
+%	% This fully defines our valuation $\nu$.
+%	
+%	Clearly all formulas of the form $q(\varz)$ or $R(\varz) = R(\varz')$ are satisfied.
+%	For the formulas of the form $R(\varz) \neq R(\varz')$, we observe that as $\query$ is not "contradictory", $\varz$ and $\varz'$ are not in the same connected component of $G$. Because the runs $\run_i$ worked with disjoint sets of register values ($\config_0$ is initial), the agents assigned to $\varz$ and $\varz'$ end the run with distinct register values.
+%	Hence $\data{\config}(\nu(\varz)) \neq \data{\config}(\nu(\varz'))$. As a result, $\query$ is satisfied by $\run$.
+%\end{proof}
+%\fi
+%\fi
 
 
 \subsection{Classical definitions}
