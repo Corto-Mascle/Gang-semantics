@@ -266,9 +266,9 @@ We are now ready to prove Lemma~\ref{lem:tree-to-run}.
 	
 	Let $\tau$ be a "unfolding tree", let $\node$ be its root.
 	
-	We see $\localrunlabel{\node}$ as a "partial run" with a single agent.
-	We are going to compose $\localrunlabel{\node}$ with some runs given by the children of $\node$ to construct a run satisfying the properties above.
-	Let $V$ be the set of values received or broadcast in $\localrunlabel{\node}$ and $V_{init}$ be the set of initial values of $\localrunlabel{\node}$.
+	We see $u := \localrunlabel{\node}$ as a "partial run" with a single agent.
+	We are going to compose $u$ with some runs given by the children of $\node$ to construct a run satisfying the properties above.
+	Let $V$ be the set of values appearing in $u$ and $V_{init}$ be the set of initial values of $u$.
 	
 	
 	\subsubsection{Step 1: Non-initial values}
@@ -283,7 +283,7 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 	\item If $v \in V' \cup \nats \setminus V$ then $\vinput{v}{\run} = \epsilon$
 \end{itemize}  
 	
-	If $V' = \emptyset$ then this is clear as we can simply take $\run$.
+	If $V' = \emptyset$ then this is clear as we can simply take $\run := \localrun$.
 	
 	Now suppose there exists $v \in V \setminus (V_{init}\cup \set{\valuelabel{\node}} \cup V')$. Let $V'' = V' \cup \set{v}$. By induction hypothesis (on $\size{V'}$) there exists a "partial run" $\run'$ such that for all $v' \in \nats$:
 	\begin{itemize}
@@ -292,7 +292,7 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 		\item If $v' \in (\nats \setminus V) \cup V''$ then $\vinput{v'}{\run} = \epsilon$
 	\end{itemize}
 
-	As $v \neq \valuelabel{\node}$, by condition~\ref{unfoldingC3.2} $\node$ has a child $\node'$ such that $\vinput{v}{\localrunlabel{\mu}} \subword  \bosslabel{\node'}$.
+	As $v \neq \valuelabel{\node}$, by condition~\ref{item:condition1_non_initial_value} $\node$ has a child $\node'$ such that $\vinput{v}{\localrunlabel{\mu}} \subword  \bosslabel{\node'}$.
 	By induction hypothesis (on the "unfolding tree"), as the subtree rooted in $\mu'$ satisfies the "boss specification" $\vinput{v}{\mu}$, there exists a run $\run_v$ satisfying $\vinput{v}{\localrunlabel{\mu}}$.
 	
 	Let $v' \in \nats$ be such that $\vinput{v}{\localrunlabel{\node}} \subword \voutput{v'}{\run_v}$. 
@@ -308,7 +308,7 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 	
 	As a result, $\Tilde{\run}$ is a partial run satisfying the three requirements for $V''$.  This concludes our induction.
 	
-	In particular, with $V' = V\setminus (V_{init}\cup \set{\valuelabel{\node}})$, we obtain that there exists a run $\run$ such that 
+	In particular, with $V' = V\setminus (V_{init}\cup \set{\valuelabel{\node}})$, we obtain that there exists a run $\run$ such that,
 	for all $v \in \nats$:
 	\begin{itemize}
 		\item $\voutput{v}{u} \subword \voutput{v}{\run}$
@@ -339,9 +339,9 @@ Now suppose there exists $v \in V \setminus (\set{\valuelabel{\node}} \cup V')$.
 	\item If $v' \in (\nats \setminus V) \cup V''$ then $\vinput{v'}{\run} = \epsilon$
 \end{itemize}
 
-As $v \neq \valuelabel{\node}$, by condition~\ref{unfoldingC3.1} there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdec{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
+As $v \neq \valuelabel{\node}$, by condition~\ref{item:condition2_initial_value}, there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into successive local runs $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$, $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdec{\decsymb_i}$ with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
 
-By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$. \corto{fix follower spec dec,m vs fw, fm}
+By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v_i'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$. \corto{fix follower spec dec,m vs fw, fm}
 
 For each $i$ we consider the shortest prefix $\run''_i$ of $\run'_i$ ending with an "internal message" $\intmessage{\followlabelmessage{\node_i}}{v'_i}$, we have that $\vinput{v'_i}{\run''_i} \subword \vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$.
 
