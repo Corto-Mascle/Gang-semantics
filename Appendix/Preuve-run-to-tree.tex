@@ -19,9 +19,9 @@
 	Assume $\spec$ is a "boss specification" $\bossspec \in \messages^*$.
 	
 	There exists a value $v$ such that $\bossspec$ is a subword of the sequence of messages broadcast with value $v$ in $\run$. Let $w$ the sequence of messages broadcast with value $v$ in $\run$.
-	If $\bossspec$ is empty then the tree decomposition with one node labelled with an empty local run, any value and $\bossspec$ satisfies $\bossspec$.	
+	If $\bossspec$ is empty then the trivially "unfolding tree" with one node and an empty local run satisfies $\bossspec$.	
 	
-	Otherwise let $a$ be the agent which has $v$ as an initial value, let $u$ be its local run in $\run$. We set $u$, $v$ and $w$ to be the labels of the root of the unfolding tree we are constructing.
+	Otherwise let $a$ be the agent which has $v$ as "initial value" and let $u$ be its "local run" in $\run$. We set $u$, $v$ and $w$ to be the labels of the root of the unfolding tree we are constructing.
 	We decompose $w$ as $(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$, where $w_0\cdots w_\ell$ is the sequence of messages broadcast by $a$ with value $v$, and the $(m_j)_{1\leq j\leq \ell}$ are the elements of $\messages$, placed at the times at which they are first broadcast by an agents other than $a$ with value $v$. If there is no such broadcast of a message $m$, then it does not appear as an $m_j$. This forms a "decomposition" of $w'$.
 	
 	For all $1 \leq j \leq \ell$ let us write $\decsymb_j$ for the "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$. Let $\run_j$ be the prefix of $\run$ up until the first broadcast of $m_j$ with $v$ by some agent $a_j$ that does not have $v$ as an initial value, and let $\run'_j$ be $\run_j$ without that last step. By definition of $\decsymb$, the sequence of broadcasts with value $v$ in $\run'_j$ "admits decomposition" $\decsymb_j$.
