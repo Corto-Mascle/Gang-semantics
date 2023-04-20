@@ -1,22 +1,24 @@
-\section{Proof of Lemma~\ref{lem:run-to-tree}}
+\subsection{Proof of Lemma~\ref{lem:run-to-tree}}
 
 \LemRunToTree*
 
 \begin{proof}
 	
-	We proceed by strong induction on the lexicographic order on $\nats \times \set{boss, follower}$ with the length of $\run$ as the first component and the type of specification as the second, ``boss'' being considered higher than ``follower''. 
+	We proceed by strong induction on the lexicographic order on $\nats \times \set{\text{boss}, \text{follower}}$ with the length of the run as first component and the type of specification as second component, ``boss'' being considered higher than ``follower'' (so that, for a fixed "run" length, we prove it for "boss specifications" then for "follower specifications"). 
 	
-	Let $\run$ be a run, $\spec \in \messages^* \cup \messages^* \times \messages$ a specification, assume the property is satisfied for all lower pairs of runs and specifications. We construct a root and attach subtrees to it so that conditions \ref{unfoldingC1} to \ref{unfoldingC3} are satisfied 
+	For runs of length $0$, no specifications are satisfied hence the property is true.
+	Let $\run$ be a run, and assume that the prperty is true for run whose length less than the one of $\run$. 
 	
-	We split our construction in four parts. The first part applies if $\spec$ is a "boss specification", the second one if $spec$ is a "follower specification". 
-	Those parts construct a root labelled with a local run $u$ and a value $v$, as well as some children so that conditions \ref{unfoldingC1} and \ref{unfoldingC2} are satisfied.
+	We split our construction in four parts. The first part applies if $\spec$ is a "boss specification", the second one if $\spec$ is a "follower specification". 
+	Those parts construct a root labelled with a local run $u$ and a value $v$, as well as some children so that conditions \nico{todo}
 	
-	The third and fourth part add children so that \ref{unfoldingC3.1} and \ref{unfoldingC3.2} are satisfied, respectively.
+	The third and fourth part add children so that \nico{todo}
 	
 	\textbf{Case 1: The specification is a "boss specification"}
 	
-	Assume $\spec$ is a "boss specification" $\spec = \bossspec \in \messages^*$.
-	There exists a value $v$ such that $\bossspec$ is a subword of the sequence of messages broadcast with value $v$ through $\run$. Let $w$ be the latter sequence.
+	Assume $\spec$ is a "boss specification" $\bossspec \in \messages^*$.
+	
+	There exists a value $v$ such that $\bossspec$ is a subword of the sequence of messages broadcast with value $v$ in $\run$. Let $w$ the sequence of messages broadcast with value $v$ in $\run$.
 	If $\bossspec$ is empty then the tree decomposition with one node labelled with an empty local run, any value and $\bossspec$ satisfies $\bossspec$.	
 	
 	Otherwise let $a$ be the agent which has $v$ as an initial value, let $u$ be its local run in $\run$. We set $u$, $v$ and $w$ to be the labels of the root of the unfolding tree we are constructing.

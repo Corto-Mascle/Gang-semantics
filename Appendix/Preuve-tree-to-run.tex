@@ -1,4 +1,4 @@
-\section{Proof of Lemma~\ref{lem:tree-to-run}}
+\subsection{Proof of Lemma~\ref{lem:tree-to-run}}
 \label{app:tree-to-run}
 
 \begin{definition}
@@ -255,7 +255,7 @@ Hence the $\Tilde{\run}_i$ satisfy all the required conditions.
 	Let $V$ be the set of values received or broadcast in $\localrunlabel{\node}$ and $V_{init}$ be the set of initial values of $\localrunlabel{\node}$.
 	
 	
-	\subsection{Step 1: Non-initial values}
+	\subsubsection{Step 1: Non-initial values}
 	\label{sec:tree-to-run-step-one}
 	
 	We show the following statement by induction on $\size{V'}$.
@@ -302,7 +302,7 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 		\item If $v \notin (V_{init}\cup \set{\valuelabel{\node}})$ then $\vinput{v}{\run} = \epsilon$
 	\end{itemize}  
 	
-	\subsection{Step 2: Initial values}
+	\subsubsection{Step 2: Initial values}
 	\label{sec:tree-to-run-step-two}
 	
 	We show the following statement by induction on $\size{V'}$.
@@ -351,7 +351,7 @@ for all $v \in \nats$:
 	\item If $v \neq \valuelabel{\node}$ then $\vinput{v}{\widehat{\run}} = \vinput{v}{\run} = \epsilon$
 \end{itemize}  
 
-\subsection{Step 3: $\valuelabel{\node}$}
+\subsubsection{Step 3: $\valuelabel{\node}$}
 	
 In Section~\ref{sec:tree-to-run-step-two} we constructed a run $\widehat{\run}$ such that for all $v \in \nats$:
 \begin{itemize}

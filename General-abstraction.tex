@@ -81,93 +81,30 @@ a finite tree where each node $\node$ has three labels:
 	\item The third one is a ""specification"" $\speclabel{\node}$, which is either a word $\bosslabel{\node} \in \messages^*$ (""boss specification"") or a pair $(\followlabelword{\node}, \followlabelmessage{\node}) \in \messages^* \times \messages$ (""follower specification""). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
 \end{itemize} 
 
-Before stating the conditions that the tree must satisfy, we provide a bit of intuition. Let $\node$ a node of $\tree$. In this tree, the children of a local run are the witnesses that this local run may be turned into a real run, as they provide the messages received in the local run. To satisfy a boss specification $\bossspec$, one must certify that $\bossspec$ may be sent with value $\valuelabel{\node}$; to do so, \nicoin{todo}
+For $\aval$ appearing in a "local run", $\aval$ is ""initial"" if its appears in $u$'s first "local configuration", and ""non-initial"" otherwise. \nicoin{a enlever?}
 
-""Initial values"" of a "local run" $\localrun$ are values that appear in $\localrun$ and are present in its first "local configuration"; ""non-initial values"" are values appearing in $\localrun$ which are not "initial".
-
-\begin{enumerate}
-	\item \label{item:follower_node} If $\node$ is a "follower node" then $\aval$ is not an initial value of $\localrun$, $\vinput{\aval}{\localrun} = \followlabelword{\node}$ and 
+Let $\node$ a node of $\tree$. 
+The conditions expressed below state two things. First, that $\node$ is a witness that its "specification" is carried out. Second, that the "specifications" of its children are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents. It is formalized as follows.
+\begin{enumerate}[{Condition} (i)]
+	\item \label{item:condition1_non_initial_value} For every non-initial value $\aval \ne \valuelabel{\node}$ of $\localrun$, $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval}{\localrun}$ is a subword of $\bosslabel{\node'}$.
+	\item \label{item:condition2_follower_node} If $\node$ is a "follower node" then $\aval$ is not an initial value of $\localrun$, $\vinput{\aval}{\localrun} = \followlabelword{\node}$ and 
 	$\voutput{\aval}{\localrun}$ contains $\followlabelmessage{\node}$.
-	\item \label{item:non_initial_value} for every non-initial value $\aval$ of $\localrun$, $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval}{\localrun}$ is a subword of $\bosslabel{\node'}$.
-	\item \label{item: initial_value} For every initial value $\aval$ of $\localrun$, there exists a decomposition $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that:
+	\item \label{item:condition3_initial_value} For every initial value $\aval$ of $\localrun$, there is a "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ s.t.:
 	\begin{itemize}
 		\item $\localrun$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{\aval}{\localrun_i}$ and $\vinput{\aval}{\localrun_i} \in \set{m_1, \dots, m_{i-1}}^*$
 		\item for all $i \in [1,\ell]$, $\node$ has a child $\node_i$ which is a "follower node" such that $\followlabelmessage{\node_i} = m_i$ and $\followlabelword{\node_i} \in\langdec{\decsymb_i}$ where $\decsymb_i = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.
 	\end{itemize}
-	\item \label{item:boss_node} If $\node$ is a "boss node", there $\valuelabel{\node}$ is an "initial value" of $\localrunlabel{\node}$ and the associated "decomposition" $\decsymb$ is such that $\bosslabel{\node} \in \langdec{\decsymb}$.
+	\item \label{item:condition4_boss_node} If $\node$ is a "boss node", there $\valuelabel{\node}$ is an "initial value" of $\localrunlabel{\node}$ and the associated "decomposition" $\decsymb$ satisfies that $\bosslabel{\node} \in \langdec{\decsymb}$.
 \end{enumerate}
 
-
-%Old def
-
-%\begin{definition}
-%	\label{def:tree-unfolding}
-%	A ""unfolding tree"" is
-%	a finite tree where each node has three labels:
-%	\begin{itemize}
-%		\item The first one is a local run of $\prot$. 
-%		
-%		\item The second one is a value $v \in \nats$.
-%		
-%		\item The third one is a ""specification"", which is either a word $bw \in \messages^*$ or a pair $(fw, fm)$ with $fm \in \messages$ and $fw \in \messages^*$ a "decomposition". In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"". 
-%	\end{itemize} 
-%	
-%	It must satisfy the following conditions:
-%	Let $\node$ be a node of that tree, and $u$ and $v$ the local run and value labelling it. The following conditions must hold:
-%	
-%	\begin{itemize}
-%		\item[C1\namedlabel{unfoldingC1}{C1}] If it is a "boss node" labelled by $w \in \messages^*$ then $v$ is an initial value of $u$ and there exists a decomposition $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$ such that
-%		$w_0 \cdots w_\ell$ is the $v$-output of $u$, $w \in \langdec{\decsymb}$, and for all $j \in \nset{1}{\ell}$, $\node$ has a child which is a "follower node" with a label $\decsymb \subword ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.
-%		
-%		\item[C2\namedlabel{unfoldingC2}{C2}] If it is a "follower node" labelled $(\decsymb, m)$ then $v$ is not an initial value of $u$, the $v$-input of $u$ is in $\langdec{\decsymb}$, and $m$ is broadcast at some point in $u$ with value $v$.
-%		
-%		\item[C3\namedlabel{unfoldingC3}{C3}] In both cases, for all $v' \neq v$ broadcast or received at some point in $u$,
-%		\begin{itemize}
-%			\item[C3.1\namedlabel{unfoldingC3.1}{C3.1}] If $v'$ is an initial value of $u$ then there exists a "decomposition" $\decsymb' = (w'_0, m'_1, w'_1, \ldots, m'_k, w'_k)$ where $w'_0 w'_1 \ldots w'_k$ is the $v'$-output of $u$, for all $j \in \nset{1}{k}$ all receptions of $m_j$ with value $v'$ in $u$ happen after the broadcasts of $w'_0\cdots w'_{j-1}$ with value $v'$, and for all $j \in \nset{1}{k}$ $\node$ has a child which is a "follower node" with a label $\decsymb \subword ((w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1}), m_j)$.  
-%			
-%			\item[C3.2\namedlabel{unfoldingC3.2}{C3.2}] If $v'$ is not an initial value of $u$ then $\node$ has a child which is a "boss node" labelled by $w'$ such that $\vinput{v}{u}$ is a subword of $w'$.
-%		\end{itemize}
-%	\end{itemize}
-%	
-%	
-%\end{definition}
+There is a strong connection between runs of $\prot$ and "unfolding trees". In fact, the following proposition expresses that \COVER may be expressed as the existence of an "unfolding tree". 
+The proof can be found in Appendix~\ref{app:trees-sound-complete}.
 
 
-%\begin{remark}
-% The conditions \ref{unfoldingC1}, \ref{unfoldingC2} and \ref{unfoldingC3} defined in Definition~\ref{def:tree-unfolding} only depend on the
-%\end{remark}
-
-
-\begin{definition}
-	A "run" $\run$ satisfies a boss specification $\bossspec$ if there exists $\aval \in \nats$ such that $\bossspec$ is a subword of the sequence of messages sent with value $\aval$ through $\run$.
-	
-	A "run" $\run$ satisfies a follower specification $(\followwordspec, \followmessagespec)$ if there exists a value $\aval$ and an agent $a$ such that $\aval$ is not an initial value of $a$, the $\aval$-input of $a$ in $\run$ is a subword of $\followwordspec$ and agent $a$ broadcasts $\followmessagespec$ with value $\aval$ at some point.
-	
-	An "unfolding tree" satisfies a boss specification $\bossspec$ if its root $\node$ is a "boss node" and $\bossspec$ is a subword of its specification label $\bosslabel{\node}$.
-	An "unfolding tree" satisfies a follower specification $(\followwordspec, \followmessagespec)$ if its root $\node$ is a "follower node" such that $\followmessagespec=\followlabelmessage{\node}$ and  $\followlabelword{\node}$ is a subword of $\followwordspec$.
-\end{definition}
-
-We will now prove that there exists a run satisfying a specification if and only if there exists a finite tree satisfying that same specification. To do so, we will build a tree from a run and conversely.
-
-
-Also note that the interpretation of the "follower nodes" changes between the two directions: when building the tree a follower node labelled $(\followwordspec, \followmessagespec)$ means that there exists a global run in which some agent receives the sequence of messages $\followwordspec$ and broadcasts $\followmessagespec$, all with a value $\aval$ that is not one of its initial ones.
-\nico{pas clair}
-
-When building the run a follower node means that there exists a "partial run" which receives a sequence of external messages which forms the word $fw$, with a value $v$ that it initially does not contain, and eventually broadcasts $m$ with that same value.
-
-\begin{restatable}{lemma}{LemRunToTree}
-	\label{lem:run-to-tree}
-	Let $\prot$ be a protocol.
-	If there exists a finite run $\run$ of $\prot$ satisfying some "specification" $\spec$ then there exists a finite "unfolding tree" $\tree$ labelled with local runs of $\prot$ satisfying $\spec$. \nico{pourquoi label par $\prot$?}
+\begin{restatable}{proposition}{treessoundcomplete}
+\label{prop:trees-sound-complete}
+Let $(\prot,q_f)$ an instance of $\COVER$. $(\prot,q_f)$ is positive if and only if there exists an "unfolding tree" $\tree$ of $\prot$ such that the local run at the root of $\tree$ covers $q_f$.
 \end{restatable}
-
-\begin{restatable}{lemma}{LemTreeToRun}
-	\label{lem:tree-to-run}
-	Let $\prot$ be a "protocol".
-	If there exists a finite "unfolding tree" labelled by local runs of $\prot$ satisfying a "boss specification" $bw \in \messages^*$ then there exists  a finite "run" $\run$ of $\prot$ satisfying $bw$.
-\end{restatable}
-
-The proof can be found in Appendix~\ref{app:tree-to-run}.
 
 
 
