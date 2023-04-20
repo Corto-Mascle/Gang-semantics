@@ -1,5 +1,9 @@
-%\subsection{Upper bound}
-To prove that the "cover problem" is in \NP in the special case of 1-BNRAs, we will present an abstraction on configurations and runs. 
+
+To prove the \NP upper bound, we will present an abstraction on configurations and runs. 
+
+
+
+
 A key observation is that if there is a run sending an agent to a state $q$, then we can copy that run over disjoints set of agents (with different values) as many times as we want to obtain as many agents as we need in $q$. 
 
 Furthermore, if an agent $a$ in a state $q$ has a value $\aval$ that is not its initial one, it means that at some point in the run, it was in a state $q'$ and executed a transition in which it received a message with value $v$, stored it in its register and went to a state $q''$. As mentioned before, we can copy the run up to that point to have an unlimited supply of agents in $q'$, and thus an unlimited supply of agents in $q''$ with value $\aval$. We can then make all those agents copy the broadcasts of $a$ and receive the same messages so that they all reach $q$ with value $v$. Hence if we have an agent in a state $q$ with a value $\aval$ that is not its initial one, we can assume that we have as many agents in $q$ with value $\aval$ as we need.
@@ -126,7 +130,7 @@ The \emph{initial abstract configuration} is $\aconfiginit := (\set{q_0}, q_0, \
 As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfig_0 = \aconfiginit$ is the initial configuration and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Similarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
 \end{definition}
 
-The gang reset will help us to do the following, if one wants to check if one state is reachable, one should check the presence of an abstract run leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new boss but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a sate in $S$).\lu{c'est une première formulation un peu moche, il faut repasser dessus}
+The gang reset will help us to do the following, if one wants to check if one state is reachable, one should check the presence of an abstract run leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new boss but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a state in $S$).\lu{c'est une première formulation un peu moche, il faut repasser dessus}
 
 \begin{lemma}
 	\label{lem:short-run}
