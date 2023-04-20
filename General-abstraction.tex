@@ -15,22 +15,23 @@ From the other agents' perspective, this means that someone (or several agents) 
 Moreover, the agent $a$ might first broadcast messages with some value $\aval$ that it had initially and require to receive from other agents messages with this same value $\aval$. 
 From the other agent's perspective, this means that someone, after receiving sequence of messages $w$ all with the same value $\aval$, is required to broadcast a given message $\amessage$ with value $\aval$. We later call such a request a \emph{"follower specification"}.
 
-The two roles identified previously are the key to the decidability procedure. While, in the original run, it could be that some agent plays several such roles\lu{it would be nice to have such an example in the execution example and cite it there}, we will in fact show, thanks to the copycat principle, that one might consider that each agent only plays one such role.
-We will define an "unfolding tree" of a local run where each node provides a witness that a given "role" can be carried out. We will then provide bounds on the size of the "unfolding tree" that we have to consider, and conclude that a decidability procedure can simply guess such a "decomposition tree". 
-//
-We will proceed as follows. In \ref{sec:decidability-def}, we introduce several usefuls notions. In \ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In \ref{sec:decidability-shortening-branches}, we provide useful arguments towards shortening branches of a tree. In \ref{sec:local-bounds}, we provide useful arguments towards bounding the size of a given node of the tree. In \ref{sec:tree-bounds}, we bound the overall size of the tree. In \ref{sec:decidability-end}, we conclude by proving our decidabily procedure. 
+The two roles identified previously are the key to the decidability procedure. While, in the original run, it could be that some agent plays several such roles\lu{it would be nice to have such an example in the execution example and cite it there}, we will in fact show, thanks to the copycat principle, that one might consider that each agent only plays one such role. We will use what we will name an "unfolding tree" as a way to list all "roles" needed for the local run to happen, and, in the same time, to verify that each of this "role" can be carried out.
+%We will define an "unfolding tree" of a local run where each node provides a witness that a given "role" can be carried out. 
+We will then provide bounds on the size of the "unfolding tree" that we have to consider, and conclude that a decidability procedure can simply guess such an "unfolding tree". 
+\\
+We will proceed as follows. In \ref{sec:decidability-defs}, we introduce several usefuls notions. In \ref{sec:decidability-tree-unfoldings}, we define the "unfolding tree". In \ref{sec:decidability-shortening-branches}, we provide useful arguments towards shortening branches of a tree. In \ref{sec:local-bounds}, we provide useful arguments towards bounding the size of a given node of the tree. In \ref{sec:tree-bounds}, we bound the overall size of the tree. In \ref{sec:decidability-end}, we conclude by proving our decidabily procedure. 
 
-\luin{ajouter ici plan de la section, intuition} %nico: j'en ai mis, à relire et modifier
+
 
 
 \subsection{Useful definitions}
 \label{sec:decidability-defs}
 
-We first define a notion of "local run", which may be understood as the projection of a "run" onto a given agent. 
+We first need to define what should be the tree root: a "local run". A "local run" may be understood as the projection of a "run" onto a given agent. Among with "local runs", we define "local configurations" and "local steps".  When a "local step" describes the broadcast of a message we name it an "internal step", whereas when it describes a reception of a message with a certain value, we name it an 
 	
 	A ""local configuration"" is a pair $(q, \localdata) \in Q \times \nats^r$. %Intuitively, it describes the configuration of a single agent. 
 
-	An ""external message"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans$ is of the form $(q,\rec{m}{j}{\anact},q')$ with $\localdata(j') = \localdata(j')$ for all $j' \neq j$ and one of the following cases holds:
+	An ""reception step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans$ is of the form $(q,\rec{m}{j}{\anact},q')$ with $\localdata(j') = \localdata(j')$ for all $j' \neq j$ and one of the following cases holds:
 	
 	\begin{minipage}[t]{6cm}
 		\begin{itemize}
@@ -50,11 +51,11 @@ We first define a notion of "local run", which may be understood as the projecti
 
 	An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\atrans$ is either a "broadcast" or a "local test" and an agent in $(q,\localdata)$ may perform this transition in isolation and get to $(q',\localdata')$. 
 
-	A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either an "external message" or an "internal step". 
+	A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either an "reception step" or an "internal step". 
 	A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$ where, for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions}$. 
 	A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ containing the message types and values that $\localrun$ receives and broadcasts. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\tau} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
 
-	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "external messages".
+	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "reception steps".
 	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcast steps made in $\localrun$.
 	
 	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\aval}{\localrun}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$. 
