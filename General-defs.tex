@@ -22,11 +22,6 @@ The size of $\prot$, written $\size{\prot}$, is defined as $\size{Q} + \size{\me
 \end{definition}
 
 
-\begin{figure}
-	\input{Figures/fig-ex1}
-	\caption{Exemple of a \BNRA}\label{fig:ex1}
-\end{figure}
-\luin{here should come an example}
 
 We now define the semantics of those systems. Essentially, we have a finite set of agents, each with their own registers, which initially all contain distinct values. A step of a run consists in either one agent executing a local action, or one agent broadcasting a message and some of the other agents receiving it.
 
@@ -66,8 +61,15 @@ We now define the semantics of those systems. Essentially, we have a finite set 
 	% with current definition, every run is initial
 	
 	\AP A run $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when there exists $a \in \agents$ such that $\st{\config_f}(a) = q$. 
-	
+\end{definition}
+\begin{example}\label{example-1}
+	We give an example of a "protocol" with 2 registers in Figure \ref{fig:ex1}. Its set of states is $\{q_i\}_{0 \leq i \leq 6}$, and the initial state is $q_0$. Let $\agents = \{a_1, a_2, a_3, a_4\}$ and let $(x_i, y_i)_{1 \leq i \leq 4} \in \mathbb{N}$ be 8 different integers. The function $\config_0$ associating to each agent $a_i$ the element $(q_0, (x_i, y_i))$ is an initial configuration over $\agents$. There exists a run covering $q_4$: from $\config_0$, let agent $a_1$ broadcast message $m_1$ among with its value $x_1$, the reached configuration $\config_1$ should be such that: $\st{\config_1}(a_1)= q_1$, $\st{\config_1}(a_3)= q_2$, $\data{\config_1}(a_1)(1) = \data{\config_1}(a_3)(1) = x_1$. Let now agent $a_2$ broadcast message $m_2$ among with its value $x_2$ and let agent $a_4$ receives the message. The resulting configuration $\config_2$ is such that $\st{\config_2}(a_2)= q_1$, $\st{\config_2}(a_4)= q_5$, $\data{\config_2}(a_2)(1) = \data{\config_2}(a_4)(1) = x_2$. From $\config_2$, agent $a_1$ can broadcast message $m_3$ among with its value $x_1$, let agent $a_4$ receives its value, as $\data{\config_2}(a_4)(1) = x_2 \ne x_1 = \data{\config_2}(a_1)(1)$, agent $a_4$ can take the reception transition leading to $q_6$. Hence, the resulting configuration $\config_3$ is such that $\st{\config_3}(a_4)= q_6$. 
+\end{example}
 
+\begin{figure}
+	\input{Figures/fig-ex1}
+	\caption{Exemple of a "protocol".}\label{fig:ex1}
+\end{figure}
 	
 	
 The following remark formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
@@ -78,7 +80,7 @@ The following remark formalizes the intuition that, because the only way to take
 
 \begin{remark}
 	\label{rem:copycat-principle}
-	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can copy it by copying each agent of $\run$ and make them perform the same sequences of steps independently from the original agents. Note that original agents and cloned agents do not share any registers' value. As a consequence, the copy of the run only allow us to copy some agents in a certain state but not their registers' values. We will refer to this notion as the ""copycat principle"": if a certain state is coverable, then for any integer $n$ there exists an execution which puts $n$ agents on the coverable state, however, none of this $n$ agents share the same register values.
+	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can copy it by copying each agent of $\run$ and make them perform the same sequences of steps independently from the original agents. Note that original agents and cloned agents do not share any registers' value. As a consequence, the copy of the run only allow us to copy some agents in a certain state but not their registers' values. We will refer to this notion as the ""copycat principle"": if a certain state is coverable, then for any integer $n$ there exists an execution which puts $n$ agents on the coverable state, however, none of this $n$ agents share the same register values. \lu{faire un parallèle avec l'exemple?}
 \end{remark}
 
 	
@@ -99,6 +101,7 @@ The following remark formalizes the intuition that, because the only way to take
 %		
 %		\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is a "run" of this protocol whose last "configuration" satisfies the query.
 %	\end{definition}
+\begin{definition}
 
 	\AP The ""cover problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this protocol whose last "configuration" satisfies the "query" with the single formula $\quotemarks{q_f(\var{z})}$.
 	
@@ -111,6 +114,10 @@ The following remark formalizes the intuition that, because the only way to take
 	
 	%We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
 \end{definition}
+
+\begin{example}\lu{feel free to reformuler}
+	In \cref{example-1}~we gave an example of an execution covering $q_6$, however, as an agent on $q_1$ should never be able to reach $q_6$, the protocol displayed in Figure \ref{fig:ex1}~among with state $q_6$ is not a positive instance of the "target reachability problem". However it would be if the final state were $q_1$: from an initial configuration all agents broadcast $m_1$ one-by-one and the message is never received. Note as well that some state might not be coverable: take for instance $q_3$, in order to reach $q_3$, we must reach a configuration $\config$ in which some agent $a$ is on $q_2$, some agent $a'$ is on $q_5$ and they both share the same value on their first register. First register's value of agent $a$ is herited from a an agent who broadcast message $m_1$ whereas first register's value of agent $a'$ is herited from a an agent who broadcast message $m_2$. Observe that one agent can not send $m_1$ and $m_2$, therefore, it must be that the two messages have been sent by two different agents as in the execution we gave in \cref{example-1}. As a consequence, their first registers' values can not be the same.
+\end{example}
 
 \begin{remark}
 	In \cite{DelzannoST13}, the authors considered ``queries'', which are conjunctions of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z}')}$, $\quotemarks{R_j(\var{z}) \neq R_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$, $q$ a state and $j,j' \in \nset{1}{r}$. A configuration satisfies a query $\query$ if we can assign agents to each of the variables of $\query$ so that all conjuncts are satisfied.
