@@ -21,6 +21,13 @@ $\quotemarks{\eqtestact}$ is an equality test, $\quotemarks{\diseqtestact}$ is a
 The size of $\prot$, written $\size{\prot}$, is defined as $\size{Q} + \size{\messages} + \size{\transitions} + r$.
 \end{definition}
 
+
+\begin{figure}
+	\input{Figures/fig-ex1}
+	\caption{Exemple of a \BNRA}\label{fig:ex1}
+\end{figure}
+\luin{here should come an example}
+
 We now define the semantics of those systems. Essentially, we have a finite set of agents, each with their own registers, which initially all contain distinct values. A step of a run consists in either one agent executing a local action, or one agent broadcasting a message and some of the other agents receiving it.
 
 \begin{definition}[Semantics]
