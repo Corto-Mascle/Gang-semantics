@@ -75,7 +75,7 @@
 	By definition of the function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$, all "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
 	
 	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(M)$ elements, thus $\altmin \leq f_1(M) = f_1(f_0(f_1(N)))$.
-	We define $f_2$ as $f_1 \circ f_0 \circ f_1$. It is a function of $\Ffunction{\omega^{\size{\messages}}}$ as $f_0$ and $f_1$ are and $\Ffunction{\omega^{\size{\messages}}}$ is closed by composition.
+	We define $f_2$ as $f_1 \circ f_0 \circ f_1$. It is a function of $\Ffunction{\omega^{\size{\messages}+1}}$ as $f_0$ and $f_1$ are in $\Ffunction{\omega^{\size{\messages}}} \subseteq \Ffunction{\omega^{\size{\messages}+1}}$ and $\Ffunction{\omega^{\size{\messages}+1}}$ is closed by composition with functions of $\Ffunction{\omega^{\size{\messages}}}$.
 \end{proof}
 
 \PropBoundTreeSize*

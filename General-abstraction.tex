@@ -116,7 +116,7 @@ A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ w
 We say that $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$.
 We denote by $\langdec{\decsymb}$ the language of words that admit decomposition $\decsymb$. 
 
-As we argued earlier, the set of sequences $w_0' \cdot w_1' \cdot w_2'$ is exaclty the language $\langdec{\decsymb}$ for $\decsymb = (w_0, m_1, w_1, m_2, w_2)$.
+As we argued earlier, the set of sequences $w_0' \cdot w_1' \cdot w_2'$ is exactly the language $\langdec{\decsymb}$ for $\decsymb = (w_0, m_1, w_1, m_2, w_2)$.
 
 For $\aval$ appearing in a "local run", $\aval$ is ""initial"" if its appears in $u$'s first "local configuration", and ""non-initial"" otherwise. \nicoin{a enlever?}
 
@@ -156,20 +156,20 @@ Let $(\prot,q_f)$ an instance of $\COVER$. $(\prot,q_f)$ is positive if and only
 \subsection{Shortening branches}
 \label{sec:decidability-shortening-branches}
 
-\begin{restatable}{lemma}{lemIncreasingBosses}
-	\label{lem:increasing-bosses}
-	Let $\tree$ be a "unfolding tree" satisfying a specification $\spec$.
-	Let $\node, \node'$ be two "boss nodes" of $\tree$.
-	If $\node$ is an ancestor of $\node'$ and $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$ then there exists a smaller "unfolding tree" satisfying $\spec$.  
-\end{restatable}
+Our aim is now to provide bounds on the size of the "unfolding tree" that one has to consider for \COVER. To do so, we start with two simple observations. First, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then that any subword of $\bossspec$ can also be broadcast with a single value. 
+% Therefore, if a branch of our tree has node $\node$ with "boss specification" $w$ and below has node $\node'$ "boss specification" $w'$ such that $w \subword w'$, then $\node'$ is better than $\node$ and one can shorten the tree by replacing $\node$ by $\node'$. 
+For "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better. Therefore, we have the following two ways of shortening an "unfolding tree":
 
-\begin{restatable}{lemma}{lemIncreasingFollowers}
-	\label{lem:increasing-followers}
+\begin{lemma}(Proof in Appendix~\ref{app:proofs-reduction-branches}) 
+\label{lem:shortening-branches}
 	Let $\tree$ be a "unfolding tree" satisfying a specification $\spec$.
-	Let $\node, \node'$ be two "follower nodes" of $\tree$.
-	If $\node$ is an ancestor of $\node'$, $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$ then there exists a smaller "unfolding tree" satisfying $\spec$. 
-\end{restatable}
-
+	Let $\node, \node'$ be two nodes of tree such that $\node$ is an ancestor of $\node'$.
+	$\tree$ can be shortened if:
+	\begin{itemize}
+	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$; or
+	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$. 
+	\end{itemize}
+\end{lemma}
 
 \subsection{Local bounds}
 \label{sec:local-bounds}
@@ -282,7 +282,7 @@ Let $(\prot,q_f)$ an instance of $\COVER$. $(\prot,q_f)$ is positive if and only
 
 \begin{corollary}
 	\label{cor:bound-node-size}
-	There exists a function $f_3$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$\corto{corriger les M en M+1} such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, for all node $\node$ of $\tree$,
+	There exists a function $f_3$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, for all node $\node$ of $\tree$,
 	
 		\begin{itemize}
 		\item $\size{\localrunlabel{\node}} \leq f_3(\size{\prot}+ \size{w})$
