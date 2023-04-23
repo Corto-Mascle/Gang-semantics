@@ -1,9 +1,9 @@
 
 To prove the \NP upper bound, we present an abstraction on configurations and runs. 
-The main ingredient of our abstraction is an extended version of the "copycat principle" presented in Remark \corto{ref}. 
+The main ingredient of our abstraction is an extended version of the "copycat principle" presented in Remark~\ref{rem:copycat-principle}. 
 It is twofold: 
 \begin{itemize}
-	\item First, as explained in Remark \corto{ref}, if there is a run $\run$ sending an agent to a state $q$, then we can construct a run $\run'$ executing run over disjoint sets of agents (with different values) as many times as we want to obtain as many agents as we need in $q$.
+	\item First, as explained in Remark~\ref{rem:copycat-principle}, if there is a run $\run$ sending an agent to a state $q$, then we can construct a run $\run'$ executing run over disjoint sets of agents (with different values) as many times as we want to obtain as many agents as we need in $q$.
 	
 	\item  Furthermore, if in a run $\run$ an agent $a$ gets in a state $q$ with a value $\aval$ that is not its initial one, it means that at some point in the run, it was in a state $q'$ and executed a transition in which it received a message with value $v$, stored it in its register and went to a state $q''$. 
 	As mentioned before, we can copy the run up to that point to have an unlimited supply of agents in $q'$, and thus an unlimited supply of agents in $q''$ with value $\aval$. We can then make all those agents copy the broadcasts of $a$ and receive the same messages so that they all reach $q$ with value $\aval$. Hence if we have an agent in a state $q$ with a value $\aval$ that is not its initial one, we can assume that we have as many agents in $q$ with value $\aval$ as we need.	
