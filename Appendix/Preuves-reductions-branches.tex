@@ -1,43 +1,22 @@
 \section{Proofs of Lemma~\ref{lem:shortening-branches}}
 \label{app:proofs-reduction-branches}
-We prove the following two lemmas:
 
-\begin{restatable}{lemma}{lemIncreasingBosses}
-	\label{lem:increasing-bosses}
-	Let $\tree$ be a "unfolding tree" satisfying a specification $\spec$.
-	Let $\node, \node'$ be two "boss nodes" of $\tree$.
-	If $\node$ is an ancestor of $\node'$ and $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$ then there exists a smaller "unfolding tree" satisfying $\spec$.  
-\end{restatable}
-
-\begin{restatable}{lemma}{lemIncreasingFollowers}
-	\label{lem:increasing-followers}
-	Let $\tree$ be a "unfolding tree" satisfying a specification $\spec$.
-	Let $\node, \node'$ be two "follower nodes" of $\tree$.
-	If $\node$ is an ancestor of $\node'$, $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$ then there exists a smaller "unfolding tree" satisfying $\spec$. 
-\end{restatable}
-
-
-\lemIncreasingBosses*
+\lemShorteningBranches*
 
 \begin{proof}
 	Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
 	Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
 	
-	If $\node$ is the root of $\tree$, then $\tree'$ is a "unfolding tree" with $\node'$ as root. As $\node$ is a "boss node" and $\tree$ satisfies $\spec$, $\spec$ is a "boss specification", and a subword of $\bosslabel{\node}$.
-	As $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$, $\spec$ is a subword of $\bosslabel{\node'}$ and thus $\tree'$ satisfies $\spec$.
+	If $\node$ is the root of $\tree$, then $\tree'$ is a "unfolding tree" because it is the subtree of $\tree$ rooted in $\node'$. It satisfies "specification" $\speclabel{\node'}$ hence also $\speclabel{\node}$. 
 	
-	If $\node$ is not the root of $\tree$ then let $\node''$ be its father. We have to check that $\tree'$ is a "unfolding tree". 
-	All nodes other than $\node''$ have the same label and children as before, thus the conditions of "unfolding trees" are still respected for them.
-	As for $\node''$, it has the same "follower" children, hence conditions \ref{unfoldingC1} and \ref{unfoldingC3.1} are respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
-	
-	Finally, let $v'$ be a value that is not initial in $\localrunlabel{\node''}$. Either $\node''$ has a "boss" child other than $\node'$ such that $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of its label, or $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of $\bosslabel{\node}$, which is a subword of $\bosslabel{\node'}$, hence condition \ref{unfoldingC3.2} is satisfied. 
-	
+	If $\node$ is not the root of $\tree$ then let $\node''$ be its father. We have to check that $\tree'$ is a "unfolding tree"; all node satisfy automatically satisfy the condition except $\node''$. The only condition that may no longer be satisfied at  
+
+	Since $\tree$ is an "unfolding tree", for every non-initial value in $\localrunlabel{\node''}$, $\vinput{v'}{\localrunlabel{\node''}}$ was the subword of the "boss specification" of a child of $\node''$ in $\tree$; the only problematic case is when that child was $\node$. In that case, since $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of $\bosslabel{\node}$, it is also a subword of $\bosslabel{\node'}$ and condition \ref{item:condition1_non_initial_value} is satisfied.
+	Moreover, since $\node''$ has the same "follower" children in $\tree$ and $\tree'$ condition \ref{item:condition2_initial_value} and \ref{item:condition4_boss_node} are satisfied. Condition \ref{item:condition3_follower_node} is automatically satisfied as it does not speak about the children of $\node''$. 
 	As a result, in both cases $\tree'$ is a "unfolding tree" smaller than $\tree$ that satisfies $\spec$. 
-\end{proof}
 
-\lemIncreasingFollowers*
+	We now prove it for "follower specifications". 
 
-\begin{proof}
 	Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
 	Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
 	

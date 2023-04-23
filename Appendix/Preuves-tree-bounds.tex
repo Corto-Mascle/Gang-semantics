@@ -34,7 +34,7 @@
 	
 	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
 	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\followlabelword{\node'_{i_1}} \subword \followlabelword{\node'_{i_2}}$ and $\followlabelmessage{\node'_{i_1}} = \followlabelword{\node'_{i_2}}$.
-	Therefore, as $\node_{i_1}$ is a descendant of $\node_{i_2}$, by Lemma~\ref{lem:increasing-followers} there would exist a "unfolding tree" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
+	Therefore, as $\node_{i_1}$ is a descendant of $\node_{i_2}$, by second case of Lemma~\ref{lem:shortening-branches} there would exist a "unfolding tree" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
 	
 	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
 	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\altmax-i+1) = (N^2(\towerfun(N)(N)+1))^{i}$.
@@ -61,7 +61,7 @@
 	Let $N = \size{w} + \size{\prot}+1$. For all $i \in \nset{0}{-\altmin}$ let $\node'_i = \node_{j_{-i}}$ and $w_i = \bosslabel{\node'_{i}} \in \messages^*$.
 	
 	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
-	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\bosslabel{\node'_{i_1}} \subword \bosslabel{\node'_{i_2}}$, hence, as $\node_{i_2}$ is a descendant of $\node_{i_1}$, by Lemma~\ref{lem:increasing-bosses} there would exist a "unfolding tree" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
+	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\bosslabel{\node'_{i_1}} \subword \bosslabel{\node'_{i_2}}$, hence, as $\node_{i_2}$ is a descendant of $\node_{i_1}$, by first case of Lemma~\ref{lem:shortening-branches} there would exist a "unfolding tree" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
 	
 	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
 	By Lemma~\ref{lem:bound-length-at-height-h}, for all $\node'_i$ we have $\size{\bosslabel{\node'_i}} \leq f_0(\altmax - \altitude{\node'_i}) = f_0(\altmax +i)$.
