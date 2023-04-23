@@ -18,7 +18,9 @@
 
 \bibliographystyle{plainurl}% the mandatory bibstyle
 %\title{On deadlock avoidance control for lock-sharing systems} 
-\title{Broadcast networks with local registers}
+\title{Verifying Parameterized Broadcast Networks of Agents with Identifiers and Local Registers}
+% poposition de titre, en essayant que ça ressemble pas trop au titre du papier d'Arnaud
+% \title{Broadcast networks with local registers}
 
 %\titlerunning{Dummy short title} %TODO optional, please use if title is longer than one line
 
@@ -119,16 +121,26 @@
 	
 	\maketitle
 	
-	\begin{abstract}
-		We consider the parameterized verification of a model representing an arbitrarily large network of agents which communicate by broadcasting and receiving messages. The broadcast topology is reconfigurable, hence a message sent may be received by any set of agents.
-		Agents have local registers which contain identifiers. They may broadcast, receive, store and compare these values using their registers.
-		We consider the coverability problem, where one asks whether a given state of the system may be reached by at least one agent. We show that this problem is decidable; however, it is as hard as coverability in lossy channel systems, which is non-primitive recursive. 
-		We also consider other classical problems on such systems, in particular the target problem where all processes must synchronize on a given state. This problem is however undecidable for our model. 
-		By contrast, we prove that the coverability problem is \NP-complete when each agent has only one register.
+	% \begin{abstract}
+	% 	We consider the parameterized verification of a model representing an arbitrarily large network of agents which communicate by broadcasting and receiving messages. The broadcast topology is reconfigurable, hence a message sent may be received by any set of agents.
+	% 	Agents have local registers which contain identifiers. They may broadcast, receive, store and compare these values using their registers.
+	% 	We consider the coverability problem, where one asks whether a given state of the system may be reached by at least one agent. We show that this problem is decidable; however, it is as hard as coverability in lossy channel systems, which is non-primitive recursive. 
+	% 	We also consider other classical problems on such systems, in particular the target problem where all processes must synchronize on a given state. This problem is however undecidable for our model. 
+	% 	By contrast, we prove that the coverability problem is \NP-complete when each agent has only one register.
 		
-		\keywords{Parameterized verification \and Well quasi-orders \and Distributed systems }
-	\end{abstract}
+	% 	\keywords{Parameterized verification \and Well quasi-orders \and Distributed systems }
+	% \end{abstract}
 	
+	\begin{abstract}
+	We consider the parameterized verification of arbitrarily large networks of agents which communicate by broadcasting and receiving messages. In our model, the broadcast topology is reconfigurable so that a sent message can be received by any set of agents. In addition, agents have local registers which are initially distinct and can therefore be thought of as identifiers.
+	When an agent broadcasts a message, it appends to the message the value stored in one of its registers. Upon reception, an agent may store the value received or test this value for equality with one of its own registers. 
+
+	We consider the coverability problem, where one asks whether a given state of the system may be reached by at least one agent. We establish that this problem is decidable; however, it is as hard as coverability in lossy channel systems, which is non-primitive recursive. 
+	This model lies at the frontier of decidability as other classical problems on this model are undecidable; this is in particular true for the target problem where all processes must synchronize on a given state.  
+	By contrast, we show that the coverability problem is \NP-complete when each agent has only one register.
+	
+	\end{abstract}
+
 	\input{Intro}
 \input{todo}
 	\input{General-defs}
@@ -150,13 +162,13 @@
 	\newpage
 	
 	\appendix
-%	\input{Appendix/Preuve-LCS-reduction}
+	\input{Appendix/Preuve-LCS-reduction} 
 	\input{Appendix/Preuve-simple-protocols}
 	\input{Appendix/Preuve-trees-sound-complete.tex}
 
 	\input{Appendix/Preuves-reductions-branches}
-%	\input{Appendix/Preuve-Tower-lemma}
+	\input{Appendix/Preuve-Tower-lemma}
 	\input{Appendix/Preuves-tree-bounds}
 	\input{Appendix/Preuve-Target}
-%	\input{Appendix/one-reg-proofs}
+	\input{Appendix/one-reg-proofs}
 \end{document}

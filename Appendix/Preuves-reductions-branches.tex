@@ -9,26 +9,28 @@
 	
 	If $\node$ is the root of $\tree$, then $\tree'$ is a "unfolding tree" because it is the subtree of $\tree$ rooted in $\node'$. It satisfies "specification" $\speclabel{\node'}$ hence also $\speclabel{\node}$. 
 	
-	If $\node$ is not the root of $\tree$ then let $\node''$ be its father. We have to check that $\tree'$ is a "unfolding tree"; all node satisfy automatically satisfy the condition except $\node''$. The only condition that may no longer be satisfied at  
+	% If $\node$ is not the root of $\tree$ then let $\node''$ be its father. We have to check that $\tree'$ is an "unfolding tree"; all node automatically satisfy the condition except $\node''$. The only condition that may no longer be satisfied are , whose children have changed from $\tree$ to $\tree'$.
 
-	Since $\tree$ is an "unfolding tree", for every non-initial value in $\localrunlabel{\node''}$, $\vinput{v'}{\localrunlabel{\node''}}$ was the subword of the "boss specification" of a child of $\node''$ in $\tree$; the only problematic case is when that child was $\node$. In that case, since $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of $\bosslabel{\node}$, it is also a subword of $\bosslabel{\node'}$ and condition \ref{item:condition1_non_initial_value} is satisfied.
-	Moreover, since $\node''$ has the same "follower" children in $\tree$ and $\tree'$ condition \ref{item:condition2_initial_value} and \ref{item:condition4_boss_node} are satisfied. Condition \ref{item:condition3_follower_node} is automatically satisfied as it does not speak about the children of $\node''$. 
-	As a result, in both cases $\tree'$ is a "unfolding tree" smaller than $\tree$ that satisfies $\spec$. 
+	% Since $\tree$ is an "unfolding tree", for every non-initial value in $\localrunlabel{\node''}$, $\vinput{v'}{\localrunlabel{\node''}}$ was the subword of the "boss specification" of a child of $\node''$ in $\tree$; the only problematic case is when that child was $\node$. In that case, since $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of $\bosslabel{\node}$, it is also a subword of $\bosslabel{\node'}$ and condition \ref{item:condition1_non_initial_value} is satisfied.
+	% Moreover, since $\node''$ has the same "follower" children in $\tree$ and $\tree'$ condition \ref{item:condition2_initial_value} and \ref{item:condition4_boss_node} are satisfied. Condition \ref{item:condition3_follower_node} is automatically satisfied as it does not speak about the children of $\node''$. 
+	% As a result, in both cases $\tree'$ is a "unfolding tree" smaller than $\tree$ that satisfies $\spec$. 
 
-	We now prove it for "follower specifications". 
+	% We now prove it for "follower specifications". 
 
-	Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
-	Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
+	% Let $\tree_{\node}$, $\tree_{\node'}$ be the subtrees rooted in $\node$, $\node'$ respectively. 
+	% Let $\tree'$ be the tree obtained by replacing $\tree_{\node}$ with $\tree_{\node'}$. The size of $\tree'$ is smaller than the one of $\tree$, as $\tree_{\node'}$ is a strict subtree of $\tree_{\node}$.
 	
-	If $\node$ is the root of $\tree$, then $\tree'$ is a "unfolding tree" with $\node'$ as root. As $\node$ is a "follower node" and $\tree$ satisfies $\spec$, $\spec$ is a "follower specification". Let $(\followwordspec, \followmessagespec) = \spec$, we have $\followlabelword{\node} \subword \followwordspec$ and $\followlabelmessage{\node} = \followmessagespec$. 
-	Hence we have $\followlabelword{\node'} \subword \followlabelword{\node} \subword \followwordspec $ and $\followlabelmessage{\node'} = \followlabelmessage{\node} = \followmessagespec$, thus $\tree'$ satisfies $\spec$.
+	% If $\node$ is the root of $\tree$, then $\tree'$ is a "unfolding tree" with $\node'$ as root. As $\node$ is a "follower node" and $\tree$ satisfies $\spec$, $\spec$ is a "follower specification". Let $(\followwordspec, \followmessagespec) = \spec$, we have $\followlabelword{\node} \subword \followwordspec$ and $\followlabelmessage{\node} = \followmessagespec$. 
+	% Hence we have $\followlabelword{\node'} \subword \followlabelword{\node} \subword \followwordspec $ and $\followlabelmessage{\node'} = \followlabelmessage{\node} = \followmessagespec$, thus $\tree'$ satisfies $\spec$.
 	
 	If  $\node$ is not the root of $\tree$ then let $\node''$ be the father of $\node$. We have to check that $\tree'$ is a "unfolding tree". 
 	All nodes other than $\node''$ have the same children as before, thus the conditions of "unfolding trees" are still respected for them.
-	As for $\node''$, it has the same "boss" children, hence condition \ref{unfoldingC3.2} is respected. Condition \ref{unfoldingC2} only depends on its label, which hasn't changed.
-	
-	For conditions \ref{unfoldingC1} and \ref{unfoldingC3.1}, we can check that they are still satisfied by observing that since $\followlabelword{\node'} \subword \followlabelword{\node}$, for all "decomposition" $\decsymb$, if $\followlabelword{\node} \in \langdec{\decsymb}$ then $\followlabelword{\node'} \in \langdec{\decsymb}$. One can see that both conditions are satisfied by using the same "decompositions" and applying this fact.
-	
-	As a result, in both cases $\tree'$ is a "unfolding tree" smaller than $\tree$ that satisfies $\spec$. 
+	As for $\node''$, the only problematic cases are values $v$ which had $\node$ as witness in conditions \ref{item:condition1_non_initial_value} (if $\node$ is a "boss node") and \ref{item:condition2_initial_value} (if $\node$ is a "follower node").
+
+	Let $v$ a value for which $\node''$ relied on $\node$ for one of the two conditions. 
+	If $\node$ is a "boss node" ($v$ is non-initial), we had $\vinput{v}{\localrunlabel{\node''}} \subword \bosslabel{\node} \subword \bosslabel{\node'}$ hence condition \ref{item:condition1_non_initial_value} is also satisfied. If $\node$ is a "follower node" ($v$ is initial), then, reusing the notations of condition \ref{item:condition2_initial_value}, $\node$ was such that $\followlabelmessage{\node} = m_i$ and $\followlabelword{\node} \in \langdec{\decsymb_i}$. In this case, we also have $\followlabelmessage{\node'} = m_i$ and, because $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\langdec{\decsymb_i}$ is closed by subword, we have $\followlabelword{\node'} \in \langdec{\decsymb_i}$ and condition \ref{item:condition2_initial_value} is satisfied.
+
+	Note that condition \ref{item:condition3_follower_node} is satisfied at $\node''$ in $\tree'$ because its "local run" and "specification" did not change from $\tree$ to $\tree'$, and that \ref{item:condition4_boss_node} is satisfied at $\node''$ in $\tree'$ because its "local run", "specification" and the corresponding "decomposition" did not change from $\tree$ to $\tree'$.  
+	As a result, in both cases $\tree'$ is a "unfolding tree" smaller than $\tree$ that satisfies $\spec$, which concludes the proof. 
 \end{proof}
 
