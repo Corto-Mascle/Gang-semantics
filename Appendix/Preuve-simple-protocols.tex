@@ -11,7 +11,7 @@
 	For simplicity, we allow our protocol $\prot'$ to have dummy transitions with no effect (such transitions could be encoded using broadcasts with a dummy message type). 
 	
 	Let $\prot = (Q, \messages, \transitions', q_0, \regnum)$. 
-	We define $\prot' := (Q', \messages, \transitions', q_0', \regnum +1)$ as follows. The set of states is $Q' := Q \times (\nset{1}{r} \to \nset{1}{r})$, its initial state is $q_0' := (q_0, \idmap)$ where $\idmap(i) = i$ for all $i \in \nset{1}{r}$. 
+	We define $\prot' := (Q', \messages, \transitions', q_0', \regnum)$ as follows. The set of states is $Q' := Q \times (\nset{1}{r} \to \nset{1}{r})$, its initial state is $q_0' := (q_0, \idmap)$ where $\idmap(i) = i$ for all $i \in \nset{1}{r}$. 
 	
 	The set of transitions $\transitions'$ is defined as follows.
 	$\prot'$ mimics the operations of $\prot$ step-by-step. When $\prot$ stores a new value, $\prot'$ guesses whether this value is already stored in one of the "memory slots" (then it simply checks that the received value is the one of that memory slot with a $\rec{m}{i}{\eqtestact}$) or is not stored yet (then it stores it in an empty memory slot). In both cases it updates the mapping accordingly.
@@ -47,16 +47,16 @@
   
 	Let $\agents \subseteq \nats$.
 	Given a configuration $\config$ of $\prot$, we denote by \AP $\intro*\memoryproj{\config}$ 
-	the set of states $\config' \in Q'$ over set of agents $\agents$ such that:
+	the set of configurations $\config' \in \configs{\agents}$ such that:
 	 for all $a \in \agents$, by denoting $(q, \localdata):= \config(a)$, one has $\config'(a) = ((q, \map), \localdata')$ where, for every $i \in \nset{1}{r}$, $\localdata'(\map(i)) = \localdata(i)$. 
-	Moreover, we denote by \AP $\intro*\perfproj{\config}$ 
+	Moreover, we denote by $\intro*\perfproj{\config}$ 
 	the subset of $\memoryproj{\config}$ containing configurations 
 	$\config'$ that additionally satisfy that, for every agent, for every $j \ne j' \in \nset{1}{r}$, $\localdata'(j) \ne \localdata(j')$ (we call such configurations ""perfect configurations"" of $\prot'$).
 
 	Let $\run: \config_0 \step{*} \config_f$ a run on $\prot$ over some set of agents $\agents$. We prove by induction on the length of $\run$ that there exists a run $\run': \config_0' \step{*} \config_f'$ on $\prot'$ such that $\config_f' \in \perfproj{\config_f}$. This property is trivially true for $\run$ of length $0$. It therefore suffices to prove that given $\config_1 \step{} \config_2$ and $\config_1' \in \perfproj{\config_1}$, there exists $\config_2' \in \perfproj{\config_1}$ such that $\config_1' \step{} \config_2'$. We denote by $s$ the step $\config_1 \step{} \config_2$; and by $s'$ the step $\config'_1 \step{} \config'_2$ that we are building. 
 	Let $a \in \agents$ that performs a transition in $s$.
 	\begin{itemize}
-	\item If $a$ performs a local test $\loc{i_1}{i_2}{\diseqtestact}$ in $s$, then it may perform the correspondign local test in $s'$ because $\config_1' \in \perfproj{\config_1}$ hence $\config_1'(a)$ maps $i_1$ and $i_2$ to "memory slots" of distinct values. 
+	\item If $a$ performs a local test $\loc{i_1}{i_2}{\diseqtestact}$ in $s$, then it may perform the corresponding local test in $s'$ because $\config_1' \in \perfproj{\config_1}$ hence $\config_1'(a)$ maps $i_1$ and $i_2$ to "memory slots" of distinct values. 
 	\item If $a$ performs a local test  $\loc{i_1}{i_2}{\eqtestact}$, then because $\config_1'\in \perfproj{\config_1}$, it maps $i_1$ and $i_2$ to the same "memory slot" and $a$ may performs the corresponding internal transition in $\prot'$.  
 	\item If $a$ performs a broadcast in $s$, then we make it perform the corresponding broadcast in $s'$. Note that, because $\config_1' \in \memoryproj{\config_1}$, the broadcasted value is the same in $s$ and $s'$. 
 	\item 
