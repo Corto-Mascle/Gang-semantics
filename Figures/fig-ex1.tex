@@ -12,6 +12,7 @@
 	\node[state] [below of=1] (4) {$q_4$};
 	\node[state] [below of=0] (5) {$q_5$};
 	\node[state] [right = 2.5 of 5] (6) {$q_6$};
+	\node[state] [left = of 4] (7) {$q_7$};
 	
 %	\path[->, bend left=10] 	
 %	(0) edge node[above, xshift=-10] {$\br{init}{1}$} (x)
@@ -30,6 +31,8 @@
 		(5) edge node {\small$\br{m_4}{2}$} (4)
 			  edge node {\small$\rec{m_3}{1}{\diseqtestact}$} (6)
 		(5)  edge [out=330,in=290,looseness=4] node {\small$\br{m_5}{1}$} (5)
+		(4)  edge [out=330,in=290,looseness=4] node {\small$\br{m_6}{1}$} (4)
+		(4) edge node {$\small \rec{m_6}{1}{=}$} (7)
 	;
 	
 \end{tikzpicture}

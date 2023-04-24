@@ -139,10 +139,22 @@ Second, that $\node$ is a witness that its "specification" is carried out (Condi
 	\item \label{item:condition3_follower_node} If $\node$ is a "follower node" then $\aval$ is not an initial value of $\localrun$, $\vinput{\aval}{\localrun} = \followlabelword{\node}$ and 
 	$\voutput{\aval}{\localrun}$ contains $\followlabelmessage{\node}$.
 
-	\item \label{item:condition4_boss_node} If $\node$ is a "boss node", there $\valuelabel{\node}$ is an "initial value" of $\localrunlabel{\node}$ and the associated "decomposition" $\decsymb$ of \ref{item:condition2_initial_value} satisfies that $\bosslabel{\node} \in \langdec{\decsymb}$.
+	\item \label{item:condition4_boss_node} If $\node$ is a "boss node", then $\valuelabel{\node}$ is an "initial value" of $\localrunlabel{\node}$ and the associated "decomposition" $\decsymb$ of \ref{item:condition2_initial_value} satisfies that $\bosslabel{\node} \in \langdec{\decsymb}$.
 \end{enumerate}
 
 \luin{here should come more intuitions on the tree and some figures}
+\begin{figure}
+	\begin{center}
+		\input{Figures/tree-example1}
+	\end{center}
+	\caption{Example of an unfolding tree}\label{fig-ex-unfolding-tree}
+\end{figure}
+
+\begin{example}
+	In \cref{fig-ex-unfolding-tree}~we display an unfolding tree for the local run of agent 1 of the execution presented in \cref{example-1}. 
+	\luin{todo}
+\end{example}
+
 
 There is a strong connection between runs of $\prot$ and "unfolding trees". In fact, the following proposition expresses that \COVER may be expressed as the existence of an "unfolding tree". 
 The proof can be found in Appendix~\ref{app:trees-sound-complete}.
