@@ -8,8 +8,8 @@
 	\node[state,initial, minimum width=0.1pt] (0) at (0,0) {$q_0$};
 	\node[state] [right of=0, yshift=20] (x) {};
 	\node[state] [right of=0, yshift=-20] (y) {};
-	\node[state] [right of=x, xshift=10] (1) {$q_1$};
-	\node[state] [right of=y, xshift=10] (2) {$q_2$};
+	\node[state] [right of=x, xshift=20] (1) {$q_1$};
+	\node[state] [right of=y, xshift=20] (2) {$q_2$};
 	
 	\path[->, bend left=10] 	
 	(0) edge node[above, xshift=-10] {$\br{init}{1}$} (x)

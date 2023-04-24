@@ -16,22 +16,23 @@
 	An execution of the machine is a sequence $(\ell_1, v_1^1, v_2^1) \stepMM{} (\ell_2, v_1^2, v_2^2) \stepMM{} \dots \stepMM{} (\ell_k, v_1^k, v_2^k)$. We say that an execution is initial if it starts with the initial configuration.
 	The halting problem asks whether there exists an initial execution ending with a configuration $(\ell_f, v_1, v_2)$ where $v_1$, $v_2$ are any values in $\nats$. This problem is well-known to be undecidable.
 	
+	
 	\begin{figure}
-		\input{Figures/target-init}
-		\caption{init}\label{fig:target-init}
-	\end{figure}
-	
-	
+	\input{Figures/target-init}
+	\caption{Initialisation}\label{fig:target-init}
+\end{figure}
 	\begin{figure}
 		\input{Figures/cycle-knowledge}
-		\caption{Illustration of a cycle of knowledge of 4 agents. Each box represents an agent along with tis register's values.}\label{fig:target-cycle-knowledge}
+		\caption{Illustration of a cycle of knowledge of 4 agents. Each box represents an agent along with its register values.}\label{fig:target-cycle-knowledge}
 	\end{figure}
 	
-	Fix a "Minsky Machine" $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$. The simulation goes as follows: 
+
+	
+	
+	
+	Fix a Minsky Machine $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$. The simulation goes as follows: 
 	\begin{itemize}
-		\item each agent will have two registers: one with its identity, which it will broadcast, and another in which it will store the value of a \emph{predecessor} process. To do so, in an initialization phase, each process makes one of the following choice: (i) it starts by broadcasting its first register value and then waits to receive a value and stores it in its second register, (ii) it waits first for a value to store in its second register and then broadcasts its first register value. This initialization part will appear in the protocol as displayed in \cref{fig:target-init}. Note that, after the initialization phase (once all processes reached $q_1$ and $q_2$), there is necessarily a \emph{cycle of knowledge} in the reached configuration. A cycle of knowledge in a configuration $\config$ is a subset of agents $\{a_1, \dots a_k\}$ such that for all $1 \leq i < j \leq k$, $\data{\config}(a_i)(1) \ne \data{\config}(a_j)(1)$, for all $2 \leq i \leq k$, $\data{\config}(a_i)(2) = \data{\config}(a_{i-1})(1)$ and $\data{\config}(a_1)(2) = \data{\config}(a_{k})(1)$ (see \cref{fig:target-cycle-knowledge}). Indeed, consider the function wich associates to each agent $a$, an agent $a'$ such that $\data{\config}(a)(2) = \data{\config}(a')(1)$. This function is total as $\gamma$ is such that all agents reached states $q_1$ or $q_2$. By the pigeonhole principle, there exists a cycle of knowledge.
-		
-		%		configurations can be decomposed as an union of \emph{cycles of knowledge} (\cref{fig:target:cycle-knowledge}). A cycle of knowledge in a configuration $\config$ is a subset of agents $\{a_1, \dots a_k\}$ such that for all $1 \leq i < j \leq k$, $\data{\config}(a_i)(1) \ne \data{\config}(a_j)(1)$, for all $2 \leq i \leq k$, $\data{\config}(a_i)(2) = \data{\config}(a_{i-1})(1)$ and $\data{\config}(a_1)(2) = \data{\config}(a_{k})(1)$. Indeed, there exists an injective function from $\agentsof{\gamma}$ into itself associating to each agent $a_1$, any agent $a_2$ such that $\data{\config}(a_2)(2) = \data{\config}(a_1)(1)$. By the pigeonhole principle, the function is a union of cycles. \cortoin{Il peut aussi y avoir des agents sans successeurs, donc des arbres de flèches qui partent d'un cycle mais ne font pas partie d'un cycle.}
+		\item each agent will have two registers: one with its identity, which it will broadcast, and another in which it will store the value of a \emph{predecessor} process. To do so, in an initialization phase, each process makes one of the following choice: (i) it starts by broadcasting its first register value and then waits to receive a value and stores it in its second register, (ii) it waits first for a value to store in its second register and then broadcasts its first register value. This initialization part will appear in the protocol as displayed in \cref{fig:target-init}. Note that, after the initialization phase (once all processes reached $q_1$ and $q_2$), there is necessarily a \emph{cycle of knowledge} in the reached configuration. A cycle of knowledge in a configuration $\config$ is a subset of agents $\{a_1, \dots a_k\}$ such that for all $1 \leq i < j \leq k$, $\data{\config}(a_i)(1) \ne \data{\config}(a_j)(1)$, for all $2 \leq i \leq k$, $\data{\config}(a_i)(2) = \data{\config}(a_{i-1})(1)$ and $\data{\config}(a_1)(2) = \data{\config}(a_{k})(1)$ (see \cref{fig:target-cycle-knowledge}). Indeed, consider the function which associates to each agent $a$, an agent $a'$ such that $\data{\config}(a)(2) = \data{\config}(a')(1)$. This function is total as $\gamma$ is such that all agents reached states $q_1$ or $q_2$. By the pigeonhole principle, there exists a cycle of knowledge.
 		
 		From then on, an agent will broadcast only its first register value (along with some messages) and shall only receive messages sent with its second register value. In other words, every reception transition after the initialisation phase is of the form $\rec{m}{2}{=}$ for some $m \in \messages$ and every broadcast transition after the initialisation  phase is of the form $\br{m}{1}$ for some $m \in \messages$;
 		
