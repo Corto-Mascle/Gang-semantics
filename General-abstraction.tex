@@ -21,7 +21,7 @@ Hence, an interesting unfolding tree is an "unfolding tree" with root a local ru
 %We will define an "unfolding tree" of a local run where each node provides a witness that a given "role" can be carried out. 
 We will then provide bounds on the size of the "unfolding tree" that we have to consider, and conclude that a decidability procedure can simply guess such an "unfolding tree". 
 
-We will proceed as follows. In Section~\ref{sec:decidability-defs}, we introduce several usefuls notions. In Section~\ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In Section~\ref{sec:decidability-shortening-branches}, we provide useful arguments towards shortening branches of a tree. In Section~\ref{sec:local-bounds}, we provide useful arguments towards bounding the size of a given node of the tree. In Section~\ref{sec:tree-bounds}, we bound the overall size of the tree. In Section~\ref{sec:decidability-end}, we conclude by proving our decidability procedure. 
+We will proceed as follows. In Section~\ref{sec:decidability-defs}, we introduce several usefuls notions. In Section~\ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In Section~\ref{sec:tree_bounds}, we \nico{metre à jour apres fusion} provide useful arguments towards shortening branches of a tree. In Section~\ref{sec:local-bounds}, we provide useful arguments towards bounding the size of a given node of the tree. In Section~\ref{sec:tree-bounds}, we bound the overall size of the tree. In Section~\ref{sec:decidability-end}, we conclude by proving our decidability procedure. 
 
 
 \subsection{Useful definitions}
@@ -155,62 +155,42 @@ Let $(\prot,q_f)$ an instance of $\COVER$. $(\prot,q_f)$ is positive if and only
 
 
 
-\subsection{Shortening branches}
-\label{sec:decidability-shortening-branches}
+\subsection{Bounding the size of the "unfolding tree"}
+\label{sec:tree-bounds}
 
 Our aim is now to provide bounds on the size of the "unfolding tree" that one has to consider for \COVER. To do so, we start with two simple observations. First, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then any subword of $\bossspec$ can also be broadcast with a single value. 
 % Therefore, if a branch of our tree has node $\node$ with "boss specification" $w$ and below has node $\node'$ "boss specification" $w'$ such that $w \subword w'$, then $\node'$ is better than $\node$ and one can shorten the tree by replacing $\node$ by $\node'$. 
-For "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better. If a message $\followmessagespec$ can be sent by receiving sequence $w$, then it can be sent when receiving any larger sequence $w'$.
-Therefore, we have the following two ways of shortening an "unfolding tree":
+For "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better. The following lemma provides two ways of shortening an "unfolding tree". Its proof can be found in Appendix~\ref{app:proofs-reduction-branches}.
 
-\begin{lemma}(Proof in Appendix~\ref{app:proofs-reduction-branches}) 
+\begin{restatable}{lemma}{lemShorteningBranches} 
 \label{lem:shortening-branches}
-	Let $\tree$ be a "unfolding tree" satisfying a specification $\spec$.
-	Let $\node, \node'$ be two nodes of tree such that $\node$ is an ancestor of $\node'$.
-	$\tree$ can be shortened if:
+	Let $\tree$ be a "unfolding tree" whose root's local run covers $q_f$..
+	Let $\node, \node'$ be two nodes of tree such that $\node$ is an ancestor of $\node'$. If:
 	\begin{itemize}
-	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node}$ is a subword of $\bosslabel{\node'}$; or
-	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$. 
+	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; or
+	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$
 	\end{itemize}
-\end{lemma}
 
-\subsection{Local bounds}
-\label{sec:local-bounds}
-
-
-\begin{figure}
-	\input{Figures/fig-illustration-pumping}
-	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. We represent local runs as above, where lines correspond to registers, and vertical separations are times at which a $\enregact$ operation is performed on that register. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often, say every $M$ steps (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed twice. We can then obtain a shorter run by glueing them together as in the picture. The colored rectangles in the shortened runs correspond to fresh values that we introduce to make sure that all local disequality tests succeed.}
-\end{figure}
-\begin{restatable}{lemma}{lemShortLocalRuns}
-	\label{lem:short-local-runs}
-	There exists a primitive recursive function $\towerfun(n) (\regnum)$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$\corto{uniformiser la notation} such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and:
-	\begin{enumerate}
-		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
-		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
-		% \item by writing $V := \nats \setminus \set{\localdata_i(k) \mid k \in \nset{1}{\regnum}}$, for every $\aval' \in V$, there exists $\aval \in V$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$.
-	\end{enumerate}
-		%  with an "input" $I$.
-% 	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
-% 	If $\size{u_2} > TOWER$, then there exists $u'_2$ with $|u_2'| \leq \towerfun(\prot)$ such that $u_1u'_2u_3$ is a local run of $\prot$ with smaller "input" than $u$. 
+	then $\tree$ can be shortened into an "unfolding tree" $\tree'$ whose root's local run also covers $q_f$. 
 \end{restatable}
 
-\begin{remark}
-	The tower bound of Lemma~\ref{lem:short-local-runs} is tight, in the sense that some local runs may need to have length a tower of exponentials of linear height in the number of registers.
-	It also holds for pushdown automata, as the .
-	\cortoin{To formalize}
-\end{remark}
+The previous lemma however does not suffice to apply the length function theorem (Theorem~\ref{thm:lengthfcttheorem}); we need a bound on the size of the words appearing in branches. The following lemma will allow us to bound the size of a local run with respect to the sequence of messages that it needs to broadcast. Its proof can be found in Appendix~\ref{app:}.
 
 
 \begin{restatable}{lemma}{lemShortRunOutput}
 	\label{lem:short-run-for-output}
-	For every protocol $\prot$ with $r$ registers per process, for every $w_{in} \in (\messages\times \nats)^*$, if there exists a "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$ such that $w_{in} \subword \Output{\localrun}$, then for every $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, there exists $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq (\towerfun(\size{\prot})(r)+1)\size{w_{in}}$, $w_{in} \subword \Output{\localrun'}$ and:
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" $\prot$ with $\regnum$ registers, for every $w_{in} \in (\messages\times \nats)^*$, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ such that $w_{in} \subword \Output{\localrun}$ and for every $V \subseteq \nats$ finite containing all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot}, \regnum) \size{w_{in}}$, $w_{in} \subword \Output{\localrun'}$ and:
 	
 	\begin{enumerate}
 		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
-		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+		\item for all $\aval \in V'$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 	\end{enumerate}
 \end{restatable}
+
+\begin{remark}
+	The function $\towerfun$ above is a tower of exponentials of height $\regnum$. Perhaps surpringly, this tower bound is tight in the sense that one can find a family of protocols and of "local runs" such that the best $\towerfun$ possible is a tower of exponentials of height linear in $\regnum$. Suppose that we have a protocol $\prot$ and a state $q_f$ such that $q_f$ may only be reached by going exactly $N$ times through some state $q_r$. From $\prot$, we build a "protocol" $\prot'$ with two extra registers $r_0$ and $r_1$; $\prot'$ uses $\prot$ to consider sequences of messages of length $N$ (duplicate $q_r$ into $q_r'$ and $q_r''$ and add transitions in between). Words received by $r_0$ and $r_1$ are of length $N$ with the same value, we see those as binary encodings using $\mathsf{0}, \mathsf{1} \in \messages$. $\prot'$ first requires that $r_0$ receives a word of length $N$ encoding $0$, then iteratively requires that $r_{1-i}$ receives a message encoding value $m+1$ where $m$ is the value last received in $r_i$ (to be able to compare, the words received are of the form $w \#w$ with $w$ of length $N$; the comparison requires to be able to store the value of $i$, whether there is a carry,... which can be done using a third register to avoid a multiplicative factor between sizes of $\prot$ and $\prot'$). We only cover $q_f'$ when word $\mathsf{1}^N$ is received, which is only possible after going exactly $N'$ times through $q_r'$ steps with $N'$ exponential in $N$.
+\nico{à réduire / passer en annexe, idéalement décrire le protocole pour de vrai en annexe avec une figure mais long à faire}
+\end{remark}
 
 
 \begin{restatable}{lemma}{lemBoundSuccessorHeight}

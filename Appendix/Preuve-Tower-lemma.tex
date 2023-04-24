@@ -1,6 +1,25 @@
-\section{Proofs of Section~\ref{sec:local-bounds}}
+\section{Proof of Lemma~\ref{lem:short-run-for-output}}
+\label{app:tower-lemma}
 
-\lemShortLocalRuns*
+We first prove the following result:
+
+\begin{restatable}{lemma}{lemShortLocalRuns}
+	\label{lem:short-local-runs}
+	There exists a primitive recursive function $\towerfun(n)(r)$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$\corto{uniformiser la notation} such that $\length{\localrun'} \leq \towerfun(\size{\prot})(r)$ and:
+	\begin{enumerate}
+		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+		% \item by writing $V := \nats \setminus \set{\localdata_i(k) \mid k \in \nset{1}{\regnum}}$, for every $\aval' \in V$, there exists $\aval \in V$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$.
+	\end{enumerate}
+		%  with an "input" $I$.
+% 	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
+% 	If $\size{u_2} > TOWER$, then there exists $u'_2$ with $|u_2'| \leq \towerfun(\prot)$ such that $u_1u'_2u_3$ is a local run of $\prot$ with smaller "input" than $u$. 
+\end{restatable}
+
+\begin{figure}
+	\input{Figures/fig-illustration-pumping}
+	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. We represent local runs as above, where Lines correspond to registers, and vertical separations are times at which a $\enregact$ operation is performed on that register. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often, say every $M$ steps (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed twice. We can then obtain a shorter run by glueing them together as in the picture. The colored rectangles in the shortened runs correspond to fresh values that we introduce to make sure that all local disequality tests succeed.}
+\end{figure}
 
 \begin{proof}
 	Given a "local run" $\localrun$, register $i$ is ""active"" in $\localrun$ if at least one $\quotemarks{\enregact}$ step on register $i$ is performed in $\localrun$. 
@@ -117,7 +136,9 @@
 \end{lemma}
 
 \begin{proof}
-	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. \corto{define pi as word projection}
+	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we define the word projection $\wordproj{M}{w}$ as the word obtained when deleting from $w$ every symbol not in $M$.
+
+	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
 	
 	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
 	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of size at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.

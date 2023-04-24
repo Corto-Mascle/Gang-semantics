@@ -308,7 +308,7 @@ However, this will not suffice us as we will need a bound the length of a "bad" 
 We will use the following result, known as the "Length function theorem" \cite{SchmitzS2011upperHigman}:
 
 \begin{theorem}[Length function theorem \cite{SchmitzS2011upperHigman}]
-	\label{lem:lengthfcttheorem}
+	\label{thm:lengthfcttheorem}
 	Let $\Sigma$ be a finite alphabet, let $g : \nats \to \nats$ be a primitive recursive function, $n\in \nats$.
 	Then there exists a function $f \in \Ffunction{\omega^{\size{\Sigma} - 1}}$ such that every "bad sequence" $w_0, w_1, \ldots$ such that $\size{w_i} \leq g^{(i)}(n)$ for all $i$ is of length at most $f(n)$. 
 \end{theorem}
