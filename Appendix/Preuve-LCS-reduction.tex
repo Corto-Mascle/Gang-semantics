@@ -10,8 +10,8 @@
 		\item $\ltrans = (\lstate,u,!,\lstate')$ for some $u \in \Sigma^*$ and $w' \subword w \cdot u$ (a ""push""),
 		\item $\ltrans = (\lstate,u,?,\lstate')$ for some $u \in \Sigma^*$ and $u \cdot w' \subword w$ (a ""pop"")
 	\end{itemize}
-	where $\subword$ denotes the "subword relation".
-	This subword relation encodes the lossiness of the channel (a non-lossy channel would have equalities instead); intuitively, it expresses the fact that letters in the channel may get lost. 
+	where $\subword$ denotes the "subword" order.
+	This subword order encodes the lossiness of the channel (a non-lossy channel would have equalities instead); intuitively, it expresses the fact that letters in the channel may get lost. 
 	
 	The existence of such a transition for some $\ltrans \in \transitions$ is denoted $(\lstate,w) \lstep{} (\lstate',w')$, and its transitive closure is denoted $\lstep{*}$. The ""reachability problem@@lcs"" asks, given $\los$ and two locations $\lstate_i, \lstate_f \in \lstates$, whether there exists an execution $(\lstate_i,\epsilon) \lstep{*} (\lstate_f, w)$ for some $w$. 
 	
@@ -21,7 +21,7 @@
 	
 	Note that the content of the channel might become big in a "lossy channel system", therefore agents will not store it but rather rebroadcast it letter by letter. An agent only applies a small modification at the beginning of the channel if it decides to encode a "pop" transition and at the end of the channel if it decides to encode a "push" transition. Messages might get lost, which is why we are able to encode "lossy channel systems" but not non-lossy ones.
 	
-	In some initial phase, agents decide whether they are ""root"" (at the beginning of their chain) or ""link"". A "root" agent receives no message; it simply broadcasts its identifiers and the initial configuration of $\los$ $(\lstate_0,\epsilon)$. To encode this option, in $\prot$, from the initial state $q_0$ one has the possibility to move to a part where the only sequence of transitions possible is $\br{\mathsf{init}}{1}, \br{\mathsf{q_0}}{1}, \br{\mathsf{\#}}{1}$ which gets to $\finstate{\lstate_0} \in Q$. The symbol $\mathsf{\#} \in \Sigma$ is the final symbol meaning that the channel was fully broadcast. 
+	\AP In some initial phase, agents decide whether they are ""root"" (at the beginning of their chain) or ""link"". A "root" agent receives no message; it simply broadcasts its identifiers and the initial configuration of $\los$, $(\lstate_0,\epsilon)$. To encode this option, in $\prot$, from the initial state $q_0$ one has the possibility to move to a part where the only sequence of transitions possible is $\br{\mathsf{init}}{1}, \br{\mathsf{q_0}}{1}, \br{\mathsf{\#}}{1}$ which gets to $\finstate{\lstate_0} \in Q$. The symbol $\mathsf{\#} \in \Sigma$ is the final symbol meaning that the channel was fully broadcast. 
 	
 	A "link" agent first receives a broadcast with an identifier which it decides to be the one of its predecessor. It then broadcasts its own identifier. This construction guarantees that "link" agents have exactly one predecessor. It does not guarantee, however, than all agents are in the same chain or that any agent is the predecessor of at most one agent. Concretely, there is a sequence of two transitions from $q_0$ labeled by $\rec{\mathsf{init}}{2}{\enregact}, \br{\mathsf{init}}{1}$ that gets to $\waitstate \in Q$. 
 	

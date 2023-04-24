@@ -292,7 +292,7 @@ The intuition is as follows: from a protocol $\prot$, we build a protocol $\prot
 
 
 \subsection{Classical definitions}
-\luin{here comes definitions of complexity classes, wqo and anything not related to our model}
+
 
 \paragraph*{Fast-growing hierarchy}
 
@@ -306,12 +306,12 @@ In order to prove our main decidability result, we rely on the theory of well qu
 Let $\Sigma$ be a finite alphabet, $w_1, w_2 \in \Sigma^*$, $w_1$ is a ""subword"" of $w_2$, denoted $w_1 \subword w_2$, when $w_1$ can be obtained from $w_2$ by erasing some letters. 
 A sequence of words $w_0, w_1, \ldots$ is ""good"" if there exist $i<j$ such that $w_i \subword w_j$, and ""bad"" otherwise. Higman's lemma \cite{Higman52} states that every "bad" sequence of words over a finite alphabet is finite.
 However, this will not suffice us as we will need a bound the length of a "bad" sequence. In order to obtain such a bound, it is necessary to bound the growth of the sequence of words. 
-We will use the following result, known as the "Length function theorem" \cite{SchmitzS2011upperHigman}:
+We will use the following result, known as the Length function theorem \cite{SchmitzS2011upperHigman}:
 
 \begin{theorem}[Length function theorem \cite{SchmitzS2011upperHigman}]
 	\label{thm:lengthfcttheorem}
 	Let $\Sigma$ be a finite alphabet, let $g : \nats \to \nats$ be a primitive recursive function, $n\in \nats$.
-	Then there exists a function $f \in \Ffunction{\omega^{\size{\Sigma} - 1}}$ such that every "bad sequence" $w_0, w_1, \ldots$ such that $\size{w_i} \leq g^{(i)}(n)$ for all $i$ is of length at most $f(n)$. 
+	Then there exists a function $f \in \Ffunction{\omega^{\size{\Sigma} - 1}}$ such that every "bad" sequence $w_0, w_1, \ldots$ such that $\size{w_i} \leq g^{(i)}(n)$ for all $i$ is of length at most $f(n)$. 
 \end{theorem}
 
 
@@ -331,6 +331,6 @@ We argue that the "coverability problem" in BNRA is at least as hard as the reac
 %The proof is in Appendix~\ref{app:reduction-lcs}.
 
 \begin{remark}
-	The reduction presented in the proof of Proposition~\ref{prop:reduction-LCS} can be adapted to show that the repeat coverability problem is undecidable for BNRA, as it is for LCS.
+	The reduction presented in the proof of Proposition~\ref{prop:reduction-LCS} can be adapted to show that the repeat coverability problem (asking whether there is a run in which some agent reaches a state $q_f$ infinitely many times) is undecidable for BNRA, as it is for LCS. This highlights the fact that the abstraction presented below relies on the fact that we only have to consider finite runs for coverability.
 \end{remark}
 

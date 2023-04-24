@@ -1,14 +1,74 @@
 \begin{tikzpicture}
 	
-	\draw (0,0.5) rectangle (5,1);
+	\draw[->, ] (-0.5,0) -- (10.5,0);
 	
-	\node[draw] (f1) at (-0.5,3) {$(ab, a)$};
-	\node[draw] (f2) at (1,3) {$(aa, c)$};
-	\node[draw] (f3) at (2.8,3) {$(abc, d)$};
+	\node (b) at (0,0.5) {$\brone{\color{magenta}a\color{black}}$};
+	\node (b) at (1,0.5) {$\brone{\color{magenta}b\color{black}}$};
+	\node (b) at (3,0.5) {$\brone{\color{blue}a\color{black}}$};
+	\node (b) at (5,0.5) {$\brone{\color{blue}b\color{black}}$};
+	\node (b) at (10,0.5) {$\brone{\color{blue}b\color{black}}$};
 	
-	\node[draw] (b1) at (0.5,-1) {$ba$};
-	\node[draw] (f2) at (2.1,-1) {$cb$};
-	\node[draw] (f3) at (3.8,-1) {$a$};
+	\node (b1) at (0,0.6) {};
+	\node (b2) at (1,0.6) {};
+	\node (b3) at (3,0.6) {};
+	\node (b4) at (5,0.6) {};
+	\node (b5) at (10,0.6) {};
+	
+	\node (sp) at (11,2) {\Large ``$\color{blue}abdb\color{black}$''};
+	
+	
+	\node (r) at (2,-0.5) {$\recsymb(\color{magenta}a\color{black})$};
+	\node (r) at (4,-0.5) {$\recsymb(\color{orange}b\color{black})$};
+	\node (r) at (6,-0.5) {$\recsymb(\color{blue}c\color{black})$};
+	\node (r) at (7,-0.5) {$\recsymb(\color{olive}d\color{black})$};
+	\node (r) at (8,-0.5) {$\recsymb(\color{orange}a\color{black})$};
+	\node (r) at (9,-0.5) {$\recsymb(\color{teal!80}a\color{black})$};
+	
+	 \node (r1) at (2,-0.4) {};
+	 \node (r2) at (4,-0.6) {};
+	 \node (r3) at (6,-0.4) {};
+	 \node (r4) at (7,-0.6) {};
+	 \node (r5) at (8,-0.6) {};
+	 \node (r6) at (9,-0.6) {};
+	
+	\node[draw] (f1) at (1,2) {$(\color{magenta}ab\color{black}, \color{magenta}a\color{black})$};
+	\node[draw] (f2) at (3.7,2) {$(\color{blue}ab\color{black}, \color{blue}c\color{black})$};
+	\node[draw] (f3) at (6.8,2) {$(\color{blue}abc\color{black}, \color{blue}d\color{black})$};
+	\node (fa1) at (1,1.8) {};
+	\node (fa'1) at (1.6,1.6) {};
+	\node (fa2) at (3.7,1.8) {};
+	\node (fa'2) at (4.2,1.8) {};
+	\node (fa3) at (6.8,1.8) {};
+	\node (fa'3) at (6.3,1.8) {};
+	
+	
+	\node[draw] (bo1) at (4.5,-2) {$\color{orange}ba\color{black}$};
+	\node[draw] (bo2) at (6.9,-2) {$\color{olive}d\color{black}$};
+	\node[draw] (bo3) at (8.8,-2) {$\color{teal!80}a\color{black}$};
+	
+	
+	\node (ba1) at (4.5,-1.8) {};
+	\node (ba2) at (6.9,-1.8) {};
+	\node (ba3) at (8.8,-1.8) {};
+	
+	\draw[color=magenta, ->, >=angle 45] (b1) ..controls +(0,0.5) and +(0,-1).. (fa1);
+	\draw[color=magenta, ->, >=angle 45] (b2) ..controls +(0,0.5) and +(0,-1).. (fa1);
+	
+	\draw[color=blue, ->, >=angle 45] (b3) ..controls +(0,0.5) and +(0,-1).. (fa2);
+	\draw[color=blue, ->, >=angle 45] (b4) ..controls +(0,0.5) and +(0,-1).. (fa2);
+	
+	\draw[color=blue, ->, >=angle 45] (b3) ..controls +(0,0.5) and +(0,-1).. (fa3);
+	\draw[color=blue, ->, >=angle 45] (b4) ..controls +(0,0.5) and +(0,-1).. (fa3);
+	
+	\draw[color=orange, ->, >=angle 45] (ba1) ..controls +(0,0.5) and +(0,-1).. (r2);
+	\draw[color=orange, ->, >=angle 45] (ba1) ..controls +(0,0.5) and +(0,-1).. (r5);
+	
+	\draw[color=olive, ->, >=angle 45] (ba2) ..controls +(0,0.5) and +(0,-1).. (r4);
+	\draw[color=teal, ->, >=angle 45] (ba3) ..controls +(0,0.5) and +(0,-1).. (r6);
+	
+	\draw[color=magenta, ->, >=angle 45, dashed] (fa'1) ..controls +(0,0.5) and +(0,1).. (r1);
+	\draw[color=blue, ->, >=angle 45, dashed] (fa'2) ..controls +(0.5,0) and +(0,1).. (r3);
+	\draw[color=blue, ->, >=angle 45, dashed] (fa'2) ..controls +(0.5,0) and +(-0.5,0).. (fa'3);
 \end{tikzpicture}
 
 \begin{tikzpicture}
@@ -36,9 +96,9 @@
 	\draw[->, >=triangle 45] (4.2, 0) -- (4.2, 3);
 	
 	
-	\node (H) at (5, 3) {$\altitude{}$};
+	\node (H) at (5, 3) {$\mathbf{alt}$};
 	
-	\node (R) at (0.4,-0.2) {root ($\altitude{} =0$)};
+	\node (R) at (0.4,-0.3) {root ($\mathbf{alt} =0$)};
 	\node (AM) at (3,2.7) {$\altmax$};
 	\draw[red, fill=red] (0.4, 0) circle (0.05);
 	\draw[red, fill=red] (0.6, 0.5) circle (0.05);
