@@ -110,6 +110,7 @@ a finite tree where each node $\node$ has three labels:
 \end{itemize} 
 
 A "node" represents a "local run" witnessing that some "role" can be carried out. The role is represented with its "specification" and its value is necessary to check that the "local run" is a valid witness.\lu{pas sure de cette phrase..}
+The root node should have a "local run" reaching the final state to cover. It should be seen as a boss node, however its value nor its exact specification (the word $\bosslabel{\node}$) are relevant as they shall not be used.\lu{dire plus de choses là dessus ?}
 
 For a ""follower node"" $\node$, we will need to represent the possible sequences for $\followlabelword{\node}$ depending on the available messages. Remember that for the "local run" $\localrun$ of agent $a$ earlier, there was an infinite number of possible sequences $w_0' \cdot w_1' \cdot w_2'$ because any number of $m_1$ and $m_2$ could be added to the subwords of $w_2$. We find a way to describe all the possible sequence from $(w_0, m_1, w_1, m_2, w_2)$ in the following way:
 
@@ -151,8 +152,21 @@ Second, that $\node$ is a witness that its "specification" is carried out (Condi
 \end{figure}
 
 \begin{example}
-	In \cref{fig-ex-unfolding-tree}~we display an unfolding tree for the local run of agent 1 of the execution presented in \cref{example-1}. 
-	\luin{todo}
+	In \cref{fig-ex-unfolding-tree}~we display an unfolding tree for the local run of agent 1 of the execution presented in \cref{example-1}. Each node is composed of a local run displayed as sequence of local configurations, a specification (a boss one or follower one), and a value. As the two latter have no relevance for the root node, we don't display it. However, the root should be a boss node.\lu{dire que la root est boss avec une valeur qqconque initiale} The local configurations are displayed as a state among with its two registers' values. For instance, the local run of the left bottom node of the tree is the sequence of two local configuration: the first one with state $q_0$, value of first register $x_3$, and second register $y_3$, and the second one with state $q_1$ and same registers' values.
+	
+	
+	
+	First, let us see why the tree is consistent with condition \ref{item:condition1_non_initial_value}. The only non-initial value of the root node is $y_2$, hence it has only one boss node child. The same holds for the left boss node with value $y_2$ (the only non-initial value is $x_3$). For the bottom left node, all its values are initials and hence it has no boss node child. The right node has one non-initial value : $x_1$. However, $x_1$ is also the value of the node, and so it should not have any boss node child. 
+	
+	Remember that a follower node 
+	
+	\luin{ici explications sur chacune des conditions}
+	
+	
+	Note that if one wants to build a concrete execution of the protocol of Figure \ref{fig:ex1}~from the tree of Figure \ref{fig-ex-unfolding-tree}, the build execution should be over 4 agents (one agent per node). Each agent will play the role of a node of the tree. The agent playing the role of the bottom left node should broadcast its value among with message $m_2$ and stop. This message should be received by the agent playing the role of the boss node with value $y_2$, it will reach $q_5$ and store the value $x_3$ in its first register. It will then broadcast message $m_4$ among with value $y_2$ and stop. The latter broadcast should be received by the agent playing the role of the root node. This agent has broadcast messages $m_2$ before and reached $q_1$. When he broadcast message $m_2$ among with its value $x_1$, the message has been received by the agent playing role of the right node.
+	The right node received $m_2$ among with $x_1$, it can then broadcast $m_2$ (which shall not be received) and reach $q_4$. From $q_4$ it can send message $m_6$ among with $x_1$. The message is reiceived by the agent playing the root node role, allowing him to reach $q_7$.
+	
+
 \end{example}
 
 
