@@ -341,7 +341,7 @@ Now suppose there exists $v \in V \setminus (\set{\valuelabel{\node}} \cup V')$.
 
 As $v \neq \valuelabel{\node}$, by condition~\ref{item:condition2_initial_value}, there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into successive local runs $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$, $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdec{\decsymb_i}$ with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
 
-By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v_i'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$. \corto{fix follower spec dec,m vs fw, fm}
+By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v_i'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$.
 
 For each $i$ we consider the shortest prefix $\run''_i$ of $\run'_i$ ending with an "internal message" $\intmessage{\followlabelmessage{\node_i}}{v'_i}$, we have that $\vinput{v'_i}{\run''_i} \subword \vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$.
 
