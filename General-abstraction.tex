@@ -189,8 +189,8 @@ Let $(\prot,q_f)$ an instance of $\COVER$. $(\prot,q_f)$ is positive if and only
 
 
 
-\subsection{Bounding the size of the "unfolding tree"}
-\label{sec:tree-bounds}
+\subsection{Bounding the size of the nodes of the "unfolding tree"}
+\label{sec:local-bounds}
 
 Our aim is now to provide bounds on the size of the "unfolding tree" that one has to consider for \COVER. To do so, we start with two simple observations. First, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then any subword of $\bossspec$ can also be broadcast with a single value. 
 % Therefore, if a branch of our tree has node $\node$ with "boss specification" $w$ and below has node $\node'$ "boss specification" $w'$ such that $w \subword w'$, then $\node'$ is better than $\node$ and one can shorten the tree by replacing $\node$ by $\node'$. 
@@ -198,7 +198,7 @@ For "follower specifications", it goes in the opposite direction: for a fixed $\
 
 \begin{restatable}{lemma}{lemShorteningBranches} 
 \label{lem:shortening-branches}
-	Let $\tree$ be a "unfolding tree" whose root's local run covers $q_f$..
+	Let $\tree$ be a "unfolding tree" whose root's local run covers $q_f$.
 	Let $\node, \node'$ be two nodes of tree such that $\node$ is an ancestor of $\node'$. If:
 	\begin{itemize}
 	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; or
@@ -213,10 +213,10 @@ The previous lemma however does not suffice to apply the length function theorem
 
 \begin{restatable}{lemma}{lemShortRunOutput}
 	\label{lem:short-run-for-output}
-	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" $\prot$ with $\regnum$ registers, for every $w_{in} \in (\messages\times \nats)^*$, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ such that $w_{in} \subword \Output{\localrun}$ and for every $V \subseteq \nats$ finite containing all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot}, \regnum) \size{w_{in}}$, $w_{in} \subword \Output{\localrun'}$ and:
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" $\prot$ with $\regnum$ registers, for every $w_{out} \in (\messages\times \nats)^*$, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ such that $w_{out} \subword \Output{\localrun}$ and for every $V_{in}, V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq (\towerfun(\size{\prot}, \regnum)+1) \size{w_{out}}$, $w_{out} \subword \Output{\localrun'}$ and:
 	
 	\begin{enumerate}
-		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item for all $\aval' \in \nats \setminus V_{in}$, there exists $\aval \in \nats\setminus V_{in}$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 	\end{enumerate}
 \end{restatable}
