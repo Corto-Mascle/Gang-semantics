@@ -25,7 +25,7 @@ We first prove the following result:
 	Given a "local run" $\localrun$, register $i$ is ""active"" in $\localrun$ if at least one $\quotemarks{\enregact}$ step on register $i$ is performed in $\localrun$. 
 	
 	We define the function $\towerfun(n)(k)$ recursively as $\towerfun(n)(0) = n+1$ and $\towerfun(n)(k+1) = 2(\towerfun(n)(k) +1) n^{2(\towerfun(n)(k)+1)} +1$. This function is clearly primitive recursive, although non-elementary. A straightforward induction allows one to bound (roughly) $\towerfun(n)(k)$ between the towers of exponentials
-	$n^{n^{{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle n}}}}}}$ and $(4n^4+1)^{(4n^4+1)^{\scriptstyle {~\cdot^{\scriptstyle~\cdot^{\scriptstyle~\cdot^{\scriptstyle (4n^4+1)}}}}}}$  of height $k+1$.
+	$n^{n^{{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle n}}}}}}$ and $(4n^4+1)^{(4n^4+1)^{\scriptstyle {~\cdot^{\scriptstyle~\cdot^{\scriptstyle~\cdot^{\scriptstyle (4n^4+1)}}}}}}$  of height $k+1$. \nico{je sais pas si c'est nécessaire de préciser ça, en le lisant la première fois j'ai pas trop compris pourquoi c'était là}
 	
 	Let $n:=\size{\prot}$.
 	We prove the ""shortening property"": \\
@@ -44,7 +44,7 @@ We first prove the following result:
 	Suppose now that there exists no such infix "local run".
 	Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n)(k){+}1$, we have $\towerfun(n)(k+1) = 2M (n^{2M}+1)$. 
 	In any sequence of $M$ "local steps" in a row in $\localrun$, 
-	there is a $\quotemarks{\enregact}$ transition on every register in $I$. Suppose that $\length{\localrun} > \towerfun(n)(k+1)$. Additionally, suppose that $\localrun$ no local configuration appears twice in $\localrun$ (otherwise $\localrun$ may easily be shortened). For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$.
+	there is a $\quotemarks{\enregact}$ transition on every register in $I$. Suppose that $\length{\localrun} > \towerfun(n)(k+1)$. Additionally, suppose that no local configuration appears twice in $\localrun$ (otherwise $\localrun$ may easily be shortened). For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$.
 	For every $i \in \nset{0}{n^{2M}}$, we write $s_i$ the sequence $\delta_{2  M \cdot i+1}, \delta_{2  M \cdot i+2}, \cdots, \delta_{2 M \cdot i+2M}$.
 	By the pigeonhole principle two of the sequences $s_i$ are equal (there are $|\transitions|^{2M}$ distinct such sequences and $|\transitions| \leq n$). 
 	There exist two infix "local runs" $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have the same sequence of transitions $s$.
@@ -127,28 +127,7 @@ We first prove the following result:
 	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot})(\regnum)$, which concludes the proof of Lemma~\ref{lem:short-local-runs}. 
 \end{proof}
 
-\begin{lemma}
-	\label{lem:short-dec}
-	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a decomposition, and for all $i\in \nset{0}{\ell}$ let $\decsymb_i = (w_0, m_1, \ldots, w_i)$.
-	Let $w'_0, \ldots, w'_\ell$ be such that $w'_i \in \langdec{\decsymb_i}$ for all $i$.
-	
-	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that, for all $i$, $\widehat{w}_i \subword w_i$ and $w'_i \in \langdec{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$), and $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \size{w'_i}$. 
-\end{lemma}
-
-\begin{proof}
-	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we define the word projection $\wordproj{M}{w}$ as the word obtained when deleting from $w$ every symbol not in $M$.
-
-	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
-	
-	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
-	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of size at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
-	
-	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$ $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
-	
-	We obtain that for all $i$, $w'_i = v_{i,0} \cdots v_{i,i}$ with, for all $j \in \nset{0}{i}$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_j}} \subword \widehat{w}_j$. Hence we have $w'_i \in \langdec{\decsymb_i}$.
-	
-	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{v_{i,j}} = \sum_{i=0}^{\ell} \size{w'_i}$.
-\end{proof}
+We have now managed to bound the size of a "local run" that needs to go to a specific "local configuration". We now suppose that the "local run" needs to perform a certain sequence of broadcasts. In that case, we iterate the previous argument to obtain a bound on the size of the "local run".
 
 \lemShortRunOutput*
 
@@ -158,8 +137,8 @@ We first prove the following result:
 	
 	If $w_{in} = \epsilon$ we simply apply Lemma~\ref{lem:short-local-runs}.
 	
-	Otherwise let $w'_{in} (m,v) = w_{in}$.
-	As $w_{in} \subword \Output{\localrun}$ we can split $\localrun$ in three $\localrun_0: (q, \localdata) \step{*} (q_0, \nu_0)$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$, $\localrun_1 :(q_1, \localdata_1) \step{*} (q', \localdata')$ where $\delta$ applies a broadcast operation $\br{m}{i}$ with $\nu'_{m} (i) = v$.
+	Otherwise let $(m,v)$ the last message in $w'_{in}$ so that $w'_{in} \cdot (m,v) = w_{in}$.
+	As $w_{in} \subword \Output{\localrun}$ we can split $\localrun$ in three successive "local runs" $\localrun_0: (q, \localdata) \step{*} (q_0, \nu_0)$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$, $\localrun_1 :(q_1, \localdata_1) \step{*} (q', \localdata')$ where $\delta$ applies a broadcast operation $\br{m}{i}$ with $\nu'_{m} (i) = v$.
 	
 	Let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, and thus in particular every message value appearing in $\localrun_0$.
 	By induction hypothesis, there exists a "local run" $\localrun_0': (q, \localdata) \step{*} (q_0, \localdata_0)$ such that $\length{\localrun_0'} \leq (\towerfun(\size{\prot})(r)+1)\size{w'_{in}}$, $w'_{in} \subword \Output{\localrun_0'}$ and:
@@ -190,7 +169,33 @@ We first prove the following result:
 	This concludes our proof.
 \end{proof}
 
+\section{Proof of Lemma~\ref{lem:bound-successor-height}}
 \lemBoundSuccessorHeight*
+
+In order to prove the previous lemma, we first need to bound the size of the "decomposition" that one has to consider for "follower" nodes. 
+\begin{lemma}
+	\label{lem:short-dec}
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a decomposition, and for all $i\in \nset{0}{\ell}$ let $\decsymb_i = (w_0, m_1, \ldots, w_i)$.
+	Let $w'_0, \ldots, w'_\ell$ be such that $w'_i \in \langdec{\decsymb_i}$ for all $i$.
+	
+	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that, for all $i$, $\widehat{w}_i \subword w_i$ and $w'_i \in \langdec{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$), and $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \size{w'_i}$. 
+\end{lemma}
+
+\begin{proof}
+	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we define the word projection $\wordproj{M}{w}$ as the word obtained when deleting from $w$ every symbol not in $M$.
+
+	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
+	
+	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
+	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of size at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
+	
+	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$ $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
+	
+	We obtain that for all $i$, $w'_i = v_{i,0} \cdots v_{i,i}$ with, for all $j \in \nset{0}{i}$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_j}} \subword \widehat{w}_j$. Hence we have $w'_i \in \langdec{\decsymb_i}$.
+	
+	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{v_{i,j}} = \sum_{i=0}^{\ell} \size{w'_i}$.
+\end{proof}
+
 
 \begin{proof}
 	Let $\node$ be a node of $\tree$. \corto{properly define trees and nodes}
