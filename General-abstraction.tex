@@ -156,15 +156,23 @@ Second, that $\node$ is a witness that its "specification" is carried out (Condi
 	
 	
 	
-	First, let us see why the tree is consistent with condition \ref{item:condition1_non_initial_value}. The only non-initial value of the root node is $y_2$, hence it has only one boss node child. The same holds for the left boss node with value $y_2$ (the only non-initial value is $x_3$). For the bottom left node, all its values are initials and hence it has no boss node child. The right node has one non-initial value : $x_1$. However, $x_1$ is also the value of the node, and so it should not have any boss node child. 
+	First, let us see why the tree is consistent with condition \ref{item:condition1_non_initial_value}.
+	The only non-initial value of the root node is $y_2$ and its input is $m_4$, hence it has only one boss node child (the left middle node) and its specification contains $m_4$ (in this case, it is exactly $m_4$). The same holds for the left boss node with value $y_2$ (the only non-initial value is $x_3$ and its output is $m_2$) which has the bottom left node as a boss child. For the bottom left node, all its values are initials and hence it has no boss node child. The right node has one non-initial value : $x_1$. However, $x_1$ is also the value of the node, and so it should not have any boss node child. 
 	
-	Remember that a follower node 
+	The condition \ref{item:condition2_initial_value}~might be the harder to read. Take $x_1$ the initial value of the root node. Note that the output of the root node with value $x_1$ is $m_2$, and the input is $m_6$. As a consequence, the decomposition of the node should only be $(m_2, m_6, \epsilon)$, $(i = 1)$. Here the last word is $\epsilon$ because the local run of the root node stops after testing its first register value and it does not send anything afterwards. The root node should then have one follower node (the right node) such that its specification $\mathbf{fm}, \mathbf{fw}$ is such that $\mathbf{fm} = m_1$ and $\mathbf{fw} \in \langdec{dec_1}$. Note that $\mathtt{dec_1} = (m_2)$, and so $m_2 \in \langdec{dec_1}$. Note that for all other boss nodes (the two on the left), the input on initial is empty, so the decomposition is just composed of one word (the input word). As a consequence, the other boss nodes don't have follower nodes child.
 	
-	\luin{ici explications sur chacune des conditions}
+	For condition \ref{item:condition3_follower_node}, the right node satisfies the condition: $x_1$ is not one of its initial value, its input is $m2$, and its output is $m_6$, hence the condition is satisfied.
+	
+	As for condition \ref{item:condition4_boss_node}, we can check that values of the boss nodes are indeed initial values of the "local runs" and the conditions on the decomposition described on condition \ref{item:condition2_initial_value}. As we said, we are not interested in the specification of the boss node and so we can choose any subword of the input (of the initial chosen value) of the local run.\lu{mal dit..} For all other boss nodes, we argue that their decomposition of a value is the single word made of the input of the value. For the bottom left node its input on $x_3$ is $m_2$ and as $m_2 \in \langdec{(m_2)}$, this satisfies the condition. For the left middle node, its input on $y_2$ is $m_4$ and so for the same reasons the condition is satisfied.
+	
+	
+%	\luin{ici explications sur chacune des conditions}
 	
 	
 	Note that if one wants to build a concrete execution of the protocol of Figure \ref{fig:ex1}~from the tree of Figure \ref{fig-ex-unfolding-tree}, the build execution should be over 4 agents (one agent per node). Each agent will play the role of a node of the tree. The agent playing the role of the bottom left node should broadcast its value among with message $m_2$ and stop. This message should be received by the agent playing the role of the boss node with value $y_2$, it will reach $q_5$ and store the value $x_3$ in its first register. It will then broadcast message $m_4$ among with value $y_2$ and stop. The latter broadcast should be received by the agent playing the role of the root node. This agent has broadcast messages $m_2$ before and reached $q_1$. When he broadcast message $m_2$ among with its value $x_1$, the message has been received by the agent playing role of the right node.
 	The right node received $m_2$ among with $x_1$, it can then broadcast $m_2$ (which shall not be received) and reach $q_4$. From $q_4$ it can send message $m_6$ among with $x_1$. The message is reiceived by the agent playing the root node role, allowing him to reach $q_7$.
+	
+	
 	
 
 \end{example}
