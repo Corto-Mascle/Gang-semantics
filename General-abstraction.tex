@@ -190,7 +190,7 @@ For "follower specifications", it goes in the opposite direction: for a fixed $\
 
 \begin{restatable}{lemma}{lemShorteningBranches} 
 \label{lem:shortening-branches}
-	Let $\tree$ be a "unfolding tree" whose root's local run covers $q_f$..
+	Let $\tree$ be a "unfolding tree" whose root's local run covers $q_f$.
 	Let $\node, \node'$ be two nodes of tree such that $\node$ is an ancestor of $\node'$. If:
 	\begin{itemize}
 	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; or
@@ -205,10 +205,10 @@ The previous lemma however does not suffice to apply the length function theorem
 
 \begin{restatable}{lemma}{lemShortRunOutput}
 	\label{lem:short-run-for-output}
-	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" $\prot$ with $\regnum$ registers, for every $w_{in} \in (\messages\times \nats)^*$, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ such that $w_{in} \subword \Output{\localrun}$ and for every $V \subseteq \nats$ finite containing all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot}, \regnum) \size{w_{in}}$, $w_{in} \subword \Output{\localrun'}$ and:
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" $\prot$ with $\regnum$ registers, for every $w_{out} \in (\messages\times \nats)^*$, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ such that $w_{out} \subword \Output{\localrun}$ and for every $V_{in}, V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq (\towerfun(\size{\prot}, \regnum)+1) \size{w_{out}}$, $w_{out} \subword \Output{\localrun'}$ and:
 	
 	\begin{enumerate}
-		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item for all $\aval' \in \nats \setminus V_{in}$, there exists $\aval \in \nats\setminus V_{in}$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 	\end{enumerate}
 \end{restatable}

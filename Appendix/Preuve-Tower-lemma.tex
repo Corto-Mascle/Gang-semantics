@@ -5,7 +5,7 @@ We first prove the following result:
 
 \begin{restatable}{lemma}{lemShortLocalRuns}
 	\label{lem:short-local-runs}
-	There exists a primitive recursive function $\towerfun(n)(r)$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V_{in}, V \subseteq \nats$ finite such that $V$ contains every message value appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$\corto{uniformiser la notation} such that $\length{\localrun'} \leq \towerfun(\size{\prot} + \size{V_{in}})(r)$ and:
+	There exists a primitive recursive function $\towerfun(n)(r)$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V_{in}, V \subseteq \nats$ finite such that $V$ contains every message value appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot} + \size{V_{in}})(r) -1$ and:
 	\begin{enumerate}
 		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
@@ -24,12 +24,12 @@ We first prove the following result:
 \begin{proof}
 	Given a "local run" $\localrun$, register $i$ is ""active"" in $\localrun$ if at least one $\quotemarks{\enregact}$ step on register $i$ is performed in $\localrun$. 
 	
-	We define the function $\towerfun(n)(k)$ recursively as $\towerfun(n)(0) = n+1$ and $\towerfun(n)(k+1) = 2(\towerfun(n)(k) +1) (n^2)^{2(\towerfun(n)(k)+1)} +1$. This function is clearly primitive recursive, although non-elementary. A straightforward induction allows one to bound (roughly) $\towerfun(n)(k)$ between the towers of exponentials
-	$n^{n^{{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle n}}}}}}$ and $(4n^8+1)^{(4n^8+1)^{\scriptstyle {~\cdot^{\scriptstyle~\cdot^{\scriptstyle~\cdot^{\scriptstyle (4n^8+1)}}}}}}$  of height $k+1$.
+	We define the function $\towerfun(n)(k)$ recursively as $\towerfun(n)(0) = n+1$ and $\towerfun(n)(k+1) = 2(\towerfun(n)(k) +1) (n^2)^{2(\towerfun(n)(k)+1)} +2$. This function is clearly primitive recursive, although non-elementary. A straightforward induction allows one to bound (roughly) $\towerfun(n)(k)$ between the towers of exponentials
+	$n^{n^{{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle n}}}}}}$ and $(4n^8+2)^{(4n^8+2)^{\scriptstyle {~\cdot^{\scriptstyle~\cdot^{\scriptstyle~\cdot^{\scriptstyle (4n^8+2)}}}}}}$  of height $k+1$.
 	
 	Let $n:=\size{\prot} + \size{V_{in}} + 1$.
 	We prove the ""shortening property"": \\
-	Let a "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(n,k)$ and let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$. We claim that $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ active registers such that $\length{\localrun'} < \length{\localrun}$ and:
+	Let a "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(n,k)-1$ and let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$. We claim that $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ active registers such that $\length{\localrun'} < \length{\localrun}$ and:
 	\begin{itemize}
 		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
@@ -37,14 +37,14 @@ We first prove the following result:
 	
 	We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, register values do not change in $\localrun$. As $\towerfun(n)(0) = n+1 \geq \size{Q}+1$, $\localrun$ goes through the same state twice, hence all steps in between may be removed. 
 	
-	Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(n)(k+1)$.
+	Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(n)(k+1)-1$.
 	
 	First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of length $\towerfun(n)(k)+1$ with only $k$ active registers, then it suffices to apply the induction hypothesis on $u_i$ and $V$.
 	
 	Suppose now that there exists no such infix "local run".
-	Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n)(k){+}1$, we have $\towerfun(n)(k+1) = 2M ((n^2)^{2M}+1)$. 
+	Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n)(k){+}1$, we have $\towerfun(n)(k+1) -1 = 2M (n^2)^{2M}+1$. 
 	In any sequence of $M$ "local steps" in a row in $\localrun$, 
-	there is a $\quotemarks{\enregact}$ transition on every register in $I$. Suppose that $\length{\localrun} > \towerfun(n)(k+1)$. Additionally, suppose that  no local configuration appears twice in $\localrun$ (otherwise $\localrun$ may easily be shortened). 
+	there is a $\quotemarks{\enregact}$ transition on every register in $I$. Suppose that $\length{\localrun} > \towerfun(n)(k+1)-1$. Additionally, suppose that  no local configuration appears twice in $\localrun$ (otherwise $\localrun$ may easily be shortened). 
 	
 	
 	For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$, and let $\theta_i\in V_{in} \cup \set{\bot}$ be such that 
@@ -162,9 +162,61 @@ We first prove the following result:
 	But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "reception steps" with value $\phi(\aval)$ correspond to "reception steps" in $\localrun_a$ with value $\aval$, and similarly for $\localrun_2$ and $\localrun_b$. This proves condition \ref{item:shorterrun_anyvalue} for every $\aval' \in \nats \setminus V$.
 	Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues} and that is strictly shorter that $\localrun$, which proves the "shortening property".
 	
-	We build a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot})(\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup W$ where $W$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
-	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot})(\regnum)$, which concludes the proof of Lemma~\ref{lem:short-local-runs}. 
+	We build a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot})(\regnum) -1$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup W$ where $W$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
+	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot})(\regnum)-1$, which concludes the proof of Lemma~\ref{lem:short-local-runs}. 
 \end{proof}
+
+
+\lemShortRunOutput*
+
+\begin{proof}
+	We set $\psi$ to be the same function as in Lemma~\ref{lem:short-local-runs}. 
+	Let $\prot$ be a protocol with $r$ registers, $V_{in}$ a finite set of values. 
+	Let $n = \size{\prot} + \size{V_{in}} +1$.
+	
+	We proceed by induction on $\size{w_{out}}$.
+	If $w_{out} = \epsilon$ we simply apply Lemma~\ref{lem:short-local-runs}.
+	
+	Otherwise let $w'_{out} (m,v) = w_{out}$.
+	As $w_{out} \subword \Output{\localrun}$ we can split $\localrun$ in three $\localrun_0: (q, \localdata) \step{*} (q_0, \nu_0)$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$, $\localrun_1 :(q_1, \localdata_1) \step{*} (q', \localdata')$ where $\delta$ applies a broadcast operation $\br{m}{i}$ and $\nu_{0} (i) = v$.
+	
+	Let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, and thus in particular every message value appearing in $\localrun_0$.
+	By induction hypothesis, there exists a "local run" $\localrun_0': (q, \localdata) \step{*} (q_0, \localdata_0)$ such that $\length{\localrun_0'} \leq (\towerfun(\size{\prot})(r)+1)\size{w'_{in}}$, $w'_{in} \subword \Output{\localrun_0'}$ and:
+	
+	\begin{enumerate}
+		\item for all $\aval' \in \nats \setminus V_{in}$, there exists $\aval \in \nats \setminus V_{in}$ such that $\vinput{\aval'}{\localrun_0'}$ is a subword of $\vinput{\aval}{\localrun_0}$,
+		\item for all $\aval \in V$, $\vinput{\aval}{\localrun_0'}$ is a subword of $\vinput{\aval}{\localrun_0}$. 
+	\end{enumerate}
+	
+	We set $V''$ as the set of values that either are in $V$ or appear in $\localrun_0$.
+	By Lemma~\ref{lem:short-local-runs}, there exists a "local run" $\localrun_1': (q_1, \localdata_1) \step{*} (q', \localdata')$ such that $\length{\localrun_1'} \leq \towerfun(\size{\prot})(r)-1$ and:
+	\begin{enumerate}
+		\item for all $\aval' \in \nats \setminus V_{in}$, there exists $\aval \in \nats \setminus V_{in}$ such that $\vinput{\aval'}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$,
+		\item for all $\aval \in V''$, $\vinput{\aval}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$. 
+	\end{enumerate}
+	
+	Let $\localrun'$ be the concatenation of $\localrun'_0$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$ and $\localrun'_1$. As $w'_{in} \subword \Output{\localrun'_0}$, we have $w_{in} \subword \Output{\localrun}$.
+	The length of $\localrun'$ is $\length{\localrun'_0} + 1 + \length{\localrun'_1}$, which is at most $(\towerfun(\size{\prot})(r)+1)\size{w'_{in}} + \towerfun(\size{\prot})(r) = \towerfun(\size{\prot})(r)\size{w_{in}}$.
+	
+	Moreover, for all $v' \in \nats$, 
+	\begin{itemize}
+		\item if $v'\in V$, and then $\vinput{v'}{\localrun_0'} \subword \vinput{v'}{\localrun_0}$ and $\vinput{v'}{\localrun_1'} \subword \vinput{v'}{\localrun_1}$, thus $\vinput{v'}{\localrun'} \subword \vinput{v'}{\localrun}$.
+		
+		\item if $v' \in V'' \setminus (V \cup V_{in})$ and then $v'$ does not appear in $\localrun$, and there exists $v \in \nats\setminus V_{in}$ such that $\vinput{v'}{\localrun_0'} \subword \vinput{v}{\localrun_0}$. Further, as $v' \in V'$ we have $\vinput{v'}{\localrun_1'} \subword \vinput{v'}{\localrun_1} = \epsilon$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
+		
+		\item if $v' \in \nats \setminus (V_{in} \cup V'')$, then by definition of $V''$ we have $\vinput{v'}{\localrun_0'} = \epsilon$, and there exists $v \in \nats \setminus V_{in}$ such that $\vinput{v'}{\localrun_1'} \subword \vinput{v}{\localrun_1}$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
+	\end{itemize}
+	This concludes our proof.
+\end{proof}
+
+
+
+
+
+
+
+
+
 
 \begin{lemma}
 	\label{lem:short-dec}
@@ -176,7 +228,7 @@ We first prove the following result:
 
 \begin{proof}
 	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we define the word projection $\wordproj{M}{w}$ as the word obtained when deleting from $w$ every symbol not in $M$.
-
+	
 	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
 	
 	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
@@ -187,46 +239,6 @@ We first prove the following result:
 	We obtain that for all $i$, $w'_i = v_{i,0} \cdots v_{i,i}$ with, for all $j \in \nset{0}{i}$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_j}} \subword \widehat{w}_j$. Hence we have $w'_i \in \langdec{\decsymb_i}$.
 	
 	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{v_{i,j}} = \sum_{i=0}^{\ell} \size{w'_i}$.
-\end{proof}
-
-\lemShortRunOutput*
-
-\begin{proof}
-	
-	We proceed by induction on $\size{w_{in}}$.
-	
-	If $w_{in} = \epsilon$ we simply apply Lemma~\ref{lem:short-local-runs}.
-	
-	Otherwise let $w'_{in} (m,v) = w_{in}$.
-	As $w_{in} \subword \Output{\localrun}$ we can split $\localrun$ in three $\localrun_0: (q, \localdata) \step{*} (q_0, \nu_0)$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$, $\localrun_1 :(q_1, \localdata_1) \step{*} (q', \localdata')$ where $\delta$ applies a broadcast operation $\br{m}{i}$ with $\nu'_{m} (i) = v$.
-	
-	Let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, and thus in particular every message value appearing in $\localrun_0$.
-	By induction hypothesis, there exists a "local run" $\localrun_0': (q, \localdata) \step{*} (q_0, \localdata_0)$ such that $\length{\localrun_0'} \leq (\towerfun(\size{\prot})(r)+1)\size{w'_{in}}$, $w'_{in} \subword \Output{\localrun_0'}$ and:
-	
-	\begin{enumerate}
-		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun_0'}$ is a subword of $\vinput{\aval}{\localrun_0}$,
-		\item for all $\aval \in V$, $\vinput{\aval}{\localrun_0'}$ is a subword of $\vinput{\aval}{\localrun_0}$. 
-	\end{enumerate}
-	
-	We set $V'$ as the set of values that either are in $V$ or appear in $\localrun_0$.
-	By Lemma~\ref{lem:short-local-runs}, there exists a "local run" $\localrun_1': (q_1, \localdata_1) \step{*} (q', \localdata')$ such that $\length{\localrun_1'} \leq \towerfun(\size{\prot})(r)$ and:
-	\begin{enumerate}
-		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$,
-		\item for all $\aval \in V$, $\vinput{\aval}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$. 
-	\end{enumerate}
-	
-	Let $\localrun'$ be the concatenation of $\localrun'_0$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$ and $\localrun'_1$. As $w'_{in} \subword \Output{\localrun'_0}$, we have $w_{in} \subword \Output{\localrun}$.
-	The length of $\localrun'$ is $\length{\localrun'_0} + 1 + \length{\localrun'_1}$, which is at most $(\towerfun(\size{\prot})(r)+1)\size{w'_{in}} + 1 + \towerfun(\size{\prot})(r) = (\towerfun(\size{\prot})(r)+1)\size{w_{in}}$.
-	
-	Moreover, for all $v' \in \nats$, 
-	\begin{itemize}
-		\item either $v'\in V$, and then $\vinput{v'}{\localrun_0'} \subword \vinput{v'}{\localrun_0}$ and $\vinput{v'}{\localrun_1'} \subword \vinput{v'}{\localrun_1}$, thus $\vinput{v'}{\localrun'} \subword \vinput{v'}{\localrun}$.
-		
-		\item or $v' \in V' \setminus V$ and then $v'$ does not appear in $\localrun$, and there exists $v \in \nats$ such that $\vinput{v'}{\localrun_0'} \subword \vinput{v}{\localrun_0}$. Further, as $v' \in V'$ we have $\vinput{v'}{\localrun_1'} \subword \vinput{v'}{\localrun_1} = \epsilon$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
-		
-		\item or $v' \notin V'$, thus by definition of $V'$ we have $\vinput{v'}{\localrun_0'} = \epsilon$, and there exists $v$ such that $\vinput{v'}{\localrun_1'} \subword \vinput{v}{\localrun_1}$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
-	\end{itemize}
-	This concludes our proof.
 \end{proof}
 
 \lemBoundSuccessorHeight*
