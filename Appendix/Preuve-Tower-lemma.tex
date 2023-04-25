@@ -245,16 +245,16 @@ We first prove the following result:
 
 \begin{proof}
 	Let $\node$ be a node of $\tree$. \corto{properly define trees and nodes}
-	Let $V$ be the set of "initial values" being broadcast or received in $\localrunlabel{\node}$. We have $\size{V}\leq r$ as there is at most one such value for each register.  
+	Let $V_{in}$ be the set of "initial values" being broadcast or received in $\localrunlabel{\node}$. We have $\size{V_{in}}\leq r$ as there is at most one such value for each register.  
 	
-	For each $v \in V$, if $v \neq \valuelabel{\node}$ (resp. if $v = \valuelabel{\node}$), let $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ be a "decomposition" and $\node_{v,1}, \ldots, \node_{v, \ell_v}$ "follower" children of $\node$ such that condition \ref{unfoldingC3.1} (resp. \ref{unfoldingC1}) is respected.
+	For each $v \in V_{in}$, if $v \neq \valuelabel{\node}$ (resp. if $v = \valuelabel{\node}$), let $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ be a "decomposition" and $\node_{v,1}, \ldots, \node_{v, \ell_v}$ "follower" children of $\node$ such that condition~\ref{item:condition2_initial_value} (resp. \ref{item:condition4_boss_node}) is respected.
 	
-	We can delete all other "follower" children of $\node$ and still have a "unfolding tree" satisfying $w$ as the $\node_{v,i}$ suffice to satisfy conditions \ref{unfoldingC1} and \ref{unfoldingC3.1} and the other conditions do not depend on "follower" children.
-	As we assumed $\tree$ to be of minimal size, $\node$ does not have "follower" children besides the $\node_{v,i}$. As $\size{V} \leq r$ and $\ell_v \leq \size{\messages}$ for all $v$ (by definition of a "decomposition", as the $(m_{v,i})_{1\leq i \leq \ell_v}$ are all distinct), $\node$ has at most $\size{\messages}r$ "follower" children, proving property 1.
+	We can delete all other "follower" children of $\node$ and still have a "unfolding tree" satisfying $w$ as the $\node_{v,i}$ suffice to satisfy conditions \ref{item:condition2_initial_value} and \ref{item:condition4_boss_node} and the other conditions do not depend on "follower" children.
+	As we assumed $\tree$ to be of minimal size, $\node$ does not have "follower" children besides the $\node_{v,i}$. As $\size{V_{in}} \leq r$ and $\ell_v \leq \size{\messages}$ for all $v$ (by definition of a "decomposition", as the $(m_{v,i})_{1\leq i \leq \ell_v}$ are all distinct), $\node$ has at most $\size{\messages}r$ "follower" children, proving property 1.
 	
 	Property 2 follows immediately from the fact that $\tree$ satisfies a "boss specification" $w$, which by definition implies that its root is a "boss node".
 	
-	Let $\node$ be a "boss node". If $\node$ is the root, then as $\tree$ satisfies $w$ we have $w \subword \bosslabel{\node}$. If $w \neq \bosslabel{\node}$, we can replace $\bosslabel{\node}$ with $w$: As $w \subword \bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $w \in \langdec{\decsymb}$, hence condition~\ref{unfoldingC1} is still satisfied, and the other conditions of a "unfolding tree" are unaffected by this change.
+	Let $\node$ be a "boss node". If $\node$ is the root, then as $\tree$ satisfies $w$ we have $w \subword \bosslabel{\node}$. If $w \neq \bosslabel{\node}$, we can replace $\bosslabel{\node}$ with $w$: As $w \subword \bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $w \in \langdec{\decsymb}$, hence condition~\ref{item:condition4_boss_node} is still satisfied, and the other conditions of a "unfolding tree" are unaffected by this change.
 	Furthermore the resulting "unfolding tree" still satisfies $w$. This contradicts the minimality of $\tree$, hence we have $\bosslabel{\node} = w$.
 	
 	If $\node$ is not the root, then let $\node'$ be its father. 
@@ -263,13 +263,13 @@ We first prove the following result:
 	We can construct a subword $\bossspec'$ of $\bosslabel{\node}$ of length at most $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}}$ such that all $\vinput{v'}{\localrunlabel{\node'}}$ are subwords of $\bossspec'$. It suffices to select for each $v'$ a set of positions in $\bosslabel{\node}$ forming $\vinput{v'}{\localrunlabel{\node'}}$, and then taking the word formed by the union of those sets of positions.
 	Observe that we necessarily have $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}}$, thus $\size{\bossspec'} \leq \size{\localrunlabel{\node'}}$.
 	
-	Like in the previous case, as $\bossspec'$ is a subword of $\bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $\bossspec' \in \langdec{\decsymb}$. As a result, condition~\ref{unfoldingC1} is still satisfied after switching the label $\bosslabel{\node}$ to $\bossspec'$. Furthermore, by definition of $V'$ and $\bossspec'$, for all non-initial value $v'$ in $\localrunlabel{\node'}$, if $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$ then  $\vinput{v'}{\localrunlabel{\node'}} \subword \bossspec'$, hence condition~\ref{unfoldingC3.2} is still satisfied as well. Other conditions are unaffected by this change.
+	Like in the previous case, as $\bossspec'$ is a subword of $\bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $\bossspec' \in \langdec{\decsymb}$. As a result, condition~\ref{item:condition4_boss_node} is still satisfied after switching the label $\bosslabel{\node}$ to $\bossspec'$. Furthermore, by definition of $V'$ and $\bossspec'$, for all non-initial value $v'$ in $\localrunlabel{\node'}$, if $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$ then  $\vinput{v'}{\localrunlabel{\node'}} \subword \bossspec'$, hence condition~\ref{item:condition1_non_initial_value} is still satisfied as well. Other conditions are unaffected by this change.
 	
 	Hence if $\size{\bosslabel{\node}} > \size{\localrunlabel{\node'}}$ we can obtain a "unfolding tree" smaller than $\tree$ and satisfying $w$, contradicting the minimality of $\tree$. As a result, $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$.
 	
-	We have shown the first two points of property 3. For the third one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "unfolding tree conditions" and then bound the length of $\localrunlabel{\node}$ using Lemma~\ref{lem:short-run-for-output}.
+	We have shown the first two points of property 3. For the third one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "unfolding tree" conditions and then bound the length of $\localrunlabel{\node}$ using Lemma~\ref{lem:short-run-for-output}.
 	
-	Let $v$ be an initial value of $\localrunlabel{\node}$. If $v = \valuelabel{\node}$ then by condition~\ref{unfoldingC1} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_1, \ldots, \node_{\ell_v}$ such that
+	Let $v$ be an initial value of $\localrunlabel{\node}$. If $v = \valuelabel{\node}$ then by condition~\ref{item:condition4_boss_node} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_1, \ldots, \node_{\ell_v}$ such that
 	\begin{itemize}
 		\item $\bosslabel{\node} \in \langdec{\decsymb_v}$
 		\item $u$ can be split into $u_{v,0}, \ldots, u_{v,\ell_v}$ so that for all $i$, $w_{v,i} \subword \voutput{v}{u_{v,i}}$ and $\vinput{v}{u_{v,i}} \in \set{m_1, \ldots, m_{i-1}}^*$
@@ -277,12 +277,10 @@ We first prove the following result:
 		\item for all $i$, $\followlabelword{\node_i} \in \langdec{\decsymb_{v,i}}$, with $\decsymb_{v,i}= (w_{v,0}, m_{v,1}, \ldots, w_{v,i-1})$, and $\followlabelmessage{\node_i} = m_i$.
 	\end{itemize}
 	
-	Similarly, if $v \neq \valuelabel{\node}$, we set $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$, "follower" children $\node_1, \ldots, \node_{\ell_v}$ and $u_{v,0}, \ldots, u_{v,\ell_v}$ such that Condition~\ref{unfoldingC3.1} is satisfied.
+	Similarly, if $v \neq \valuelabel{\node}$, we set $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$, "follower" children $\node_1, \ldots, \node_{\ell_v}$ and $u_{v,0}, \ldots, u_{v,\ell_v}$ such that condition~\ref{item:condition2_initial_value} is satisfied.
 	
-	In both cases by Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_i}}$. \corto{A preciser}
+	In both cases by Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_i}}$.
 	
-	There exists a subword $x = (m_1, v_1) \cdots (m_k, v_k)$ of $\Output{\localrunlabel{\node}}$ such that for all
-	
-	\cortoin{TO FINISH} 
+	\cortoin{Au lecteur} 
 \end{proof}
 

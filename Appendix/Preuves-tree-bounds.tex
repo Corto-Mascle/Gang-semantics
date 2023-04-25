@@ -21,6 +21,12 @@
 	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r) +1 \leq f_0(\altmax - \altitude{\node})$.
 \end{proof}
 
+\begin{figure}
+	\input{Figures/max-height-bound}
+	\caption{Illustration of the proof of Lemma~\ref{lem:bound-max-height}}.
+	\label{fig:max-height-bound}
+\end{figure}
+
 \lemBoundMaxHeight*
 
 \begin{proof}
@@ -42,7 +48,7 @@
 	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n)(n)+1))n+2$. Clearly for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N)(N)+1))^{i} \geq N$.
 	As a consequence, for all $a$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(N) + 2 \leq g^{(i)}(N)$
 	
-	By Theorem 5.3 in \cite{SchmitzS2011upperHigman}, there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that all  "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
+	By Theorem 5.3 in \cite{SchmitzS2011upperHigman}, recalled here as Theorem~\ref{thm:lengthfcttheorem}, as $g$ is primitive recursive there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(N)$ for all $i$ have at most $f_1(N)$ elements.
 	
 	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(N) = f_1(\size{\prot} + \size{w} + 1)$ elements, thus $\altmax \leq f_1(\size{\prot} + \size{w} + 1)$.
 \end{proof}
@@ -63,7 +69,7 @@
 	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
 	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\bosslabel{\node'_{i_1}} \subword \bosslabel{\node'_{i_2}}$, hence, as $\node_{i_2}$ is a descendant of $\node_{i_1}$, by first case of Lemma~\ref{lem:shortening-branches} there would exist a "unfolding tree" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
 	
-	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
+	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword order" over the alphabet $\messages\cup\set{\#}$.
 	By Lemma~\ref{lem:bound-length-at-height-h}, for all $\node'_i$ we have $\size{\bosslabel{\node'_i}} \leq f_0(\altmax - \altitude{\node'_i}) = f_0(\altmax +i)$.
 	By Lemma~\ref{lem:bound-max-height}, we have $\altmax \leq f_1(N)$ and thus $\size{\bosslabel{\node'_i}} \leq  f_0(f_1(N) +i)$
 	
@@ -72,7 +78,7 @@
 	
 	We have $\size{w_0} \leq M = g^{(0)}(N)$ and for all $i>0$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{f_1(N) + i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(M) + 2 \leq g^{(i)}(M)$
 	
-	By definition of the function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$, all "bad sequences" of words "controlled by" $(g,N)$ have at most $f_1(N)$ elements.
+	By definition of the function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ defined in Lemma~\ref{lem:bound-max-height}, all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(M)$ have at most $f_1(M)$ elements.
 	
 	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(M)$ elements, thus $\altmin \leq f_1(M) = f_1(f_0(f_1(N)))$.
 	We define $f_2$ as $f_1 \circ f_0 \circ f_1$. It is a function of $\Ffunction{\omega^{\size{\messages}+1}}$ as $f_0$ and $f_1$ are in $\Ffunction{\omega^{\size{\messages}}} \subseteq \Ffunction{\omega^{\size{\messages}+1}}$ and $\Ffunction{\omega^{\size{\messages}+1}}$ is closed by composition with functions of $\Ffunction{\omega^{\size{\messages}}}$.
@@ -96,7 +102,7 @@
 	Furthermore, by Lemma~\ref{lem:bound-successor-height}, each node has at most $\size{\messages}r$ "follower" children. We now bound its number of "boss" children.
 	
 	Let $\node$ be a node of $\tree$, let $V$ be the set of non-initial values appearing in $\localrunlabel{\node}$ apart from $\valuelabel{\node}$.
-	By condition~\ref{unfoldingC3.2}, for each $v' \in V$, $\node$ has a "boss" child $\node_{v'}$ such that $\vinput{v'}{\localrunlabel{\node}} \subword \bosslabel{\node_{v'}}$.
+	By condition~\ref{item:condition1_non_initial_value}, for each $v' \in V$, $\node$ has a "boss" child $\node_{v'}$ such that $\vinput{v'}{\localrunlabel{\node}} \subword \bosslabel{\node_{v'}}$.
 	
 	We simply observe that $\size{V} \leq \size{\localrunlabel{\node}}$ as every non-initial value needs to be received at some point in $\localrunlabel{\node}$. We also note that all other "boss" children of $\node$ can be removed, and the resulting tree still satisfies $w$ and is still a "unfolding tree". By minimality of $\tree$, this means that $\mu$ has at most $\size{\localrunlabel{\node}}$ "boss" children, hence at most $f_3(N)$ by Corollary~\ref{cor:bound-node-size}.
 	
@@ -109,5 +115,5 @@
 	
 	Let $f_4$ be such that $f_4(n) = ((f_3(n)+2)(n+1)^{f_3(n)+1} +1) (f_3(n) + n^2)^{(f_3(n)+2)(n+1)^{f_3(n)+1}}(2f_3(n) +1)$ for all $n$. It is the composition of $f_3$ with an elementary function, hence as $f_3 \in \Ffunction{\omega^{\messages}}$ and $\Ffunction{\omega^{\messages}}$ is closed by composition with elementary functions, $f_4 \in \Ffunction{\omega^{\messages}}$.
 	
-	Furthermore, we have shown that the size of a minimal "unfolding tree" satisfying a "boss specification" $w$ and labelled by a "protocol" $\prot$ is bounded by $f_4(\size{\prot} + \size{w} +1)$.
+	Finally, we have shown that the size of a minimal "unfolding tree" satisfying a "boss specification" $w$ and labelled by a "protocol" $\prot$ is bounded by $f_4(\size{\prot} + \size{w} +1)$.
 \end{proof}
