@@ -5,9 +5,9 @@ We first prove the following result:
 
 \begin{restatable}{lemma}{lemShortLocalRuns}
 	\label{lem:short-local-runs}
-	There exists a primitive recursive function $\towerfun(n)(r)$ such that, for every protocol $\prot$ with $r$ registers per process, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V_{in}, V \subseteq \nats$ finite such that $V$ contains every message value appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot} + \size{V_{in}})(r) -1$ and:
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that, denoting by $\Vinit$ the set of initial values in $\localrun$, we have $\length{\localrun'} \leq \towerfun(\size{\prot} + \size{\Vinit},r)$ and:
 	\begin{enumerate}
-		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 		% \item by writing $V := \nats \setminus \set{\localdata_i(k) \mid k \in \nset{1}{\regnum}}$, for every $\aval' \in V$, there exists $\aval \in V$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$.
 	\end{enumerate}
@@ -15,6 +15,7 @@ We first prove the following result:
 % 	Let $u_1, u_2, u_3$ be such that $u=u_1u_2u_3$.
 % 	If $\size{u_2} > TOWER$, then there exists $u'_2$ with $|u_2'| \leq \towerfun(\prot)$ such that $u_1u'_2u_3$ is a local run of $\prot$ with smaller "input" than $u$. 
 \end{restatable}
+Intuitively, the set $V$ represents values that are already used somewhere and therefore cannot be used as fresh values, and $\Vinit$ represents values that other values should not copy because their behavior is special (this will later correspond to initial values of the run). However, because this lemma is meant to be applied to several parts of a run, we have to state it for any value for $V$ and $\Vinit$.  
 
 \begin{figure}
 	\input{Figures/fig-illustration-pumping}
@@ -24,51 +25,52 @@ We first prove the following result:
 \begin{proof}
 	Given a "local run" $\localrun$, register $i$ is ""active"" in $\localrun$ if at least one $\quotemarks{\enregact}$ step on register $i$ is performed in $\localrun$. 
 	
-	We define the function $\towerfun(n)(k)$ recursively as $\towerfun(n)(0) = n+1$ and $\towerfun(n)(k+1) = 2(\towerfun(n)(k) +1) (n^2)^{2(\towerfun(n)(k)+1)} +2$. This function is clearly primitive recursive, although non-elementary. A straightforward induction allows one to bound (roughly) $\towerfun(n)(k)$ between the towers of exponentials
-	$n^{n^{{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle n}}}}}}$ and $(4n^8+2)^{(4n^8+2)^{\scriptstyle {~\cdot^{\scriptstyle~\cdot^{\scriptstyle~\cdot^{\scriptstyle (4n^8+2)}}}}}}$  of height $k+1$.
+	We define the function $\towerfun(n,k)$ recursively as $\towerfun(n,0) = n+1$ and $\towerfun(n,k+1) = 2(\towerfun(n,k) +1) [(n+1)^{4(\towerfun(n,k)+1)} +1]$. This function is clearly primitive recursive, although non-elementary; it grows as a tower of exponentials of height $k$ where each floor of the tower is polynomial in $n$.
+	% A straightforward induction allows one to bound (roughly) $\towerfun(n)(k)$ between the towers of exponentials
+	% $n^{n^{{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle n}}}}}}$ and $(4n^8+2)^{(4n^8+2)^{\scriptstyle {~\cdot^{\scriptstyle~\cdot^{\scriptstyle~\cdot^{\scriptstyle (4n^8+2)}}}}}}$  of height $k+1$.
 	
-	Let $n:=\size{\prot} + \size{V_{in}} + 1$.
+	Let $n:=\size{\prot} + \size{\Vinit}$.
 	We prove the ""shortening property"": \\
-	Let a "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(n,k)-1$ and let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$. We claim that $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ active registers such that $\length{\localrun'} < \length{\localrun}$ and:
+	Let a "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" such that $\length{\localrun} > \towerfun(n,k)$ and let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$. We claim that $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ active registers such that $\length{\localrun'} < \length{\localrun}$ and:
 	\begin{itemize}
 		\item for all $\aval' \in \nats$, there exists $\aval \in \nats$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 	\end{itemize}
 	
-	We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, register values do not change in $\localrun$. As $\towerfun(n)(0) = n+1 \geq \size{Q}+1$, $\localrun$ goes through the same state twice, hence all steps in between may be removed. 
+	We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, register values do not change in $\localrun$. As $\towerfun(n,0) = n+1 \geq \size{Q}+1$, $\localrun$ goes through the same state twice, hence all steps in between may be removed. 
 	
-	Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(n)(k+1)-1$.
+	Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(n,k+1)$.
 	
-	First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of length $\towerfun(n)(k)+1$ with only $k$ active registers, then it suffices to apply the induction hypothesis on $u_i$ and $V$.
+	First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of length $\towerfun(n,k)+1$ with only $k$ active registers, then it suffices to apply the induction hypothesis on $u_i$ and $V$.
 	
 	Suppose now that there exists no such infix "local run".
-	Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n)(k){+}1$, we have $\towerfun(n)(k+1) -1 = 2M (n^2)^{2M}+1$. 
+	Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n,k){+}1$, we have $\towerfun(n,k+1) = 2M [((n+1)^2)^{2M}+1]$. 
 	In any sequence of $M$ "local steps" in a row in $\localrun$, 
-	there is a $\quotemarks{\enregact}$ transition on every register in $I$. Suppose that $\length{\localrun} > \towerfun(n)(k+1)-1$. Additionally, suppose that  no local configuration appears twice in $\localrun$ (otherwise $\localrun$ may easily be shortened). 
+	there is a $\quotemarks{\enregact}$ transition on every register in $I$. Suppose that $\length{\localrun} > \towerfun(n,k+1)$. Additionally, suppose that  no local configuration appears twice in $\localrun$ (otherwise $\localrun$ may easily be shortened). 
 	
 	
-	For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$, and let $\theta_i\in V_{in} \cup \set{\bot}$ be such that 
+	For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$, and let $\theta_i\in \Vinit \cup \set{\bot}$ be such that 
 	\[
 	\theta_i = 
 	\begin{cases}
-		& 	v \in V_{in} \text{ if the $i$th step of $u$ is a "reception step" } \step{\extlabel{\delta_i}{v}} \\ 
+		& 	v \text{ if the $i$th step of $u$ is a "reception step" $\extlabel{\delta_i}{v}$ with $v \in \Vinit$ } \\ 
 		& 	\bot \text{ otherwise}
 	\end{cases}
 	\]
 
-	For every $i \in \nset{0}{n^{2M}}$, we write $s_i$ the sequence $\delta_{2  M \cdot i+1}, \delta_{2  M \cdot i+2}, \cdots, \delta_{2 M \cdot i+2M}$ and $\Theta_i$ the sequence $\theta_{2  M \cdot i}, \theta_{2 M \cdot i+1}, \cdots, \theta_{2 M \cdot i+2M}$.
-	There are $|\transitions|^{2M}$ possible sequences for $s_i$ and $[\size{V_{in}} +1]^{2M}$ possible sequences for $\Theta_i$.
-	By the pigeonhole principle there exist two indices $i_a, i_b$ such that the sequences $s_{i_a}$ and $s_{i_b}$ are equal (as $|\transitions| (\size{V_{in}}+1) \leq n^2$). 
-	There exist two infix "local runs" $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have the same sequences of transitions, which we call $s$, and of receptions of values from $V_{in}$, which we call $\Theta$.
+	For every $i \in \nset{0}{(n+1)^{2M}}$, we write $s_i$ the sequence $\delta_{2  M \cdot i+1}, \delta_{2  M \cdot i+2}, \cdots, \delta_{2 M \cdot i+2M}$ and $\Theta_i$ the sequence $\theta_{2  M \cdot i}, \theta_{2 M \cdot i+1}, \cdots, \theta_{2 M \cdot i+2M}$.
+	There are $|\transitions|^{2M}$ possible sequences for $s_i$ and $[\size{\Vinit} +1]^{2M}$ possible sequences for $\Theta_i$.
+	By the pigeonhole principle there exist two indices $i_a, i_b$ such that the sequences $s_{i_a}$ and $s_{i_b}$ are equal and also the sequences $\Theta_{i_a}$ and $\Theta_{i_b}$ are equal (as $|\transitions| (\size{\Vinit}+1) \leq (n+1)^2$). 
+	There exist two infix "local runs" $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have the same sequences of transitions, which we call $s$, and of receptions of values from $\Vinit$, which we call $\Theta$.
 	
 	Although $\localrun_a$ and $\localrun_b$ have the same sequence of transitions, their "traces" may differ because their "reception steps" may have different values.
-	We build a "trace" $\atrace$ such that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ where the underlying sequence of transitions of $\atrace$ is $s$ and the receptions of values of $V_{in}$ matches $\Theta$.
+	We build a "trace" $\atrace$ such that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ where the underlying sequence of transitions of $\atrace$ is $s$ and the receptions of values of $\Vinit$ matches $\Theta$.
 	
 	For every active register $i \in I$, let $e_i \in \nset{1}{2M}$ denote the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$ and $f_i \in \nset{1}{2M}$ the index of the last $\quotemarks{\enregact}$ on register $i$ in $s$. By hypothesis, because $s$ is of length $2M$, it contains at least two $\quotemarks{\enregact}$ on register $i$, one in the first half and one in the second half, hence $e_i \leq M < M +1 \leq f_i$. 
 	
 	For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define the $j$-th "local step" of $\atrace$ as $\intlabel{\delta_j}$. 
 	Suppose now that $\delta_j$ is a "reception" of the form $\rec{\amessage}{i}{\anact}$. The $j$-th "local step" of $\localrun_a$ (resp. $\localrun_b$) has underlying transition $\delta_j$ hence is an "reception step" of the form $\extlabel{\delta_j}{\aval_a}$ for some $\aval_a \in V$ (resp. $\extlabel{\delta_j}{\aval_b}$ for some $\aval_b \in V$).
-	Because $V_{in}$ and $V$ are finite, there exists an injective function $\phi: V \rightarrow \nats$ such that for all $v \in V_{in}$, $\phi(v) = v$ and for all $v \notin V_{in}$, $\phi(v) \notin V$.
+	Because $V$ is finite and $\Vinit \subseteq V$, there exists an injective function $\phi: V \rightarrow \nats$ such that for all $v \in \Vinit$, $\phi(v) = v$ and for all $v \notin \Vinit$, $\phi(v) \notin V$.
 	We define the $j$-th "local step" of $\atrace$ to be $\extlabel{\delta_j}{\aval}$ where:
 	\begin{itemize}
 		\item if $i \notin I$ then its value stays the same throughout $\localrun$, then we set $\aval = \aval_a (= \aval_b)$ 
@@ -112,9 +114,9 @@ We first prove the following result:
 		\item if $l+1<e_i$ then $\localdata(i) = \localdata_a(i) \ne \localdata_a(i')$,
 		\item if $e_i \leq l+1 < f_i$ then $\localdata(i) = \phi(\localdata_a(i))$ and either
 		\begin{itemize}
-			\item $\localdata_a(i) \in V_{in}$ hence $\localdata(i) = \phi(\localdata_a(i)) = \localdata_a(i) \neq \localdata_a(i')$
+			\item $\localdata_a(i) \in \Vinit$ hence $\localdata(i) = \phi(\localdata_a(i)) = \localdata_a(i) \neq \localdata_a(i')$
 			
-			\item $\localdata(i') \notin V_{in}$ therefore $\phi(\localdata_a(i)) \notin V$ and, as $\localdata(i') = \localdata_a(i') \notin V$,  $\localdata(i) \ne \localdata(i')$
+			\item $\localdata(i') \notin \Vinit$ therefore $\phi(\localdata_a(i)) \notin V$ and, as $\localdata(i') = \localdata_a(i') \in V$,  $\localdata(i) \ne \localdata(i')$
 		\end{itemize}
 		\item if $f_i \leq l+1$ then $\localdata(i) = \localdata_b(i) \ne \localdata_b(i')$.
 	\end{itemize}
@@ -122,13 +124,13 @@ We first prove the following result:
 	
 	If $i \in I$ and $i' \in I$, recall that $e_i \leq M < f_{i'}$ and $e_{i'} \leq M < f_i$ thus $e_i < f_{i'}$ and $e_{i'}< f_i$. We again make a case disjunction on the value of $l+1$:
 	\begin{itemize}
-		\item $l+1<e_i$ and $l+1 <e_{i'}$: $\localdata(i)= \localdata_a(i)$, $\localdata(i)= \localdata_a(i)$ and $\localdata_a(i) \ne \localdata_a(i')$. 
+		\item $l+1<e_i$ and $l+1 <e_{i'}$: $\localdata(i)= \localdata_a(i)$, $\localdata(i')= \localdata_a(i')$ and $\localdata_a(i) \ne \localdata_a(i')$. 
 		
 		\item $e_i \leq l+1 < f_i$, $l+1<e_{i'}$: $\localdata(i) = \phi(\localdata_a(i))$ and either
 		\begin{itemize}
-			\item $\localdata_a(i) \in V_{in}$, hence $\localdata(i) = \phi(\localdata_a(i)) = \localdata_a(i) \neq  \localdata_a(i') = \localdata(i')$, or
+			\item $\localdata_a(i) \in \Vinit$, hence $\localdata(i) = \phi(\localdata_a(i)) = \localdata_a(i) \neq  \localdata_a(i') = \localdata(i')$, or
 			
-			\item $\localdata_a(i) \notin V_{in}$, hence $\phi(\localdata_a(i)) \notin V$, and $\localdata(i') = \localdata_a(i') \in V$ therefore $\localdata(i') \ne \localdata(i)$.
+			\item $\localdata_a(i) \notin \Vinit$, hence $\phi(\localdata_a(i)) \notin V$, and $\localdata(i') = \localdata_a(i') \in V$ therefore $\localdata(i') \ne \localdata(i)$.
 		\end{itemize}
 		
 		\item $e_{i'} \leq l+1 < f_{i'}$, $l+1<e_{i}$: symmetric to the previous case.
@@ -137,9 +139,8 @@ We first prove the following result:
 		
 		\item $e_i \leq l+1 < f_i$, $f_{i'} \leq l+1$: $\localdata(i') = \localdata_b(i') \in V$, $\localdata(i) = \phi(\localdata_a(i))$  and either
 		\begin{itemize}
-			\item $\localdata_a(i) \in V_{in}$, hence the last reception step on register $i$ with $\enregact$ was with a value $v' \in V_{in}$, hence $\phi(\localdata_a(i)) = \phi(\localdata_b(i))=v'$, and $\localdata(i) = \phi(\localdata_a(i)) = \phi(\localdata_b(i)) = \localdata_b(i) \neq  \localdata_b(i') = \localdata(i')$, or
-			
-			\item $\localdata_a(i) \notin V_{in}$, hence $\phi(\localdata_a(i)) \notin V$, and $\localdata(i') = \localdata_b(i') \in V$ therefore $\localdata(i') \ne \localdata(i)$.
+			\item $\localdata_a(i) \in \Vinit$, in which case $\localdata_a(i) = \localdata_b(i)$ because $\theta_{i_a} = \theta_{i_b}$ ($\localrun_a$ and $\localrun_b$ coincide on values in $\Vinit$) hence $\localdata(i) = \phi(\localdata_a(i)) = \phi(\localdata_b(i)) = \localdata_b(i) \neq  \localdata_b(i') = \localdata(i')$, or
+			\item $\localdata_a(i) \notin \Vinit$, hence $\phi(\localdata_a(i)) \notin V$, and $\localdata(i') = \localdata_b(i') \in V$ therefore $\localdata(i') \ne \localdata(i)$.
 		\end{itemize}
 		
 		
@@ -158,21 +159,27 @@ We first prove the following result:
 	
 	Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\atrace$, the "reception steps" in the first $M$ steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the last $M$ steps. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval \in V$ and values of $V$ satisfy conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues}. 
 	
-	Let $\aval' \in \nats \setminus V_{in}$, if $\aval' \in V$ then by the previous argument $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval'}{\localrun}$. If $\aval' \notin V$ then $\aval'$ does not appear in $\localrun$. Either $\aval'$ does not appear in $\localrun'$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. As $\phi$ is injective and $\phi(V_{in}) = V_{in}$ and $\aval'\notin V_{in}$, $\aval \notin V_{in}$. 
+	Let $\aval' \in \nats \setminus V$; $\aval'$ does not appear in $\localrun$. Either $\aval'$ does not appear in $\localrun'$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. As $\phi$ is injective and $\phi(\Vinit) = \Vinit$ and $\aval'\notin \Vinit$, $\aval \notin \Vinit$. 
 	But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "reception steps" with value $\phi(\aval)$ correspond to "reception steps" in $\localrun_a$ with value $\aval$, and similarly for $\localrun_2$ and $\localrun_b$. This proves condition \ref{item:shorterrun_anyvalue} for every $\aval' \in \nats \setminus V$.
 	Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues} and that is strictly shorter that $\localrun$, which proves the "shortening property".
 	
-	We build a "local run" of length strictly less that $\towerfun(\size{\prot})(\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot})(\regnum) -1$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup W$ where $W$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
-	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot})(\regnum)-1$, which concludes the proof of Lemma~\ref{lem:short-local-runs}. 
+	We build a "local run" of length less that $\towerfun(\size{\prot}+\size{\Vinit},\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot}+\size{\Vinit},\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup W$ where $W$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
+	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot} + \size{\Vinit},\regnum)$, which concludes the proof of Lemma~\ref{lem:short-local-runs}. 
 \end{proof}
 
+We now prove the following, stronger version of Lemma~\ref{lem:short-run-for-output}.
 
-\lemShortRunOutput*
+\begin{lemma}
+There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq \towerfun(\size{\prot}+\size{\Vinit}, \regnum) (\size{w_{out}}+1)$, $w_{out} \subword \Output{\localrun'}$ and:
+	\begin{enumerate}
+		\item for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats\setminus \Vinit$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+	\end{enumerate}
+\end{lemma}
 
 \begin{proof}
-	We set $\psi$ to be the same function as in Lemma~\ref{lem:short-local-runs}. 
-	Let $\prot$ be a protocol with $r$ registers, $V_{in}$ a finite set of values. 
-	Let $n = \size{\prot} + \size{V_{in}} +1$.
+	We set $\towerfun$ to be the same function as in Lemma~\ref{lem:short-local-runs}. 
+	Let $n = \size{\prot} + \size{\Vinit}$.
 	
 	We proceed by induction on $\size{w_{out}}$.
 	If $w_{out} = \epsilon$ we simply apply Lemma~\ref{lem:short-local-runs}.
@@ -181,34 +188,35 @@ We first prove the following result:
 	As $w_{out} \subword \Output{\localrun}$ we can split $\localrun$ in three $\localrun_0: (q, \localdata) \step{*} (q_0, \nu_0)$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$, $\localrun_1 :(q_1, \localdata_1) \step{*} (q', \localdata')$ where $\delta$ applies a broadcast operation $\br{m}{i}$ and $\nu_{0} (i) = v$.
 	
 	Let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$, and thus in particular every message value appearing in $\localrun_0$.
-	By induction hypothesis, there exists a "local run" $\localrun_0': (q, \localdata) \step{*} (q_0, \localdata_0)$ such that $\length{\localrun_0'} \leq (\towerfun(\size{\prot})(r)+1)\size{w'_{in}}$, $w'_{in} \subword \Output{\localrun_0'}$ and:
+	By induction hypothesis applied to $\localrun_0$, $V$ and $\Vinit$, there exists a "local run" $\localrun_0': (q, \localdata) \step{*} (q_0, \localdata_0)$ such that $\length{\localrun_0'} \leq (\towerfun(\size{\prot}+ \size{\Vinit},r)+1)\size{w'_{in}}$, $w'_{in} \subword \Output{\localrun_0'}$ and:
 	
 	\begin{enumerate}
-		\item for all $\aval' \in \nats \setminus V_{in}$, there exists $\aval \in \nats \setminus V_{in}$ such that $\vinput{\aval'}{\localrun_0'}$ is a subword of $\vinput{\aval}{\localrun_0}$,
+		\item for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun_0'}$ is a subword of $\vinput{\aval}{\localrun_0}$,
 		\item for all $\aval \in V$, $\vinput{\aval}{\localrun_0'}$ is a subword of $\vinput{\aval}{\localrun_0}$. 
 	\end{enumerate}
 	
-	We set $V''$ as the set of values that either are in $V$ or appear in $\localrun_0$.
-	By Lemma~\ref{lem:short-local-runs}, there exists a "local run" $\localrun_1': (q_1, \localdata_1) \step{*} (q', \localdata')$ such that $\length{\localrun_1'} \leq \towerfun(\size{\prot})(r)-1$ and:
+	We set $V'$ as the set of values that either are in $V$ or appear in $\localrun_0'$.
+	By Lemma~\ref{lem:short-local-runs} applied to $\localrun_0$, $V'$ and $\Vinit$, there exists a "local run" $\localrun_1': (q_1, \localdata_1) \step{*} (q', \localdata')$ such that $\length{\localrun_1'} \leq \towerfun(\size{\prot}+ \size{\Vinit},r)-1$ and:
 	\begin{enumerate}
-		\item for all $\aval' \in \nats \setminus V_{in}$, there exists $\aval \in \nats \setminus V_{in}$ such that $\vinput{\aval'}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$,
-		\item for all $\aval \in V''$, $\vinput{\aval}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$. 
+		\item for all $\aval' \in \nats \setminus V'$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$,
+		\item for all $\aval \in V'$, $\vinput{\aval}{\localrun_1'}$ is a subword of $\vinput{\aval}{\localrun_1}$. 
 	\end{enumerate}
 	
 	Let $\localrun'$ be the concatenation of $\localrun'_0$, $(q_0, \localdata_0) \intstep{\delta} (q_1, \localdata_1)$ and $\localrun'_1$. As $w'_{in} \subword \Output{\localrun'_0}$, we have $w_{in} \subword \Output{\localrun}$.
-	The length of $\localrun'$ is $\length{\localrun'_0} + 1 + \length{\localrun'_1}$, which is at most $(\towerfun(\size{\prot})(r)+1)\size{w'_{in}} + \towerfun(\size{\prot})(r) = \towerfun(\size{\prot})(r)\size{w_{in}}$.
+	The length of $\localrun'$ is $\length{\localrun'_0} + 1 + \length{\localrun'_1}$, which is at most $(\towerfun(\size{\prot},r)+1)\size{w'_{in}} + \towerfun(\size{\prot},r) = \towerfun(\size{\prot},r)\size{w_{in}}$.
 	
 	Moreover, for all $v' \in \nats$, 
 	\begin{itemize}
 		\item if $v'\in V$, and then $\vinput{v'}{\localrun_0'} \subword \vinput{v'}{\localrun_0}$ and $\vinput{v'}{\localrun_1'} \subword \vinput{v'}{\localrun_1}$, thus $\vinput{v'}{\localrun'} \subword \vinput{v'}{\localrun}$.
 		
-		\item if $v' \in V'' \setminus (V \cup V_{in})$ and then $v'$ does not appear in $\localrun$, and there exists $v \in \nats\setminus V_{in}$ such that $\vinput{v'}{\localrun_0'} \subword \vinput{v}{\localrun_0}$. Further, as $v' \in V'$ we have $\vinput{v'}{\localrun_1'} \subword \vinput{v'}{\localrun_1} = \epsilon$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
+		\item if $v' \in V' \setminus V$, then $v'$ does not appear in $\localrun$ and there exists $v \in \nats\setminus \Vinit$ such that $\vinput{v'}{\localrun_0'} \subword \vinput{v}{\localrun_0}$. Further, as $v' \in V'$ we have $\vinput{v'}{\localrun_1'} \subword \vinput{v'}{\localrun_1} = \epsilon$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
 		
-		\item if $v' \in \nats \setminus (V_{in} \cup V'')$, then by definition of $V''$ we have $\vinput{v'}{\localrun_0'} = \epsilon$, and there exists $v \in \nats \setminus V_{in}$ such that $\vinput{v'}{\localrun_1'} \subword \vinput{v}{\localrun_1}$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
+		\item if $v' \in \nats \setminus V'$, then by definition of $V'$ we have $\vinput{v'}{\localrun_0'} = \epsilon$, and there exists $v \in \nats \setminus \Vinit$ such that $\vinput{v'}{\localrun_1'} \subword \vinput{v}{\localrun_1}$, hence $\vinput{v'}{\localrun'} \subword \vinput{v}{\localrun}$.
 	\end{itemize}
 	This concludes our proof.
 \end{proof}
 
+To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with $\Vinit$ the set of initial values of $\localrun$ and observe that this gives $\size{\Vinit} \leq \regnum$.
 
 
 
@@ -245,16 +253,16 @@ We first prove the following result:
 
 \begin{proof}
 	Let $\node$ be a node of $\tree$. \corto{properly define trees and nodes}
-	Let $V$ be the set of "initial values" being broadcast or received in $\localrunlabel{\node}$. We have $\size{V}\leq r$ as there is at most one such value for each register.  
+	Let $\Vinit$ be the set of "initial values" being broadcast or received in $\localrunlabel{\node}$. We have $\size{\Vinit}\leq r$ as there is at most one such value for each register.  
 	
-	For each $v \in V$, if $v \neq \valuelabel{\node}$ (resp. if $v = \valuelabel{\node}$), let $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ be a "decomposition" and $\node_{v,1}, \ldots, \node_{v, \ell_v}$ "follower" children of $\node$ such that condition \ref{unfoldingC3.1} (resp. \ref{unfoldingC1}) is respected.
+	For each $v \in \Vinit$, if $v \neq \valuelabel{\node}$ (resp. if $v = \valuelabel{\node}$), let $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ be a "decomposition" and $\node_{v,1}, \ldots, \node_{v, \ell_v}$ "follower" children of $\node$ such that condition~\ref{item:condition2_initial_value} (resp. \ref{item:condition4_boss_node}) is respected.
 	
-	We can delete all other "follower" children of $\node$ and still have a "unfolding tree" satisfying $w$ as the $\node_{v,i}$ suffice to satisfy conditions \ref{unfoldingC1} and \ref{unfoldingC3.1} and the other conditions do not depend on "follower" children.
-	As we assumed $\tree$ to be of minimal size, $\node$ does not have "follower" children besides the $\node_{v,i}$. As $\size{V} \leq r$ and $\ell_v \leq \size{\messages}$ for all $v$ (by definition of a "decomposition", as the $(m_{v,i})_{1\leq i \leq \ell_v}$ are all distinct), $\node$ has at most $\size{\messages}r$ "follower" children, proving property 1.
+	We can delete all other "follower" children of $\node$ and still have a "unfolding tree" satisfying $w$ as the $\node_{v,i}$ suffice to satisfy conditions \ref{item:condition2_initial_value} and \ref{item:condition4_boss_node} and the other conditions do not depend on "follower" children.
+	As we assumed $\tree$ to be of minimal size, $\node$ does not have "follower" children besides the $\node_{v,i}$. As $\size{\Vinit} \leq r$ and $\ell_v \leq \size{\messages}$ for all $v$ (by definition of a "decomposition", as the $(m_{v,i})_{1\leq i \leq \ell_v}$ are all distinct), $\node$ has at most $\size{\messages}r$ "follower" children, proving property 1.
 	
 	Property 2 follows immediately from the fact that $\tree$ satisfies a "boss specification" $w$, which by definition implies that its root is a "boss node".
 	
-	Let $\node$ be a "boss node". If $\node$ is the root, then as $\tree$ satisfies $w$ we have $w \subword \bosslabel{\node}$. If $w \neq \bosslabel{\node}$, we can replace $\bosslabel{\node}$ with $w$: As $w \subword \bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $w \in \langdec{\decsymb}$, hence condition~\ref{unfoldingC1} is still satisfied, and the other conditions of a "unfolding tree" are unaffected by this change.
+	Let $\node$ be a "boss node". If $\node$ is the root, then as $\tree$ satisfies $w$ we have $w \subword \bosslabel{\node}$. If $w \neq \bosslabel{\node}$, we can replace $\bosslabel{\node}$ with $w$: As $w \subword \bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $w \in \langdec{\decsymb}$, hence condition~\ref{item:condition4_boss_node} is still satisfied, and the other conditions of a "unfolding tree" are unaffected by this change.
 	Furthermore the resulting "unfolding tree" still satisfies $w$. This contradicts the minimality of $\tree$, hence we have $\bosslabel{\node} = w$.
 	
 	If $\node$ is not the root, then let $\node'$ be its father. 
@@ -263,13 +271,13 @@ We first prove the following result:
 	We can construct a subword $\bossspec'$ of $\bosslabel{\node}$ of length at most $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}}$ such that all $\vinput{v'}{\localrunlabel{\node'}}$ are subwords of $\bossspec'$. It suffices to select for each $v'$ a set of positions in $\bosslabel{\node}$ forming $\vinput{v'}{\localrunlabel{\node'}}$, and then taking the word formed by the union of those sets of positions.
 	Observe that we necessarily have $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}}$, thus $\size{\bossspec'} \leq \size{\localrunlabel{\node'}}$.
 	
-	Like in the previous case, as $\bossspec'$ is a subword of $\bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $\bossspec' \in \langdec{\decsymb}$. As a result, condition~\ref{unfoldingC1} is still satisfied after switching the label $\bosslabel{\node}$ to $\bossspec'$. Furthermore, by definition of $V'$ and $\bossspec'$, for all non-initial value $v'$ in $\localrunlabel{\node'}$, if $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$ then  $\vinput{v'}{\localrunlabel{\node'}} \subword \bossspec'$, hence condition~\ref{unfoldingC3.2} is still satisfied as well. Other conditions are unaffected by this change.
+	Like in the previous case, as $\bossspec'$ is a subword of $\bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $\bossspec' \in \langdec{\decsymb}$. As a result, condition~\ref{item:condition4_boss_node} is still satisfied after switching the label $\bosslabel{\node}$ to $\bossspec'$. Furthermore, by definition of $V'$ and $\bossspec'$, for all non-initial value $v'$ in $\localrunlabel{\node'}$, if $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$ then  $\vinput{v'}{\localrunlabel{\node'}} \subword \bossspec'$, hence condition~\ref{item:condition1_non_initial_value} is still satisfied as well. Other conditions are unaffected by this change.
 	
 	Hence if $\size{\bosslabel{\node}} > \size{\localrunlabel{\node'}}$ we can obtain a "unfolding tree" smaller than $\tree$ and satisfying $w$, contradicting the minimality of $\tree$. As a result, $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$.
 	
-	We have shown the first two points of property 3. For the third one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "unfolding tree conditions" and then bound the length of $\localrunlabel{\node}$ using Lemma~\ref{lem:short-run-for-output}.
+	We have shown the first two points of property 3. For the third one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "unfolding tree" conditions and then bound the length of $\localrunlabel{\node}$ using Lemma~\ref{lem:short-run-for-output}.
 	
-	Let $v$ be an initial value of $\localrunlabel{\node}$. If $v = \valuelabel{\node}$ then by condition~\ref{unfoldingC1} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_1, \ldots, \node_{\ell_v}$ such that
+	Let $v$ be an initial value of $\localrunlabel{\node}$. If $v = \valuelabel{\node}$ then by condition~\ref{item:condition4_boss_node} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_1, \ldots, \node_{\ell_v}$ such that
 	\begin{itemize}
 		\item $\bosslabel{\node} \in \langdec{\decsymb_v}$
 		\item $u$ can be split into $u_{v,0}, \ldots, u_{v,\ell_v}$ so that for all $i$, $w_{v,i} \subword \voutput{v}{u_{v,i}}$ and $\vinput{v}{u_{v,i}} \in \set{m_1, \ldots, m_{i-1}}^*$
@@ -277,12 +285,10 @@ We first prove the following result:
 		\item for all $i$, $\followlabelword{\node_i} \in \langdec{\decsymb_{v,i}}$, with $\decsymb_{v,i}= (w_{v,0}, m_{v,1}, \ldots, w_{v,i-1})$, and $\followlabelmessage{\node_i} = m_i$.
 	\end{itemize}
 	
-	Similarly, if $v \neq \valuelabel{\node}$, we set $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$, "follower" children $\node_1, \ldots, \node_{\ell_v}$ and $u_{v,0}, \ldots, u_{v,\ell_v}$ such that Condition~\ref{unfoldingC3.1} is satisfied.
+	Similarly, if $v \neq \valuelabel{\node}$, we set $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$, "follower" children $\node_1, \ldots, \node_{\ell_v}$ and $u_{v,0}, \ldots, u_{v,\ell_v}$ such that condition~\ref{item:condition2_initial_value} is satisfied.
 	
-	In both cases by Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_i}}$. \corto{A preciser}
+	In both cases by Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_i}}$.
 	
-	There exists a subword $x = (m_1, v_1) \cdots (m_k, v_k)$ of $\Output{\localrunlabel{\node}}$ such that for all
-	
-	\cortoin{TO FINISH} 
+	\cortoin{Au lecteur} 
 \end{proof}
 

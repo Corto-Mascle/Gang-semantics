@@ -213,15 +213,15 @@ The previous lemma however does not suffice to apply the length function theorem
 
 \begin{restatable}{lemma}{lemShortRunOutput}
 	\label{lem:short-run-for-output}
-	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" $\prot$ with $\regnum$ registers, for every $w_{out} \in (\messages\times \nats)^*$, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ such that $w_{out} \subword \Output{\localrun}$ and for every $V_{in}, V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that $\length{\localrun'} \leq (\towerfun(\size{\prot}, \regnum)+1) \size{w_{out}}$, $w_{out} \subword \Output{\localrun'}$ and:
-	
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" $\prot$ with $\regnum$ registers per agent, for every $w_{out} \in (\messages\times \nats)^*$, 
+	for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ such that $w_{out} \subword \Output{\localrun}$ and for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that, denoting by $\Vinit$ the set of initial values in $\localrun$, we have $\length{\localrun'} \leq \towerfun(\size{\prot}+\regnum, \regnum) (\size{w_{out}}+1)$, $w_{out} \subword \Output{\localrun'}$ and:
 	\begin{enumerate}
-		\item for all $\aval' \in \nats \setminus V_{in}$, there exists $\aval \in \nats\setminus V_{in}$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats\setminus \Vinit$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 	\end{enumerate}
 \end{restatable}
 
-The idea behind the proof of the previous protocol is as follows. First, we prove that any long portion of $\localrun$ must change the value of every register at least once; otherwise we can shorten the run using an induction on the number of registers. Once we have proven this, we manage to prove that, if $\localrun$ includes twice the same sequence of transitions of sufficient length, then we can cut off anything in the middle and glue back together the ends. The full proof proof can be found in Appendix~\ref{app:tower-lemma}.
+The high-level idea behind the proof of the previous protocol is as follows. First, we prove that any long portion of $\localrun$ must change the value of every register at least once; otherwise we can shorten the run using an induction on the number of registers. Once we have proven this, we manage to prove that, if $\localrun$ includes twice the same sequence of transitions of sufficient length, then we can cut off anything in the middle and glue back together the ends. The full proof can be found in Appendix~\ref{app:tower-lemma}.
 
 \begin{remark}
 	The function $\towerfun$ above is a tower of exponentials of height $\regnum$. Perhaps surpringly, this tower bound is tight in the sense that one can find a family of protocols and of "local runs" such that the best $\towerfun$ possible is a tower of exponentials of height linear in $\regnum$. Suppose that we have a protocol $\prot$ and a state $q_f$ such that $q_f$ may only be reached by going exactly $N$ times through some state $q_r$. From $\prot$, we build a "protocol" $\prot'$ with two extra registers $r_0$ and $r_1$; $\prot'$ uses $\prot$ to consider sequences of messages of length $N$ (duplicate $q_r$ into $q_r'$ and $q_r''$ and add transitions in between). Words received by $r_0$ and $r_1$ are of length $N$ with the same value, we see those as binary encodings using $\mathsf{0}, \mathsf{1} \in \messages$. $\prot'$ first requires that $r_0$ receives a word of length $N$ encoding $0$, then iteratively requires that $r_{1-i}$ receives a message encoding value $m+1$ where $m$ is the value last received in $r_i$ (to be able to compare, the words received are of the form $w \#w$ with $w$ of length $N$; the comparison requires to be able to store the value of $i$, whether there is a carry,... which can be done using a third register to avoid a multiplicative factor between sizes of $\prot$ and $\prot'$). We only cover $q_f'$ when word $\mathsf{1}^N$ is received, which is only possible after going exactly $N'$ times through $q_r'$ steps with $N'$ exponential in $N$.
@@ -248,14 +248,14 @@ We are ready to state and prove the lemma which bound the size of a node from it
 			
 			\item If $\node$ is not the root then $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$
 			
-			\item In both cases $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r) + 1)\Big[ \size{\bosslabel{\node}} + \sum_{i=1}^k \size{\followlabelword{\node_i}} \Big]$
+			\item In both cases $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r) + 1)\Big[ \size{\bosslabel{\node}} + \sum_{i=1}^k \size{\followlabelword{\node_i}} \Big]$
 		\end{itemize}
 	
 		\item If $\node$ is a "follower node" then 
 		\begin{itemize}			
 			\item $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}}$
 			
-			\item $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r) +1)\Big[ 1 + \sum_{i=1}^k \size{\followlabelword{\node_i}} \Big]$
+			\item $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r) +1)\Big[ 1 + \sum_{i=1}^k \size{\followlabelword{\node_i}} \Big]$
 			
 		\end{itemize}
 	\end{enumerate}
@@ -285,7 +285,7 @@ We are ready to state and prove the lemma which bound the size of a node from it
 \begin{restatable}{lemma}{lemBoundLengthHeightH}
 	\label{lem:bound-length-at-height-h}
 	Let $\prot$ be a protocol, let $\node$ be a node of a "unfolding tree" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$.
-	Let $\altmax$ be the maximal "altitude" in $\tau$, let $N = \size{w} + \size{\prot} +1$ and let $f_0 : \nats \to \nats$ be the function mapping each $n \in \nats$ to $f_0(n)=(N^2 (\towerfun(N)(N) + 1))^{n+1}$ 
+	Let $\altmax$ be the maximal "altitude" in $\tau$, let $N = \size{w} + \size{\prot} +1$ and let $f_0 : \nats \to \nats$ be the function mapping each $n \in \nats$ to $f_0(n)=(N^2 \towerfun(N,N))^{n+1}$, with $\towerfun$ the function defined in Lemma~\ref{lem:short-run-for-output}.
 	
 	\begin{itemize}
 		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node}-1)$ and $\size{\localrunlabel{\node}} \leq f_0(\altmax - \altitude{\node})$.
