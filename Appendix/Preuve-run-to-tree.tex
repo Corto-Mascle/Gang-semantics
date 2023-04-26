@@ -6,7 +6,8 @@
 	
 	We proceed by strong induction on the lexicographic order on $\nats \times \set{\text{follower}, \text{boss}}$ with the length of the run as first component and the type of specification as second component, ``boss'' being considered higher than ``follower'' (so that, for a fixed "run" length, we prove it for "boss specifications" then for "follower specifications"). 
 	
-	For runs of length $0$, no specifications are satisfied hence the property is true.
+	If $\spec = \epsilon$ is an empty "boss specification" then the tree with a single node labelled with an empty run and an empty specification satisfies it.
+	This covers in particular the case of a run of length $0$, as they cannot satisfy any other specification.
 	Let $\run$ be a run, and assume that the property is true for runs whose length is less than the one of $\run$. Write $\agents$ the set of agents of $\run$.
 	
 	Because $\run$ satisfies $\spec$, there exists a value $v$ and an agent $a$ in $\run$ such that:
@@ -15,9 +16,9 @@
 	\item if $\spec$ is a "follower specification" $(\followwordspec, \followmessagespec)$, then $a$ is an agent which $v$-input is a subword of $\followwordspec$ and that broadcasts $\followmessagespec$ with value $v$. 
 	\end{itemize}
 
-	Observe that, if the last step of $u$ does not include a broadcast with value $v$, then the run obtained by deleting this last step also satisfies the specification so we directly call the induction hypothesis on this new run. From now on, we will suppose that the last step of $\run$ involves a broadcast with value $v$. 
+	Observe that, if the last step of $u$ does not include a broadcast with value $v$, then the run obtained by deleting this last step also satisfies the specification so we directly call the induction hypothesis on this new run. From now on, we will assume that the last step of $\run$ involves a broadcast with value $v$. 
 
-	Let $u$ the local run of $a$ in $\run$. We will build the root $\node$ of our tree $\tree$ to have local run $a$, value $v$ and "specification" $\spec$. 
+	Let $u$ the local run of $a$ in $\run$. We will build the root $\node$ of our tree $\tree$ to have local run $u$, value $v$ and "specification" $\spec$. 
 
 	The construction is as follows.
 	For every $v' \ne v$ a "non-initial" value of $a$ in $\run$, we do the following. Let $w$ the sequence of messages sent with value $v'$ in $\run$ by agents in $\agents \setminus \set{a}$; $\vinput{v'}{u}$ is a subword of $w$. Because the last step of $\run$ has value $v$, we apply the induction hypothesis to obtain an "unfolding tree" $\tree'$ whose root is a boss node with boss specification $\vinput{v'}{u}$, and we attach $\tree'$ below $\node$ in $\tree$.

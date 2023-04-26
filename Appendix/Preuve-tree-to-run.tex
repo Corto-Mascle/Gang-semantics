@@ -9,31 +9,33 @@ We define a new semantics over the set of configurations, in which some messages
 \begin{definition}
 	Let $\config, \config'$ two configurations. 
 
-	An ""internal test@global"" from $\config$ to $\config'$, denoted $\config \inttest \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent does a "local test". 
+	An ""internal test@@global"" from $\config$ to $\config'$, denoted $\config \inttest \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent does a "local test". 
 	
-	An ""internal message@global"" from $\config$ to $\config'$, denoted $\config \intmessage{m}{v} \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent broadcasts a message $m$ with value $v$. 
+	An ""internal message@@global"" from $\config$ to $\config'$, denoted $\config \intmessage{m}{v} \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent broadcasts a message $m$ with value $v$. 
 	
-	An ""external message@global"" from $\config$ to $\config'$, denoted $\config \extmessage{m}{v} \config'$ is defined when for all agents $a$, either there is a "local step" $\config(a) \extbr{m}{v} \config'(a)$ or $\config(a) = \config'(a)$.
+	An ""external message@@global"" from $\config$ to $\config'$, denoted $\config \extmessage{m}{v} \config'$ is defined when for all agents $a$, either there is a "local step" $\config(a) \extbr{m}{v} \config'(a)$ or $\config(a) = \config'(a)$.
 	
 	A ""partial run"" is a sequence of configurations $\config_0 \cdots \config_k$  such that for all $i \in \nset{1}{k}$, either $\config_{i-1} \inttest \config_{i}$ or $\config_{i-1} \intmessage{m}{v} \config_{i}$ or $\config_{i-1} \extmessage{m}{v} \config_{i}$ for some $m \in \messages$, $v\in \nats$. 
 	Note that a "local run" can be seen as a "partial run" with a single agent.
 
 	
-	We define the $v$-projection $\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external message@@global" $\config \extmessage{m}{v} \config'$ to $(m, in)$, every "internal message" $\config \intmessage{m}{v} \config'$ to $(m, out)$, and every "internal step" to $\varepsilon$.
+	We define the $v$-""projection"" $\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external message@@global" $\config \extmessage{m}{v} \config'$ to $(m, in)$, every "internal message@@global" $\config \intmessage{m}{v} \config'$ to $(m, out)$, and every "internal step@@global" to $\varepsilon$.
 	
-	The ""input@partial"" $\vinput{v}{\run}$ (resp. ""output@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ such that the projection on $\messages \times \set{in}$ (resp. $\messages\times \set{out}$) of $\vproj{v}{\run}$ is $(m_0, in) \cdots (m_k, in)$ (resp. $(m_0, out)\cdots(m_k, out)$).
+	\AP The ""input@@partial"" $\vinput{v}{\run}$ (resp. ""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ such that the projection on $\messages \times \set{in}$ (resp. $\messages\times \set{out}$) of $\vproj{v}{\run}$ is $(m_0, in) \cdots (m_k, in)$ (resp. $(m_0, out)\cdots(m_k, out)$).
 	
-	Given a "local run" $\run$ and a value $v \in \nats$ appearing in $\run$, $v$ is ""initial"" in $\run$ if it is initial for some agent in $\run$. Note that this is not always true for partial runs, unlike for runs, because it could be that $v$ was received in $\run$ through an "external message". 
+	\AP Given a "local run" $\run$ and a value $v \in \nats$ appearing in $\run$, $v$ is ""initial"" in $\run$ if it is initial for some agent in $\run$. Note that this is not always true for partial runs, unlike for runs, because it could be that $v$ was received in $\run$ through an "external message@@global". 
 
 	For all configurations $\config$ over $\agents$ and $\config'$ over $\agents'$ such that $\agents \cap \agents'$, we write $\config \sqcup \config'$ for the configuration over $\agents \cup \agents'$ such that $\config \sqcup \config'(a)$ is $\config(a)$ if $a \in \agents$ and $\config'(a)$ if $a \in \agents'$. 
 
 	\end{definition}
 
-The following lemma explains that, when a partial run $\run$ needs to receive a given word on a non-initial value $v$ and a "run" $\run'$ is able to provide this word for some of its "initial values" $v'$, then we can make a new partial run that no longer needs to receive anything on this value by ``plugging'' the output of $\run'$ on $v'$ and the input of $\run$ on $v$. 
+The following lemma explains that, when a partial run $\run$ needs to receive a given word on a non-initial value $v$ and a "run" $\run'$ is able to provide this word for one of its "initial values" $v'$, then we can make a new partial run that no longer needs to receive anything on this value by ``plugging'' the output of $\run'$ on $v'$ and the input of $\run$ on $v$. All we need to do is execute those runs in parallel over disjoint sets of agents, after renaming values so that the $v'$-output of $\run'$ is now on $v$ (which does not induce any conflict as $v$ does not appear as an initial value in $\run$). We execute $\run$, and every time it requires a message $(m,v)$, we run $\run'$ up until its next broadcast of $(m,v)$ and use it to complete $\run$.
+
+The conditions at the end of the lemma express the fact that this operation does not affect the behaviour of $\run$ on the values it used before, and that if new values are introduced, they do not require any extra message from outside. Intuitively, the resulting run $\Tilde{\run}$ requires less input than $\run$ but achieves the same things. This lemma will be used to complete the local run of the root of an "unfolding tree" over its non-initial values using its "boss" children. 
 
 \begin{lemma}
 	\label{lem:boss-composition}
-	Let $\run$ be a " partial run", $\run'$ a "run".
+	Let $\run$ be a "partial run", $\run'$ a "run".
 	If there exist $v, v' \in \nats$ such that $\vinput{v}{\run} \subword \voutput{v'}{\run'}$ and $v'$ is an initial value in $\run'$ but $v$ is not initial in $\run$, then there exists a "partial run" $\Tilde{\run}$ such that 
 	\begin{itemize}
 		\item $\vinput{v}{\Tilde{\run}} = \varepsilon$ 
@@ -58,11 +60,11 @@ The following lemma explains that, when a partial run $\run$ needs to receive a 
 	We apply a renaming to the values of $\run'$ so that $v'$ is mapped to $v$ and all other values are mapped to distinct values that do not appear in $\run$.
 	Hence the only value appearing in both runs is $v$, and it is initial only in $\run'$. As a consequence, the configuration $\config_0 \sqcup \config'_0$ is an "initial configuration".
 	
-	We then construct the desired run $\Tilde{\run}$ over $\agents \cup \agents'$ by matching the "external messages" in $\run$ with the broadcasts in $\run'$ and executing the rest of the run in parallel. Recall that $\config \sqcup \config'$ is the configuration obtained when putting $\config$ and $\config'$ side by side, which is possible when they refer to disjoint sets of agents. 
+	We then construct the desired run $\Tilde{\run}$ over $\agents \cup \agents'$ by matching the "external messages@@global" in $\run$ with the broadcasts in $\run'$ and executing the rest of the run in parallel. Recall that $\config \sqcup \config'$ is the configuration obtained when putting $\config$ and $\config'$ side by side, which is possible when they refer to disjoint sets of agents. 
 	
 	We have $\Tilde{\run} = \config_0 \sqcup \config'_0 \pstep{\run_0} \overline{\config}_0 \sqcup \config'_0 \pstep{\run'_0} \overline{\config}_0 \sqcup \overline{\config}'_0 \pstep{m_1, v} \config_{1} \sqcup \config'_1 \pstep{\run_1} \cdots \pstep{m_k,v} \config_{k}  \sqcup \config'_{k} \pstep{\run_k}  \overline{\config}_k \sqcup \config'_k \pstep{\run'_k} \overline{\config}_k \sqcup \overline{\config}'_k$.
 	
-	We indeed have $\overline{\config}_{j-1} \sqcup \overline{\config}'_{j-1} \pstep{m_j, v} \config_{j} \sqcup \config'_j$ as we can make all agents in $\agents$ that receive an "external messages" with message $m_j$ and value $v$ receive the broadcast made in $\agents'$ instead.
+	We indeed have $\overline{\config}_{j-1} \sqcup \overline{\config}'_{j-1} \pstep{m_j, v} \config_{j} \sqcup \config'_j$ as we can make all agents in $\agents$ that receive an "external messages@@global" with message $m_j$ and value $v$ receive the broadcast made in $\agents'$ instead.
 	
 	Hence we obtain a run with 
 	\begin{itemize}		
@@ -96,7 +98,13 @@ The following lemma explains that, when a partial run $\run$ needs to receive a 
 %	\end{itemize}
 %\end{lemma}
 
-Using the previous result, we now want to be able to merge a partial run broadcasting on some of its initial value $v$ and partial runs that play the roles of follower nodes, \emph{i.e.}, receive messages with value $v$ (which is not initial for them) and then broadcast in turn with value $v$. The following lemma will make a step in this direction.
+The following proofs are more technical, we now want to be able to merge a partial run broadcasting on some of its initial value $v$ and partial runs that play the roles of follower nodes, i.e., receive a sequence of messages with value $v$ (which is not initial for them) and then broadcast in turn a message with value $v$. The following lemma will make a step in this direction.
+
+Its statement can be understood as follows: Say we have a "partial run" $\run$ which requires some input over one of its "initial" values $v$. More precisely, we have a "decomposition" $\decsymb = (w_0, m_1, \ldots, w_\ell)$ such that $\run$ can be split into parts that each output $w_i$ while only requiring some $m_j$ with $j<i$ as input over $v$. On the other hand, we have for each $i$ a "partial run" $\run'_i$ which can output $m_i$ with some non-initial value $v_j$ while only requiring an input over $v_j$ that forms a word matching "decomposition" $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$. 
+Then we can obtain  a run $\Tilde{\run}$ that can be split the same way as $\run$ but no longer requires input over $v$.
+
+Intuitively, this is done by renaming values in those runs in a suitable way so that the $\run'_i$ now have an output over value $v$. We take the last message type $m_\ell$ and use (many copies of) $\run'_\ell$ to eliminate the $(m_\ell, v)$ inputs in the last part of $\run$, while using the output of $\run$ to complete some of the input of $\run'$. The remaining input then only consists of messages $m_{i}$ with $i<\ell$, which allows us to conclude by induction.
+
 
 \begin{lemma}
 	\label{lem:follower-composition-completion}
@@ -131,7 +139,7 @@ Using the previous result, we now want to be able to merge a partial run broadca
 	
 	We then proceed in a similar way as in Lemma~\ref{lem:boss-composition}.
 	We can rename agents so that $\run$ and $\run'_j$ are on disjoint sets of agents, and apply a renaming of values in $\run_j'$ so that $v_j$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
-	We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\run_i$ for all $i\in\nset{1}{\ell}$. As $w_i \subword \voutput{v}{\run_i}$, we can match the "internal messages" of $\run_j$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
+	We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\run_i$ for all $i\in\nset{1}{\ell}$. As $w_i \subword \voutput{v}{\run_i}$, we can match the "internal messages@@global" of $\run_j$ with some "external messages@@global" of $\run'_{j',i}$ so that the remaining "external messages@@global" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
 	We obtain, for each $i \in \nset{1}{j'-1}$, a run $\run''_i$ from $\config_{i-1} \sqcup \config_{j', i-1}$ to $\config_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
 	
 	For each $i \in \nset{j'+1}{j-1}$, let $\run''_i$ be the run that goes from $\config_{i-1} \sqcup \config_{j', j'}$ to $\config_{i} \sqcup \config_{j', j'}$ by executing $\run_i$ on the first part and staying idle on the second one.
@@ -160,7 +168,14 @@ Using the previous result, we now want to be able to merge a partial run broadca
 All the conditions are satisfied, the lemma is proven.
 \end{proof}
 
-However, the previous lemma will not suffice, because we may want some of the values broadcast by the runs $\run_j'$ to be broadcast several times (recall that, in the definition of "decomposition", the messages $m_i$ may appear as many times as we want). Intuitively, this can be done by cloning the runs $\run_i'$ at will. The following lemma uses this idea to provide a convenient extension of Lemma~\ref{lem:follower-composition-completion} 
+However, the previous lemma will not suffice, as if we have a "boss node" with a specification $w$ and an "initial" value $v$, it may not suffice to complete the associated local run $u$ so that it does not require input over $v$: some extra messages may be needed to obtain $w$ as the output of $u$ may not suffice. This can be done by cloning the runs $\run_i'$ at will, using them to produce the missing messages in $w$, and then using the previous lemma to complete the resulting partial run so that it does not require input over $v$. The following lemma uses this idea to provide a convenient extension of Lemma~\ref{lem:follower-composition-completion} 
+
+\begin{figure}
+	\input{Figures/Fig-tree-to-run}
+	\caption{Illustration of Lemma~\ref{lem:follower-composition-output}}
+	\label{fig:tree-to-run}
+\end{figure}
+
 
 \begin{lemma}
 	\label{lem:follower-composition-output}
@@ -211,7 +226,7 @@ There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinpu
 Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \pstep{\run_{{j'},1}'} \config_{{j'},1} \cdots \pstep{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
 
 We can rename agents so that the $\widehat{\run}_i$ and $\run'_{j',i}$ are on disjoint sets of agents, and apply a renaming of values in $\run'_{j'}$ so that $v_{j'}$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
-We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\widehat{\run}_i$ for all $i\in\nset{1}{\ell}$. As $w_i \subword \voutput{v}{\widehat{\run}_i}$, we can match the "internal messages" of $\widehat{\run}_i$ with some "external messages" of $\run'_{j',i}$ so that the remaining "external messages" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
+We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\widehat{\run}_i$ for all $i\in\nset{1}{\ell}$. As $w_i \subword \voutput{v}{\widehat{\run}_i}$, we can match the "internal messages@@global" of $\widehat{\run}_i$ with some "external messages@@global" of $\run'_{j',i}$ so that the remaining "external messages@@global" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
 We obtain, for each $i \in \nset{1}{j'-1}$, a run $\run''_i$ from $\widehat{\config}_{i-1} \sqcup \config_{j', i-1}$ to $\widehat{\config}_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
 
 For each $i \in \nset{j'+1}{j-1}$, let $\run''_i$ be the run that goes from $\widehat{\config}_{i-1} \sqcup \config_{j', j'}$ to $\widehat{\config}_{i} \sqcup \config_{j', j'}$ by executing $\widehat{\run}_i$ on the first part and staying idle on the second one.
@@ -274,7 +289,7 @@ We are now ready to prove Lemma~\ref{lem:tree-to-run}.
 	\subsubsection{Step 1: Non-initial values}
 	\label{sec:tree-to-run-step-one}
 	
-	We show the following statement by induction on $\size{V'}$.
+	We show the following statement by induction on $\size{V'}$. It expresses that we can complete $u$ into a "partial run" that does not require any input over its "non-initial" values. This is done by induction, using Lemma~\ref{lem:boss-composition} and the runs obtained via the "boss" children to eliminate the input of $u$ over each of its "non-initial" values without adding some input requirements on other values or modifying its behaviour over values that were previously there.
 	
 For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, there exists a "partial run" $\run$ such that for all $v \in \nats$:
 \begin{itemize}
@@ -320,6 +335,8 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 	
 	\subsubsection{Step 2: Initial values}
 	\label{sec:tree-to-run-step-two}
+	
+	We proceed in the same way as in the previous part: the goal is now to use the "partial runs" yielded by the "follower" children to eliminate, one by one, using Lemma~\ref{lem:follower-composition-completion}, the input over each non-initial value of $u$, except maybe for $\valuelabel{\node}$, which requires a special case.
 	
 	We show the following statement by induction on $\size{V'}$.
 	
@@ -368,6 +385,8 @@ for all $v \in \nats$:
 \end{itemize}  
 
 \subsubsection{Step 3: $\valuelabel{\node}$}
+
+In this final part, we use Lemma~\ref{lem:follower-composition-output} to complete the "partial run" previously obtained so that it has enough output on $\valuelabel{\node}$ to satisfy the specification of $\node$. In fact, if $\node$ is a "follower node", the "partial run" constructed so far suffices. If $\node$ is a "boss node", we need to apply Lemma~\ref{lem:follower-composition-output}.
 	
 In Section~\ref{sec:tree-to-run-step-two} we constructed a run $\widehat{\run}$ such that for all $v \in \nats$:
 \begin{itemize}

@@ -1,21 +1,34 @@
 \section{Proof of Proposition~\ref{prop:trees-sound-complete}}
 \label{app:trees-sound-complete}
 
-We here prove that "unfolding trees" are sound and complete for the \COVER problem for \BNRA{}s. 
+\treessoundcomplete*
+ 
 We start with a few definitions. 
-
 First, we define the projection of a "run" onto an agent, which corresponds to the intuitive idea that a "local run" is used to describe the point of view of a single agent in a "run". Given a run $\run: \config_0 \step{} \config_1 \step{} \cdots \step{}\config_n$ and a agent $a$, the "local run" $\localrun$ of $a$ in $\run$ is defined by induction. The "local run" of $a$ in the empty run is the empty local run. Let $\localrun_i$ the local run of $a$ in $\config_0 \step{} \config_i$ (prefix of length $i$ of $\run$). We define $\localrun_{i+1}$ as follows:
 \begin{itemize}
 \item if in $\config_i \step{} \config_{i+1}$, $a$ performs a "local test" or a "broadcast" with a transition $\atrans$ then $u_{i+1}$ is $u_i$ to which a step labeled by $\intstep{\atrans}$ is appended,
-\item if in $\config_i \step{} \config_{i+1}$, $a$ performs a "reception" with a transition $\atrans$ then, by letting $\aval$ the value of the message recevied, $u_{i+1}$ is $u_i$ to which a step labeled by $\extmessage{\atrans}{\aval}$ is appended,
+\item if in $\config_i \step{} \config_{i+1}$, $a$ performs a "reception" with a transition $\atrans$ then, by letting $\aval$ the value of the message recevied, $u_{i+1}$ is $u_i$ to which a step labeled by $\step{\extlabel{\atrans}{\aval}}$ is appended,
 \item if $\config_i \step{} \config_{i+1}$ does not involve $a$, then $u_{i+1} := u_i$.
 \end{itemize}
 
-A "run" $\run$ satisfies a "boss specification" $\bossspec$ if there exists $\aval \in \nats$ such that $\bossspec$ is a subword of the sequence of messages sent with value $\aval$ in $\run$.
-A "run" $\run$ satisfies a follower specification $(\followwordspec, \followmessagespec)$ if there exists a value $\aval$ and an agent $a$ such that $\aval$ is not an initial value of $a$, the $\aval$-input of $a$ in $\run$ is a subword of $\followwordspec$ and agent $a$ broadcasts $\followmessagespec$ with value $\aval$ at some point.
+We make the meaning of the "specification" labels more concrete by defining the criteria for a "run" to satisfy a "specification".
 
-An "unfolding tree" satisfies a boss specification $\bossspec$ if its root $\node$ is a "boss node" and $\bossspec$ is a subword of its specification label $\bosslabel{\node}$.
-An "unfolding tree" satisfies a follower specification $(\followwordspec, \followmessagespec)$ if its root $\node$ is a "follower node" such that $\followmessagespec=\followlabelmessage{\node}$ and  $\followlabelword{\node}$ is a subword of $\followwordspec$.
+\begin{itemize}
+	\item A "run" $\run$ satisfies a "boss specification" $\bossspec$ if there exists $\aval \in \nats$ such that $\bossspec$ is a subword of the sequence of messages sent with value $\aval$ in $\run$.
+	
+	
+	\item A "run" $\run$ satisfies a follower specification $(\followwordspec, \followmessagespec)$ if there exists a value $\aval$ and an agent $a$ such that $\aval$ is not an initial value of $a$, the $\aval$-input of $a$ in $\run$ is a subword of $\followwordspec$ and agent $a$ broadcasts $\followmessagespec$ with value $\aval$ at some point.
+\end{itemize}
+
+For an "unfolding tree", satisfying a specification simply means that its root is labelled with that specification or a better one.
+
+\begin{itemize}
+	\item An "unfolding tree" satisfies a boss specification $\bossspec$ if its root $\node$ is a "boss node" and $\bossspec$ is a subword of its specification label $\bosslabel{\node}$.
+	
+	\item An "unfolding tree" satisfies a follower specification $(\followwordspec, \followmessagespec)$ if its root $\node$ is a "follower node" such that $\followmessagespec=\followlabelmessage{\node}$ and  $\followlabelword{\node}$ is a subword of $\followwordspec$.
+\end{itemize}
+
+
 
 
 % Also note that the interpretation of the "follower nodes" changes between the two directions: when building the tree a follower node labelled $(\followwordspec, \followmessagespec)$ means that there exists a global run in which some agent receives the sequence of messages $\followwordspec$ and broadcasts $\followmessagespec$, all with a value $\aval$ that is not one of its initial ones.
