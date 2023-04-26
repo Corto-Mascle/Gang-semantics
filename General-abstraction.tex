@@ -138,7 +138,7 @@ Second, that $\node$ is a witness that its "specification" is carried out (Condi
 	\item \label{item:condition4_boss_node} If $\node$ is a "boss node", then $\valuelabel{\node}$ is an "initial value" of $\localrunlabel{\node}$ and the associated "decomposition" $\decsymb$ of \ref{item:condition2_initial_value} satisfies that $\bosslabel{\node} \in \langdec{\decsymb}$.
 \end{enumerate}
 
-\luin{here should come more intuitions on the tree and some figures}
+%\luin{here should come more intuitions on the tree and some figures}
 \begin{figure}
 	\begin{center}
 		\input{Figures/tree-example1}
@@ -187,7 +187,7 @@ Let $(\prot,q_f)$ an instance of $\COVER$. $(\prot,q_f)$ is positive if and only
 \subsection{Bounding the size of the nodes of the "unfolding tree"}
 \label{sec:local-bounds}
 
-Our aim is now to provide bounds on the size of the "unfolding tree" that one has to consider for \COVER. To do so, we start with two simple observations. First, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then any subword of $\bossspec$ can also be broadcast with a single value. 
+Our aim is now to provide bounds on the size of the "unfolding tree" that one has to consider for \COVER. To do so, we start with two simple observations. First, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then any subword of $\bossspec$ can also be broadcast with a single value and so we don't need to check if subwords of $\bossspec$ can be broadcast with a single value. 
 % Therefore, if a branch of our tree has node $\node$ with "boss specification" $w$ and below has node $\node'$ "boss specification" $w'$ such that $w \subword w'$, then $\node'$ is better than $\node$ and one can shorten the tree by replacing $\node$ by $\node'$. 
 For "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better. The following lemma provides two ways of shortening an "unfolding tree". Its proof can be found in Appendix~\ref{app:proofs-reduction-branches}.
 
@@ -224,10 +224,11 @@ The high-level idea behind the proof of the previous protocol is as follows. Fir
 \end{remark}
 
 
+We are ready to state and prove the lemma which bound the size of a node from its parent's size.
 
 \begin{restatable}{lemma}{lemBoundSuccessorHeight}
 	\label{lem:bound-successor-height}
-	Let $\prot$ be a "protocol" over $\regnum$ registers, let $\node$ be a node of a "unfolding tree" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$.
+	Let $\prot$ be a "protocol" over $\regnum$ registers, let $\node$ be a node of an "unfolding tree" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$.
 	Let $\node_1, \ldots, \node_k$ be its "follower" children. If $\node$ is not the root of $\tree$ then let $\mu'$ be its father.
 	We have the following properties:
 	
@@ -254,10 +255,16 @@ The high-level idea behind the proof of the previous protocol is as follows. Fir
 		\end{itemize}
 	\end{enumerate}
 \end{restatable}
-
+\luin{sans doute qu'il faut changer l'énoncé de ce lemme pour la partie corps du papier}
 
 \subsection{Tree bounds}
 \label{sec:tree-bounds}
+
+\luin{ici il faut de l'intuition + peut etre une figure qui illustre comment on range notre arbre}
+\begin{figure}
+	\input{Figures/rearrangement-tree}
+	\caption{figure}
+\end{figure}
 
 \begin{definition}
 	We define the ""altitude"" of a node $\node$, written $\altitude{\node}$, in a "unfolding tree" recursively as follows:
@@ -281,6 +288,8 @@ The high-level idea behind the proof of the previous protocol is as follows. Fir
 		\item If $\node$ is a "follower node" then $\size{\localrunlabel{\node}} \leq \size{\followlabelword{\node}} \leq  f_0(\altmax - \altitude{\node})$.
 	\end{itemize} 
 \end{restatable}
+
+\luin{mentionner que c'est dans le lemme suivant que l'on utilise le length theorem}
 
 \begin{restatable}{lemma}{lemBoundMaxHeight}
 	\label{lem:bound-max-height}
