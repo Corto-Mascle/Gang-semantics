@@ -9,16 +9,16 @@
 	Let $\node_1, \ldots, \node_k$ be its "follower" children. If $\node$ is not the root of $\tree$ then let $\mu'$ be its father.
 	
 	If it is a "boss node" then by Lemma~\ref{lem:bound-successor-height} if it is the root we have $\size{\bosslabel{\node}} = \size{w} \leq N$, and if not we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}} \leq f_0(\altmax - \altitude{\node} -1)$ by induction hypothesis. In both cases we have $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node} -1)$.	
-	In all cases we obtain $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r)+1) \Big[f_0(\altmax-\altitude{\node} -1) + \sum_{i=1}^k \size{\followlabelword{\node_i}}\Big]$
+	In all cases we obtain $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r)+1) \Big[f_0(\altmax-\altitude{\node} -1) + \sum_{i=1}^k \size{\followlabelword{\node_i}}\Big]$
 	
 	By Lemma~\ref{lem:bound-successor-height} we have $k \leq \size{\messages}r$.
 	Moreover, by induction hypothesis for all $i$ we have 
 	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node} -1)$. As a result,
 	
-	$\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot})(r)+1) f_0(\altmax-\altitude{\node} -1)(\size{\messages} r +1) \leq N^2(\towerfun(N)(N) +1) f_0(\altmax - \altitude{\node} -1) \leq f_0(\altmax - \altitude{\node})$.
+	$\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r)+1) f_0(\altmax-\altitude{\node} -1)(\size{\messages} r +1) \leq N^2(\towerfun(N,N) +1) f_0(\altmax - \altitude{\node} -1) \leq f_0(\altmax - \altitude{\node})$.
 	
 	If $\node$ is a "follower node" then by Lemma~\ref{lem:bound-successor-height} we have 
-	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot})(r) +1 \leq f_0(\altmax - \altitude{\node})$.
+	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r) +1 \leq f_0(\altmax - \altitude{\node})$.
 \end{proof}
 
 \begin{figure}
@@ -43,10 +43,10 @@
 	Therefore, as $\node_{i_1}$ is a descendant of $\node_{i_2}$, by second case of Lemma~\ref{lem:shortening-branches} there would exist a "unfolding tree" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
 	
 	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
-	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\altmax-i+1) = (N^2(\towerfun(N)(N)+1))^{i}$.
+	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\altmax-i+1) = (N^2(\towerfun(N,N)+1))^{i}$.
 	
-	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n)(n)+1))n+2$. Clearly for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N)(N)+1))^{i} \geq N$.
-	As a consequence, for all $a$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(N) + 2 \leq g^{(i)}(N)$
+	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n,n)+1))n+2$. Clearly for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N,N)+1))^{i} \geq N$.
+	As a consequence, for all $a$, $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{i} + 2 \leq (N^2(\towerfun(N,N)+1)) g^{(i-1)}(N) + 2 \leq g^{(i)}(N)$
 	
 	By Theorem 5.3 in \cite{SchmitzS2011upperHigman}, recalled here as Theorem~\ref{thm:lengthfcttheorem}, as $g$ is primitive recursive there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(N)$ for all $i$ have at most $f_1(N)$ elements.
 	
@@ -73,10 +73,10 @@
 	By Lemma~\ref{lem:bound-length-at-height-h}, for all $\node'_i$ we have $\size{\bosslabel{\node'_i}} \leq f_0(\altmax - \altitude{\node'_i}) = f_0(\altmax +i)$.
 	By Lemma~\ref{lem:bound-max-height}, we have $\altmax \leq f_1(N)$ and thus $\size{\bosslabel{\node'_i}} \leq  f_0(f_1(N) +i)$
 	
-	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n)(n)+1))n+2$. 
-	Let $M = f_0(f_1(N))$. Clearly for all $i\geq 0$ we have $g^{(i)}(M) \geq (N^2(\towerfun(N)(N)+1))^{f_1(N) + i}$.
+	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n,n)+1))n+2$. 
+	Let $M = f_0(f_1(N))$. Clearly for all $i\geq 0$ we have $g^{(i)}(M) \geq (N^2(\towerfun(N,N)+1))^{f_1(N) + i}$.
 	
-	We have $\size{w_0} \leq M = g^{(0)}(N)$ and for all $i>0$, $\size{w_i} \leq (N^2(\towerfun(N)(N)+1))^{f_1(N) + i} + 2 \leq (N^2(\towerfun(N)(N)+1)) g^{(i-1)}(M) + 2 \leq g^{(i)}(M)$
+	We have $\size{w_0} \leq M = g^{(0)}(N)$ and for all $i>0$, $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{f_1(N) + i} + 2 \leq (N^2(\towerfun(N,N)+1)) g^{(i-1)}(M) + 2 \leq g^{(i)}(M)$
 	
 	By definition of the function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ defined in Lemma~\ref{lem:bound-max-height}, all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(M)$ have at most $f_1(M)$ elements.
 	
