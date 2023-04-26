@@ -277,10 +277,10 @@ To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with 
 	
 	We have shown the first two points of property 3. For the third one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "unfolding tree" conditions and then bound the length of $\localrunlabel{\node}$ using Lemma~\ref{lem:short-run-for-output}.
 	
-	Let $v$ be an initial value of $\localrunlabel{\node}$. If $v = \valuelabel{\node}$ then by condition~\ref{item:condition4_boss_node} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_1, \ldots, \node_{\ell_v}$ such that
+	Let $u = \localrunlabel{\node}$, let $v$ be an initial value of $u$. If $v = \valuelabel{\node}$ then by condition~\ref{item:condition4_boss_node} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_1, \ldots, \node_{\ell_v}$ such that
 	\begin{itemize}
 		\item $\bosslabel{\node} \in \langdec{\decsymb_v}$
-		\item $u$ can be split into $u_{v,0}, \ldots, u_{v,\ell_v}$ so that for all $i$, $w_{v,i} \subword \voutput{v}{u_{v,i}}$ and $\vinput{v}{u_{v,i}} \in \set{m_1, \ldots, m_{i-1}}^*$
+		\item $u$ can be split into $u_{v,0}, \ldots, u_{v,\ell_v}$ so that for all $i$, $w_{v,i} \subword \voutput{v}{u_{v,i}}$ and $\vinput{v}{u_{v,i}} \in \set{m_{v,1}, \ldots, m_{v,i-1}}^*$
 		
 		\item for all $i$, $\followlabelword{\node_i} \in \langdec{\decsymb_{v,i}}$, with $\decsymb_{v,i}= (w_{v,0}, m_{v,1}, \ldots, w_{v,i-1})$, and $\followlabelmessage{\node_i} = m_i$.
 	\end{itemize}
@@ -289,6 +289,15 @@ To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with 
 	
 	In both cases by Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_i}}$.
 	
-	\cortoin{Au lecteur} 
+	We define $J_v$ as a set of positions in $\localrun$ corresponding to the broadcasts of the letters of all the $w_{v,i}$. Formally, let $w_v = w_{v,0} \cdots w_{v,\ell_v}$, $J_v$ is a set of indices $j_1 < j_2 < \ldots < j_N$ such that: 
+	\begin{itemize}
+		\item $N = \size{w_v}$
+		
+		\item for all $a \in [1,N]$, the $j_a$th step of $u$ is a broadcast of the $a$th letter of $w_v$ with value $v$.
+		
+		\item for all index $j'$, if the $j'$th step in $u$ is a reception step of $m_{v, i}$ then $w_{v,0} \cdots w_{v,i-1}$ has already been broadcast, i.e., $w_{v,0} \cdots w_{v,i-1}$ is a prefix of the sequence of message types broadcast at positions in $J \cap [1, j']$.
+	\end{itemize}
+	 
+	Let $J$ be the union of all $J_v$, we have $\size{J} \leq \sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_i}} $
 \end{proof}
 

@@ -48,7 +48,7 @@
 	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n,n)+1))n+2$. Clearly for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N,N)+1))^{i} \geq N$.
 	As a consequence, for all $a$, $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{i} + 2 \leq (N^2(\towerfun(N,N)+1)) g^{(i-1)}(N) + 2 \leq g^{(i)}(N)$
 	
-	By Theorem 5.3 in \cite{SchmitzS2011upperHigman}, recalled here as Theorem~\ref{thm:lengthfcttheorem}, as $g$ is primitive recursive there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(N)$ for all $i$ have at most $f_1(N)$ elements.
+	By the Length Function Theorem from \cite{SchmitzS2011upperHigman}, recalled here as Theorem~\ref{thm:lengthfcttheorem}, as $g$ is primitive recursive there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(N)$ for all $i$ have at most $f_1(N)$ elements.
 	
 	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(N) = f_1(\size{\prot} + \size{w} + 1)$ elements, thus $\altmax \leq f_1(\size{\prot} + \size{w} + 1)$.
 \end{proof}
