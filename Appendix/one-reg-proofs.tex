@@ -63,7 +63,7 @@ We define "abstract runs" as follows:
 	Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denoted $\aconfig \step{} \aconfig'$, when $\clique' \subseteq \covset'$, $\boss' \in \covset' \cup \set{\noboss}$ and one of the following cases is satisfied.
 	\begin{enumerate}
 		\item \emph{Broadcast from "clique":}
-		\begin{enumerate}[i]
+		\begin{enumerate}[label = (\arabic*)]
 			\item\label{item:broadcast_from_clique_broadcast} There exist $\amessage \in \messages$ and $\statebr \in \clique, \statebr' \in \clique'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
 			
 			\item\label{item:broadcast_from_clique_boss} Either $\boss = \boss'$ or there exists $(\boss, \recone{\amessage}{\anact}, \boss') \in \transitions$ for some action $\anact$.
@@ -83,7 +83,7 @@ We define "abstract runs" as follows:
 		
 		
 		\item \emph{Broadcast from "boss":}
-		\begin{enumerate}[i]
+		\begin{enumerate}[label = (\arabic*)]
 			\item \label{item:broadcast_from_boss_broadcast} there exists $\amessage \in \messages$ such that $(\boss, \brone{m}, \boss') \in \transitions$
 			
 			\item\label{item:broadcast_from_boss_boss} $\boss, \boss' \ne \noboss$ (technically implied by \ref{item:broadcast_from_boss_broadcast} but written here to match other cases)
@@ -103,7 +103,7 @@ We define "abstract runs" as follows:
 		
 		
 		\item \emph{External broadcast:}
-		\begin{enumerate}[i]
+		\begin{enumerate}[label = (\arabic*)]
 			\item\label{item:external_broadcast_broadcast} There exists $\amessage \in \messages$ and $\statebr \in \covset, \statebr' \in \covset'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
 			
 			\item\label{item:external_broadcast_boss}Either $\boss = \boss'$ or:
@@ -204,7 +204,7 @@ This subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
 	Let $\agentboss$ the agent such that $\data{\config_0}(\agentboss) = \aval$. In case~\ref{proof_completeness:case_broadcast_boss}, $\agentboss = \agentbr$; in the other two cases, $\agentboss \ne \agentbr$. 
 	
 	We now prove the other conditions:
-	\begin{enumerate}[i]
+	\begin{enumerate}[label = (\arabic*)]
 		\item In case~\ref{proof_completeness:case_broadcast_clique}, since $\agentbr$ has value $\aval$ in $\config_i$ and $\config_{i+1}$ but not in every $\config_j$ for $j \leq i$, we directly have $\statebr \in \clique_i$ and $\statebr' \in \clique_{i+1}$. In case~\ref{proof_completeness:case_broadcast_boss}, it suffices to note that $\boss_i = \st{\config}(\agentbr)$ and $\boss_{i+1} = \st{\config_{i+1}}(\agentbr)$. In case~\ref{proof_completeness:case_external_broadcast}, it suffices to note that $\statebr, \statebr' \in \covset$ as both states appear in $\run$.
 		\item In case~\ref{proof_completeness:case_broadcast_boss}, this condition is automatically satisfied. In the other two cases, we look at what $\agentboss$ does in $s_{i+1}$. If it remains idle then we have $\boss_i = \boss_{i+1}$. Otherwise it takes a reception transition as $\agentbr \ne \agentboss$. 
 		In case~\ref{proof_completeness:case_external_broadcast}, this reception may not have action $\quotemarks{\eqtestact}$ as the broadcast is from an agent with register value that is not $\aval$ ($\data{\config_i}(\agentbr) \ne \aval$ by hypothesis). For the same reason, if this reception has action $\quotemarks{\enregact}$ then $\boss_{i+1}= \noboss$. If this reception has action $\quotemarks{\dummyact}$ and $\boss_i \ne \noboss$ then $\boss_{i+1} \ne \noboss$ as $\agentboss$ keeps value $\aval$.
