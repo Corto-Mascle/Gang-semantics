@@ -7,13 +7,11 @@ We consider that when a message is broadcast by an agent, each other agent indep
 We study the set of runs of an arbitrary number of agents communicating this way.
 
 \begin{definition}[Protocols]
-	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with 
+	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""messages""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with a set of operations 
 	\begin{multline*}
 	\operations = \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq \regnum} \\ \cup  
 	\set{\loc{i}{j}{\eqtestact}, \loc{i}{j}{\diseqtestact} \mid 1 \leq i,j \leq \regnum}
-	\end{multline*}
-	the set of operations.
-	
+	\end{multline*}	
 	Transitions labelled with $\brsymb$ are ""broadcasts"", transitions labelled with $\recsymb$ are ""receptions"" and transitions labelled with $\locsymb$ are ""local tests"".
 	Given a reception $\rec{\amessage}{i}{\anact}$ or a local test $\loc{i}{j}{\anact}$, $\anact$ is the ""action"" of the reception (resp. local test). 
 The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
@@ -87,43 +85,15 @@ The following remark formalizes the intuition that, because the only way to take
 	Starting with the initial configuration with each agent of $\run$ and their clones, original agents from $\run$ perform the sequences of steps of $\rho$. Then, the set of clones perform the same sequence. 
 	Note that original agents and cloned agents do not share any registers' value. As a consequence, the copy of the run only allow us to copy some agents in a certain state but not their registers' values. We will refer to this notion as the ""copycat principle"": if a certain state is coverable, then for any integer $n$ there exists an execution which puts $n$ agents on the coverable state (each agent has $n$ clones), however, none of this $n$ agents share the same register values.
 	
-%	In the "protocol" of Example \ref{example-1}, take a run with two agents, one broadcasts message $m_2$ among with its first register value which is received by the second agent which stores the value in its first register. The first agent is in $q_1$ and the second in $q_5$. The second agent then broadcasts message $m_4$ among with the value of its second register, received by the first agent which stores it in its second register. The wo agents are in $q_4$ and share the same registers' values. We can copy the "run": consider four agents, the two first agents perform the described sequence and reach a configuration in which two agents are in $q_4$ and share same registers' values and the two other agents  
-	
-%	 \lu{faire un parallèle avec l'exemple?}
-	
 	
 \end{remark}
 
 	
-	\begin{definition}
-		We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
-	\end{definition}
-	
-%	\begin{definition}
-%		A ""query"" $\query$ is a finite set of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z}')}$, $\quotemarks{R_j(\var{z}) \neq R_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$ and $j,j' \in \nset{1}{r}$.
-%		It is \emph{satisfied} by a "configuration" $\config$ if there is a valuation $\nu : \varset \to \agentsof{\config}$ such that:
-%		\begin{itemize}
-%			\item for all $\quotemarks{q(\var{z})} \in \query$, $\st{\config}(\nu(\var{z})) = q$,
-%			
-%			\item for all $\quotemarks{R_j(\var{z}) = R_{j'}(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z}))(j) = \data{\config}(\nu(\var{z'}))(j')$,
-%			
-%			\item for all $\quotemarks{R(\var{z}) \neq R(\var{z'})} \in \query$, $\data{\config}(\nu(\var{z}))(j) \neq \data{\config}(\nu(\var{z'}))(j')$.
-%		\end{itemize}
-%		
-%		\AP The ""query coverability problem"" is to determine, given a "protocol" and a "query", whether there is a "run" of this protocol whose last "configuration" satisfies the query.
-%	\end{definition}
 \begin{definition}
 
-	\AP The ""cover problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this protocol whose last "configuration" satisfies the "query" with the single formula $\quotemarks{q_f(\var{z})}$.
+	\AP The ""cover problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this protocol whose last "configuration" has an agent in state $q_f$.
 	
-	\AP The ""target reachability problem"" is to determine, given a "protocol" and a state $q$, whether there is a "run" of this protocol with a non-empty set of agents whose last "configuration" $\config$ is such that $\st{\config}(\agentsof{\gamma}) = \{q_f\}$, i.e all agents reached $q_f$.
-	
-%	\begin{remark}
-%		\label{rem:bigger_config_query}
-%		If some "configuration" $\config$ satisfies a "query" $\query$, then every configuration $\config'$ such that $\config \lessthan \config'$ satisfies $\query$. 
-%	\end{remark}
-	
-	%We say that it is ""initial@@run"" if $\config_0$ is an initial configuration.
+	\AP The ""target reachability problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this protocol with a non-empty set of agents whose last "configuration" $\config$ is such that $\st{\config}(\agentsof{\gamma}) = \{q_f\}$, i.e all agents reached $q_f$.
 \end{definition}
 
 \begin{example}\label{example-2}\lu{feel free to reformuler}

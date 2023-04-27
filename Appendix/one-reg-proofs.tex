@@ -5,6 +5,18 @@
 \subsection{Removing disequality tests}
 \label{sec:one-diseq-tests}
 
+We start with a basic observation that adding agents to a configuration cannot decrease the set of reachable configurations.
+
+
+\begin{definition}
+	We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
+\end{definition}
+
+\begin{remark}
+			\label{rem:bigger_config_query}
+			If some "configuration" $\config$ satisfies a "query" $\query$, then every configuration $\config'$ such that $\config \lessthan \config'$ satisfies $\query$. 
+\end{remark}
+
 \lemRemoveDiseq*
 
 \begin{proof}

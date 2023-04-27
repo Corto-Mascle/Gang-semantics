@@ -1,14 +1,14 @@
 \section{Cover decidability}
 \label{sec:cover-decidability}
 
-This section is devoted to proving the main result of this paper:
+This section is dedicated to the proof of the main result of this paper:
 
 \begin{restatable}{theorem}{decidablecover}
 \label{thm:decidable-cover}
 \COVER for \BNRA{}s is decidable. Moreover, the problem is $\Fcomplexity{\omega^\omega}$-complete.
 \end{restatable}
 
-Thanks to Proposition~\ref{prop:loc-eq-test-elimination}, we may suppose that our protocols have no "local equality tests" (the complexity class $\Fomegaomega$ being stable by exponential reduction). 
+Thanks to Proposition~\ref{prop:loc-eq-test-elimination}, we may assume that our protocols have no "local equality tests" (the complexity class $\Fomegaomega$ being stable by exponential reduction). 
 
 The intuition of our decidability procedure is as follows. 
 Consider a given run and a given agent $a$ that covers some state $q$. We are interested in what the agent needs from other agents to cover $q$. The agent $a$ might need to receive a sequence $w \in \messages^*$ of messages that all have the same value, so that it stores the value of the first such message then tests equality with the stored value upon reception of following messages. 
