@@ -2,16 +2,17 @@
 	
 	The "cover problem" is much easier in 1-BNRAs than in the general case. Intuitively, it suffices to keep track of the state of one \emph{boss} agent (the one who broadcasts its initial value), a set of states containing \emph{follower} processes with that same register value, and a set of states containing agents with any register values. This way, we can (i) compute the set of reachable states and (ii) decide if a state is coverable or not. In this section, we prove that the "cover problem" for 1-BNRAs is \NP-complete.
 
-	We simplify notations as in this section we do not need to consider "local tests": with a single register every local equality test is satisfied and every local disequality test is not.
-	Hence we can delete transitions with disequality tests and replace equality tests with internal transitions that have no effect (which may in turn be encoded in our model using broadcasts of dummy messages). 
-	 
-	Furthermore, the register argument in receptions and broadcasts is always $1$, hence we remove it.
-	Our new set of operations is 
-	$
-	Op^{\messages} = \set{\brone{\amessage}, \recone{\amessage}{\dummyact}, \recone{\amessage}{\enregact}, \recone{\amessage}{\eqtestact}, \recone{\amessage}{\diseqtestact} \mid \amessage \in \messages}.
-	$
-	Finally, given a "configuration" $\config$, we write $\data{\config}(a)$ for $\data{\config}(a,1)$. 
+	Suppose we have a set of states $S$ (containing the initial state $q_0$) that we know to be coverable. We can always start by running many copies of runs covering them to obtain an arbitrarily large number of agents (with possibly different values) in each state of $S$. Thus from now on we will assume that we have an unlimited supply of agents in those states.
 
+	Now say there exists a run covering a state outside of $S$. As $q_0 \in S$, we can take a prefix $\run$ of that run whose last step puts an agent $a$ in a state $s' \notin S$, and that only has agents in states of $S$ before. 
+	Let $v$ be the value of $a$ just before that last step.
+	We want to keep track of the set of agents that have value $v$ through $\run$.
+	An important observation is that whenever an agent gets in a state $q$ with a value $\aval$ that is not its initial one, it means that at some point in the run, it was in a state $q'$ and executed a transition in which it received a message with value $v$, stored it in its register and went to a state $q''$. 
+	As mentioned before, we can copy the run up to that point to have an unlimited supply of agents in $q'$, and thus an unlimited supply of agents in $q''$ with value $\aval$. We can then make all those agents copy the broadcasts of $a$ and receive the same messages so that they all reach $q$ with value $\aval$. Hence if we have an agent in a state $q$ with a value $\aval$ that is not its initial one, we can assume that we have as many agents in $q$ with value $\aval$ as we need.	
+	
+	We thus define \emph{gangs}, which abstract runs with respect to a value $v$. A "gang" is made of a "boss" state (the state of the agent which had that value at the start) and a \emph{clique}, a set of "follower" states (the states reached by other agents with that value). The clique may only increase through the abstract run, intuitively we assume that we always have enough copies of each agent so that we can leave many agents with value $v$ in every state they visited.
+
+	
 		
 
 

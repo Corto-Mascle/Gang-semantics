@@ -1,17 +1,17 @@
 
-To prove the \NP upper bound, we present an abstraction on configurations and runs. 
-The main ingredient of our abstraction is an extended version of the "copycat principle" presented in Remark~\ref{rem:copycat-principle}. 
-It is twofold: 
-\begin{itemize}
-	\item First, as explained in Remark~\ref{rem:copycat-principle}, if there is a run $\run$ sending an agent to a state $q$, then we can construct a run $\run'$ executing run over disjoint sets of agents (with different values) as many times as we want to obtain as many agents as we need in $q$.
-	
-	\item  Furthermore, if in a run $\run$ an agent $a$ gets in a state $q$ with a value $\aval$ that is not its initial one, it means that at some point in the run, it was in a state $q'$ and executed a transition in which it received a message with value $v$, stored it in its register and went to a state $q''$. 
-	As mentioned before, we can copy the run up to that point to have an unlimited supply of agents in $q'$, and thus an unlimited supply of agents in $q''$ with value $\aval$. We can then make all those agents copy the broadcasts of $a$ and receive the same messages so that they all reach $q$ with value $\aval$. Hence if we have an agent in a state $q$ with a value $\aval$ that is not its initial one, we can assume that we have as many agents in $q$ with value $\aval$ as we need.	
-\end{itemize}
+%To prove the \NP upper bound, we present an abstraction on configurations and runs. 
+%The main ingredient of our abstraction is an extended version of the "copycat principle" presented in Remark~\ref{rem:copycat-principle}. 
+%It is twofold: 
+%\begin{itemize}
+%	\item First, as explained in Remark~\ref{rem:copycat-principle}, if there is a run $\run$ sending an agent to a state $q$, then we can construct a run $\run'$ executing run over disjoint sets of agents (with different values) as many times as we want to obtain as many agents as we need in $q$.
+%	
+%	\item  Furthermore, if in a run $\run$ an agent $a$ gets in a state $q$ with a value $\aval$ that is not its initial one, it means that at some point in the run, it was in a state $q'$ and executed a transition in which it received a message with value $v$, stored it in its register and went to a state $q''$. 
+%	As mentioned before, we can copy the run up to that point to have an unlimited supply of agents in $q'$, and thus an unlimited supply of agents in $q''$ with value $\aval$. We can then make all those agents copy the broadcasts of $a$ and receive the same messages so that they all reach $q$ with value $\aval$. Hence if we have an agent in a state $q$ with a value $\aval$ that is not its initial one, we can assume that we have as many agents in $q$ with value $\aval$ as we need.	
+%\end{itemize}
 
-Our abstraction keeps track of a set of reachable states (intuitively, the ones with at least one agent) and of what we shall name a "gang", which is used to keep track of a set of agents sharing a common value $\aval$. A "gang" is made of a "boss" state (the state of the agent which had that value at the start) and a set of "follower" states (the state of agents who stored that value later). 
 
-\begin{definition}
+
+\begin{restatable}{definition}{defGang}
 	Let $(Q,\transitions, q_0)$ be a protocol.
 	
 	A ""gang"" is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. The element $\boss$ is the ""boss"" and the set $\clique$ is the ""clique"" of the "gang". %We write $\gangconfigs$ the set of "gangs". 
@@ -27,16 +27,11 @@ Our abstraction keeps track of a set of reachable states (intuitively, the ones 
 		%´\nico{j'ai changé la def pour fque ça soit plus facile: ancienne def $\clique := \set{q \in Q \mid \exists a \in \agents\setminus \set{\boss}, \config_k(a) = (q,\aval)}$}
 	\end{itemize}
 	Note that, if such an agent $a_0$ exists, then it is unique as $\config_0$ is initial hence this definition is sound. If there exists no agents with value $\aval$ in $\config_0$, then trivially $\gangof{\aval}{\run} = (\noboss, \emptyset)$. 
-\end{definition} 
+\end{restatable} 
 
 
 
-To simplify the proofs, we use a lemma allowing us to only consider protocols which does not contain any reception transition with actions $\quotemarks{\ne}$. This is feasible as we can run several copies of a run in parallel (with distinct values) so that every broadcast is made in each copy with a different value. Hence if a process receives a message, it can always receive it with a value different from its own, making disequality tests useless. We can thus replace them with receptions with $\quotemarks{\dummyact}$. See Appendix~\ref{sec:one-diseq-tests} for the formal proof.
 
-\begin{restatable}{lemma}{lemRemoveDiseq}
-\label{lem:removing_diseq_tests}
-Let $(\prot, q_f)$ an instance of the "coverability problem". This instance is positive if and only if $(\tilde{\prot}, q_f)$ is positive, where $\tilde{\prot}$ is equal to $\prot$ where every disequality test $\quotemarks{\diseqtestact}$ is replaced by dummy action $\quotemarks{\dummyact}$.  
-\end{restatable}
 %
 %The proof can be found in Appendix~\ref{sec:one-diseq-tests}.
 %\begin{example}
@@ -56,111 +51,18 @@ Let $(\prot, q_f)$ an instance of the "coverability problem". This instance is p
 %
 %Intuitively, a "gang" corresponds to the set of agents with a given "register value". The "boss" $\boss$ represents the process that had this value at the beginning and the "clique" $\clique$ the set of states of processes who have received and stored this register value. If the original owner of this value no longer has it, then $\boss = \noboss$. Note that we define the clique as the set of states $q$ such that \emph{at some point in the run} some agent was in state $q$ with value $v$. This is because we can use the copycat principle to add a large amount of agents that are in state $q$ with value $v$, and thus we can assume that there is always one.
 
-We now define an abstract semantics based on gangs.
-Say we have a run $\run$ that covers a state $q$. 
-Let $v$ be the register value of the first agent to enter $q$, and let $S'$ be the set of states covered before $q$. Then to witness the coverability of $q$, we only need to keep track of the set of states in which we can send agents with value $v$ assuming we have unlimited supplies of agents with different values in every state of $S'$.
- 
-%An abstract transition $(\covset, \boss, \clique) \step{} (\covset', \boss', \clique')$ means that we can go, in one step, from a configuration with enough agents in every state of $\covset$ and an agent in $\boss$ sharing its value with enough agents in all states of $\clique$, a configuration with arbitrarily 
-%An abstract run defines an increasing sequence of sets of reachable states $S_0= \set{q_0} \subsetneq S_1 \subsetneq \cdots \subsetneq S_k$ and, for each $i \in [0,k-1]$, describes 
+We can then define a natural abstract semantics based on gangs. An abstract configuration consists in a set of states $S$ (states covered so far by some agents) and a clique $(b, K)$ (the original owner of the value $v$ we are keeping track of and the states reached by other agents with that value). If the original owner of $v$ receives a new value we set $b = \bot$.
 
-\begin{definition}
-\label{def:abstract-configuration}
-An ""abstract configuration"" over $\agents$ is a tuple of $2^Q \times \gangset$ where $\gangset$ designates the set of all "gangs". We write $\aconfigs{\agents}$ the set of "abstract configurations" over $\agents$ and $\allaconfigs := \bigcup_{\agents \subseteq \nats \text{ finite }}\aconfigs{\agents}$ the set of all abstract configurations. 
+Abstract transitions are defined simply by applying transitions of the protocol while assuming that we have unlimited supplies of agents in every state of $S$ and of agents with the same value $v$ in states of $K$.
+We also allow \emph{gang resets}, which maintain $S$ but reinitialise $(b,K)$ to $(q_0, \emptyset)$ (we start keeping track of a new value).
 
-Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denoted $\aconfig \step{} \aconfig'$, when $\clique' \subseteq \covset'$, $\boss' \in \covset' \cup \set{\noboss}$ and one of the following cases is satisfied.
-\begin{enumerate}
-\item \emph{Broadcast from "clique":}
-	\begin{enumerate}[i]
-		\item\label{item:broadcast_from_clique_broadcast} There exist $\amessage \in \messages$ and $\statebr \in \clique, \statebr' \in \clique'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
-		
-		\item\label{item:broadcast_from_clique_boss} Either $\boss = \boss'$ or there exists $(\boss, \recone{\amessage}{\anact}, \boss') \in \transitions$ for some action $\anact$.
+We define formally this abstraction and show its soundness and completeness in the appendix.
+It is then easy to show that $S$ should grow between two gang resets (otherwise they reset to the same abstract configuration) and that there may be at most $O(\size{Q}^2)$ abstract steps between two resets (as $K$ can only increase and there are only $\size{Q}+1$ possibilities for $b$). This means that if there is an abstract run covering a state, there is one of size $O(\size{Q}^3)$, giving us polynomial-size witnesses for coverability, and thus an \NP algorithm.
 
-		\item\label{item:broadcast_from_clique_clique}$(\clique \cup \set{\statebr'}) \subseteq \clique'$ and, for all $q' \in \clique' \setminus (\clique \cup \set{\statebr'})$, there exists $q$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where:
-		\begin{itemize}
-			\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
-			\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
-		\end{itemize}
-		
-		\item\label{item:broadcast_from_clique_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where:
-		\begin{itemize}
-			\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
-			\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
-		\end{itemize}
-	\end{enumerate}
+The \NP lower bound is then obtained by a direct reduction from 3SAT (an agent sends a sequence of messages with its identifier representing a valuation to other agents which broadcast it back to it, allowing it to check the satisfaction of a 3SAT formula).
 
+Those results yield the main theorem of this section:
 
-	\item \emph{Broadcast from "boss":}
-	\begin{enumerate}[i]
-		\item \label{item:broadcast_from_boss_broadcast} there exists $\amessage \in \messages$ such that $(\boss, \brone{m}, \boss') \in \transitions$
-		
-		\item\label{item:broadcast_from_boss_boss} $\boss, \boss' \ne \noboss$ (technically implied by \ref{item:broadcast_from_boss_broadcast} but written here to match other cases)
-
-		\item\label{item:broadcast_from_boss_clique} 	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where:
-		\begin{itemize}
-			\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
-			\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
-		\end{itemize}
-				
-		\item\label{item:broadcast_from_boss_covset} $\covset \cup \set{\boss'} \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\boss'})$, there exists $q$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where:
-		\begin{itemize}
-			\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
-			\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
-		\end{itemize}
-	\end{enumerate}
-
-
-	\item \emph{External broadcast:}
-	\begin{enumerate}[i]
-		\item\label{item:external_broadcast_broadcast} There exists $\amessage \in \messages$ and $\statebr \in \covset, \statebr' \in \covset'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
-	
-		\item\label{item:external_broadcast_boss}Either $\boss = \boss'$ or:
-		\begin{itemize} 
-			\item $\boss' \ne \noboss$ and there exists $(\boss, \recone{\amessage}{\dummyact}, \boss') \in \transitions$, or
-			\item $\boss' = \noboss$ and there exists $(\boss, \recone{\amessage}{\enregact}, \boss') \in \transitions$.
-		\end{itemize}
-
-		\item\label{item:external_broadcast_clique}$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q \in \clique$ s.t. $(q, \recone{\amessage}{\dummyact}, q') \in \transitions$.
-		
-		\item\label{item:external_broadcast_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q \in \covset$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\enregact}$ or $\anact = \quotemarks{\dummyact}$.
-	\end{enumerate}
-	\item \emph{Gang reset:} $S' = S$, $\clique' = \emptyset$ and $\boss'= q_0$
-\end{enumerate}
-
-
-Given a concrete run $\run: \config_0 \step{*} \config_k$, we write \AP  $\intro*\absproj{\aval}{\run}$ for the "abstract configuration" $(\covset, \gangof{\aval}{\run})$ where $\covset$ is the set of all states appearing in $\run$. 
-
-%The set of \emph{initial abstract configurations} is $\aconfiginitset := \set{(\set{q_0}, \boss, \clique)  \mid \boss \in \set{q_0, \noboss}, \clique \subseteq \set{q_0}}$.
-The \emph{initial abstract configuration} is $\aconfiginit := (\set{q_0}, q_0, \emptyset)$. 
-As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfiginit$ is the initial configuration and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Similarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
-\end{definition}
-
-The gang reset will help us to do the following, if one wants to check if one state is reachable, one should check the presence of an abstract run leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new boss but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a state in $S$).\lu{c'est une première formulation un peu moche, il faut repasser dessus}
-
-\begin{lemma}
-	\label{lem:short-run}
-For every $\aconfig \in \allaconfigs$ such that $\aconfiginit \step{*} \aconfig$, there exists an abstract run $\arun: \aconfig_0 \step{*} \aconfig$ of less that $(|Q|+2)^3$ steps.
-% note: this bound is not optimal and is chosen to keep the proof simple
-\end{lemma}
-
-\ifproofs
-\begin{proof}
-Note that $\covset$ may never decrease along an abstract execution and that $\clique$ may only decrease at "gang resets".
-We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the boss may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the execution with no "reset" has at most $(|Q|+2)(|Q|+1)$ steps, yielding the bound. 
-\end{proof}
-\fi
-
- We prove that our abstraction is sound and complete for our problem of interest in the appendix, the rest of this section gives some intuition on the proofs.
-
-To prove the completeness, we take a concrete "run" $\run$ in our model and any value $v$ appearing in the reached configuration. We prove that there exists an abstract run leading to the abstract configuration $(\statesin{\run}, \gangof{v}{\run})$. Note that $\statesin{\run}$ is the set of all states appearing in $\run$ and $\gangof{v}{\run} = (\boss, \clique)$ is the gang of agents with value $v$ at the end of $\run$, i.e., if the agent starting with value $v$ has still the same value, $\boss$ denotes its state, and otherwise $\boss = \bot$, and $\clique$ is the set of states on which there is an agent with value $v$ at the end of $\run$.
-
-To construct the abstract run, we will first show that, for all concrete run $\run$ and for all value $v$, $(\statesin{\run}, q_0, \emptyset) \step{\ast}(\statesin{\run}, \gangof{v}{\run})$. To do this, it suffices to follow steps by steps how agents with value $v$ evolve and find the fitting abstract step such that we follow exactly the evolution of the gang associated to value $v$. 
-Then, it is left to show that for all concrete run $\run$ and for all value $v$, $\aconfiginit \step{\ast} (\statesin{\run}, q_0, \emptyset)$. We shall prove this by induction on the size of $\statesin{\run}$. The base case is handled by the first property we proved. For the induction case, we will argue that there exists a prefix run $\run'$ such that $\statesin{\run'} \subsetneq \statesin{\run}$ and by completing $\run'$ of one more step, we obtain a prefix $\run''$ of $\run$ such that $\statesin{\run''} = \statesin{\run}$, we note $v_{\mathbf{br}}$ the value at the end of $\run'$ of the broadcasting agent in this last step from $\run'$ to $\run''$. By induction hypothesis and our first property, we prove that $\aconfiginit \step{\ast} (\statesin{\run'}, q_0, \emptyset) \step{\ast} (\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'})$. By going one step forward and distinguish case to find the fitting case in the abstract semantics, we prove that $(\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'}) \step{} (\statesin{\run''}, \gangof{v_{\mathbf{br}}}{\run''})$. Finally,  $\aconfiginit \step{\ast} (\statesin{\run''}, q_0, \emptyset)$ by the "gang reset" step of the abstract semantics. Putting everything together and applying the first property, we finally get: $\aconfiginit \step{\ast} \absproj{v}{\run}$.
-
-It is left to prove that our abstraction is sound, in order to do this, consider an abstract run $\aconfiginit \step{\ast} \aconfig = (S, \boss, \clique)$. We shall prove that there exists a concrete run $\run : \config_0 \step{\ast} \config $ such that $\config$ covers all states in $S$, there exists a special agent on state $b$ with value $v$ and for each state $q$ in $\clique$, there is (at least) one agent on $q$ with register value $v$. In fact, we prove something stronger: in each of states $s\in S$, we shall prove that we can put an exponential number (in the size of the protocol) of agents in each state $s\in S$ and in each state $k\in \clique$ with value $v$. This stronger property will allow us to do a proof by induction on the length of the run. 
-
-As we proved our abstraction to be safe and complete, by Lemma \ref{lem:short-run}, we can guess an abstract run of at most $(|Q| + 2)^3$ steps leading to an abstract configuration in which $q_f$ appears. As a result, we find an NP-algorithm for our problem of interest.
-
-In the appendix, we present a reduction of 3-SAT to our problem, which proves that the "coverability problem" is NP-hard. As a result, we get to the main result of this section.
 
 \begin{restatable}{theorem}{thmNPComplete}
 	\label{thm:np-complete-query-cover}
