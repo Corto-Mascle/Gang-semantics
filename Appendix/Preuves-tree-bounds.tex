@@ -6,16 +6,16 @@
 	The proof is by strong induction on $\altmax-\altitude{\node}$.
 
 	%initialization added for clarity although one could factorize it with the rest of the induction
-	First, let $\node$ such that $\altitude{\node} = \altmax$. This implies that $\node$ has no follower node ($k=0$ in the notation of Lemma~\ref{lem:bound-successor-height}).  If $\node$ is the root of the tree, then it is a "boss node" and applying Lemma~\ref{lem:bound-successor-height} proves that $\size{\bosslabel{\node}} \leq \size{w}$ and $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}+r,r) \size{w} \leq f_0(0)$ ($\towerfun$ defined in Lemma~\ref{lem:short-run-for-output} is of course monotone for both arguments). If $\node$ is not the root of the tree, then it is necessarily a "follower node", and the application of Lemma~\ref{lem:bound-successor-height} yields that $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}+r,r) \leq f_0(1)$.   
+	First, let $\node$ such that $\altitude{\node} = \altmax$. This implies that $\node$ has no follower node (hence we can set $K=0$ in Lemma~\ref{lem:bound-successor-height}).  If $\node$ is the root of the tree, then it is a "boss node" and applying Lemma~\ref{lem:bound-successor-height} proves that $\size{\bosslabel{\node}} \leq \size{w}$ and $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}+r,r) \size{w} \leq f_0(0)$ ($\towerfun$ defined in Lemma~\ref{lem:short-local-runs} is of course monotone for both arguments). If $\node$ is not the root of the tree, then it is necessarily a "follower node", and the application of Lemma~\ref{lem:bound-successor-height} again yields that $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}+r,r) \leq f_0(0)$.   
 
-	Let $\node$ be a node, and suppose that the statement is true for all nodes of altitude strictly higher than $\altitude{\node}$ and that $\altitude{\node} < \altmax$. 
-	Let $\node_1, \ldots, \node_k$ be its "follower" children. If $\node$ is not the root of $\tree$ then let $\node'$ be its father.
+	Let $\node$ be a node, and suppose that the statement is true for all nodes of altitude greater than $\altitude{\node}$ and that $\altitude{\node} < \altmax$. 
+	Let $\node_1, \ldots, \node_k$ be its "follower" children, and $K$ the maximum of all $\size{\followlabelword{\node_i}}$.  By induction hypothesis for all $i$ we have 
+	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node})$ because $\altitude{\node_i} = \altitude{\node}+1$, and thus $K \leq \leq f_0(\altmax-\altitude{\node})$. If $\node$ is not the root of $\tree$ then let $\node'$ be its father.
 	
 	Suppose first that $\node$ is a "boss node". If it is at the root then by Lemma~\ref{lem:bound-successor-height}, we have $\size{\bosslabel{\node}} = \size{w} \leq N \leq f_0(\altmax - \altitude{\node})$. If not, $\node'$ is above $\node$ therefore we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}} \leq f_0(\altmax - \altitude{\node})$ by Lemma~\ref{lem:bound-successor-height} and induction hypothesis. In both cases we have $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node})$.	
-	Again by Lemma~\ref{lem:bound-successor-height}, we obtain \[\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r)+1) \Big[f_0(\altmax-\altitude{\node}) + \sum_{i=1}^k \size{\followlabelword{\node_i}} +1 \Big]. \]
-	By Lemma~\ref{lem:bound-successor-height} we have $k \leq \size{\messages} r$.
-	Moreover, by induction hypothesis for all $i$ we have 
-	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node})$ because $\altitude{\node_i} = \altitude{\node}+1$. As a result, 
+	Again by Lemma~\ref{lem:bound-successor-height}, we obtain \[\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r)+1) \Big[f_0(\altmax-\altitude{\node}) + \size{\messages}rK\Big]. \]
+	
+	 As a result, 
 	\begin{align*}
 	\size{\localrunlabel{\node}}& 
 	\leq (\towerfun(\size{\prot}+r,r)+1) f_0(\altmax-\altitude{\node})(\size{\messages} r +1) \\&  
@@ -24,11 +24,11 @@
 	\end{align*}
 	
 	Suppose now that $\node$ is a "follower node". By Lemma~\ref{lem:bound-successor-height}, we have 
-	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r)+1) \Big[\sum_{i=1}^k \size{\followlabelword{\node_i}}+1\Big]$.
+	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r)+1) \Big[1+\size{\messages}rK\Big]$.
 	By the same argument as above, this proves that $\size{\localrunlabel{\node}} \leq f_0(\altmax - \altitude{\node}+1)$.
 \end{proof}
 
-\begin{figure}
+\begin{figure}[h]
 	\input{Figures/max-height-bound}
 	\caption{Illustration of the proof of Lemma~\ref{lem:bound-max-height}}.
 	\label{fig:max-height-bound}
@@ -49,13 +49,13 @@
 	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\followlabelword{\node'_{i_1}} \subword \followlabelword{\node'_{i_2}}$ and $\followlabelmessage{\node'_{i_1}} = \followlabelword{\node'_{i_2}}$.
 	Therefore, as $\node_{i_1}$ is a descendant of $\node_{i_2}$, by second case of Lemma~\ref{lem:shortening-branches} there would exist a "unfolding tree" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
 	
-	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
+	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword" well-quasi order over the alphabet $\messages\cup\set{\#}$.
 	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\altmax-i+2) = (N^2(\towerfun(N,N)+1))^{i}$.
 	
 	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n,n)+1))n+2$. Clearly for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N,N)+1))^{i} \geq N$.
 	As a consequence, for all $a$, $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{i} + 2 \leq (N^2(\towerfun(N,N)+1)) g^{(i-1)}(N) + 2 \leq g^{(i)}(N)$
 	
-	By the Length Function Theorem from \cite{SchmitzS2011upperHigman}, recalled here as Theorem~\ref{thm:lengthfcttheorem}, as $g$ is primitive recursive there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(N)$ for all $i$ have at most $f_1(N)$ elements.
+	By the "Length function theorem" from \cite{SchmitzS2011upperHigman}, recalled here as Theorem~\ref{thm:lengthfcttheorem}, as $g$ is primitive recursive there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(N)$ for all $i$ have at most $f_1(N)$ elements.
 	
 	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(N) = f_1(\size{\prot} + \size{w} + 1)$ elements, thus $\altmax \leq f_1(\size{\prot} + \size{w} + 1)$.
 \end{proof}
