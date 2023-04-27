@@ -61,7 +61,7 @@
 \lemBoundMinHeight*
 
 \begin{proof}
-	We proceed similarly as in the proof of Lemma~\ref{lem:bound-max-height}. 
+	We proceed similarly as in the proof of Lemma~\ref{lem:bound-max-height}.
 	
 	Let $\tree$ be a "unfolding tree" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$. Let $\altmin$ be the minimal altitude of a node in $\tree$. Let $\node_0, \ldots, \node_m$ be nodes of $\tree$ such that $\node_0$ is its root, $\altitude{\node_m} = \altmin$, and for all $i\in \nset{1}{m}$, $\node_i$ is a child of $\node_{i-1}$.
 	For all $a \in \nset{\altmin}{0}$, let $j_a$ be the minimal index such that $\altitude{\node_{j_a}} = a$. This index exists as $\altitude{\node_0} = 0$, $\altitude{\node_m} = \altmin$ and for all $i$, $\altitude{\node_{i}} \geq \altitude{\node_{i-1}}-1$.
@@ -81,9 +81,9 @@
 	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n,n)+1))n+2$. 
 	Let $M = f_0(f_1(N)+1)$. Clearly for all $i\geq 0$ we have $g^{(i)}(M) \geq (N^2(\towerfun(N,N)+1))^{f_1(N) + i}$.
 	
-	We have $\size{w_0} \leq M = g^{(0)}(N)$ and for all $i>0$, $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{f_1(N) + i} + 2 \leq (N^2(\towerfun(N,N)+1)) g^{(i-1)}(M) + 2 \leq g^{(i)}(M)$
+	We have $\size{w_0} \leq M = g^{(0)}(N)$ and for all $i>0$, $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{f_1(N) + i} + 2 \leq (N^2(\towerfun(N,N)+1)) g^{(i-1)}(M) + 2 \leq g^{(i)}(M)$ and $g$ is primitive-recursive.
 	
-	By definition of the function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ defined in Lemma~\ref{lem:bound-max-height}, all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(M)$ have at most $f_1(M)$ elements.
+	By definition of the function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ defined in Lemma~\ref{lem:bound-max-height}, all "bad" sequences of words whose $i$-th term is of length at most $g^{(i)}(M)$ have at most $f_1(M)$ elements.
 	
 	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(M)$ elements, thus $\altmin \leq f_1(M) = f_1(f_0(f_1(N)+1))$.
 	We define $f_2$ as $f_1 \circ f_0 \circ f_1$. It is a function of $\Ffunction{\omega^{\size{\messages}+1}}$ as $f_0$ and $f_1$ are in $\Ffunction{\omega^{\size{\messages}}} \subseteq \Ffunction{\omega^{\size{\messages}+1}}$ and $\Ffunction{\omega^{\size{\messages}+1}}$ is closed by composition with functions of $\Ffunction{\omega^{\size{\messages}}}$.
@@ -92,14 +92,15 @@
 \PropBoundTreeSize*
 
 \begin{proof}
+	Recall that the size of $\tree$ is defined as the sum of the sizes of its nodes. 
 	Let $\tree$ be a "unfolding tree" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$. Let $N = \size{\prot} + \size{w}+1$.
 	
-	We first bound the height of $\tree$, then its arity (the maximal number of children of a node), which allows us to obtain a bound on the number of nodes.
+	We first bound the height of $\tree$ (\emph{i.e.}, the difference between its maximum and minimum "altitude"), then its arity (the maximal number of children of a node), which allows us to obtain a bound on the number of nodes. The sizes of the nodes will finally be bounded using the size of the height. 
 	
-	By Corollary~\ref{cor:bound-node-size}, for all "boss node" $\node$ in $\tree$ we have $\size{\bosslabel{\node}} \leq f_3(N)$.
+	By Corollary~\ref{lem:bound-node-size}, for all "boss node" $\node$ in $\tree$ we have $\size{\bosslabel{\node}} \leq f_3(N)$.
 	If a branch contains more than $\sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ "follower nodes", then there are two nodes in it with the same "boss" label, hence $\tree$ can be reduced and still satisfy $w$, contradicting the minimality of $\tree$.
 	
-	Similarly, by Corollary~\ref{cor:bound-node-size}, for all "follower node" $\node$ in $\tree$ we have $\size{\followlabelword{\node}} \leq f_3(N)$.
+	Similarly, by Corollary~\ref{lem:bound-node-size}, for all "follower node" $\node$ in $\tree$ we have $\size{\followlabelword{\node}} \leq f_3(N)$.
 	If a branch contains more than $\size{\messages}\sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ "follower nodes", then there are two nodes in it with the same "follower" label, hence $\tree$ can be reduced and still satisfy $w$, contradicting the minimality of $\tree$.
 	
 	As a result, each branch of $\tree$ contains at most $1+ (\size{\messages}+1) \sum_{i=0}^{f_3(N)}\size{\messages}^{i}$ nodes. We simplify this expression: let $H = (f_3(N)+2)(N+1)^{f_3(N)+1}$, each branch of $\tree$ has at most $H$ nodes.
@@ -109,7 +110,7 @@
 	Let $\node$ be a node of $\tree$, let $V$ be the set of non-initial values appearing in $\localrunlabel{\node}$ apart from $\valuelabel{\node}$.
 	By condition~\ref{item:condition1_non_initial_value}, for each $v' \in V$, $\node$ has a "boss" child $\node_{v'}$ such that $\vinput{v'}{\localrunlabel{\node}} \subword \bosslabel{\node_{v'}}$.
 	
-	We simply observe that $\size{V} \leq \size{\localrunlabel{\node}}$ as every non-initial value needs to be received at some point in $\localrunlabel{\node}$. We also note that all other "boss" children of $\node$ can be removed, and the resulting tree still satisfies $w$ and is still a "unfolding tree". By minimality of $\tree$, this means that $\mu$ has at most $\size{\localrunlabel{\node}}$ "boss" children, hence at most $f_3(N)$ by Corollary~\ref{cor:bound-node-size}.
+	We simply observe that $\size{V} \leq \size{\localrunlabel{\node}}$ as every non-initial value needs to be received at some point in $\localrunlabel{\node}$. We also note that all other "boss" children of $\node$ can be removed, and the resulting tree still satisfies $w$ and is still a "unfolding tree". By minimality of $\tree$, this means that $\mu$ has at most $\size{\localrunlabel{\node}}$ "boss" children, hence at most $f_3(N)$ by Corollary~\ref{lem:bound-node-size}.
 	
 	As a consequence, each node in $\tree$ has at most $f_3(N) + \size{\messages}(r+1)$ children.
 	
@@ -121,4 +122,21 @@
 	Let $f_4$ be such that $f_4(n) = ((f_3(n)+2)(n+1)^{f_3(n)+1} +1) (f_3(n) + n^2)^{(f_3(n)+2)(n+1)^{f_3(n)+1}}(2f_3(n) +1)$ for all $n$. It is the composition of $f_3$ with an elementary function, hence as $f_3 \in \Ffunction{\omega^{\messages}}$ and $\Ffunction{\omega^{\messages}}$ is closed by composition with elementary functions, $f_4 \in \Ffunction{\omega^{\messages}}$.
 	
 	Finally, we have shown that the size of a minimal "unfolding tree" satisfying a "boss specification" $w$ and labelled by a "protocol" $\prot$ is bounded by $f_4(\size{\prot} + \size{w} +1)$.
+\end{proof}
+
+
+\begin{lemma}
+	\label{lem:bound-node-size}
+	There exists a function $f_3$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, for all node $\node$ of $\tree$,
+	
+		\begin{itemize}
+		\item $\size{\localrunlabel{\node}} \leq f_3(\size{\prot}+ \size{w})$
+			
+		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq f_3(\size{\prot}+ \size{w})$.
+		
+		\item If $\node$ is a "follower node" then $\size{\followlabelword{\node}} \leq f_3(\size{\prot}+ \size{w})$.
+	\end{itemize} 
+\end{lemma}
+\begin{proof}
+
 \end{proof}
