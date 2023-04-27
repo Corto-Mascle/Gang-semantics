@@ -138,8 +138,7 @@ Second, that $\node$ is a witness that its "specification" is carried out (Condi
 	\item \label{item:condition4_boss_node} If $\node$ is a "boss node", then $\valuelabel{\node}$ is an "initial value" of $\localrunlabel{\node}$ and the associated "decomposition" $\decsymb$ of \ref{item:condition2_initial_value} satisfies that $\bosslabel{\node} \in \langdec{\decsymb}$.
 \end{enumerate}
 
-The ""size"" of an "unfolding tree" is defined as the sum of the lengths of the local run labels and specifications of all its nodes.
-
+Lastly, given $\tree$ an "unfolding tree", we define its ""size@@tree"" by $\size{\tree} := \sum_{\node \in \tree} \size{\localrunlabel{\node}} + \size{\speclabel{\node}}$. Note that the "size@@tree" of $\tree$ also takes into account the size of its nodes, so that a tree $\tree$ can be stored in space $O(\size{\tree})$. 
 %\luin{here should come more intuitions on the tree and some figures}
 \begin{figure}
 	\begin{center}
@@ -329,19 +328,6 @@ By using a similar argument as for the maximal altitude, we consider a branch re
 \end{restatable}
 
 With the bounds on the maximal and minimal altitudes, Lemma~\ref{lem:bound-length-at-height-h} yields a bound on the size of all nodes in the tree.
-
-\begin{corollary}
-	\label{cor:bound-node-size}
-	There exists a function $f_3$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, for all node $\node$ of $\tree$,
-	
-		\begin{itemize}
-		\item $\size{\localrunlabel{\node}} \leq f_3(\size{\prot}+ \size{w})$
-			
-		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq f_3(\size{\prot}+ \size{w})$.
-		
-		\item If $\node$ is a "follower node" then $\size{\followlabelword{\node}} \leq f_3(\size{\prot}+ \size{w})$.
-	\end{itemize} 
-\end{corollary}
 
 \ifproofs
 \begin{proof}
