@@ -19,7 +19,7 @@ We define a new semantics over the set of configurations, in which some messages
 	Note that a "local run" can be seen as a "partial run" with a single agent.
 
 	
-	We define the $v$-""projection"" $\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external message@@global" $\config \extmessage{m}{v} \config'$ to $(m, in)$, every "internal message@@global" $\config \intmessage{m}{v} \config'$ to $(m, out)$, and every "internal step@@global" to $\varepsilon$.
+	We define the $v$-""projection"" $\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external message@@global" $\config \extmessage{m}{v} \config'$ to $(m, in)$, every "internal message@@global" $\config \intmessage{m}{v} \config'$ to $(m, out)$, and every "internal test@@global" to $\varepsilon$.
 	
 	\AP The ""input@@partial"" $\vinput{v}{\run}$ (resp. ""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ such that the projection on $\messages \times \set{in}$ (resp. $\messages\times \set{out}$) of $\vproj{v}{\run}$ is $(m_0, in) \cdots (m_k, in)$ (resp. $(m_0, out)\cdots(m_k, out)$).
 	
@@ -360,7 +360,7 @@ As $v \neq \valuelabel{\node}$, by condition~\ref{item:condition2_initial_value}
 
 By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v_i'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$.
 
-For each $i$ we consider the shortest prefix $\run''_i$ of $\run'_i$ ending with an "internal message" $\intmessage{\followlabelmessage{\node_i}}{v'_i}$, we have that $\vinput{v'_i}{\run''_i} \subword \vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$.
+For each $i$ we consider the shortest prefix $\run''_i$ of $\run'_i$ ending with an "internal message@@global" $\intmessage{\followlabelmessage{\node_i}}{v'_i}$, we have that $\vinput{v'_i}{\run''_i} \subword \vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$.
 
 Furthermore, as $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$, we can do the same for $\run$ as $v \in V_{init}$ and thus by definition of $\run$ we have $\vproj{v}{\run} = \vproj{v}{u}$.
 Hence we obtain a sequence of runs $\run_0, \ldots, \run_\ell$ such that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{\run_i}$ and $\vinput{v}{\run_i} \in \set{m_0, \ldots, m_{i-1}}^*$.
