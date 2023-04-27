@@ -56,7 +56,7 @@ We now consider a branch reaching maximal altitude: we mark along that branch al
 	Furthermore, for every $a$, for every $j < j_a$, $\altitude{\node_j} < a$. 
 	As a consequence, we have $j_1 < j_2 < \ldots < j_{\altmax}$. Moreover, $\node_{j_a}$ is necessarily a "follower node" as otherwise we would have $\altitude{\node_{j_a-1}} = a+1$ which contredicts minimality of $j_a$.
 	
-	We will bound $\altmax$ using Theorem~\ref{thm:lengthfcttheorem}. Forr simplicity, we will encode the $\followmessagespec$ part using a fresh character added to our alphabet (this is why we obtain a function in $\Ffunction{w^{\size{\messages}}}$ and not $\Ffunction{w^{\size{\messages}-1}}$; in fact, one could obtain the latter bound using Theorem 5.3. of~\cite{SchmitzS2011upperHigman}, but the proof would be more involved).
+	We will bound $\altmax$ using Theorem~\ref{thm:lengthfcttheorem}. For simplicity, we will encode the $\followmessagespec$ part using a fresh character added to our alphabet (this is why we obtain a function in $\Ffunction{w^{\size{\messages}}}$ and not $\Ffunction{w^{\size{\messages}-1}}$; in fact, one could obtain the latter bound using Theorem 5.3. of~\cite{SchmitzS2011upperHigman}, but the proof would be more involved).
 
 	Let $\# \notin \messages$ be a fresh letter, and let $N = \size{w} + \size{\prot}+1$. For all $i \in \nset{1}{\altmax}$ let $\node'_i = \node_{j_{\altmax - i+1}}$ and $w_i = \followlabelword{\node'_{i}} \# \followlabelmessage{\node'_{i}} \in (\messages \cup \set{\#})^*$.
 	

@@ -246,13 +246,12 @@ We are ready to state and prove the lemma which bounds the size of a node from i
 	\label{lem:bound-successor-height}
 	Let $\prot$ be a "protocol" over $\regnum$ registers, let $\node$ be a node of an "unfolding tree" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $\bossspec$.
 	Let $K$ be such that for all "follower" child $\node_f$ of $\node$, $\size{\followlabelword{\node_f}} \leq K$.
-	If $\node$ is not the root of $\tree$ then let $\mu'$ be its father. 
 	We have the following properties:
 	
 	\begin{enumerate}				
 		\item  If $\node$ is a "boss node" then 
 		\begin{itemize}
-			\item If $\node$ is the root of $\tree$ then $\bosslabel{\node} = w$, otherwise $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$
+			\item If $\node$ is the root of $\tree$ then $\bosslabel{\node} = w$, otherwise $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$ with $\node'$ its father
 			
 			\item In both cases $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r) + 1)\Big[ \size{\bosslabel{\node}} + \size{\messages}rK \Big]$
 		\end{itemize}
