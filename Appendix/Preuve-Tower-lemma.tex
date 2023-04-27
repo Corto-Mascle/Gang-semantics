@@ -1,6 +1,10 @@
 \section{Proof of Lemma~\ref{lem:short-run-for-output}}
 \label{app:tower-lemma}
 
+	We start by defining the notion of "trace". 
+	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ containing the message types and values that $\localrun$ receives and broadcasts. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\tau} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
+
+
 We prove the following result:
 
 \lemShortLocalRuns*
