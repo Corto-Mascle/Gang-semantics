@@ -25,7 +25,7 @@ We define a new semantics over the set of configurations, in which some messages
 	
 	\AP Given a "local run" $\run$ and a value $v \in \nats$ appearing in $\run$, $v$ is ""initial"" in $\run$ if it is initial for some agent in $\run$. Note that this is not always true for partial runs, unlike for runs, because it could be that $v$ was received in $\run$ through an "external message@@global". 
 
-	For all configurations $\config$ over $\agents$ and $\config'$ over $\agents'$ such that $\agents \cap \agents'$, we write $\config \sqcup \config'$ for the configuration over $\agents \cup \agents'$ such that $\config \sqcup \config'(a)$ is $\config(a)$ if $a \in \agents$ and $\config'(a)$ if $a \in \agents'$. 
+	For all configurations $\config$ over $\agents$ and $\config'$ over $\agents'$ such that $\agents \cap \agents' = \emptyset$, we write $\config \sqcup \config'$ for the configuration over $\agents \cup \agents'$ such that $\config \sqcup \config'(a)$ is $\config(a)$ if $a \in \agents$ and $\config'(a)$ if $a \in \agents'$. 
 
 	\end{definition}
 
