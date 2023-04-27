@@ -210,24 +210,25 @@ For "follower specifications", it goes in the opposite direction: for a fixed $\
 	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$
 	\end{itemize}
 
-	then $\tree$ can be shortened into an "unfolding tree" $\tree'$ whose root's local run also covers $q_f$. 
+	then $\tree$ can be shortened into an "unfolding tree" $\tree'$ of smaller size whose root's local run also covers $q_f$. 
 \end{restatable}
 
 
-The previous lemma however does not suffice to apply the length function theorem (Theorem~\ref{thm:lengthfcttheorem}); we need a bound on the size of the words appearing in branches. The following lemma will allow us to bound the size of a local run with respect to the sequence of messages that it needs to broadcast. 
+The previous lemma however does not suffice to apply the "Length function theorem"; we need a bound on the size of the words appearing in branches. The following lemma will allow us to bound the size of a local run with respect to the sequence of messages that it needs to broadcast. 
 
 
-\begin{restatable}{lemma}{lemShortRunOutput}
-	\label{lem:short-run-for-output}
-	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" $\prot$ with $\regnum$ registers per agent, for every $w_{out} \in (\messages\times \nats)^*$, 
-	for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ such that $w_{out} \subword \Output{\localrun}$ and for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that, denoting by $\Vinit$\corto{à réécrire, la notion d'initial values ne convient pas aux runs non initiaux} the set of initial values in $\localrun$, we have $\length{\localrun'} \leq \towerfun(\size{\prot}+\regnum, \regnum) (\size{w_{out}}+1)$, $w_{out} \subword \Output{\localrun'}$ and:
+\begin{restatable}{lemma}{lemShortLocalRuns}
+	\label{lem:short-local-runs}
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun'} \leq \towerfun(\size{\prot} + \size{\Vinit},r)$ and:
 	\begin{enumerate}
-		\item for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats\setminus \Vinit$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
-		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
 	\end{enumerate}
 \end{restatable}
 
-The high-level idea behind the proof of the previous protocol is as follows. First, we prove that any long portion of $\localrun$ must change the value of every register at least once; otherwise we can shorten the run using an induction on the number of registers. Once we have proven this, we manage to prove that, if $\localrun$ includes twice the same sequence of transitions of sufficient length, then we can cut off anything in the middle and glue back together the ends. The full proof can be found in Appendix~\ref{app:tower-lemma}.
+
+The high-level idea behind the proof of the previous protocol is as follows. First, we prove that any long portion of $\localrun$ must change the value of every register at least once; otherwise we can shorten the run using an induction on the number of registers. Once we have proven this, we manage to prove that, if $\localrun$ includes twice the same sequence of transitions of sufficient length, then we can cut off anything in the middle and glue back together the ends. While shortening the run we may end up adding some fresh values to the run (see Figure~\ref{fig:pumping} in the appendix), which is not a problem as we ensure that they are always less constraining than the ones that were in the original run. The set $W$ should be thought of as the set of initial values of the run we are trying to shorten, which we do not want new value to mimic for technical reasons.
+The full proof can be found in Appendix~\ref{app:tower-lemma}.
 
 \begin{remark}
 The function $\towerfun(n,k)$ defined above is actually a tower of exponentials of height $k$ where each floor is a polynomial in $n$. Perhaps surprinsingly, this bound is tight in the sense that one may need a "local run" as large as a tower of exponentials to reach a given "local configuration" while being allowed to receive sequences of messages of same value from a given fixed set. 
@@ -239,7 +240,7 @@ The function $\towerfun(n,k)$ defined above is actually a tower of exponentials 
 % \end{remark}
 
 
-We are ready to state and prove the lemma which bound the size of a node from its parent's size.
+We are ready to state and prove the lemma which bounds the size of a node from its parent's size.
 
 \begin{restatable}{lemma}{lemBoundSuccessorHeight}
 	\label{lem:bound-successor-height}
@@ -269,7 +270,7 @@ We are ready to state and prove the lemma which bound the size of a node from it
 \subsection{Tree bounds}
 \label{sec:tree-bounds}
 
-In this section we show that there is a computable bound on the size of the "unfolding tree" achieving a given specification and labelled with a "protocol" $\prot$. Lemma~\ref{lem:shortening-branches} leads us towards an application of the Length function theorem recalled earlier (Theorem~\ref{thm:lengthfcttheorem}). 
+In this section we show that there is a computable bound on the size of the "unfolding tree" achieving a given specification and labelled with a "protocol" $\prot$. Lemma~\ref{lem:shortening-branches} leads us towards an application of the "Length function theorem". 
 However, this theorem cannot be simply applied on a branch of the tree, for several reasons: First there is no reason to think that the sizes of the labels of the children of a node can be bounded with respect to the label of that node, especially the "follower" ones.  Second, we can reduce the tree if we find either an \emph{increasing} pair of "boss" nodes or a \emph{decreasing} pair of "follower" ones. This is a problem as a branch can alternate between sequences of "bosses" and of "followers", making it impossible to apply the theorem.
 
 \begin{figure}[h]
@@ -302,7 +303,7 @@ We iterate this in the following lemma to get a bound on the size of a node depe
 \begin{restatable}{lemma}{lemBoundLengthHeightH}
 	\label{lem:bound-length-at-height-h}
 	Let $\prot$ be a protocol, let $\node$ be a node of a "unfolding tree" of minimal size labelled by $\prot$ satisfying a "boss specification" $w$.
-	Let $\altmax$ be the maximal "altitude" in $\tau$, let $N = \size{w} + \size{\prot} +r +1$ and let $f_0 : \nats \to \nats$ be the function mapping each $n \in \nats$ to $f_0(n)=(N^2 \towerfun(N,N))^{n+1}$, with $\towerfun$ the function defined in Lemma~\ref{lem:short-run-for-output}.
+	Let $\altmax$ be the maximal "altitude" in $\tau$, let $N = \size{w} + \size{\prot} +r +1$ and let $f_0 : \nats \to \nats$ be the function mapping each $n \in \nats$ to $f_0(n)=(N^2 \towerfun(N,N))^{n+1}$, with $\towerfun$ the function defined in Lemma~\ref{lem:short-local-runs}.
 	
 	\begin{itemize}
 		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node})$ and $\size{\localrunlabel{\node}} \leq f_0(\altmax - \altitude{\node}+1)$.

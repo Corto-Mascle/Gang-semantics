@@ -6,16 +6,16 @@
 	The proof is by strong induction on $\altmax-\altitude{\node}$.
 
 	%initialization added for clarity although one could factorize it with the rest of the induction
-	First, let $\node$ such that $\altitude{\node} = \altmax$. This implies that $\node$ has no follower node ($k=0$ in the notation of Lemma~\ref{lem:bound-successor-height}).  If $\node$ is the root of the tree, then it is a "boss node" and applying Lemma~\ref{lem:bound-successor-height} proves that $\size{\bosslabel{\node}} \leq \size{w}$ and $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}+r,r) \size{w} \leq f_0(0)$ ($\towerfun$ defined in Lemma~\ref{lem:short-run-for-output} is of course monotone for both arguments). If $\node$ is not the root of the tree, then it is necessarily a "follower node", and the application of Lemma~\ref{lem:bound-successor-height} yields that $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}+r,r) \leq f_0(1)$.   
+	First, let $\node$ such that $\altitude{\node} = \altmax$. This implies that $\node$ has no follower node (hence we can set $K=0$ in Lemma~\ref{lem:bound-successor-height}).  If $\node$ is the root of the tree, then it is a "boss node" and applying Lemma~\ref{lem:bound-successor-height} proves that $\size{\bosslabel{\node}} \leq \size{w}$ and $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}+r,r) \size{w} \leq f_0(0)$ ($\towerfun$ defined in Lemma~\ref{lem:short-local-runs} is of course monotone for both arguments). If $\node$ is not the root of the tree, then it is necessarily a "follower node", and the application of Lemma~\ref{lem:bound-successor-height} again yields that $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}+r,r) \leq f_0(0)$.   
 
-	Let $\node$ be a node, and suppose that the statement is true for all nodes of altitude strictly higher than $\altitude{\node}$ and that $\altitude{\node} < \altmax$. 
-	Let $\node_1, \ldots, \node_k$ be its "follower" children. If $\node$ is not the root of $\tree$ then let $\node'$ be its father.
+	Let $\node$ be a node, and suppose that the statement is true for all nodes of altitude greater than $\altitude{\node}$ and that $\altitude{\node} < \altmax$. 
+	Let $\node_1, \ldots, \node_k$ be its "follower" children, and $K$ the maximum of all $\size{\followlabelword{\node_i}}$.  By induction hypothesis for all $i$ we have 
+	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node})$ because $\altitude{\node_i} = \altitude{\node}+1$, and thus $K \leq \leq f_0(\altmax-\altitude{\node})$. If $\node$ is not the root of $\tree$ then let $\node'$ be its father.
 	
 	Suppose first that $\node$ is a "boss node". If it is at the root then by Lemma~\ref{lem:bound-successor-height}, we have $\size{\bosslabel{\node}} = \size{w} \leq N \leq f_0(\altmax - \altitude{\node})$. If not, $\node'$ is above $\node$ therefore we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}} \leq f_0(\altmax - \altitude{\node})$ by Lemma~\ref{lem:bound-successor-height} and induction hypothesis. In both cases we have $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node})$.	
-	Again by Lemma~\ref{lem:bound-successor-height}, we obtain \[\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r)+1) \Big[f_0(\altmax-\altitude{\node}) + \sum_{i=1}^k \size{\followlabelword{\node_i}} +1 \Big]. \]
-	By Lemma~\ref{lem:bound-successor-height} we have $k \leq \size{\messages} r$.
-	Moreover, by induction hypothesis for all $i$ we have 
-	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node})$ because $\altitude{\node_i} = \altitude{\node}+1$. As a result, 
+	Again by Lemma~\ref{lem:bound-successor-height}, we obtain \[\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r)+1) \Big[f_0(\altmax-\altitude{\node}) + \size{\messages}rK\Big]. \]
+	
+	 As a result, 
 	\begin{align*}
 	\size{\localrunlabel{\node}}& 
 	\leq (\towerfun(\size{\prot}+r,r)+1) f_0(\altmax-\altitude{\node})(\size{\messages} r +1) \\&  
@@ -24,11 +24,11 @@
 	\end{align*}
 	
 	Suppose now that $\node$ is a "follower node". By Lemma~\ref{lem:bound-successor-height}, we have 
-	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r)+1) \Big[\sum_{i=1}^k \size{\followlabelword{\node_i}}+1\Big]$.
+	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r)+1) \Big[1+\size{\messages}rK\Big]$.
 	By the same argument as above, this proves that $\size{\localrunlabel{\node}} \leq f_0(\altmax - \altitude{\node}+1)$.
 \end{proof}
 
-\begin{figure}
+\begin{figure}[h]
 	\input{Figures/max-height-bound}
 	\caption{Illustration of the proof of Lemma~\ref{lem:bound-max-height}}.
 	\label{fig:max-height-bound}
