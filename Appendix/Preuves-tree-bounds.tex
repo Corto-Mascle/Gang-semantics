@@ -42,22 +42,20 @@
 	Furthermore, for every $a$, for every $j < j_a$, $\altitude{\node_j} < a$. 
 	As a consequence, we have $j_1 < j_2 < \ldots < j_{\altmax}$. Moreover, $\node_{j_a}$ is necessarily a "follower node" as otherwise we would have $\altitude{\node_{j_a-1}} = a+1$ which contredicts minimality of $j_a$.
 	
-	Our aim is now to bound $\altmax$ using Proposition~\ref{thm:lengthfcttheorem}. One way to use it would be to define $(\followwordspec, \followmessagespec) \leqslant (\followwordspec', \followmessagespec')$ whenever $\followwordspec \subword \followwordspec'$ and $\followmessagespec = \followmessagespec'$. In order to fit directly into the \nico{refaire bien}
-	Let $\#$ be a fresh letter, and let $N = \size{w} + \size{\prot}+1$. For all $i \in \nset{1}{\altmax}$ let $\node'_i = \node_{j_{\altmax - i+1}}$ and $w_i = \followlabelword{\node'_{i}} \# \followlabelmessage{\node'_{i}} \in (\messages \cup \set{\#})^*$.
+	We will bound $\altmax$ using Theorem~\ref{thm:lengthfcttheorem}. Forr simplicity, we will encode the $\followmessagespec$ part using a fresh character added to our alphabet (this is why we obtain a function in $\Ffunction{w^{\size{\messages}}}$ and not $\Ffunction{w^{\size{\messages}-1}}$; in fact, one could obtain the latter bound using Theorem 5.3. of~\cite{SchmitzS2011upperHigman}, but the proof would be more involved).
+
+	Let $\# \notin \messages$ be a fresh letter, and let $N = \size{w} + \size{\prot}+1$. For all $i \in \nset{1}{\altmax}$ let $\node'_i = \node_{j_{\altmax - i+1}}$ and $w_i = \followlabelword{\node'_{i}} \# \followlabelmessage{\node'_{i}} \in (\messages \cup \set{\#})^*$.
 	
 	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
-	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\followlabelword{\node'_{i_1}} \subword \followlabelword{\node'_{i_2}}$ and $\followlabelmessage{\node'_{i_1}} = \followlabelword{\node'_{i_2}}$.
+	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\followlabelword{\node'_{i_1}} \subword \followlabelmessage{\node'_{i_2}}$ and $\followlabelmessage{\node'_{i_1}} = \followlabelword{\node'_{i_2}}$.
 	Therefore, as $\node_{i_1}$ is a descendant of $\node_{i_2}$, by second case of Lemma~\ref{lem:shortening-branches} there would exist a "unfolding tree" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
 	
-	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword normed well-quasi order" over the alphabet $\messages\cup\set{\#}$.
-	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\altmax-i+2) = (N^2(\towerfun(N,N)+1))^{i}$.
+	As a result, the sequence $(w_i)_{1\leq i \leq \altmax}$ is a "bad sequence" over the alphabet $\messages\cup\set{\#}$.
+	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\altmax-i+2) = (N^2(\towerfun(N,N)+1))^{i}$ therefore $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{i}+2$.
 	
-	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n,n)+1))n+2$. Clearly for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N,N)+1))^{i} \geq N$.
-	As a consequence, for all $a$, $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{i} + 2 \leq (N^2(\towerfun(N,N)+1)) g^{(i-1)}(N) + 2 \leq g^{(i)}(N)$
+	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n,n)+1)) n +2$. By immediate induction, for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N,N)+1))^{i} +2 \geq N$. As a consequence, for all $a$, $\size{w_i} \leq g^{(i)}(N)$ and $g$ is primitive-recursive.
 	
-	By Theorem 5.3 in \cite{SchmitzS2011upperHigman}, recalled here as Theorem~\ref{thm:lengthfcttheorem}, as $g$ is primitive recursive there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that all "bad" sequences of words whose $i$th term is of length at most $g^{(i)}(N)$ for all $i$ have at most $f_1(N)$ elements.
-	
-	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(N) = f_1(\size{\prot} + \size{w} + 1)$ elements, thus $\altmax \leq f_1(\size{\prot} + \size{w} + 1)$.
+	By Theorem~\ref{thm:lengthfcttheorem}, there exists a function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ such that the sequence $(w_i)_{i \in \nset{1}{\altmax}}$ is of length at most $f_1(N)$. This prove that $\altmax \leq f_1(N) = f_1(\size{\prot} + \size{w} + 1)$.
 \end{proof}
 
 \lemBoundMinHeight*
@@ -76,7 +74,7 @@
 	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
 	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\bosslabel{\node'_{i_1}} \subword \bosslabel{\node'_{i_2}}$, hence, as $\node_{i_2}$ is a descendant of $\node_{i_1}$, by first case of Lemma~\ref{lem:shortening-branches} there would exist a "unfolding tree" of smaller size than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
 	
-	As a result, the sequence $(w_i){1\leq i \leq \altmax}$ is a "bad sequence" for the "subword order" over the alphabet $\messages\cup\set{\#}$.
+	As a result, the sequence $(w_i)_{1\leq i \leq \altmax}$ is a "bad sequence" for the "subword order" over the alphabet $\messages\cup\set{\#}$.
 	By Lemma~\ref{lem:bound-length-at-height-h}, for all $\node'_i$ we have $\size{\bosslabel{\node'_i}} \leq f_0(\altmax - \altitude{\node'_i}+1) = f_0(\altmax +i+1)$.
 	By Lemma~\ref{lem:bound-max-height}, we have $\altmax \leq f_1(N)$ and thus $\size{\bosslabel{\node'_i}} \leq  f_0(f_1(N) +i+1)$
 	
