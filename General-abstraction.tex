@@ -24,7 +24,7 @@ We will proceed as follows. In Section~\ref{sec:decidability-defs}, we introduce
 \subsection{Useful definitions}
 \label{sec:decidability-defs}
 
-In this section, we define a notion of "local run"; a "local run" may be seen as the projection of a "run" onto a given agent. In this local vision, we do not consider the origin of the messages received.
+We define a notion of "local run", which may be seen as the projection of a "run" onto a given agent. In this local vision, we do not consider the origin of the messages received.
 	
 \AP A ""local configuration"" is a pair $(q, \localdata) \in Q \times \nats^r$.  
 \AP An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\localdata = \localdata'$, and $\atrans =(q, \alpha, q')$ is either a "broadcast" or a "local test" and if it is "local test" on register $i$ and $j$, $\localdata(i) \ne \localdata(j)$.  
@@ -55,7 +55,7 @@ In this section, we define a notion of "local run"; a "local run" may be seen as
 	A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. 
 	A word $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$. 
 	We denote by $\langdec{\decsymb}$ the language of words that "admit decomposition" $\decsymb$. 
-	Intuitively this describes the sequence of messages sent with some value $v$ n a run: The $w_i$ are messages sent by the agent with that value initially, and the $m_i$ mark the times at which each message type is broadcast for the first time by another agent. This definition will be crucial to derive from a local run a set of specifications that make it feasible.
+	Intuitively this describes the sequence of messages sent with some value $v$ in a run: The $w_i$ are messages sent by the agent with that value initially, and the $m_i$ mark the times at which each message type is broadcast for the first time by another agent. This definition will be crucial to derive from a "local run" a set of "specifications" that make it feasible.
 
 %	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "reception steps".
 %	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcast steps made in $\localrun$.
@@ -183,8 +183,8 @@ For "follower specifications", it goes in the opposite direction: for a fixed $\
 
 \begin{restatable}{lemma}{lemShorteningBranches} 
 \label{lem:shortening-branches}
-	Let $\tree$ be a "unfolding tree" whose root's local run covers $q_f$.
-	Let $\node, \node'$ be two nodes of tree such that $\node$ is an ancestor of $\node'$. If one of the conditions below holds, then 
+	Let $\tree$ be a "coverability witness" for $(\prot, q_f)$.
+	Let $\node, \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If one of the conditions below holds, then there exists a smaller "coverability witness" for $(\prot, q_f)$.
 	\begin{itemize}
 	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; or
 	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$
@@ -268,7 +268,6 @@ We now use the previous lemma to bound the label of each node $\node$ with respe
 
 \begin{proof}[Proof sketch]
 	A node $\node$ has at most $\size{\messages}$ "follower" children for each initial value, hence at most $\size{\messages}r$ in total, each one of them requires at most $K$ messages. The node $\node$ may have to output $\bosslabel{\node}$ extra messages to satisfy its specification if it is a "boss node", or just one $\followlabelmessage{\node}$ otherwise.
-	
 	In all cases we obtain a bound on the number of messages $\localrunlabel{\node}$ needs to broadcast. We mark the positions at which $\localrunlabel{\node}$ sends them and use Lemma~\ref{lem:short-local-runs} to bound the sections of run between two of those broadcasts by $\towerfun(\size{\prot},r)$, yielding the bounds above.
 \end{proof}
 
