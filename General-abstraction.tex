@@ -55,7 +55,8 @@ We define a notion of "local run", which may be seen as the projection of a "run
 	A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. 
 	A word $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$. 
 	We denote by $\langdec{\decsymb}$ the language of words that "admit decomposition" $\decsymb$. 
-	% Intuitively this describes the sequence of messages sent with some value $v$ in a run: The $w_i$ are messages sent by the agent with that value initially, and the $m_i$ mark the times at which each message type is broadcast for the first time by another agent. This definition will be crucial to derive from a "local run" a set of "specifications" that make it feasible.
+	This definition will be useful later; the intuition is that a "decomposition" describes the sequence of messages sent with some value $v$ in a run. The $w_i$ are messages sent by the agent with that value initially, and the $m_i$ mark the times at which each message type is broadcast for the first time by another agent. 
+	% This definition will be crucial to derive from a "local run" a set of "specifications" that make it feasible.
 
 %	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "reception steps".
 %	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcast steps made in $\localrun$.
@@ -287,7 +288,7 @@ This lemma lets us bound the labels of the nodes of maximal altitude, and then b
 \subsection{Decidability}
 \label{sec:decidability-end}
 
-We have shown that "unfolding trees" were a sound and complete abstraction for "coverability" in Section~\ref{sec:decidability-tree-unfoldings} and proven that there was a computable bound (of the class $\Ffunction{\omega^\omega}$) on the size of a minimal "unfolding tree" witnessing coverability, if it exists, in Sections~\ref{sec:tree-bounds}. Essentially, we then obtain decidability of the problem via the procedure computing that bound and then enumerating all trees below that size, checking for each one of them whether it is a valid "unfolding tree" witnessing coverability. We are skipping some details here, which are treated in the proof in Appendix~\ref{app:decidability}.
+We have shown that "unfolding trees" were a sound and complete abstraction for \COVER in Section~\ref{sec:decidability-tree-unfoldings} and proven that there was a computable bound (of the class $\Ffunction{\omega^\omega}$) on the size of a minimal "unfolding tree" witnessing coverability, if it exists, in Sections~\ref{sec:tree-bounds}. Essentially, we then obtain decidability of the problem via the procedure computing that bound and then enumerating all trees below that size, checking for each one of them whether it is a valid "unfolding tree" witnessing coverability. We are skipping some details here, which are treated in the proof in Appendix~\ref{app:decidability}.
 
 \decidablecover*
 
