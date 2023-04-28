@@ -1,4 +1,4 @@
-\section{Proof of Lemma~\ref{lem:short-run-for-output}}
+\section{Proof of Lemma~\ref{lem:short-local-runs}}
 \label{app:tower-lemma}
 
 	We start by defining the notion of "trace". 
@@ -93,7 +93,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	\begin{itemize}
 		\item $l+1<e_i$: $\localdata(i)= \localdata_a(i)$, $\aval = \aval_a$ and $\binrel{\localdata_a(i)}{\anact}{\aval_a}$. 
 		\item $e_i \leq l+1 < f_i$: We have $\aval = \phi(\aval_a)$. 
-		Moreover, because $e_i < l+1$, there is at least one $\quotemarks{\enregact}$ on register $i$ in $\atrace_l$. Consider the last such "transition" in $\atrace_l$; its index $j$ satisfies $e_i \leq j < f_i$ by definition of $e_i$, hence the value of the corresponding "reception step" in $\localrun_a$ is $\localdata_a(i)$ and its value in $\atrace_{l}$ is $\phi(\localdata_a(i))$. One has $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ therefore (by injectivity of $\phi$ for $\anact = \quotemarks{\diseqtestact}$)
+		Moreover, because $e_i < l+1$, there is at least one $\quotemarks{\enregact}$ on register $i$ in $\atrace_l$. Consider the last such transition in $\atrace_l$; its index $j$ satisfies $e_i \leq j < f_i$ by definition of $e_i$, hence the value of the corresponding "reception step" in $\localrun_a$ is $\localdata_a(i)$ and its value in $\atrace_{l}$ is $\phi(\localdata_a(i))$. One has $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ therefore (by injectivity of $\phi$ for $\anact = \quotemarks{\diseqtestact}$)
 		$\binrel{\phi(\localdata_a(i))}{\anact}{\phi(\aval_a)}$.
 		\item$f_i \leq l+1$: $\localdata(i)= \localdata_b(i)$ and $\aval = \aval_b$, and because the "internal step" is valid in $\localrun_b$ we have $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. 
 	\end{itemize}
@@ -211,13 +211,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 %	This concludes our proof.
 %\end{proof}
 
-To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with $\Vinit$ the set of initial values of $\localrun$ and observe that this gives $\size{\Vinit} \leq \regnum$.
-
-
-
-
-
-
+%To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with $\Vinit$ the set of initial values of $\localrun$ and observe that this gives $\size{\Vinit} \leq \regnum$.
 
 
 
@@ -247,7 +241,7 @@ To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with 
 \lemBoundSuccessorHeight*
 
 \begin{proof}
-	Let $\node$ be a node of $\tree$. \corto{properly define trees and nodes}
+	Let $\node$ be a node of $\tree$.
 	Let $\Vinit$ be the set of "initial values" being broadcast or received in $\localrunlabel{\node}$. We have $\size{\Vinit}\leq r$ as there is at most one such value for each register.  
 	
 %	For each $v \in \Vinit$, if $v \neq \valuelabel{\node}$ (resp. if $v = \valuelabel{\node}$), let $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ be a "decomposition" and $\node_{v,1}, \ldots, \node_{v, \ell_v}$ "follower" children of $\node$ such that condition~\ref{item:condition2_initial_value} (resp. \ref{item:condition4_boss_node}) is respected.

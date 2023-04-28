@@ -27,10 +27,10 @@ We start with a basic observation that adding agents to a configuration cannot d
 	We define a preorder over the set of configurations $\allconfigs$ as follows: $\config \lessthan \config'$ if there exists an injective function $\pi: \agentsof{\config} \rightarrow \agentsof{\config'}$ such that, for all $a \in \agentsof{\config}$, $\config(a) = \config'(\pi(a))$. 
 \end{definition}
 
-\begin{remark}
-			\label{rem:bigger_config_query}
-			If some "configuration" $\config$ satisfies a "query" $\query$, then every configuration $\config'$ such that $\config \lessthan \config'$ satisfies $\query$. 
-\end{remark}
+%\begin{remark}
+%			\label{rem:bigger_config_query}
+%			If some "configuration" $\config$ satisfies a "query" $\query$, then every configuration $\config'$ such that $\config \lessthan \config'$ satisfies $\query$. 
+%\end{remark}
 
 \begin{restatable}{lemma}{lemRemoveDiseq}
 	\label{lem:removing_diseq_tests}
@@ -40,7 +40,7 @@ We start with a basic observation that adding agents to a configuration cannot d
 \begin{proof}
 	First, if $(\prot, q_f)$ is positive then so is $(\tilde{\prot}, q_f)$, as one can easily lift any "run" in $\prot$ to an equivalent "run" in $\tilde{\prot}$ (transitions are less guarded  in $\tilde{\prot}$ that in $\prot$). 
 	
-	Suppose now that $(\tilde{\prot}, q_f)$ is a positive instance of the "coverability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that covers $q_f$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (Remark~\ref{rem:bigger_config_query} then allows us to conclude). 
+	Suppose now that $(\tilde{\prot}, q_f)$ is a positive instance of the "coverability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that covers $q_f$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (note that if $\tilde{\config}$ covers a state, then so does $\config$). 
 	
 	If $\config = \config_0$ then $\run = \tilde{\run}$ suffices. Suppose that $\tilde{\run}$ has length $k \geq 1$, and that the result if true for "runs" of length $k-1$. Decompose $\tilde{\run}$ into $\tilde{\run_{k-1}}: \tilde{\config_0} \step{*} \tilde{\config_{k-1}}$ of length $k-1$ and a final step $\tilde{\config_{k-1}} \step{} \tilde{\config_k}$. 
 	By induction hypothesis, there exists $\run_{k-1}: \config_0 \step{*} \config_{k-1}$ such that $\tilde{\config_{k-1}} \lessthan \config_{k-1}$: there exists an injective function $\pi : \tilde{\agents} \rightarrow \agents$
@@ -62,7 +62,7 @@ We define "abstract runs" as follows:
 	
 	Given two abstract configurations $\aconfig = (\covset, \boss, \clique)$ and $\aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denoted $\aconfig \step{} \aconfig'$, when $\clique' \subseteq \covset'$, $\boss' \in \covset' \cup \set{\noboss}$ and one of the following cases is satisfied.
 	\begin{enumerate}
-		\item \emph{Broadcast from "clique":}
+		\item \emph{""Broadcast from clique"":}
 		\begin{enumerate}[label = (\arabic*)]
 			\item\label{item:broadcast_from_clique_broadcast} There exist $\amessage \in \messages$ and $\statebr \in \clique, \statebr' \in \clique'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
 			
@@ -81,8 +81,7 @@ We define "abstract runs" as follows:
 			\end{itemize}
 		\end{enumerate}
 		
-		
-		\item \emph{Broadcast from "boss":}
+		\item \emph{""Broadcast from boss"":}
 		\begin{enumerate}[label = (\arabic*)]
 			\item \label{item:broadcast_from_boss_broadcast} there exists $\amessage \in \messages$ such that $(\boss, \brone{m}, \boss') \in \transitions$
 			
@@ -102,7 +101,7 @@ We define "abstract runs" as follows:
 		\end{enumerate}
 		
 		
-		\item \emph{External broadcast:}
+		\item \emph{""External broadcast"":}
 		\begin{enumerate}[label = (\arabic*)]
 			\item\label{item:external_broadcast_broadcast} There exists $\amessage \in \messages$ and $\statebr \in \covset, \statebr' \in \covset'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
 			
@@ -116,7 +115,7 @@ We define "abstract runs" as follows:
 			
 			\item\label{item:external_broadcast_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q \in \covset$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\enregact}$ or $\anact = \quotemarks{\dummyact}$.
 		\end{enumerate}
-		\item \emph{Gang reset:} $S' = S$, $\clique' = \emptyset$ and $\boss'= q_0$
+		\item \emph{""Gang reset"":} $S' = S$, $\clique' = \emptyset$ and $\boss'= q_0$
 	\end{enumerate}
 	
 	
@@ -127,7 +126,7 @@ We define "abstract runs" as follows:
 	As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfiginit$ is the initial configuration and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Similarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
 \end{definition}
 
-The gang reset will help us to do the following, if one wants to check if one state is reachable, one should check the presence of an abstract run leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new boss but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a state in $S$).
+The gang reset will help us to do the following, if one wants to check if one state is reachable, one should check the presence of an abstract run leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new "boss@@gang" but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a state in $S$).
 
 First of all we observe that if there is an abstract run covering a state then there is a short one.
 
@@ -140,7 +139,7 @@ First of all we observe that if there is an abstract run covering a state then t
 \ifproofs
 \begin{proof}
 	Note that $\covset$ may never decrease along an abstract execution and that $\clique$ may only decrease at "gang resets".
-	We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the boss may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the execution with no "reset" has at most $(|Q|+2)(|Q|+1)$ steps, yielding the bound. 
+	We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the "boss@@gang" may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the execution with no "reset" has at most $(|Q|+2)(|Q|+1)$ steps, yielding the bound. 
 \end{proof}
 \fi
 
@@ -160,6 +159,13 @@ As we proved our abstraction to be safe and complete, by Lemma \ref{lem:short-ru
 \label{one-completeness}
 
 This subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
+
+
+The following remark formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
+\begin{remark}
+	\label{rem:run_no_new_register_values}
+	Because a register may only change its value to one that is broadcast from another register, we have that for all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
+\end{remark}
 
 \begin{lemma}
 	\label{lem:abstraction_complete}
@@ -195,9 +201,9 @@ This subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
 	
 	We now make the following case distinction to determine the type of the abstract step $\aconfig^i \step{} \aconfig^{i+1}$:
 	\begin{enumerate}
-		\item\label{proof_completeness:case_broadcast_clique} if $\data{\config_{i}}(\agentbr) = \aval$ but there exists $j<i$ such that $\data{\config_{j}}(\agentbr) \ne \aval$ then it is a ``broadcast from clique'',
-		\item\label{proof_completeness:case_broadcast_boss} if, for all $j \leq i$, $\data{\config_j}(\agentbr) = \aval$ then it is a ``broadcast from boss'',
-		\item\label{proof_completeness:case_external_broadcast} otherwise it is an ``external broadcast''. 
+		\item\label{proof_completeness:case_broadcast_clique} if $\data{\config_{i}}(\agentbr) = \aval$ but there exists $j<i$ such that $\data{\config_{j}}(\agentbr) \ne \aval$ then it is a "broadcast from clique",
+		\item\label{proof_completeness:case_broadcast_boss} if, for all $j \leq i$, $\data{\config_j}(\agentbr) = \aval$ then it is a "broadcast from boss",
+		\item\label{proof_completeness:case_external_broadcast} otherwise it is an "external broadcast". 
 	\end{enumerate}
 	Note that $\agentbr$ may not change its register value in $s_{i+1}$ hence $\data{\config_i}(\agentbr) = \data{\config_{i+1}}(\agentbr)$. 
 	

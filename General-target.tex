@@ -12,8 +12,9 @@ We show that \Target is undecidable for BNRAs, which suggests that while we can 
 	The "target reachability problem" (asking whether there is a run in which all agents reach a state $q_f$) is undecidable for \BNRA with two registers.
 \end{restatable}
 
-The proof goes as follows: We simulate a Minsky machine with two counters. In an initialisation phase, all agents record a value  sent by another agent in their second register, which will be their ``predecessor''. Throughout the run they will only listen to broadcasts from that agent, and only broadcast with the initial value in their first register. As there are finitely many agents, there must be a cycle in the predecessor graph.
+\begin{proof}[Proof sketch]
+We simulate a Minsky machine with two counters. In an initialisation phase, all agents record a value  sent by another agent in their second register, which will be their ``predecessor''. Throughout the run they will only listen to broadcasts from that agent, and only broadcast with the initial value in their first register. As there are finitely many agents, there must be a cycle in the predecessor graph.
 
 We exploit the fact that \textbf{all} agents must reach state $q_f$ to simulate faithfully a Minsky machine: we make agents alternate between receptions and broadcasts so that in the end they have received and sent the same number of messages, implying that all messages have been received along the cycle.
-
-Once we guarantee that no messages are lost, we can simulate the machine by having an agent (the leader) choose transitions of the machine and the other ones simulate the counter values by memorizing a counter 1 or 2 and a bit 0 or 1. For instance, an increment of counter 1 is done by having the leader send a message around the cycle, which eventually finds an agent simulating counter 1 and with bit 0, which switches to 1 and sends a confirmation message to confirm to the leader that the operation has been executed.
+Once we guarantee that no messages are lost, we can simulate the machine by having an agent (the leader) choose transitions of the machine and the other ones simulate the counter values by memorizing a counter 1 or 2 and a bit 0 or 1. For instance, an increment of counter 1 is done by having the leader send a message around the cycle, which eventually finds an agent simulating counter 1 and with bit 0, which switches to 1 and sends a confirmation message to confirm to the leader that the operation has been executed.	
+\end{proof}

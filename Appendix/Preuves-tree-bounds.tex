@@ -1,4 +1,5 @@
-\section{Proofs of Section~\ref{sec:tree-bounds}}
+\section{Proofs of Proposition~\ref{prop:bound-tree-size}}
+\label{app:bound-tree-size}
 
 \begin{restatable}{lemma}{lemBoundLengthHeightH}
 	\label{lem:bound-length-at-height-h}
@@ -20,7 +21,7 @@
 
 	Let $\node$ be a node, and suppose that the statement is true for all nodes of altitude greater than $\altitude{\node}$ and that $\altitude{\node} < \altmax$. 
 	Let $\node_1, \ldots, \node_k$ be its "follower" children, and $K$ the maximum of all $\size{\followlabelword{\node_i}}$.  By induction hypothesis for all $i$ we have 
-	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node})$ because $\altitude{\node_i} = \altitude{\node}+1$, and thus $K \leq \leq f_0(\altmax-\altitude{\node})$. If $\node$ is not the root of $\tree$ then let $\node'$ be its father.
+	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node})$ because $\altitude{\node_i} = \altitude{\node}+1$, and thus $K \leq f_0(\altmax-\altitude{\node})$. If $\node$ is not the root of $\tree$ then let $\node'$ be its father.
 	
 	Suppose first that $\node$ is a "boss node". If it is at the root then by Lemma~\ref{lem:bound-successor-height}, we have $\size{\bosslabel{\node}} = \size{w} \leq N \leq f_0(\altmax - \altitude{\node})$. If not, $\node'$ is above $\node$ therefore we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}} \leq f_0(\altmax - \altitude{\node})$ by Lemma~\ref{lem:bound-successor-height} and induction hypothesis. In both cases we have $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node})$.	
 	Again by Lemma~\ref{lem:bound-successor-height}, we obtain \[\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r)+1) \Big[f_0(\altmax-\altitude{\node}) + \size{\messages}rK\Big]. \]
@@ -39,7 +40,7 @@
 \end{proof}
 
 
-We now consider a branch reaching maximal altitude: we mark along that branch all the nodes that have a greater altitude than all the previous ones. They are necessarily "follower" nodes as "boss" nodes are below their father. Thanks to Lemma~\ref{lem:bound-length-at-height-h}, this sequence (reversed) is so that the $i$th term is at altitude $\altmax-i$ and we can bound its size with respect to $i$. Along with Lemma~\ref{lem:shortening-branches}, this allows us to apply the "Length function theorem" on that sequence to bound its length, hence the following result bounding the maximal altitude.
+
 
 \begin{figure}[h]
 	\input{Figures/max-height-bound}

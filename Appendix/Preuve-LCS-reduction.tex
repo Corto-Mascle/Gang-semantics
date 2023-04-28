@@ -5,7 +5,7 @@
 
 \begin{proof}
 	It is sufficient to prove that it is as hard as reachability for lossy channel systems with a single channel, which corresponds to a single finite-state machine that has the ability to buffer symbols in a lossy FIFO queue \cite{Schnoebelen2002verifying}. We present here a polynomial-time reduction.
-	Let $\los := (\lstates,\Sigma)$ be a "lossy channel system", where $\lstates$ is a finite set of locations, $\Sigma$ is a finite set of symbols and $\ltransitions \subseteq \lstates \times \Sigma^* \times \set{!, ?} \times \lstates$; $\quotemarks{!}$ corresponds to a ""push"" (writing at the end of the channel) and $\quotemarks{?}$ to a ""pop"" (reading at the beginning the channel). A configuration of $\los$ is a pair of $\lstates \times \Sigma^*$ denoting the location of the system and the content of the channel. There exists a step from $(\lstate,w)$ to $(\lstate',w')$ using transition $\ltrans \in \ltransitions$, denoted $(\lstate,w) \lstep{\ltrans} (\lstate',w')$, when
+	Let $\los := (\lstates,\Sigma)$ be a "lossy channel system", where $\lstates$ is a finite set of locations, $\Sigma$ is a finite set of symbols and $\ltransitions \subseteq \lstates \times \Sigma^* \times \set{!, ?} \times \lstates$; $\quotemarks{!}$ corresponds to a "push" (writing at the end of the channel) and $\quotemarks{?}$ to a "pop" (reading at the beginning the channel). A configuration of $\los$ is a pair of $\lstates \times \Sigma^*$ denoting the location of the system and the content of the channel. There exists a step from $(\lstate,w)$ to $(\lstate',w')$ using transition $\ltrans \in \ltransitions$, denoted $(\lstate,w) \lstep{\ltrans} (\lstate',w')$, when
 	\begin{itemize}
 		\item $\ltrans = (\lstate,u,!,\lstate')$ for some $u \in \Sigma^*$ and $w' \subword w \cdot u$ (a ""push""),
 		\item $\ltrans = (\lstate,u,?,\lstate')$ for some $u \in \Sigma^*$ and $u \cdot w' \subword w$ (a ""pop"")
@@ -15,7 +15,7 @@
 	
 	The existence of such a transition for some $\ltrans \in \transitions$ is denoted $(\lstate,w) \lstep{} (\lstate',w')$, and its transitive closure is denoted $\lstep{*}$. The ""reachability problem@@lcs"" asks, given $\los$ and two locations $\lstate_i, \lstate_f \in \lstates$, whether there exists an execution $(\lstate_i,\epsilon) \lstep{*} (\lstate_f, w)$ for some $w$. 
 	
-	We aim at constructing a $2$-BNRA $\prot$ with a distinguished state $q_f$ such that $q_f$ may be covered if and only if $(\los, q_i, q_f)$ is a positive instance of the "reachability problem@@lcs". 
+	We aim at constructing a protocol $\prot$ with two registers with a distinguished state $q_f$ such that $q_f$ may be covered if and only if $(\los, q_i, q_f)$ is a positive instance of the "reachability problem@@lcs". 
 	The intuition of $\prot$ is the following. Agents will organize in chains so that each agent of a chain knows the identifier of its predecessor in the chain, hence is able to check that messages received come from it. Each agent of the chain is meant to encode a step of the execution in the "lossy channel system". 
 	An agent of the chain will only listen to their predecessor in the chain, from which they will obtain a location of the system and the content of the channel. As it receives those, it will broadcast the new location of the system and the new content of the channel to the next agent of the chain. 
 	
