@@ -97,7 +97,7 @@ Moreover, all nodes $\node$ in an "unfolding tree" must satisfy the four followi
 	\item \label{item:condition4_boss_node} If $\node$ is a "boss node", then $\valuelabel{\node}$ is an "initial" value of $\localrunlabel{\node}$ and the "decomposition" $\decsymb$ of \ref{item:condition2_initial_value} for $\valuelabel{\node}$ satisfies that $\bosslabel{\node} \in \langdec{\decsymb}$.
 \end{enumerate}
 
-\AP Lastly, given $\tree$ an "unfolding tree", we define its ""size@@tree"" by $\size{\tree} := \sum_{\node \in \tree} \size{\localrunlabel{\node}} + \size{\speclabel{\node}}$. Note that the "size@@tree" of $\tree$ also takes into account the size of its nodes, so that a tree $\tree$ can be stored in polynomial space  in $\size{\tree}$ (renaming the values appearing in $\tree$ if needed). 
+\AP Lastly, given $\tree$ an "unfolding tree", we define its ""size@@tree"" by $\size{\tree} := \sum_{\node \in \tree} \size{\localrunlabel{\node}} + \size{\speclabel{\node}}$. Note that the "size@@tree" of $\tree$ also takes into account the size of its nodes, so that a tree $\tree$ can be stored in space polynomial in $\size{\tree}$ (renaming the values appearing in $\tree$ if needed). 
 \end{definition}
 %A node represents a "local run" witnessing that some "role" can be carried out. The role is represented with its "specification" and its value is necessary to check that the "local run" is a valid witness.\lu{pas sure de cette phrase..}
 %The root node should have a "local run" reaching the final state to cover. It should be seen as a boss node, however its value nor its exact specification (the word $\bosslabel{\node}$) are relevant as they shall not be used.\lu{dire plus de choses là dessus ?}
@@ -128,18 +128,18 @@ Condition~\ref{item:condition3_follower_node} directly states that a "follower n
 \end{figure}
 
 \begin{example}
-	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the run of \cref{ex:example-1}. The tables represent "local run", each column is a "local configuration". For instance, the local run at $\node_1$ is \begin{multline*}
+	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the run of \cref{ex:example-1}. The tables represent "local run", each column is a "local configuration" and the steps are omitted for simplicity. For instance, the local run at $\node_1$ is \begin{multline*}
 	(q_0, (x_1,y_1)) \intstep{(q_0, \br{m_1}{1},q_1)} (q_1, (x_1, y_1)) \extbr{(q_1, \rec{m_4}{2}{\enregact}, q_4)}{y_2} (q_4, (x_1, y_2)) \\ \extbr{(q_4, \rec{m_6}{1}{\eqtestact}, q_7)}{x_1} (q_7, (x_1, y_2)) \intstep{(q_7, \br{m_7}{1},q_7)} (q_7, (x_1, y_2)) \end{multline*}
 	
 	We explain why conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied at the root $\node_1$ of the tree. Let $\localrun$ denote its local run.
 	The only non-initial value in $\localrun$ is $y_2$, and $\vinput{y_2}{\localrun} = m_4$; condition \ref{item:condition1_non_initial_value} is satisfied as $\node_1$ has a boss child with a "boss specification" containing $m_4$. 
-	For "initial value" $y_1$, condition~\ref{item:condition2_initial_value} is satisfied as $\localrun$ never receives a message with value $y_1$. For $x_1$, consider the decomposition $\decsymb := (m_2, m_6, m_7)$. Condition~\ref{item:condition2_initial_value} is satisfied thanks to $\node_3$ being a child of $\node_1$ with "follower specification" $(\mathbf{fm}, \mathbf{fw})$ such that $\mathbf{fm} = m_1$ and $\mathbf{fw} \in \langdec{\decsymb_1}$ where $\decsymb_1 = (m_2)$. One can check that conditions~\ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied for the other nodes. 
+	For "initial value" $y_1$, condition~\ref{item:condition2_initial_value} is satisfied as $\localrun$ never receives a message with value $y_1$. For $x_1$, consider the decomposition $\decsymb := (w, m_6, w')$ for $w:= m_2$ and $w' := m_7$ seen as words of $\messages^*$. Condition~\ref{item:condition2_initial_value} is satisfied thanks to $\node_3$ being a child of $\node_1$ with "follower specification" $(\mathbf{fm}, \mathbf{fw})$ such that $\mathbf{fm} = m_1$ and $\mathbf{fw} \in \langdec{\decsymb_1}$ where $\decsymb_1 = (m_2)$. One can check that conditions~\ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied for the other nodes. 
 	
 	Condition \ref{item:condition3_follower_node} only applies to $\node_3$. It is satisfied as $\localrunlabel{\node_3}$ broadcasts $(m_6,x_1)$; to do so, it can receive $(m_2,x_1)$ without needing a child to broadcast it. 
-	For condition \ref{item:condition4_boss_node}, it suffices to observe that $\node_2$ and $\node_4$ broadcast their $\bossspec$ themselves; we can consider "decompositions@@decomposition" $(m_4)$ and $(m_2)$ respectively. Moreover, $\node_1$ satisfies "boss specification" $m_1 \, m_6 \, m_7$, with decomposition $(m_2, m_6, m_7)$, although its local run does not broadcast $m_6$. 
+	For condition \ref{item:condition4_boss_node}, it suffices to observe that $\node_2$ and $\node_4$ broadcast their $\bossspec$ themselves; we can consider "decompositions@@decomposition" $(m_4)$ and $(m_2)$ respectively. Moreover, $\node_1$ satisfies "boss specification" $\bossspec:= m_1 \, m_6 \, m_6 \, m_7$ as $v \in \langdec{\decsymb}$ with $\decsymb := (m_2, m_6, m_7)$ as above. Therefore $\node_1$ is a witness that $\bossspec$ can be broadcast with a single value, although its local run does not broadcast $m_6$ itself. 
 	
 	The execution from Example~\ref{ex:example-1} involved two agents $a_1$ and $a_2$; $a_1$ corresponds to nodes $\node_1$ and $\node_4$ and $a_2$ 
-	to nodes $\node_2$ and $\node_3$. However, when building an execution from our tree, we would use $4$ distinct agents, each playing a single role. Indeed, our "unfolding trees" assign each task to a distinct agent and therefore can require a non-optimal number of agents.
+	to nodes $\node_2$ and $\node_3$. Note that, if we apply our procedure described below to build a "run" from $\tree$, we would however use $4$ distinct agents, each playing a single role.
 \end{example}
 
 
@@ -151,20 +151,19 @@ Hence the following definition:
 A ""coverability witness"" is an "unfolding tree" whose root $\node$ is a "boss node" whose local run $\localrunlabel{\node}$ covers $q_f$. 
 \end{definition}
 
-The following proposition expresses that this definition is sound, as indeed a "coverability witness" is a witness that \COVER is positive.
-The proof can be found in Appendix~\ref{app:trees-sound-complete}.
-
+This definition is sound as a "coverability witness" is a witness that \COVER is positive:
 
 \begin{restatable}{proposition}{treessoundcomplete}
 \label{prop:trees-sound-complete}
 An instance of $\COVER$ $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
 \end{restatable}
-
 \begin{proof}[Proof sketch]
-The translation from run to tree works by induction on the length of the run. We first define what is means for a run to satisfy a "specification". We consider a run $\run$ and isolate a well-chosen agent $a$, the one witnessing that the "specification" is satisfied. We call the induction hypothesis with the "specification" expressing what $a$ needs to receive with that value. Each such specification is satisfied by a strict prefix of $\run$ (except if we want $\run$ to satisfy a boss specification, in which case we might use the induction hypothesis on $\run$ but with a follower specification and the induction is well-founded).
-We construct a tree by labeling the root with the specification and the local run of $a$, and attaching to it subtrees obtained by induction hypothesis from the prefix runs.
+The translation from run to tree works by induction on the length of the run. We first define in a natural what it means for a run to satisfy a "specification". We consider a run $\run$ and isolate a well-chosen agent $a$, the one witnessing that the "specification" is satisfied. We call the induction hypothesis with the "specifications" expressing what $a$ needs to receive from other agent. Each such specification is satisfied by a strict prefix of $\run$ (except if we want $\run$ to satisfy a boss specification, in which case we might use the induction hypothesis on $\run$ but always with a follower specification, which proves that the induction is well-founded).
+We construct an "unfolding tree" by labeling the root with the "specification" and the "local run" of $a$, and attaching below it the subtrees obtained by induction hypothesis.
 
 The translation from tree to run consists in an induction on the tree. A key concept is the one of "partial run", which extends the notion of "local run" to a subset of agents: in a "partial run", some receptions are external as they are not matched by a broadcast. This is meant to represent the behavior of a subtree of the "unfolding tree". In particular, if the root of an "unfolding tree" is a "follower node" with "specification" $(\followwordspec, \followmessagespec)$ then the corresponding "partial run" receives an external sequence $\followwordspec$. The induction step  considers the runs obtained from the children of the root by induction hypothesis and merges them with the "local run" of the root by branching broadcasts to the right external receptions. 
+
+See Appendix~\ref{app:trees-sound-complete} for the full proof. 
 \end{proof}
 
 

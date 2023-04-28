@@ -58,7 +58,7 @@
 	\begin{itemize}
 	\item If $a$ performs a local test $\loc{i_1}{i_2}{\diseqtestact}$ in $s$, then it may perform the corresponding local test in $s'$ because $\config_1' \in \perfproj{\config_1}$ hence $\config_1'(a)$ maps $i_1$ and $i_2$ to "memory slots" of distinct values. 
 	\item If $a$ performs a local test  $\loc{i_1}{i_2}{\eqtestact}$, then because $\config_1'\in \perfproj{\config_1}$, it maps $i_1$ and $i_2$ to the same "memory slot" and $a$ may performs the corresponding internal transition in $\prot'$.  
-	\item If $a$ performs a broadcast in $s$, then we make it perform the corresponding broadcast in $s'$. Note that, because $\config_1' \in \memoryproj{\config_1}$, the broadcasted value is the same in $s$ and $s'$. 
+	\item If $a$ performs a broadcast in $s$, then we make it perform the corresponding broadcast in $s'$. Note that, because $\config_1' \in \memoryproj{\config_1}$, the broadcast value is the same in $s$ and $s'$. 
 	\item 
 	Suppose now that $a$ performs a reception $\rec{\amessage}{i}{\anact}$ in $s$. Let $\aval$ the value of the message. By above, the corresponding broadcast is performed in $s'$ with the same value $\aval$. 
 		\begin{itemize}

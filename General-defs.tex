@@ -64,7 +64,7 @@ In our model, agents may only send one value per message. Indeed, \cite{Delzanno
 	\begin{multline*}
 	\tuple{(q_0, (x_1,y_1)), (q_0,(x_2,y_2))} \step{} \tuple{(q_1, (x_1,y_1)), (q_5,(x_1,y_2))} \step{} \\ \tuple{(q_4, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))}
 	\end{multline*}
-	The broadcast messages are: $(m_2,x_1)$ by $a_1$, $(m_4,y_2)$ by $a_2$, $(m_6,x_1)$ by $a_1$ and $(m_7,x_1)$ by $a_1$. Each broadcast is received by the other agent. 
+	The broadcast messages are, this order: $(m_2,x_1)$ by $a_1$, $(m_4,y_2)$ by $a_2$, $(m_6,x_1)$ by $a_1$ and $(m_7,x_1)$ by $a_1$. Each broadcast message is received by the other agent. 
 \end{example}
 
 \begin{figure}[h]
@@ -77,7 +77,7 @@ In our model, agents may only send one value per message. Indeed, \cite{Delzanno
 
 \begin{remark}
 	\label{rem:copycat-principle}
-	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can build a run in which each agent of $\run$ has  a clone in the same state but with different register values. To obtain this, it suffices to add new agents that mimick $\run$ in parallel; they will not share any register values with the original agents.  We will refer to this notion as the ""copycat principle"": if state $q$ is coverable, then for all $n$ there exists a "run" which puts $n$ agents on $q$.
+	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can build a run in which each agent of $\run$ has  a clone in the same state but with different register values. To obtain this, it suffices to add new agents that mimick $\run$ in parallel of the original agents, with which they will not share any register values.  We will refer to this notion as the ""copycat principle"": if state $q$ is coverable, then for all $n$ there exists a "run" which puts $n$ agents on $q$.
 \end{remark}
 
 	
@@ -109,8 +109,9 @@ In fact, we may get rid of "local equality tests" at the cost of an exponential 
 	\label{prop:loc-eq-test-elimination}
 	There is an exponential-time reduction from \COVER to \COVER with no "local equality tests" $\loc{i}{j}{=}$.
 \end{restatable}
-% \cortoin{En annexe ? Seulement utile pout TOWER}
-The intuition is as follows: from a "protocol" $\prot$, we build a "protocol" $\prot'$ whose registers are used to store values of multiple registers of $\prot$, so that equality of two registers of $\prot$ is encoded in the states of $\prot'$. To do so, a state of $\prot'$ stores which register of $\prot$ is mapped to which register of $\prot'$, hence the exponential blowup. The full proof can be found in Appendix~\ref{sec:proof-lol-eq-test-elim}.
+\begin{proof}[Proof sketch]
+From a "protocol" $\prot$, we build a "protocol" $\prot'$ whose registers are used to store values of multiple registers of $\prot$, so that equality of two registers of $\prot$ is encoded in the states of $\prot'$. To do so, a state of $\prot'$ stores which register of $\prot$ is mapped to which register of $\prot'$, hence the exponential blowup. The full proof can be found in Appendix~\ref{sec:proof-lol-eq-test-elim}.
+\end{proof}
 %\ifbasic
 %\section{Basic properties}
 
