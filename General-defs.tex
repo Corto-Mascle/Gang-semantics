@@ -121,7 +121,7 @@ In fact, we may get rid of "local equality tests" at the cost of an exponential 
 	\label{prop:loc-eq-test-elimination}
 	There is an exponential-time reduction from the general "coverability problem" to the coverability problem on protocols with no "local equality tests" $\loc{i}{j}{=}$.
 \end{restatable}
-The intuition is as follows: from a protocol $\prot$, we build a protocol $\prot'$ whose registers are used to store values of multiple registers of $\prot$ at the same time, so that equality of two registers of $\prot$ correspond to a condition on the states in $\prot'$. To do so, one must store in any state of $\prot'$ which register of $\prot$ is mapped to which register of $\prot'$, hence the exponential blowup. The full proofs may be found in Appendix~\ref{sec:proof-lol-eq-test-elim}.
+The intuition is as follows: from a protocol $\prot$, we build a protocol $\prot'$ whose registers are used to store values of multiple registers of $\prot$ at the same time, so that equality of two registers of $\prot$ correspond to a condition on the states in $\prot'$. To do so, one must store in any state of $\prot'$ which register of $\prot$ is mapped to which register of $\prot'$, hence the exponential blowup. The full proof may be found in Appendix~\ref{sec:proof-lol-eq-test-elim}.
 %\ifbasic
 %\section{Basic properties}
 
