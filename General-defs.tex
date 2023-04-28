@@ -24,10 +24,10 @@ The size of $\prot$, written $\size{\prot}$, is defined as $\size{Q} + \size{\me
 We now define the semantics of those systems. Essentially, we have a finite set of agents, each with their own registers, which initially all contain distinct values. A step of a run consists in either one agent executing a local action, or one agent broadcasting a message and some of the other agents receiving it.
 
 \begin{definition}[Semantics]
-	Let $(Q,\messages, \transitions, q_0)$ be a "protocol" of $\regnum$ registers, and $\agents \subseteq \nats$ a finite set of \emph{agents}.
+	Let $(Q,\messages, \transitions, q_0)$ be a "protocol" of $\regnum$ registers, and $\agents \subseteq \nats$ a finite set of ""agents"".
 	A ""configuration"" over a set of agents $\agents$ is a labelling function $\config : \agents \to Q \times \nats^{\regnum}$, mapping each agent to a state and ""register values"" for each of its registers. 
 	We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component.
-	An \emph{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and for all $a, a' \in \agents$, $i, i' \in \nset{1}{\regnum}$, if $\data{\config}(a, i) = \data{\config}(a', i')$ then $a=a'$ and $i=i'$.
+	An \emph{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and for all $a, a' \in \agents$, $i, i' \in \nset{1}{\regnum}$, if $(a,i) \neq (a', i')$ then $\data{\config}(a, i) \neq \data{\config}(a', i')$.
 	
 	\AP We denote by $\configs{\agents}$ the set of configurations over $\agents$, and by $\allconfigs := \cup_{\agents \subseteq \nats \text{ finite }} \configs{\agents}$ the set of all configurations. Given a configuration $\config$, we denote by $\agentsof{\config}$ the set of agents of $\config$.
 	
@@ -63,21 +63,17 @@ We now define the semantics of those systems. Essentially, we have a finite set 
 \begin{example}\label{ex:example-1}
 	We give an example of a "protocol" with 2 registers in Figure \ref{fig:ex1}. 
 	% Its set of states is $\{q_i\}_{0 \leq i \leq 6}$, and the initial state is $q_0$. 
-	Let $\agents = \{a_1, a_2\}$. Initial configurations $\config_0$ over $\agents$ are such that $\config_0(a_i) = (q_0, (x_i, y_i))$ with $x_1,x_2,y_1,y_2 \in \nats$ all distinct. There exists a run covering $q_7$: from $\config_0$, agent $a_1$ broadcasts message $(m_2,x_1)$, which agent $a_2$ receives. This brings us to $\config_1$such that $\st{\config_1}(a_1)= q_1$, $\st{\config_1}(a_2)= q_5$, $\data{\config_1}(a_1)(1) = \data{\config_1}(a_2)(1) = x_1$. Then, agent $a_2$ broadcasts message $(m_4,y_2)$ and agent $a_1$ receives it; we get to $\config_2$ where both agents are on $q_4$ and $\data{\config_2}(a_2)(2) = \data{\config_2}(a_4)(2) = y_2$. Finally, agent $a_2$ broadcasts message $(m_6,x_1)$, and agent $a_1$ receives it to go to $q_7$, which is possible as $\data{\config_2}(a_1)(1) = x_1 =\data{\config_2}(a_2)(1)$. 
+	Let $\agents = \{a_1, a_2\}$. Initial configurations $\config_0$ over $\agents$ are such that $\config_0(a_i) = (q_0, (x_i, y_i))$ with $x_1,x_2,y_1,y_2 \in \nats$ all distinct. There exists a run covering $q_7$: from $\config_0$, agent $a_1$ broadcasts message $(m_2,x_1)$, which agent $a_2$ receives. This brings us to $\config_1$ such that $\st{\config_1}(a_1)= q_1$, $\st{\config_1}(a_2)= q_5$, $\data{\config_1}(a_1)(1) = \data{\config_1}(a_2)(1) = x_1$. Then, agent $a_2$ broadcasts message $(m_4,y_2)$ and agent $a_1$ receives it; we get to $\config_2$ where both agents are on $q_4$ and $\data{\config_2}(a_2)(2) = \data{\config_2}(a_4)(2) = y_2$. Finally, agent $a_2$ broadcasts message $(m_6,x_1)$, and agent $a_1$ receives it to go to $q_7$, which is possible as $\data{\config_2}(a_1)(1) = x_1 =\data{\config_2}(a_2)(1)$. 
 %	We give an example of a "protocol" with 2 registers in Figure \ref{fig:ex1}. Its set of states is $\{q_i\}_{0 \leq i \leq 6}$, and the initial state is $q_0$. Let $\agents = \{a_1, a_2,a_3,a_4\}$ and let $(x_i, y_i)_{1 \leq i \leq 4} \in \mathbb{N}$ be 8 different integers. The function $\config_0$ associating to each agent $a_i$ the element $(q_0, (x_i, y_i))$ is an initial configuration over $\agents$. There exists a run covering $q_6$: from $\config_0$, let agent $a_1$ broadcast message $m_1$ among with its value $x_1$, the reached configuration $\config_1$ should be such that: $\st{\config_1}(a_1)= q_1$, $\st{\config_1}(a_3)= q_2$, $\data{\config_1}(a_1)(1) = \data{\config_1}(a_3)(1) = x_1$. Let now agent $a_2$ broadcast message $m_2$ among with its value $x_2$ and let agent $a_4$ receives the message. The resulting configuration $\config_2$ is such that $\st{\config_2}(a_2)= q_1$, $\st{\config_2}(a_4)= q_5$, $\data{\config_2}(a_2)(1) = \data{\config_2}(a_4)(1) = x_2$. From $\config_2$, agent $a_1$ can broadcast message $m_3$ among with its value $x_1$, let agent $a_4$ receives its value, as $\data{\config_2}(a_4)(1) = x_2 \ne x_1 = \data{\config_2}(a_1)(1)$, agent $a_4$ can take the reception transition leading to $q_6$. Hence, the resulting configuration $\config_3$ is such that $\st{\config_3}(a_4)= q_6$.
 \end{example}
 
-\begin{figure}
+\begin{figure}[h]
 	\input{Figures/fig-ex1}
 	\caption{Example of a "protocol".}\label{fig:ex1}
 \end{figure}
 	
 	
-The following remark formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
-\begin{remark}
-	\label{rem:run_no_new_register_values}
-	Because a register may only change its value to one that is broadcast from another register, we have that for all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
-\end{remark}
+
 
 \begin{remark}
 	\label{rem:copycat-principle}
@@ -93,13 +89,13 @@ The following remark formalizes the intuition that, because the only way to take
 	
 \begin{definition}
 
-	\AP The ""cover problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this protocol whose last "configuration" has an agent in state $q_f$.
+	\AP The ""cover problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this "protocol" whose last "configuration" has an agent in state $q_f$.
 	
-	\AP The ""target reachability problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this protocol with a non-empty set of agents whose last "configuration" $\config$ is such that $\st{\config}(\agentsof{\gamma}) = \{q_f\}$, i.e all agents reached $q_f$.
+	\AP The ""target reachability problem"" is to determine, given a "protocol" and a state $q_f$, whether there is a "run" of this "protocol" with a non-empty set of agents whose last "configuration" $\config$ is such that $\st{\config}(\agentsof{\gamma}) = \{q_f\}$, i.e all agents reached $q_f$.
 \end{definition}
 
 \begin{example}\label{example-2}
-	Let $\prot$ the protocol of \ref{fig:ex1}. As proven in Example~\ref{ex:example1}, $(\prot,q_7)$ is a positive instance of \COVER. However, $(\prot,q_7)$ is a negative instance of \TARGET: for an agent to reach $q_7$, there must be an agent staying on $q_6$ to broadcast $m_6$. However $(\prot,q_1)$ is a positive instance of \TARGET: from an initial configuration all agents can broadcast $m_1$ one at a time. Also, $(\prot, q_3)$ is a negative instance of \COVER: we would need an agent $a$ on $q_2$ and an agent $a'$ on $q_5$ with the same value in their first registers. The value of the first register of $a$ comes from a broadcast of message type $m_1$ where it comes from a broadcast of message type $m_2$ for $a'$. An agent broadcasting message type $m_1$ or $m_2$ must broadcast it with one of its initial value and may not broadcast both $m_1$ and $m_2$ in the same run; therefore $a$ and $a'$ cannot have the same value in their first register and $q_3$ cannot be covered. 
+	Let $\prot$ the "protocol" of \ref{fig:ex1}. As proven in Example~\ref{ex:example-1}, $(\prot,q_7)$ is a positive instance of \COVER. However, $(\prot,q_7)$ is a negative instance of \TARGET: for an agent to reach $q_7$, there must be an agent staying on $q_6$ to broadcast $m_6$. Meanwhile, $(\prot,q_1)$ is a positive instance of \TARGET: from an initial configuration all agents can broadcast $m_1$ one at a time. Also, $(\prot, q_3)$ is a negative instance of \COVER: we would need an agent $a$ on $q_2$ and an agent $a'$ on $q_5$ with the same value in their first registers. The value of the first register of $a$ comes from a broadcast of message type $m_1$ where it comes from a broadcast of message type $m_2$ for $a'$. An agent broadcasting message type $m_1$ or $m_2$ must broadcast it with one of its initial value and may not broadcast both $m_1$ and $m_2$ in the same run; therefore $a$ and $a'$ cannot have the same value in their first register and $q_3$ cannot be covered. 
 \end{example}
 
 \begin{remark}
@@ -108,20 +104,20 @@ The following remark formalizes the intuition that, because the only way to take
 	
 	Given a "protocol" $\prot$ with $r$ registers and a query $\query$ with $k$ variables, we can construct a "protocol" $\prot'$ with $\size{\prot}^k$ states and $kr$ registers that allows each agent to simulate $k$ agents of the previous system (by taking as states $k$-tuples of states of $\prot$, using the $kr$ registers to store the values of the registers of the $k$ agents and adapting the transitions accordingly).
 	There is a run of the first BNRA satisfying $\query$ if and only if there is a run of the second in which one agent simulates the $k$ agents satisfying $\query$, which can be checked locally by that agent, which enters a special state $q_f$ if it happens. 
-	
-	This reduction is exponential, but this does not hinder our complexity result as we are concerned with a complexity class stable by exponential reductions.
+	This reduction is exponential, which does not hinder our complexity result as we are concerned with a complexity class stable by exponential reductions.
 	
 	In the case of one register, we even have a polynomial-time reduction: We add a transition from every state to a sink state allowing an agent to stop at any moment and send its local configuration (state and register value) in a single broadcast.
 	Also, at any moment, an agent may enter a series of transitions in which it receives the configurations of $k$ agents and checks that they satisfy the query, then enters a special state $q_f$. An agent can reach $q_f$ if and only if some agents could reach a configuration satisfying $\query$ in the first BNRA.
 \end{remark}
 
-In fact, we may get rid of "local equality tests" at the cost of an exponential blowup in the number of states.
+In fact, we may get rid of "local equality tests" at the cost of an exponential blow-up in the number of states.
 
 \begin{restatable}{proposition}{SimpleReduction}
 	\label{prop:loc-eq-test-elimination}
-	There is an exponential-time reduction from the general "coverability problem" to the coverability problem on protocols with no "local equality tests" $\loc{i}{j}{=}$.
+	There is an exponential-time reduction from the general "coverability problem" to the coverability problem on "protocols" with no "local equality tests" $\loc{i}{j}{=}$.
 \end{restatable}
-The intuition is as follows: from a protocol $\prot$, we build a protocol $\prot'$ whose registers are used to store values of multiple registers of $\prot$ at the same time, so that equality of two registers of $\prot$ correspond to a condition on the states in $\prot'$. To do so, one must store in any state of $\prot'$ which register of $\prot$ is mapped to which register of $\prot'$, hence the exponential blowup. The full proofs may be found in Appendix~\ref{sec:proof-lol-eq-test-elim}.
+\cortoin{En annexe ? Seulement utile pout TOWER}
+The intuition is as follows: from a "protocol" $\prot$, we build a "protocol" $\prot'$ whose registers are used to store values of multiple registers of $\prot$ at the same time, so that equality of two registers of $\prot$ correspond to a condition on the states in $\prot'$. To do so, one must store in any state of $\prot'$ which register of $\prot$ is mapped to which register of $\prot'$, hence the exponential blowup. The full proofs may be found in Appendix~\ref{sec:proof-lol-eq-test-elim}.
 %\ifbasic
 %\section{Basic properties}
 
@@ -268,7 +264,7 @@ The intuition is as follows: from a protocol $\prot$, we build a protocol $\prot
 
 \subparagraph*{Fast-growing hierarchy}
 
-For $\alpha$ an ordinal in Cantor normal form, we will denote by $\Ffunction{\alpha}$ the class of functions corresponding to level $\alpha$ in the Fast-Growing Hierarchy. We will moreover denote by $\Fcomplexity{\alpha}$ the associated complexity class and use the notion of $\Fcomplexity{\alpha}$-completeness. All these notions are defined in \cite{Schmitz16}. We will specifically work with complexity class $\Fcomplexity{\omega^{\omega}}$. For readers unfamiliar with these notions, $\Fcomplexity{\omega^{\omega}}$-complete problems are problems which are decidable but with very high complexity (they are non-primitive recursive, and even hyper-Ackermannian). 
+For $\alpha$ an ordinal in Cantor normal form, we will denote by $\Ffunction{\alpha}$ the class of functions corresponding to level $\alpha$ in the Fast-Growing Hierarchy. We will moreover denote by $\Fcomplexity{\alpha}$ the associated complexity class and use the notion of $\Fcomplexity{\alpha}$-completeness. All these notions are defined in \cite{Schmitz16}. We will specifically work with complexity class $\Fcomplexity{\omega^{\omega}}$. For readers unfamiliar with these notions, $\Fcomplexity{\omega^{\omega}}$-complete problems are problems which are decidable but with very high complexity (they are non-primitive recursive, and even non-multiply recursive). 
 
 We highlight that our main result is the decidability of the problem. In fact, proving that the problem lies in $\Fcomplexity{\omega^{\omega}}$ does not complicate our decidability proof significantly. Moreover, this result fits nicely into the landscape of high-complexity problems arising from well quasi-orders. 
 
@@ -292,7 +288,7 @@ We will use the following result, known as the Length function theorem \cite{Sch
 
 ""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate via sending messages from a finite alphabet through unbounded FIFO channels through which messages may be lost. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AbdullaJ1996verif}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and is in fact $\Fcomplexity{\omega^{\omega}}$-complete \cite{ChambartS08ordinal}.
 
-We argue that the "coverability problem" in BNRA is at least as hard as the reachability problem for "LCS", even with two registers. The reduction can be found in Appendix~\ref{app:reduction-lcs}; we provide here some intuition. Given an "LCS" $\los$, we build a protocol $\prot$ with two registers. For each agent, the first register should never be modified and can be seen as an identifier. At the beginning of the execution, each agent receives a foreigner identifier and stores it in its second register; in the latter, it should only accepts messages sent by this identifer (using an $\quotemarks{\eqtestact}$ on every reception). This way, agents will form chains where messages propagate in one direction only, with the property that an agent has at most one predecessor in the chain. Each agent of the chain will simulate a step of an execution of $\los$: an agent received from its predecessor a configuration of $\los$, chooses the next configuration of $\los$ and broadcasts it, sending first the location of $\los$ then, letter by letter, the content of the channel. Note that some letters of the channel might not be received, hence the lossiness. 
+We argue that the "coverability problem" in BNRA is at least as hard as the reachability problem for "LCS", even with two registers. The reduction can be found in Appendix~\ref{app:reduction-lcs}; we provide here some intuition. Given an "LCS" $\los$, we build a "protocol" $\prot$ with two registers. For each agent, the first register is never modified and can be seen as an identifier. At the beginning of the execution, each agent receives a foreigner identifier and stores it in its second register; in the latter, it should only accepts messages sent by this identifer (using an $\quotemarks{\eqtestact}$ on every reception). This way, agents will form chains where messages propagate in one direction only, with the property that an agent has at most one predecessor in the chain. Each agent of the chain will simulate a step of an execution of $\los$: an agent received from its predecessor a configuration of $\los$, chooses the next configuration of $\los$ and broadcasts it, sending first the location of $\los$ then, letter by letter, the content of the channel. Note that some letters of the channel might not be received, hence the lossiness. 
 % Note that one special agent has to start the execution, and send the initial configuration before receiving anything. The final state is the final state of the "LCS" and if one agent reaches it, one can argue that there is an execution of the "LCS" described by the sent messages in the chain of agent starting with an agent sending the initial configuration.
 
 \begin{restatable}{proposition}{propReductionLCS}

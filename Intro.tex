@@ -18,7 +18,8 @@ Other approaches exist to define parameterized models with registers~\cite{Bolli
 
 Such parameterized verification problems often relate to the theory of well quasi-orders and well-structured transition systems, and the associated high complexities obtained from bounds on so-called ``bad sequences'' in ordered sets. In particular, our model is linked to two classical models from this field. The first one is data nets, which are Petri nets in which tokens are labelled with natural numbers, and can exchange and compare their labels~\cite{LazicNORW08}. In general, inequality tests are allowed, but data nets with only equality tests have also been studied~\cite{Rosa-Velardo17}. They do not subsume BNRA as processes can only carry one integer, and not several register values (problems on models of data nets where tokens have tuples of integers as labels are typically undecidable).
 The other closely related model is lossy channel systems (LCS)\cite{AbdullaJ1996verif}, which we will simulate using BNRA. We will show that BNRA coverability and LCS reachability are complete for the same complexity class $\Fcomplexity{\omega^\omega}$~\cite{ChambartS08ordinal, Schnoebelen2002verifying}.
-\nico{truc mis en commentaire}% As a matter of fact, LCS are derived from distributed models with processes communicating through pairwise channels, which are a rich field of study on their own~\cite{Aiswarya2015model,Aiswarya2020networks}.
+\nico{truc mis en commentaire}
+% As a matter of fact, LCS are derived from distributed models with processes communicating through pairwise channels, which are a rich field of study on their own~\cite{Aiswarya2015model,Aiswarya2020networks}.
 
 \textbf{Overview}
 We start with the model definition and some preliminary results in Section~\ref{sec:preliminaries}. We prove decidability of the coverability problem as well as undecidability of the target problem in Section~\ref{sec:cover-decidability}. 

@@ -26,7 +26,7 @@
 		\item  $\clique := \set{q \in Q \mid \exists i \leq k, \exists a \in \agents\setminus \set{a_0}, \config_i(a) = (q,\aval)}$ %\\
 		%´\nico{j'ai changé la def pour fque ça soit plus facile: ancienne def $\clique := \set{q \in Q \mid \exists a \in \agents\setminus \set{\boss}, \config_k(a) = (q,\aval)}$}
 	\end{itemize}
-	Note that, if such an agent $a_0$ exists, then it is unique as $\config_0$ is initial hence this definition is sound. If there exists no agents with value $\aval$ in $\config_0$, then trivially $\gangof{\aval}{\run} = (\noboss, \emptyset)$. 
+%	Note that, if such an agent $a_0$ exists, then it is unique as $\config_0$ is initial hence this definition is sound. If there exists no agents with value $\aval$ in $\config_0$, then trivially $\gangof{\aval}{\run} = (\noboss, \emptyset)$. 
 \end{restatable} 
 
 
@@ -59,8 +59,7 @@ We also allow \emph{gang resets}, which maintain $S$ but reinitialise $(b,K)$ to
 We define formally this abstraction and show its soundness and completeness in the appendix.
 It is then easy to show that $S$ should grow between two gang resets (otherwise they reset to the same abstract configuration) and that there may be at most $O(\size{Q}^2)$ abstract steps between two resets (as $K$ can only increase and there are only $\size{Q}+1$ possibilities for $b$). This means that if there is an abstract run covering a state, there is one of size $O(\size{Q}^3)$, giving us polynomial-size witnesses for coverability, and thus an \NP algorithm.
 
-The \NP lower bound is then obtained by a direct reduction from 3SAT (an agent sends a sequence of messages with its identifier representing a valuation to other agents which broadcast it back to it, allowing it to check the satisfaction of a 3SAT formula).
-
+The \NP lower bound follows from a reduction from 3SAT (an agent sends a sequence of messages with its identifier representing a valuation to other agents which broadcast it back to it, allowing it to check the satisfaction of a 3SAT formula).
 Those results yield the main theorem of this section:
 
 

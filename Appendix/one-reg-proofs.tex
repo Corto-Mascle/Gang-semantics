@@ -160,6 +160,13 @@ As we proved our abstraction to be safe and complete, by Lemma \ref{lem:short-ru
 
 This subsection is devoted to proving Lemma~\ref{lem:abstraction_complete}.
 
+
+The following remark formalizes the intuition that, because the only way to take a new register value is to receive another agent's value, no new register values are created in a "run".
+\begin{remark}
+	\label{rem:run_no_new_register_values}
+	Because a register may only change its value to one that is broadcast from another register, we have that for all $\run: \config_0 \step{*} \config_f$, $\valsof{\run} = \set{\aval \in \nats \mid \exists a, \, \data{\config_0}(a) = \aval}$.
+\end{remark}
+
 \begin{lemma}
 	\label{lem:abstraction_complete}
 	If $\run$ is a (concrete) "run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
