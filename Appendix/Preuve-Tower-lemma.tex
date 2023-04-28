@@ -252,7 +252,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	Let $\node$ be a "boss node". If $\node$ is the root, then as $\tree$ satisfies $\bossspec$ we have $\bossspec \subword \bosslabel{\node}$. If $\bossspec \neq \bosslabel{\node}$, we can replace $\bosslabel{\node}$ with $\bossspec$: As $\bossspec \subword \bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $\bossspec \in \langdec{\decsymb}$, hence condition~\ref{item:condition4_boss_node} is still satisfied, and the other conditions of a "unfolding tree" are unaffected by this change.
 	Furthermore the resulting "unfolding tree" still satisfies $\bossspec$. This contradicts the minimality of $\tree$, hence we have $\bosslabel{\node} = \bossspec$.
 	
-	If $\node$ is not the root, then let $\node'$ be its father. 
+	If $\node$ is not the root, then let $\node'$ be its parent. 
 	Let $V'$ be the set of non-initial values $v'$ of $\node'$ such that $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$.
 	
 	We can construct a subword $\bossspec'$ of $\bosslabel{\node}$ of length at most $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}}$ such that all $\vinput{v'}{\localrunlabel{\node'}}$ are subwords of $\bossspec'$. It suffices to select for each $v'$ a set of positions in $\bosslabel{\node}$ forming $\vinput{v'}{\localrunlabel{\node'}}$, and then taking the word formed by the union of those sets of positions.

@@ -1,5 +1,5 @@
 
-\begin{tikzpicture}[ >=stealth', shorten >=1pt,node distance=2cm,on grid,auto, initial text = {}] 
+\begin{tikzpicture}[ >=stealth', shorten >=1pt,node distance=2cm,on grid, initial text = {}] 
 	
 	\tikzset{
 		tnode/.style = {rectangle, draw, thick, minimum width=1cm,
@@ -35,9 +35,9 @@
 %		}
 %		]
 
-	\draw[gray](-5.5,-2.5)grid(-5.5,1.5);
-	\draw[]|-(-5,-3)node[above]{\textbf{alt}};
-	\foreach \y in {-2,...,1} \draw (-5.2, \y )node[left]{\y} -- (-5, \y);
+	\draw[black, ->, thick](-5,-2.2)--(-5,1.4);
+	\node[black, thick] at (-5,1.6) {altitude};
+	\foreach \y in {-2,...,1} \draw[black, thick] (-5.1, \y )node[left, thick]{\y} -- (-4.9, \y);
 	
 	 \node[tnode, fill=pink!] (root) { Boss};
 	 \node[tnode] (n1) [above = 1cm of root, xshift = 2cm]{ Follower};

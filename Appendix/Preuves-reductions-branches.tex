@@ -9,7 +9,7 @@
 	
 	If $\node$ is the root of $\tree$, then $\tree'$ is a "unfolding tree" because it is the subtree of $\tree$ rooted in $\node'$. It satisfies "specification" $\speclabel{\node'}$ hence also $\speclabel{\node}$. 
 	
-	% If $\node$ is not the root of $\tree$ then let $\node''$ be its father. We have to check that $\tree'$ is an "unfolding tree"; all node automatically satisfy the condition except $\node''$. The only condition that may no longer be satisfied are , whose children have changed from $\tree$ to $\tree'$.
+	% If $\node$ is not the root of $\tree$ then let $\node''$ be its parent. We have to check that $\tree'$ is an "unfolding tree"; all node automatically satisfy the condition except $\node''$. The only condition that may no longer be satisfied are , whose children have changed from $\tree$ to $\tree'$.
 
 	% Since $\tree$ is an "unfolding tree", for every non-initial value in $\localrunlabel{\node''}$, $\vinput{v'}{\localrunlabel{\node''}}$ was the subword of the "boss specification" of a child of $\node''$ in $\tree$; the only problematic case is when that child was $\node$. In that case, since $\vinput{v'}{\localrunlabel{\node''}}$ is a subword of $\bosslabel{\node}$, it is also a subword of $\bosslabel{\node'}$ and condition \ref{item:condition1_non_initial_value} is satisfied.
 	% Moreover, since $\node''$ has the same "follower" children in $\tree$ and $\tree'$ condition \ref{item:condition2_initial_value} and \ref{item:condition4_boss_node} are satisfied. Condition \ref{item:condition3_follower_node} is automatically satisfied as it does not speak about the children of $\node''$. 
@@ -23,7 +23,7 @@
 	% If $\node$ is the root of $\tree$, then $\tree'$ is a "unfolding tree" with $\node'$ as root. As $\node$ is a "follower node" and $\tree$ satisfies $\spec$, $\spec$ is a "follower specification". Let $(\followwordspec, \followmessagespec) = \spec$, we have $\followlabelword{\node} \subword \followwordspec$ and $\followlabelmessage{\node} = \followmessagespec$. 
 	% Hence we have $\followlabelword{\node'} \subword \followlabelword{\node} \subword \followwordspec $ and $\followlabelmessage{\node'} = \followlabelmessage{\node} = \followmessagespec$, thus $\tree'$ satisfies $\spec$.
 	
-	If  $\node$ is not the root of $\tree$ then let $\node''$ be the father of $\node$. We have to check that $\tree'$ is a "unfolding tree". 
+	If  $\node$ is not the root of $\tree$ then let $\node''$ be the parent of $\node$. We have to check that $\tree'$ is a "unfolding tree". 
 	All nodes other than $\node''$ have the same children as before, thus the conditions of "unfolding trees" are still respected for them.
 	As for $\node''$, the only problematic cases are values $v$ which had $\node$ as witness in conditions \ref{item:condition1_non_initial_value} (if $\node$ is a "boss node") and \ref{item:condition2_initial_value} (if $\node$ is a "follower node").
 
