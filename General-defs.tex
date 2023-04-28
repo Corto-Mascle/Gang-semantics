@@ -59,11 +59,11 @@ We now define the semantics of those systems. Essentially, we have a finite set 
 \end{definition}
 \begin{example}\label{ex:example-1}
 	We give an example of a "protocol" with 2 registers in Figure \ref{fig:ex1}. 
-	Let $\agents = \{a_1, a_2\}$. We denote a configuration $\config$ over $\agents$ by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(q_2),\data{\config}(a_2))}$. The following "run" covers $q_7$, where $x_1,y_1,x_2,y_2$ are distinct natural integers:
+	Let $\agents = \{a_1, a_2\}$. We denote a configuration $\config$ over $\agents$ by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$. The following is a "run", where $x_1,y_1,x_2,y_2$ are distinct natural integers:
 	\begin{multline*}
-	\tuple{(q_0, (x_1,y_1)), (q_0,(x_2,y_2))} \step{} \tuple{(q_1, (x_1,y_1)), (q_5,(x_1,y_2))} \step{} \\ \tuple{(q_4, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_6, (x_1,y_2)), (q_4,(x_1,y_2))}
+	\tuple{(q_0, (x_1,y_1)), (q_0,(x_2,y_2))} \step{} \tuple{(q_1, (x_1,y_1)), (q_5,(x_1,y_2))} \step{} \\ \tuple{(q_4, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))}
 	\end{multline*}
-	The broadcast messages are: $(m_2,x_1)$ by $a_1$, $(m_4,y_2)$ by $a_2$ and $(m_6,x_1)$ by $a_1$. Each broadcast is received by the other agent. 
+	The broadcast messages are: $(m_2,x_1)$ by $a_1$, $(m_4,y_2)$ by $a_2$, $(m_6,x_1)$ by $a_1$ and $(m_7,x_1)$ by $a_1$. Each broadcast is received by the other agent. 
 \end{example}
 
 \begin{figure}[h]
@@ -88,7 +88,7 @@ We now define the semantics of those systems. Essentially, we have a finite set 
 \end{definition}
 
 \begin{example}\label{example-2}
-	Let $\prot$ the "protocol" of Example~\ref{fig:ex1}. As proven in Example~\ref{ex:example-1}, $(\prot,q_7)$ is a positive instance of \COVER. However, $(\prot,q_7)$ is a negative instance of \TARGET: for an agent to reach $q_7$, there must be an agent staying on $q_6$ to broadcast $m_6$. Meanwhile, $(\prot,q_1)$ is a positive instance of \TARGET: all agents can broadcast $m_1$ to get to $q_1$. Also, $(\prot, q_3)$ is a negative instance of \COVER: we would need one agent on $q_1$ and one on $q_5$ with the same value in their first registers, hence we need a broadcast $(m_1,v)$ and a broadcast $(m_2,v)$ for some $v$. However, an agent broadcasting message $(m_1,v)$ or $(m_2,v)$ has $v$ as initial value; it cannot come back to $q_0$ thus cannot broadcast both $(m_1,v)$ and $(m_2,v)$ in the same "run". 
+	Let $\prot$ the "protocol" of Example~\ref{fig:ex1}. As proven in Example~\ref{ex:example-1}, $(\prot,q_7)$ is a positive instance of \COVER. However, $(\prot,q_7)$ is a negative instance of \TARGET: for an agent to reach $q_7$, there must be an agent staying on $q_4$ to broadcast $m_6$. Meanwhile, $(\prot,q_1)$ is a positive instance of \TARGET: all agents can broadcast $m_1$ to get to $q_1$. Also, $(\prot, q_3)$ is a negative instance of \COVER: we would need one agent on $q_2$ and one on $q_5$ with the same value in their first registers, hence we need a broadcast $(m_1,v)$ and a broadcast $(m_2,v)$ for some $v$. However, an agent broadcasting message $(m_1,v)$ or $(m_2,v)$ has $v$ as initial value; it cannot come back to $q_0$ thus cannot broadcast both $(m_1,v)$ and $(m_2,v)$ in the same "run". 
 \end{example}
 
 \begin{remark}
@@ -278,9 +278,9 @@ We will use the following result, known as the Length function theorem \cite{Sch
 
 \subsection{Link with LCS}
 
-""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate via sending messages from a finite alphabet through unbounded lossy FIFO channels. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AbdullaJ1996verif}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and is in fact $\Fcomplexity{\omega^{\omega}}$-complete \cite{ChambartS08ordinal}. \nico{je suis là}
+""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate via sending messages from a finite alphabet through unbounded lossy FIFO channels. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AbdullaJ1996verif}, but is proven to have non-primitive recursive complexity \cite{Schnoebelen2002verifying} and is in fact $\Fcomplexity{\omega^{\omega}}$-complete \cite{ChambartS08ordinal}. 
 
-We argue that the "coverability problem" in BNRA is at least as hard as the reachability problem for "LCS", even with two registers. The reduction can be found in Appendix~\ref{app:reduction-lcs}; we provide here some intuition. Given an "LCS" $\los$, we build a "protocol" $\prot$ with two registers. For each agent, the first register is never modified and can be seen as an identifier. At the beginning of the execution, each agent receives a foreigner identifier and stores it in its second register; in the latter, it should only accepts messages sent by this identifer (using an $\quotemarks{\eqtestact}$ on every reception). This way, agents will form chains where messages propagate in one direction only, with the property that an agent has at most one predecessor in the chain. Each agent of the chain will simulate a step of an execution of $\los$: an agent received from its predecessor a configuration of $\los$, chooses the next configuration of $\los$ and broadcasts it, sending first the location of $\los$ then, letter by letter, the content of the channel. Note that some letters of the channel might not be received, hence the lossiness. 
+We argue that \COVER in BNRA is harder than the reachability problem for "LCS". The reduction can be found in Appendix~\ref{app:reduction-lcs}; we provide here some intuition. Given an "LCS" $\los$, we build a "protocol" $\prot$ with two registers. For each agent, the first register is never modified and plays the role of a permanent identifier. At the beginning of the execution, each agent receives a foreigner identifier and stores it in its second register; it then only accepts messages with this identifer (using an equality test on every reception). This way, agents will form chains where messages propagate in one direction and where an agent has at most one predecessor. Each agent of the chain will simulate a step of an execution of $\los$: an agent received from its predecessor a configuration of $\los$, chooses the next configuration of $\los$ and broadcasts it, sending first the location of $\los$ then, letter by letter, the content of the channel. Note that some of the messages for the content of the channel might get lost, hence the lossiness. 
 % Note that one special agent has to start the execution, and send the initial configuration before receiving anything. The final state is the final state of the "LCS" and if one agent reaches it, one can argue that there is an execution of the "LCS" described by the sent messages in the chain of agent starting with an agent sending the initial configuration.
 
 \begin{restatable}{proposition}{propReductionLCS}
@@ -291,6 +291,7 @@ We argue that the "coverability problem" in BNRA is at least as hard as the reac
 %The proof is in Appendix~\ref{app:reduction-lcs}.
 
 \begin{remark}
-	The reduction presented in the proof of Proposition~\ref{prop:reduction-LCS} can be adapted to show that the repeat coverability problem (asking whether there is a run in which some agent reaches a state $q_f$ infinitely many times) is undecidable for BNRA, as it is for LCS~\cite{AbdullaJ1996undec}. This highlights the fact that the abstraction presented below relies on the fact that we only have to consider finite runs for coverability.
+	This reduction can be adapted to show that repeat-\COVER (whether there is an infinite run covering $q_f$ infinitely often) is undecidable for BNRA, as it is for LCS~\cite{AbdullaJ1996undec}. 
+	% This highlights the fact that the abstraction presented below relies on the fact that we only have to consider finite runs for coverability.
 \end{remark}
 
