@@ -123,7 +123,7 @@ Condition~\ref{item:condition3_follower_node} states that a "follower node" $\no
 \end{figure}
 
 \begin{example}
-	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the run of \cref{ex:example-1}. Each node is labeled with a local run, a specification, and a value (we omit the labels of the root). Local configurations are displayed as a state among with its two registers' values. For instance, the local run of the node at the root of the tree is \begin{multline*}
+	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the run of \cref{ex:example-1}. Each node is labeled with a local run, a specification, and a value (we omit the labels of the root). Local configurations are displayed as a state along with its two registers' values. For instance, the local run of the node at the root of the tree is \begin{multline*}
 	(q_0, (x_1,y_1)) \intstep{(q_0, \br{m_1}{1},q_1)} (q_1, (x_1, y_1)) \extbr{(q_1, \rec{m_4}{2}{\enregact}, q_4)}{y_2} (q_4, (x_1, y_2)) \\ \extbr{(q_4, \rec{m_6}{1}{\eqtestact}, q_7)}{x_1} (q_7, (x_1, y_2)) \end{multline*}
 	
 	We explain why conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied at the root $\node_1$ of the tree. Let $\localrun$ its local run.
@@ -137,8 +137,8 @@ Condition~\ref{item:condition3_follower_node} states that a "follower node" $\no
 %	\luin{ici explications sur chacune des conditions}
 	
 	
-	Note that if one wants to build a concrete execution of the protocol of Figure \ref{fig:ex1}~from the tree of Figure \ref{fig-ex-unfolding-tree}, the build execution should be over 4 agents (one agent per node). Each agent will play the role of a node of the tree. The agent playing the role of the bottom left node should broadcast its value among with message $m_2$ and stop. This message should be received by the agent playing the role of the boss node with value $y_2$, it will reach $q_5$ and store the value $x_3$ in its first register. It will then broadcast message $m_4$ among with value $y_2$ and stop. The latter broadcast should be received by the agent playing the role of the root node. This agent has broadcast messages $m_2$ before and reached $q_1$. When he broadcast message $m_2$ among with its value $x_1$, the message has been received by the agent playing role of the right node.
-	The right node received $m_2$ among with $x_1$, it can then broadcast $m_2$ (which shall not be received) and reach $q_4$. From $q_4$ it can send message $m_6$ among with $x_1$. The message is received by the agent playing the root node role, allowing him to reach $q_7$.
+	Note that if one wants to build a concrete execution of the protocol of Figure \ref{fig:ex1}~from the tree of Figure \ref{fig-ex-unfolding-tree}, the build execution should be over 4 agents (one agent per node). Each agent will play the role of a node of the tree. The agent playing the role of the bottom left node should broadcast its value along with message $m_2$ and stop. This message should be received by the agent playing the role of the boss node with value $y_2$, it will reach $q_5$ and store the value $x_3$ in its first register. It will then broadcast message $m_4$ along with value $y_2$ and stop. The latter broadcast should be received by the agent playing the role of the root node. This agent has broadcast messages $m_2$ before and reached $q_1$. When he broadcast message $m_2$ along with its value $x_1$, the message has been received by the agent playing role of the right node.
+	The right node received $m_2$ along with $x_1$, it can then broadcast $m_2$ (which shall not be received) and reach $q_4$. From $q_4$ it can send message $m_6$ along with $x_1$. The message is received by the agent playing the root node role, allowing him to reach $q_7$.
 	
 	
 	
