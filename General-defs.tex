@@ -53,6 +53,11 @@ We now define the semantics of those systems. Essentially, we have a finite set 
 	A "path" is a  ""run"" when $\config_0$ is an "initial configuration".  
 	\AP A run $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when there exists $a \in \agents$ such that $\st{\config_f}(a) = q$. 
 \end{definition}
+\begin{remark}
+\label{rem:several_values_per_message}
+In our model, agents may only send one value per message. Indeed, \cite{DelzannoST13} establishes undecidability of "coverability" if agents can broadcast two values at once.
+\end{remark}
+
 \begin{example}\label{ex:example-1}
 	We give an example of a "protocol" with 2 registers in Figure \ref{fig:ex1}. 
 	Let $\agents = \{a_1, a_2\}$. We denote a configuration $\config$ over $\agents$ by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$. The following sequence is a "run", where $x_1,y_1,x_2,y_2$ are distinct natural integers:
@@ -102,7 +107,7 @@ In fact, we may get rid of "local equality tests" at the cost of an exponential 
 
 \begin{restatable}{proposition}{SimpleReduction}
 	\label{prop:loc-eq-test-elimination}
-	There is an exponential-time reduction from the general "coverability problem" to the coverability problem on "protocols" with no "local equality tests" $\loc{i}{j}{=}$.
+	There is an exponential-time reduction from \COVER to \COVER with no "local equality tests" $\loc{i}{j}{=}$.
 \end{restatable}
 % \cortoin{En annexe ? Seulement utile pout TOWER}
 The intuition is as follows: from a "protocol" $\prot$, we build a "protocol" $\prot'$ whose registers are used to store values of multiple registers of $\prot$, so that equality of two registers of $\prot$ is encoded in the states of $\prot'$. To do so, a state of $\prot'$ stores which register of $\prot$ is mapped to which register of $\prot'$, hence the exponential blowup. The full proof can be found in Appendix~\ref{sec:proof-lol-eq-test-elim}.
