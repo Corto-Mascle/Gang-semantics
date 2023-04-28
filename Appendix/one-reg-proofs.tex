@@ -12,6 +12,8 @@ Op^{\messages} = \set{\brone{\amessage}, \recone{\amessage}{\dummyact}, \recone{
 $
 Finally, given a "configuration" $\config$, we write $\data{\config}(a)$ for $\data{\config}(a,1)$. 
 
+Given a "run" $\run$, we write $\agentsof{\run}$ its set of agents, $\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
+
 First, to simplify the proofs, we use a lemma allowing us to only consider protocols which does not contain any reception transition with actions $\quotemarks{\ne}$. This is feasible as we can run several copies of a run in parallel (with distinct values) so that every broadcast is made in each copy with a different value. Hence if a process receives a message, it can always receive it with a value different from its own, making disequality tests useless. We can thus replace them with receptions with $\quotemarks{\dummyact}$. 
 
 
