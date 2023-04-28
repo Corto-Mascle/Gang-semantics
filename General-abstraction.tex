@@ -10,22 +10,23 @@ This section is dedicated to the proof of the main result of this paper:
 
 Thanks to Proposition~\ref{prop:loc-eq-test-elimination}, we may assume that our protocols have no "local equality tests" (the complexity class $\Fomegaomega$ is stable by exponential reduction).
 
-The intuition of our decidability procedure is as follows. 
-We want to understand what an agent $a$ needs from other agents in order to cover a state $q$. We identify two such taks that other agents must carry out, called \emph{specifications}. First, they might need to broadcast a sequence $w \in \messages^*$ of messages all with the same value, so that $a$ stores the value of the first such message and tests further messages for equality. We later call such a task a \emph{"boss specification"}.  
-They might also, after receiving $w$ from $a$ with a value $\aval$ that $a$ had initially, need to broadcast a given message $(\amessage,\aval)$ . We later call such a task a \emph{"follower specification"}.
+In order to abstract our "runs", we want to understand what an agent $a$ needs from other agents in order to cover a state $q$. We identify two types of roles that other agents must carry out, called \emph{specifications}. First, they might need to broadcast a sequence $w \in \messages^*$ of messages all with the same value, so that $a$ stores the value of the first such message and tests further messages for equality. We later call such a role a \emph{"boss specification"}.  
+They might also, after receiving a word $w$ from $a$ with a value $\aval$ that $a$ had initially, need to broadcast a given message $(\amessage,\aval)$. We later call such a role a \emph{"follower specification"}.
 
-The two roles identified previously are the key to the decidability procedure. Thanks to the copycat principle, we will be able to consider runs in which a given agent only plays one such role. To represent such executions, we consider \emph{unfolding trees} that represent all such roles, dependencies between them and how they are carried out. The decidability procedure will rely on a bound of the minimum "size@@tree" of the "unfolding tree" one has to consider.
+The two roles identified previously are the key to the decidability procedure. 
+% Thanks to the copycat principle, we will be able to consider runs in which a given agent only plays one such role. 
+To represent executions, we consider \emph{unfolding trees} that represent all such roles, dependencies between them and how they are carried out. The fact that we can consider trees and not general graphs is not obvious and is connected to the copycat property.  The decidability procedure will rely on a bound of the minimum "size@@tree" of the "unfolding tree" one has to consider.
 
 In Section~\ref{sec:decidability-defs}, we introduce several useful notions. In Section~\ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In Section~\ref{sec:tree-bounds}, we bound the size of the "unfolding trees" that we have to consider. In Section~\ref{sec:decidability-end}, we conclude by exposing our decidability procedure. 
-
+In Section~\ref{sec:undec-target}, we prove that the \TARGET problem is, however, undecidable.
 
 \subsection{Useful definitions}
 \label{sec:decidability-defs}
 
-We define a notion of "local run", which may be seen as the projection of a "run" onto a given agent. In this local vision, we do not consider the origin of the messages received.
+We define a notion of "local run", which may be seen as the projection of a "run" onto a given agent. In this local vision, we do not specify the origin of the received messages.
 	
 \AP A ""local configuration"" is a pair $(q, \localdata) \in Q \times \nats^r$.  
-\AP An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\localdata = \localdata'$ and $\atrans =(q, \alpha, q')$ is a "broadcast" or a "local test" satisfied by $\localdata$ and $\localdata'$.  
+\AP An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\localdata = \localdata'$ and $\atrans =(q, \alpha, q')$ is a "broadcast" or a "local test" satisfied by $\localdata$.  
 \AP A ""reception step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans$ is of the form $(q,\rec{m}{j}{\anact},q')$ with $\localdata(j') = \localdata'(j')$ for all $j' \neq j$ and one of the following holds:
 	
 	\begin{minipage}[t]{6cm}
@@ -44,10 +45,12 @@ We define a notion of "local run", which may be seen as the projection of a "run
 	
 
 	%Said otherwise, $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$ when an agent in $(q,\localdata)$ may perform $\atrans$ upon receiving a message of type $\amessage$ and of value $\aval$.
-	\AP A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either an "reception step" or an "internal step". 
-	\AP A ""local run"" is a sequence $\localrun$ of "local steps" $(q_0, \nu_0) \step{\locallabel_1} (q_1, \nu_1) \step{\locallabel_2} \cdots \step{\locallabel_k} (q_k, \nu_k)$ where, for all $i$, $\locallabel_i \in \set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions}$. 
-	For $\aval \in \nats$ appearing in $\localrun$, $\aval$ is ""initial"" if it appears in $\nu_0$ and ""non-initial"" otherwise. 
-	The ""input"" $\Input{\localrun} \in (\messages \times \nats)^*$ of a "local run" $\localrun$ is the sequence of messages of its "reception steps". Its ""output"" $\Output{\localrun} \in (\messages \times \nats)^*$ is the sequence of messages broadcast in $\localrun$. The $\aval$-input $\vinput{\aval}{\localrun}$ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the sequence containing message types of "reception steps" (resp. broadcast steps) of $\localrun$ with value $\val$. Formally, $\vinput{\aval}{\localrun}$ (resp. $\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$. 
+	\AP A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either a "reception step" or an "internal step". 
+	\AP A ""local run"" $\localrun$ is a sequence of "local steps" denoted $(q_0, \nu_0) \step{*} (q, \nu)$.
+	$\aval \in \nats$ appearing in $\localrun$ is ""initial"" if it appears in $\nu_0$ and ""non-initial"" otherwise. 
+	The ""input"" $\Input{\localrun} \in (\messages \times \nats)^*$ of  $\localrun$ is the sequence of messages of its "reception steps", the ""output"" $\Output{\localrun} \in (\messages \times \nats)^*$ the sequence of messages broadcast in $\localrun$. 
+	% The $\aval$-input $\vinput{\aval}{\localrun}$ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the sequence containing message types of "reception steps" (resp. broadcast steps) of $\localrun$ with value $\val$. 
+	For $\aval \in \nats$, the $\aval$-input $\vinput{\aval}{\localrun}$ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$. 
  
 	A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. 
 	A word $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$. 
@@ -63,12 +66,14 @@ We define a notion of "local run", which may be seen as the projection of a "run
 \subsection{Unfolding trees}
 \label{sec:decidability-tree-unfoldings}
 
-An \emph{unfolding tree} is a description of a run achieving some goal. Each node is assigned a local run and a specification of the role of this local run. There are \emph{boss specifications} and \emph{follower specifications}. A ""boss specification"" consists of a word $\bossspec \in \messages^*$ describing a sequence of message types that should be broadcast all with the same value. A ""follower specification"" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that sequence of message types $\followwordspec$ is broadcast with a common value $v$, one must be able to broadcast $\followmessagespec$ with that same value. 
+An \emph{unfolding tree} is an abstraction of a run in the form of a tree where each node is assigned a local run and a specification of its role. A ""boss specification"" consists of a word $\bossspec \in \messages^*$ describing a sequence of message types that should be broadcast all with the same value. A ""follower specification"" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that if sequence of message types $\followwordspec$ is broadcast with a value $v$, one must be able to broadcast $\followmessagespec$ with value $v$. 
 
-We first provide the formal definition "unfolding trees". We then explain this definition and prove that the notion of "unfolding tree" is relevant for \COVER. 
+We first provide the formal definition "unfolding trees". We will then explain this definition and why this notion is relevant for \COVER. 
 
+\begin{definition}
+\label{def:unfolding_tree}
 \AP An ""unfolding tree"" $\tree$ over $\prot$ is
-a finite tree where each node $\node$ has three labels:
+a finite tree where all nodes $\node$ have three labels:
 \begin{itemize}
 	\item a "local run" of $\prot$, written $\localrunlabel{\node}$;
 	
@@ -78,11 +83,11 @@ a finite tree where each node $\node$ has three labels:
 \end{itemize} 
 Moreover, all nodes $\node$ in an "unfolding tree" must satisfy the four following conditions:
 \begin{enumerate}[label= (\roman*), ref=(\roman*)]
-	\item \label{item:condition1_non_initial_value} For each "non-initial" value $\aval \ne \valuelabel{\node}$ of $\localrun$, $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval}{\localrun}$ is a subword of $\bosslabel{\node'}$.
+	\item \label{item:condition1_non_initial_value} For each "non-initial" value $\aval \ne \valuelabel{\node}$ of $\localrunlabel{\node}$, $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval}{\localrunlabel{\node}}$ is a subword of $\bosslabel{\node'}$.
 	
-	\item \label{item:condition2_initial_value} For each "initial" value $\aval$ appearing in $\localrun$, there is a "decomposition" $\decsymb =$ \\ $(w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$~such~that:
+	\item \label{item:condition2_initial_value} For each "initial" value $\aval$ in $\localrunlabel{\node}$, there is a "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$~s.t.:
 	\begin{itemize}
-		\item $\localrun$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{\aval}{\localrun_i}$ and $\vinput{\aval}{\localrun_i} \in \set{m_1, \dots, m_{i-1}}^*$,
+		\item $\localrunlabel{\node}$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{\aval}{\localrun_i}$ and $\vinput{\aval}{\localrun_i} \in \set{m_1, \dots, m_{i-1}}^*$,
 		\item for all $i \in [1,\ell]$, $\node$ has a child $\node_i$ which is a "follower node" such that $\followlabelmessage{\node_i} = m_i$ and $\followlabelword{\node_i} \in\langdec{\decsymb_i}$ where $\decsymb_i = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.	\end{itemize}
 	
 	\item \label{item:condition3_follower_node} If $\node$ is a "follower node" then $\valuelabel{\node}$ is not an "initial" value of $\localrun$, $\vinput{\valuelabel{\node}}{\localrun} = \followlabelword{\node}$ and 
@@ -92,21 +97,21 @@ Moreover, all nodes $\node$ in an "unfolding tree" must satisfy the four followi
 \end{enumerate}
 
 \AP Lastly, given $\tree$ an "unfolding tree", we define its ""size@@tree"" by $\size{\tree} := \sum_{\node \in \tree} \size{\localrunlabel{\node}} + \size{\speclabel{\node}}$. Note that the "size@@tree" of $\tree$ also takes into account the size of its nodes, so that a tree $\tree$ can be stored in polynomial space  in $\size{\tree}$ (renaming the values appearing in $\tree$ if needed). 
-
+\end{definition}
 %A node represents a "local run" witnessing that some "role" can be carried out. The role is represented with its "specification" and its value is necessary to check that the "local run" is a valid witness.\lu{pas sure de cette phrase..}
 %The root node should have a "local run" reaching the final state to cover. It should be seen as a boss node, however its value nor its exact specification (the word $\bosslabel{\node}$) are relevant as they shall not be used.\lu{dire plus de choses là dessus ?}
 
 
-We now explain this definition. Let $\node$ be a node of an "unfolding tree" $\tree$ and let $\localrun := \localrunlabel{\node}$. $\localrun$ encodes the "local run" of a given agent; $\speclabel{\node}$ encodes the specification that this "local run" carries out; $\valuelabel{\node}$ encodes the value for which the "specification" is carried out.
+We now explain this definition. Let $\node$ be a node of an "unfolding tree" $\tree$ and let $\localrun := \localrunlabel{\node}$. $\localrun$ encodes the "local run" of a given agent, $\speclabel{\node}$ encodes the specification that this "local run" carries out and $\valuelabel{\node}$ encodes the value for which the "specification" is carried out.
 
 Conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} state that the "specifications" of the children of $\node$ are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents. Conditions \ref{item:condition3_follower_node} and \ref{item:condition4_boss_node} state that $\node$ is a witness that its "specification" is carried out. 
 
-Condition \ref{item:condition1_non_initial_value} expresses that, for every "non-initial" value $\aval$ of $\localrun$ (values not in $\localrun$ at the start), $\node$ must have a "boss" child witnessing that $\vinput{v}{\localrun}$ can indeed be received. Because $\aval$ was initially stored in $\localrun$, it can be replaced by any other value as long as the sequence received contains $\vinput{v}{\localrun}$, therefore we do not impose anything about the values of this "boss" child. 
+Condition \ref{item:condition1_non_initial_value} expresses that, for every "non-initial" value $\aval$ of $\localrun$ (values not in $\localrun$ at the start), $\node$ must have a "boss" child witnessing that $\vinput{v}{\localrun}$ can indeed be received. Because $\aval$ was first stored by a "reception step" of $\localrun$, another value with sequence of message types containing $\vinput{v}{\localrun}$ would also work and we do not impose the value of this "boss" child to be $v$. 
 
-Let us now explain condition \ref{item:condition2_initial_value}. Let $v$ be an initial value of $\localrun$. Suppose that $\localrun$ is the "local run" of agent $a$. If another agent broadcasts a message $(m,v)$, it must have first received $\aval$ and stored it. Therefore, such an agent can be duplicated, and from this point on we may assume that we have an unlimited supply of messages $(m,v)$.
-We split $\localrun$ into $u_0,\dots,u_\ell$ based on the first point where each type of message is received with value $v$. For every $i$, the sequence of messages with value $v$ during $u_i$ is $\voutput{v}{u_i}$ where symbols from $\set{m_1,\dots, m_{i-1}}$ can be freely added. Therefore, the child $\node_i$ responsible for the broadcast of $m_i$ may first receive with value $v$ a subword of $w_0' \cdot w_1' \cdots w_{i-1}'$ where, for all $j \leq i-1$, $w_j$ is obtained from $\voutput{v}{u_i}$ by adding symbols from $\set{m_1, \dots, m_{j-1}}$, which means $\followlabelword{\node_i} \in \langdec{\decsymb_i}$.   
+We now explain condition \ref{item:condition2_initial_value}. Let $v$ be an initial value of $\localrun$. Consider a run where $\localrun$ is the "local run" of agent $a$. If another agent broadcasts with value $v$, it has first received and stored $\aval$. Therefore, such an agent can be duplicated, and we may afterwards assume that we have an unlimited supply of messages $(m,v)$.
+We split $\localrun$ into $u_0,\dots,u_\ell$ based on the first point where each type of message is received with value $v$. For every $i$, the sequence of messages available with value $v$ during $u_i$ is $\voutput{v}{u_i}$ expanded by freely adding symbols from $\set{m_1,\dots, m_{i-1}}$. Therefore, the child $\node_i$ responsible for the broadcast of $(m_i,v)$ may first receive with value $v$ a subword of $w_0' \cdot w_1' \cdots w_{i-1}'$ where, for all $j \leq i-1$, $w_j$ is obtained from $\voutput{v}{u_i}$ by adding symbols from $\set{m_1, \dots, m_{j-1}}$, which we state as $\followlabelword{\node_i} \in \langdec{\decsymb_i}$.   
 
-Condition~\ref{item:condition3_follower_node} directly states that a "follower node" $\node$ receives word $\followlabelword{\node}$ with value $\valuelabel{\node}$ and broadcasts message $(\followlabelmessage{\node}, v)$. Condition \ref{item:condition4_boss_node} expresses that a "boss node" witnesses the broadcast of a sequence of messages $\bosslabel{\node}$ with a single value; in this sequence, some messages may come from subsequent agents encoded in "follower" children, which is why we have the condition that $\bosslabel{\node} \in \langdec{\decsymb}$ and not simply $\bosslabel{\node} = \voutput{\valuelabel{\node}}{\localrun}$. 
+Condition~\ref{item:condition3_follower_node} directly states that a "follower node" $\node$ receives word $\followlabelword{\node}$ with value $\valuelabel{\node}$ and broadcasts message $(\followlabelmessage{\node}, v)$. Condition \ref{item:condition4_boss_node} expresses that a "boss node" witnesses the broadcast of a sequence of messages $\bosslabel{\node}$ with a single value; in this sequence, some messages may come from auxiliary agents encoded in "follower" children, which is why we have the condition that $\bosslabel{\node} \in \langdec{\decsymb}$ and not simply $\bosslabel{\node} = \voutput{\valuelabel{\node}}{\localrun}$. 
 
 
 
@@ -122,18 +127,18 @@ Condition~\ref{item:condition3_follower_node} directly states that a "follower n
 \end{figure}
 
 \begin{example}
-	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the run of \cref{ex:example-1} (we omit the labels of the root). The tables represent "local run", each column being a "local configuration". For instance, the local run at $\node_1$ is \begin{multline*}
-	(q_0, (x_1,y_1)) \intstep{(q_0, \br{m_1}{1},q_1)} (q_1, (x_1, y_1)) \extbr{(q_1, \rec{m_4}{2}{\enregact}, q_4)}{y_2} (q_4, (x_1, y_2)) \\ \extbr{(q_4, \rec{m_6}{1}{\eqtestact}, q_7)}{x_1} (q_7, (x_1, y_2)) \end{multline*}
+	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the run of \cref{ex:example-1}. The tables represent "local run", each column is a "local configuration". For instance, the local run at $\node_1$ is \begin{multline*}
+	(q_0, (x_1,y_1)) \intstep{(q_0, \br{m_1}{1},q_1)} (q_1, (x_1, y_1)) \extbr{(q_1, \rec{m_4}{2}{\enregact}, q_4)}{y_2} (q_4, (x_1, y_2)) \\ \extbr{(q_4, \rec{m_6}{1}{\eqtestact}, q_7)}{x_1} (q_7, (x_1, y_2)) \intstep{(q_7, \br{m_7}{1},q_7)} (q_7, (x_1, y_2)) \end{multline*}
 	
 	We explain why conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied at the root $\node_1$ of the tree. Let $\localrun$ denote its local run.
 	The only non-initial value in $\localrun$ is $y_2$, and $\vinput{y_2}{\localrun} = m_4$; condition \ref{item:condition1_non_initial_value} is satisfied as $\node_1$ has a boss child with a "boss specification" containing $m_4$. 
-	For "initial value" $y_1$, condition~\ref{item:condition2_initial_value} is trivially satisfied as $\localrun$ never receives a message with value $y_1$. For $x_1$, consider the decomposition $\decsymb := (m_2, m_6, \epsilon)$. Condition~\ref{item:condition2_initial_value} is satisfied thanks to $\node_3$ being a child of $\node_1$ with "follower specification" $(\mathbf{fm}, \mathbf{fw})$ such that $\mathbf{fm} = m_1$ and $\mathbf{fw} \in \langdec{\decsymb_1}$ where $\decsymb_1 = (m_2)$. In fact, conditions~\ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are also satisfied for the other nodes. 
+	For "initial value" $y_1$, condition~\ref{item:condition2_initial_value} is satisfied as $\localrun$ never receives a message with value $y_1$. For $x_1$, consider the decomposition $\decsymb := (m_2, m_6, m_7)$. Condition~\ref{item:condition2_initial_value} is satisfied thanks to $\node_3$ being a child of $\node_1$ with "follower specification" $(\mathbf{fm}, \mathbf{fw})$ such that $\mathbf{fm} = m_1$ and $\mathbf{fw} \in \langdec{\decsymb_1}$ where $\decsymb_1 = (m_2)$. One can check that conditions~\ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied for the other nodes. 
 	
 	Condition \ref{item:condition3_follower_node} only applies to $\node_3$. It is satisfied as $\localrunlabel{\node_3}$ broadcasts $(m_6,x_1)$; to do so, it can receive $(m_2,x_1)$ without needing a child to broadcast it. 
-	For condition \ref{item:condition4_boss_node}, it suffices to observe that $\node_2$ and $\node_4$ broadcast their $\bossspec$; we can consider "decompositions" $(m_4)$ and $(m_2)$ respectively. Moreover, $\node_1$ would have satisfied "boss specification" $m_1 \cdot m_6$, with decomposition $(m_2, m_6, \epsilon)$, although its local run does not broadcast $m_6$. 
+	For condition \ref{item:condition4_boss_node}, it suffices to observe that $\node_2$ and $\node_4$ broadcast their $\bossspec$ themselves; we can consider "decompositions@@decomposition" $(m_4)$ and $(m_2)$ respectively. Moreover, $\node_1$ satisfies "boss specification" $m_1 \, m_6 \, m_7$, with decomposition $(m_2, m_6, m_7)$, although its local run does not broadcast $m_6$. 
 	
 	The execution from Example~\ref{ex:example-1} involved two agents $a_1$ and $a_2$; $a_1$ corresponds to nodes $\node_1$ and $\node_4$ and $a_2$ 
-	to nodes $\node_2$ and $\node_3$. However, when building an execution from our tree, we would use $4$ distinct agents, each playing a single role. Our "unfolding trees" assign each task to a distinct agent and may therefore require a non-optimal number of agents.
+	to nodes $\node_2$ and $\node_3$. However, when building an execution from our tree, we would use $4$ distinct agents, each playing a single role. Indeed, our "unfolding trees" assign each task to a distinct agent and therefore can require a non-optimal number of agents.
 \end{example}
 
 
