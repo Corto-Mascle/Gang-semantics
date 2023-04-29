@@ -324,7 +324,7 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 	\\
 	
 	\textbf{Case 3: } If $\sigma_i \to \sigma_{i+1}$ is an \emph{external broadcast} $d = (q, \brone{m}, q')$ , then we make all agents $a \in \agents_q^{d}$ execute that transition one by one. None of those broadcasts are received by any other agent, except for the last one:
-	If $b_i \neq b_{i+1}$ then there is a transition $(b, \recone{m}{\alpha}, b'')$ and either $b_{i+1} = b'' \neq \noboss$ and $\alpha = *$ or $b_{i+1} = \noboss$ and $\alpha=\enregact$. In both cases we make $a_i$ execute that transition, and we set $a_{i+1} = a_i$.
+	If $b_i \neq b_{i+1}$ then there is a transition $(b_i, \recone{m}{\alpha}, b')$ and either $b_{i+1} = b'' \neq \noboss$ and $\alpha = *$ or $b_{i+1} = \noboss$ and $\alpha=\enregact$. In both cases we make $a_i$ execute that transition, and we set $a_{i+1} = a_i$.
 	
 	For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \recone{m}{*}, k')$ with $k \in K_i$. We make all agents of $\agents_k^{d'}$ take that transition.
 	
