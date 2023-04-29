@@ -51,10 +51,10 @@ We say that a local run is cheaper than another one if the set of children it sp
  We now define a notion of altitude of a node, which is not the same as its depth in the tree. Intuitively we put the children of a node $n$ below it if $n$ has to receive messages from them (first case in the previous subsection) and above it if $n$ has to send messages to them (second case).
  The altitude of the root is $0$, and the altitude of a child of a node $n$  is  the one of $n$ minus one if it is of the first type of specification, plus one otherwise.
  
- Nodes of minimal altitude (except maybe the root) are nodes of the second type which only have children of the first type, hence all they have to do is broadcast one single message (given by their father). Hence their length is at most $f(\size{\prot})$. 
+ Nodes of minimal altitude (except maybe the root) are nodes of the second type which only have children of the first type, hence all they have to do is broadcast one single message (given by their parent). Hence their length is at most $f(\size{\prot})$. 
  
  Now assume we have a bound $M$ on runs of altitude $h$. A run of altitude $h-1$ sees at most $r$ different initial values. Hence it has at most $\size{\messages}r$ children of the second type, and for each corresponding specification it has to make at most $M$ broadcasts, as each of those children makes at most $M$ receiving actions.
- Moreover, if it is of the first type, it also has to provide broadcasts for its father, but again his father has altitude $h$, thus will require at most $M$ broadcasts.
+ Moreover, if it is of the first type, it also has to provide broadcasts for its parent, but again his parent has altitude $h$, thus will require at most $M$ broadcasts.
  
  Overall a local run at altitude $h-1$ needs to make a sequence of at most $M(\size{\messages} r +1)$ broadcasts. If that can be done, it can be done by a local run of length at most $[M(\size{\messages} r +1)](f(\size{\prot})+1)$.
  
