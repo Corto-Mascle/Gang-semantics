@@ -11,10 +11,15 @@
 	An important observation is that whenever an agent gets in a state $q$ with a value $\aval$ that is not its initial one, it means that at some point in the run, it was in a state $q'$ and executed a transition in which it received a message with value $v$, stored it in its register and went to a state $q''$. 
 	As mentioned before, we can copy the run up to that point to have an unlimited supply of agents in $q'$, and thus an unlimited supply of agents in $q''$ with value $\aval$. We can then make all those agents copy the broadcasts of $a$ and receive the same messages so that they all reach $q$ with value $\aval$. Hence if we have an agent in a state $q$ with a value $\aval$ that is not its initial one, we can assume that we have as many agents in $q$ with value $\aval$ as we need.	
 	
-	We thus define \emph{"gangs"}, which abstract runs with respect to a value $v$. A "gang" is made of a "boss" state (the state of the agent which had that value at the start) and a \emph{clique}, a set of "follower" states (the states reached by other agents with that value). The clique may only increase through the abstract run, intuitively we assume that we always have enough copies of each agent so that we can leave many agents with value $v$ in every state they visited.
-
+	We thus define "gangs@@informal", which abstract runs with respect to a value $v$. A "gang" is made of a "boss@@ganginformal" state (the state of the agent which had that value at the start) and a "clique@@informal", the states reached by other agents with that value. The clique may only increase through the abstract run, intuitively we assume that we always have enough copies of each agent so that we can leave many agents with value $v$ in every state they visited.
+	\AP More formally, let $(Q,\messages, \transitions, q_0)$ be a protocol.
+	A ""gang@@informal"" is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. The element $\boss$ is the ""boss@@ganginformal"" and the set $\clique$ is the ""clique@@informal"" of the "gang@@informal". 	
+	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \valsof{\run}$. The "gang@@informal" of value $\aval$ in $\run$ is the "gang@@informal" $(\boss, \clique)$ such that, 
+	\begin{itemize}
+		\item if there exists $a_0$ an agent which has value $v$ in $\config_0$ and keeps it in all $\config_i$ then $\boss$ is its state in $\config_k$, otherwise $\boss := \noboss$, 
+		\item  $\clique$ is the set of states $q$ such that there is an agent in $q$ with value $v$ in some $\config_i$.
+	\end{itemize}
 	
-		
 
 
 

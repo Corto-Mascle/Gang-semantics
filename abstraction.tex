@@ -11,23 +11,6 @@
 
 
 
-\begin{restatable}{definition}{defGang}
-	Let $(Q,\transitions, q_0)$ be a protocol.
-	
-	A ""gang"" is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. The element $\boss$ is the ""boss@gang"" and the set $\clique$ is the ""clique"" of the "gang". %We write $\gangconfigs$ the set of "gangs". 
-	
-	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \valsof{\run}$. The "gang" of value $\aval$ in $\run$, written $\gangof{\aval}{\run}$, is the "gang" $(\boss, \clique)$ such that, 
-	\begin{itemize}
-		\item if there exists $a_0 \in \agentsof{\run}$ such that, 
-		for every 
-		$i \in \nset{0}{k}$, 
-		$\data{\config_i}(a_0) = \aval$ then $\boss := \st{\config_k}(a_0)$, otherwise $\boss := \noboss$, 
-		%	\nico{changement de def: pour etre le boss il faut garder sa valeur tt le long de l'execution}
-		\item  $\clique := \set{q \in Q \mid \exists i \leq k, \exists a \in \agents\setminus \set{a_0}, \config_i(a) = (q,\aval)}$ %\\
-		%´\nico{j'ai changé la def pour fque ça soit plus facile: ancienne def $\clique := \set{q \in Q \mid \exists a \in \agents\setminus \set{\boss}, \config_k(a) = (q,\aval)}$}
-	\end{itemize}
-%	Note that, if such an agent $a_0$ exists, then it is unique as $\config_0$ is initial hence this definition is sound. If there exists no agents with value $\aval$ in $\config_0$, then trivially $\gangof{\aval}{\run} = (\noboss, \emptyset)$. 
-\end{restatable} 
 
 
 
