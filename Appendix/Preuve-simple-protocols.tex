@@ -8,9 +8,9 @@
 	The intuition is as follows. $\prot'$ corresponds to $\prot$, where an abstract layer is added in the treatments of the registers. In $\prot'$, we do not directly store each register but rather equality relations between them, so that a value shared by several registers is only stored once. We dub registers of $\prot'$ ""memory slots"" to distinguish them from the registers of $\prot$. A "memory slot" will be used to store a value shared between registers. 
 	We will need $\regnum$ "memory slots" to do so. Moreover, we will need a mapping $\map : \nset{1}{r} \to \nset{1}{r}$ that tells, for each register, in which "memory slot" its value is stored. This mapping will be directly encoded in the set of states of $\prot'$, which causes an exponential blow-up in the size of the protocol.
 	
-	For simplicity, we allow our protocol $\prot'$ to have dummy transitions with no effect (such transitions could be encoded using broadcasts with a dummy message type). 
+	For simplicity, we allow our protocol $\prot'$ to have dummy transitions with no effect (such transitions can be encoded using broadcasts with a dummy message type). 
 	
-	Let $\prot = (Q, \messages, \transitions', q_0, \regnum)$. 
+	Let $\prot = (Q, \messages, \transitions, q_0, \regnum)$. 
 	We define $\prot' := (Q', \messages, \transitions', q_0', \regnum)$ as follows. The set of states is $Q' := Q \times (\nset{1}{r} \to \nset{1}{r})$, its initial state is $q_0' := (q_0, \idmap)$ where $\idmap(i) = i$ for all $i \in \nset{1}{r}$. 
 	
 	The set of transitions $\transitions'$ is defined as follows.
