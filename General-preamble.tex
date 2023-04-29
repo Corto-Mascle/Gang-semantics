@@ -130,11 +130,10 @@
 \newcommand{\run}{\rho}
 % \newcommand{\Runs}[1]{Runs_{#1}}
 \newcommand{\runsize}[1]{||#1||}
-\newcommand{\statesin}[1]{\mathsf{cov}(#1)}
-\newcommand{\valsof}[1]{\mathsf{val}(#1)}
 \newcommand{\agents}{\mathbb{A}}
-\newcommand{\agentsof}[1]{\mathsf{ag}(#1)}
-
+\knowledgenewrobustcmd{\statesin}[1]{\mathsf{\cmdkl{cov}}\cmdkl{(}#1\cmdkl{)}}
+\knowledgenewrobustcmd{\valsof}[1]{\mathsf{\cmdkl{val}}\cmdkl{(}#1\cmdkl{)}}
+\knowledgenewrobustcmd{\agentsof}[1]{\mathsf{\cmdkl{ag}}\cmdkl{(}#1\cmdkl{)}}
 
 \newcommand{\configs}[1]{\Gamma(#1)}
 \newcommand{\allconfigs}{\Gamma}
@@ -147,7 +146,7 @@
 \newcommand{\gang}{\mathsf{G}}
 \newcommand{\gangset}{\mathcal{G}}
 \newcommand{\gangconfigs}{\mathcal{G}}
-\newcommand{\gangof}[2]{\mathsf{gang}_{#1}(#2)}
+\knowledgenewrobustcmd{\gangof}[2]{\mathsf{\cmdkl{gang}}_{#1}\cmdkl{(}#2\cmdkl{)}}
 \newcommand{\noboss}{\bot}
 
 % abstract semantics
@@ -159,7 +158,7 @@
 \newcommand{\aconfiginitset}{\allaconfigs_{\mathsf{init}}}
 \newcommand{\arun}{\nu}
 
-\newcommand{\absproj}[2]{\mathsf{abs}_{#1}(#2)}
+\knowledgenewrobustcmd{\absproj}[2]{\cmdkl{\mathsf{abs}}_{#1}\cmdkl{(}#2\cmdkl{)}}
 
 % some standard names useful in proofs
 \newcommand{\agentbr}{a_{\brsymb}} %agent broadcasting
