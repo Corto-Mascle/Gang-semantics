@@ -5,20 +5,20 @@ This section is dedicated to the proof of the main result of this paper:
 
 \begin{restatable}{theorem}{decidablecover}
 \label{thm:decidable-cover}
-\COVER for \BNRA{}s is decidable. Moreover, the problem is $\Fcomplexity{\omega^\omega}$-complete.
+\COVER for BNRA is decidable and $\Fcomplexity{\omega^\omega}$-complete.
 \end{restatable}
 
 Thanks to Proposition~\ref{prop:loc-eq-test-elimination}, we may assume that our protocols have no "local equality tests" (the complexity class $\Fomegaomega$ is stable by exponential reduction).
 
 In order to abstract our "runs", we want to understand what an agent $a$ needs from other agents in order to cover a state $q$. 
-
-In general, in a "run", $a$ may receive messages with several different values from the same agent. However, because each message contains a single value, we can clone agents so that sets of agents sending messages to $a$ with different values are disjoint and do not interact at all with each other. The other key ingredient of the construction is the "specifications" presented below; they describe the two ways an agent may receive messages over a value $v$.
+In general, $a$ may receive messages with several values from the same agent. However, because each message contains a single value, we will in fact be able to clone agents so that agents sending messages to $a$ with distinct values are distinct and do not interact with each other. 
+% The other key ingredient of the construction is the "specifications" presented below; they describe the two ways an agent may receive messages with a value $v$.
 
 We identify two types of roles that other agents must carry out, called \emph{specifications}. First, they might need to broadcast a sequence of "message types" $w \in \messages^*$ with a common value, so that $a$ stores the value of the first such message and tests further messages for equality. We later call such a role a \emph{"boss specification"}.  
-It might also be the case that $a$ sends some "messages" with a common value $\aval$ that it had initially, and then needs to receive back a message $(\amessage, \aval)$ with that value. Then some other agents should be able to  broadcast $(\amessage, \aval)$ after receiving some sequence of "message types" $w$ with that value $\aval$ that they did not have initially. We later call such a role a \emph{"follower specification"}.
+It might also be the case that $a$ sends some "messages" with a common value $\aval$ that it had initially, then needs to receive a message $(\amessage, \aval)$ with that same value. To do so, some other agents should be able to  broadcast $(\amessage, \aval)$ after receiving some sequence of "message types" $w$ with that value $\aval$ (that they did not have in their registers initially, because $a$ did). We later call such a role a \emph{"follower specification"}.
 
 The two roles identified previously are the key to the decidability procedure.
-To represent "runs", we consider \emph{unfolding trees} that represent all such roles, dependencies between them and how they are carried out. The fact that we can consider trees and not general graphs is not obvious and is connected to the copycat property.  The decidability procedure will rely on a bound of the minimum "size@@tree" of the "unfolding tree" one has to consider.
+To represent "runs", we consider \emph{unfolding trees} that represent all such roles, dependencies between them and how they are carried out. The fact that we can consider trees and not general graphs is not obvious and is connected to the cloning idea mentioned above.  The decidability procedure will rely on a bound of the minimum "size@@tree" of the "unfolding tree" one has to consider.
 
 In Section~\ref{sec:decidability-defs}, we introduce several useful notions. In Section~\ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In Section~\ref{sec:tree-bounds}, we bound the size of the "unfolding trees" that we have to consider. In Section~\ref{sec:decidability-end}, we conclude by exposing our decidability procedure. 
 In Section~\ref{sec:undec-target}, we prove that the \TARGET problem is, by contrast, undecidable.
@@ -70,7 +70,8 @@ We define a notion of "local run", which may be seen as the projection of a "run
 \subsection{Unfolding trees}
 \label{sec:decidability-tree-unfoldings}
 
-An \emph{unfolding tree} is an abstraction of a "run" in the form of a tree where each node is assigned a "local run" and a specification of its role. A ""boss specification"" consists of a word $\bossspec \in \messages^*$ describing a sequence of message types that should be broadcast all with the same value. A ""follower specification"" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that one must be able to broadcast $\followmessagespec$ with value $v$ after receiving the sequence $\followwordspec$ with value $v$. 
+An \emph{unfolding tree} is an abstraction of a "run" in the form of a tree where each node is assigned a "local run" and a specification of its role. In this vision, the node at the root corresponds to the "local run" of the agent that we are interested in (\emph{e.g.}, the agent covering $q_f$), and children nodes are here to provide messages that this agent needs to receive; such needs are expressed using "specifications". 
+A ""boss specification"" consists of a word $\bossspec \in \messages^*$ describing a sequence of message types that should be broadcast all with the same value. A ""follower specification"" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that one must be able to broadcast $\followmessagespec$ with value $v$ after receiving the sequence $\followwordspec$ with value $v$. 
 
 We first provide the formal definition "unfolding trees". We will then explain this definition and why this notion is relevant for \COVER. 
 
@@ -107,16 +108,20 @@ We now explain this definition. Let $\node$ be a node of an "unfolding tree" $\t
 
 Conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} state that the "specifications" of the children of $\node$ are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents. Conditions \ref{item:condition3_follower_node} and \ref{item:condition4_boss_node} state that $\node$ is a witness that its "specification" is carried out. 
 
-Condition \ref{item:condition1_non_initial_value} expresses that, for every "non-initial value" $\aval$ of $\localrun$ (values not in $\localrun$ at the start), $\node$ must have a "boss" child witnessing that $\vinput{v}{\localrun}$ can indeed be broadcast. Because $\aval$ was first stored by a "reception step" of $\localrun$, another value with sequence of message types containing $\vinput{v}{\localrun}$ would also work and we do not impose the value of this "boss" child to be $v$. 
+Condition \ref{item:condition1_non_initial_value} expresses that, for every "non-initial value" $\aval$ of $\localrun$ (values not in $\localrun$ at the start), $\node$ must have a "boss" child witnessing that $\vinput{v}{\localrun}$ can indeed be broadcast. Because $\aval$ was first stored by a "reception step" of $\localrun$, any other (fresh) value with sequence of message types containing $\vinput{v}{\localrun}$ also works and we do not impose the value label of this child to be $v$. 
 
 We now explain condition \ref{item:condition2_initial_value}. Let $v$ be an "initial value" of $\localrun$. Consider a "run" where $\localrun$ is the "local run" of agent $a$. If another agent broadcasts with value $v$, it has first received and stored $\aval$. Therefore, such an agent can be duplicated, and we may afterwards assume that we have an unlimited supply of messages $(m,v)$.
 We split $\localrun$ into $u_0,\dots,u_\ell$ based on the first point where each type of message is received with value $v$. For every $i$, the sequence of messages available with value $v$ during $u_i$ is $\voutput{v}{u_i}$ expanded by freely adding symbols from $\set{m_1,\dots, m_{i-1}}$. Therefore, the child $\node_i$ responsible for the broadcast of $(m_i,v)$ may first receive with value $v$ a subword of $w_0' \cdot w_1' \cdots w_{i-1}'$ where, for all $j \leq i-1$, $w_j$ is obtained from $\voutput{v}{u_i}$ by adding symbols from $\set{m_1, \dots, m_{j-1}}$, which we state as $\followlabelword{\node_i} \in \langdec{\decsymb_i}$.   
 
-Condition~\ref{item:condition3_follower_node} directly states that a "follower node" $\node$ receives word $\followlabelword{\node}$ with value $\valuelabel{\node}$ and broadcasts message $(\followlabelmessage{\node}, \valuelabel{\node})$. Condition \ref{item:condition4_boss_node} expresses that a "boss node" witnesses the broadcast of a sequence of messages $\bosslabel{\node}$ with a single value; in this sequence, some messages may come from auxiliary agents encoded in "follower" children, which is why we have the condition that $\bosslabel{\node} \in \langdec{\decsymb}$ and not simply $\bosslabel{\node} = \voutput{\valuelabel{\node}}{\localrun}$. 
+Condition~\ref{item:condition3_follower_node} directly states that a "follower node" $\node$ receives word $\followlabelword{\node}$ with value $\valuelabel{\node}$ and broadcasts message $(\followlabelmessage{\node}, \valuelabel{\node})$. Condition \ref{item:condition4_boss_node} expresses that a "boss node" witnesses the broadcast of a sequence of messages $\bosslabel{\node}$ with a single value; in this sequence, some messages may come from auxiliary agents encoded in "follower" children, which is why we have the condition that $\bosslabel{\node} \in \langdec{\decsymb}$ and not simply $ \voutput{\valuelabel{\node}}{\localrun} \subword \bosslabel{\node}$. 
 
+Our aim is to prove that we can study \COVER directly on "unfolding trees". For \COVER, we consider trees whose root $\node$ is a "boss node", as they suffice to witness "coverability" (a "follower node" implicitely relies on its parent's ability to broadcast some messages \nico{a discuter}). 
+% Hence the following definition: 
 
-
-%fact that it can be a tree = non-obvious
+\begin{definition}
+\label{def:cov_witness}
+A ""coverability witness"" for $(\prot, q_f)$ is an "unfolding tree" over $\prot$ whose root $\node$ is a "boss node" whose "local run" $\localrunlabel{\node}$ covers $q_f$. 
+\end{definition}
 
 \begin{figure}
 	\begin{center}
@@ -128,40 +133,31 @@ Condition~\ref{item:condition3_follower_node} directly states that a "follower n
 \end{figure}
 
 \begin{example}
-	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the "run" of \cref{ex:example-1}. The tables represent "local run", each column is a "local configuration" and the steps are omitted for simplicity. For instance, the "local run" at $\node_1$ is \begin{multline*}
-	(q_0, (x_1,y_1)) \intstep{(q_0, \br{m_2}{1},q_1)} (q_1, (x_1, y_1)) \extbr{(q_1, \rec{m_4}{2}{\enregact}, q_4)}{y_2} (q_4, (x_1, y_2)) \\ \extbr{(q_4, \rec{m_6}{1}{\eqtestact}, q_7)}{x_1} (q_7, (x_1, y_2)) \intstep{(q_7, \br{m_7}{1},q_7)} (q_7, (x_1, y_2)) \end{multline*}
+	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the "run" of \cref{ex:example-1}. The tables represent "local run", each column is a "local configuration" and the step labels are omitted for simplicity. For instance, the "local run" at $\node_1$ is \vspace{-0,2cm} \begin{multline*} 
+	(q_0, (x_1,y_1)) \intstep{(q_0, \br{m_2}{1},q_1)} (q_1, (x_1, y_1)) \extbr{(q_1, \rec{m_4}{2}{\enregact}, q_4)}{y_2} (q_4, (x_1, y_2)) \\ \extbr{(q_4, \rec{m_6}{1}{\eqtestact}, q_7)}{x_1} (q_7, (x_1, y_2)) \intstep{(q_7, \br{m_7}{1},q_7)} (q_7, (x_1, y_2)) \end{multline*} \vspace{-0,6cm}
 	
-	We explain why conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied at the root $\node_1$ of the tree. Let $\localrun$ denote its "local run".
+	We explain why conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied at the root $\node_1$ of the tree. Let $\localrun := \localrunlabel{\node_1}$ its "local run". 
 	The only "non-initial value" in $\localrun$ is $y_2$, and $\vinput{y_2}{\localrun} = m_4$; condition \ref{item:condition1_non_initial_value} is satisfied as $\node_1$ has a boss child with a "boss specification" containing $m_4$. 
 	For "initial value" $y_1$, condition~\ref{item:condition2_initial_value} is satisfied as $\localrun$ never receives a message with value $y_1$. For $x_1$, consider the decomposition $\decsymb := (w, m_6, w')$ for $w:= m_2$ and $w' := m_7$ seen as words of $\messages^*$. Condition~\ref{item:condition2_initial_value} is satisfied thanks to $\node_3$ being a child of $\node_1$ with "follower specification" $(\mathbf{fm}, \mathbf{fw})$ such that $\mathbf{fm} = m_6$ and $\mathbf{fw} \in \langdec{\decsymb_1}$ where $\decsymb_1 = (m_2)$. One can check that conditions~\ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied for the other nodes. 
 	
 	Condition \ref{item:condition3_follower_node} only applies to $\node_3$. It is satisfied as $\localrunlabel{\node_3}$ broadcasts $(m_6,x_1)$ after receiving only $(m_2,x_1)$ with that value. 
-	For condition \ref{item:condition4_boss_node}, it suffices to observe that $\node_2$ and $\node_4$ broadcast their $\bossspec$ themselves; we can consider "decompositions" $(m_4)$ and $(m_2)$ respectively. Moreover, $\node_1$ satisfies "boss specification" $\bossspec:= m_1 \, m_6 \, m_6 \, m_7$ as $v \in \langdec{\decsymb}$ with $\decsymb := (m_2, m_6, m_7)$ as above. Therefore $\node_1$ is a witness that $\bossspec$ can be broadcast with a single value, although its "local run" does not broadcast $m_6$ itself. 
+	For condition \ref{item:condition4_boss_node}, it suffices to observe that $\node_2$ and $\node_4$ broadcast their $\bossspec$ themselves; we can consider "decompositions" $(m_4)$ and $(m_2)$ respectively. Moreover, $\node_1$ satisfies "boss specification" $\bossspec:= m_1 \, m_6 \, m_6 \, m_7$ as $\bossspec \in \langdec{\decsymb}$ with $\decsymb := (m_2, m_6, m_7)$ as above. Therefore $\node_1$ is a witness that $\bossspec$ can be broadcast with a single value, although its "local run" does not broadcast $m_6$ itself. 
 	
 	The "run" from Example~\ref{ex:example-1} involved two agents $a_1$ and $a_2$; $a_1$ corresponds to nodes $\node_1$ and $\node_4$ and $a_2$ 
-	to nodes $\node_2$ and $\node_3$. Note that, if we apply our procedure described below to build a "run" from $\tree$, we would however use $4$ distinct agents, each playing a single role.
+	to nodes $\node_2$ and $\node_3$. Note that, if we apply our procedure described below to build a "run" from $\tree$, we would use $4$ distinct agents, each playing a single role.
 \end{example}
 
 
-Our aim is to prove that we can study the \COVER problem directly on "unfolding trees". For \COVER, we consider trees whose root $\node$ is a "boss node", as they suffice to witness "coverability". 
-Hence the following definition: 
-
-\begin{definition}
-\label{def:cov_witness}
-A ""coverability witness"" is an "unfolding tree" whose root $\node$ is a "boss node" whose "local run" $\localrunlabel{\node}$ covers $q_f$. 
-\end{definition}
-
-This definition is sound as a "coverability witness" is a witness that \COVER is positive:
-
+We now prove that \COVER can be stated as the existence of an "unfolding tree" that is a "coverability witness" as defined above:
 \begin{restatable}{proposition}{treessoundcomplete}
 \label{prop:trees-sound-complete}
 An instance of $\COVER$ $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
 \end{restatable}
 \begin{proof}[Proof sketch]
-The translation from "run" to tree works by induction on the length of the "run". We first define in a natural way what it means for a "run" to satisfy a "specification". We consider a "run" $\run$ and isolate a well-chosen agent $a$, whose "local run" witnesses that the "specification" is satisfied. We call the induction hypothesis with the "specifications" expressing what $a$ needs to receive from other agents. Each such "specification" is satisfied by a strict prefix of $\run$ (except if we want $\run$ to satisfy a boss specification, in which case we might use the induction hypothesis on $\run$ but always with a follower specification, hence the induction is well-founded).
+The translation from "run" to tree works by induction on the length of the "run". We first define in a natural way what it means for a "run" to satisfy a "specification". We consider a "run" $\run$ and isolate a well-chosen agent $a$, whose "local run" witnesses that the "specification" is satisfied. We call the induction hypothesis with the "specifications" expressing what $a$ needs to receive from other agents. Each such "specification" is satisfied by a strict prefix of $\run$ (the only exception being if $a$ satisfies a "boss specification" with value $v$ and the last step of $\run$ is a broadcast with $v$ by another agent; in this case, we use the induction hypothesis on $\run$ but with a follower specification, hence the induction is well-founded).
 We construct an "unfolding tree" by labeling the root with the "specification" and the "local run" of $a$, and attaching below it the subtrees obtained by induction hypothesis.
 
-The translation from tree to "run" consists in an induction on the tree. A key concept is the one of "partial run", which extends the notion of "local run" to a subset of agents: in a "partial run", some receptions called \emph{external} are not matched by a broadcast. This is meant to represent the behavior of a subtree of the "unfolding tree": if the root of an "unfolding tree" is a "follower node" with "specification" $(\followwordspec, \followmessagespec)$ then the corresponding "partial run" receives an external sequence $\followwordspec$. The induction step considers the "runs" obtained from the children of the root by induction hypothesis and merges them with the "local run" of the root by branching broadcasts to the right external receptions. 
+The translation from tree to "run" consists in an induction on the tree. A key concept is the one of "partial run", which extends the notion of "local run" to a subset of agents: in a "partial run", some receptions called \emph{external} are not matched by a broadcast. This is meant to represent the behavior of a subtree of the "unfolding tree": if the root of an "unfolding tree" is a "follower node" with "specification" $(\followwordspec, \followmessagespec)$ then the corresponding "partial run" receives an external sequence $\followwordspec$. The inductive step applies the induction hypothesis to the children of the "root" to obtain partial runs and merges them with the "local run" of the root by branching broadcasts to the right external receptions. 
 See Appendix~\ref{app:trees-sound-complete} for the full proof. 
 \end{proof}
 
@@ -176,7 +172,7 @@ For "follower specifications", it goes in the opposite direction: for a fixed $\
 \begin{restatable}{lemma}{lemShorteningBranches} 
 \label{lem:shortening-branches}
 	Let $\tree$ be a "coverability witness" for $(\prot, q_f)$.
-	Let $\node, \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If one of the conditions below holds, then there exists a smaller "coverability witness" for $(\prot, q_f)$:
+	Let $\node, \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If one of the conditions below holds, then there exists a "coverability witness" for $(\prot, q_f)$ of "size" smaller than $\tree$:
 	\begin{itemize}
 	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; or
 	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$.
@@ -184,8 +180,7 @@ For "follower specifications", it goes in the opposite direction: for a fixed $\
 \end{restatable}
 
 
-We now show that there is a computable bound on the size of the "unfolding tree" achieving a given specification and labelled with a "protocol" $\prot$. Lemma~\ref{lem:shortening-branches} leads us towards an application of the "Length function theorem". 
-However, this theorem requires a bound on the size of the words and therefore cannot be simply applied on a branch of the tree. In fact, there is no reason to think that the sizes of the labels of the children of a node can be bounded with respect to the size of the label of that node. 
+We now show that there is a computable bound on the size of the "unfolding tree" achieving a given specification and labeled with a "protocol" $\prot$. Lemma~\ref{lem:shortening-branches} leads us towards an application of the "Length function theorem";however, this theorem requires a bound on the size of the words. In fact, there is no reason to think that the sizes of the labels of the children of a node can be bounded with respect to the size of the label of that node. 
 
 In order to bound the size of the nodes, we use the following result, which essentially states that if there is a "local run" between two local configurations $(q, \nu)$ and $(q', \nu')$ then there is one of length bounded by a primitive recursive function and which does not require larger inputs than the previous one.
 
@@ -212,7 +207,7 @@ The function $\towerfun(n,k)$ defined above is actually a tower of exponentials 
 % \nico{à réduire / passer en annexe, idéalement décrire le protocole pour de vrai en annexe avec une figure mais long à faire}
 % \end{remark}
 
-The previous result would allow us to apply the "Length function theorem", had we in our "unfolding tree" only "boss nodes" or only "follower nodes". Indeed, we can bound the size of a node with respect to the nodes to which it must send long words of messages. This means we can find a bound for a node $\node$ that depends on $\node$'s "follower" children's size and, if $\node$ is a "boss" node, with respect to its parent's size. This is a problem: we cannot bound the size of "unfolding tree" from the root to the leaves because of "follower nodes" nor from the leaves to the root because of "boss nodes". We thus rearrange the tree as in Figure~\ref{fig:rearrange-tree} to make it so that long sequences of messages are sent upwards. We formalize this with the notion of altitude:
+If we had in our "unfolding tree" only "boss nodes" or only "follower nodes", then the previous result would allow us to apply the "Length function theorem". Indeed, we can bound the size of a node with respect to the nodes to which it must send long words of messages. This means we can find a bound for a node $\node$ that depends on $\node$'s "follower" children's size and, if $\node$ is a "boss" node, with respect to its parent's size. However, we cannot bound the size of "unfolding tree" from the root to the leaves because of "follower nodes" nor from the leaves to the root because of "boss nodes". We thus rearrange the tree as in Figure~\ref{fig:rearrange-tree} to make it so that long sequences of messages are sent upwards. We formalize this with the notion of altitude:
 
 \begin{definition}
 	Let $\tree$ an "unfolding tree". We define the ""altitude"" of a node $\node$ of $\tree$, written $\altitude{\node}$, recursively as follows:
@@ -233,7 +228,7 @@ We now use the previous lemma to bound the label of each node $\node$ with respe
 
 \begin{restatable}{lemma}{lemBoundSuccessorHeight}
 	\label{lem:bound-successor-height}
-	Let $\prot$ be a "protocol" over $\regnum$ registers, let $\node$ be a node of an "unfolding tree" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $\bossspec$.
+	Let $\prot$ be a "protocol" over $\regnum$ registers, let $\tree$ be an "unfolding tree" over $\prot$ of minimal size satisfying a "boss specification" $\bossspec$, let $\node$ be a node of $\tree$.
 	Let $K$ be such that for all "follower" children $\node_f$ of $\node$, $\size{\followlabelword{\node_f}} \leq K$.
 	We have the following properties:
 	
@@ -255,19 +250,19 @@ We now use the previous lemma to bound the label of each node $\node$ with respe
 	This gives a bound on the number of messages $\localrunlabel{\node}$ needs to broadcast. We mark the positions at which $\localrunlabel{\node}$ sends them and use Lemma~\ref{lem:short-local-runs} to bound the length of sections of the "run" connecting two such broadcasts by $\towerfun(\size{\prot}+r,r)$, which yields the bounds above.
 \end{proof}
 
-This lemma lets us bound the labels of the nodes of maximal altitude, and then by applying it inductively we can bound the labels of all nodes at a given altitude $i$ depending on its difference with the maximal one $\altmax-i$ (Lemma~\ref{lem:bound-length-at-height-h}). We then use those results to bound the size of the tree.
+This lemma allows us to bound the size of the labels of the nodes of maximal altitude. Applying it inductively, we can then bound the sizes of the labels of all nodes at a given altitude $i$ depending on its difference with the maximal one $\altmax-i$ (Lemma~\ref{lem:bound-length-at-height-h}). We then use those results to bound the size of the tree.
 
  
 \begin{restatable}{proposition}{PropBoundTreeSize}
 	\label{prop:bound-tree-size}
-	There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labelled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f(\size{\prot} + \size{w}+1)$.
+	There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labeled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f(\size{\prot} + \size{w}+1)$.
 \end{restatable}
 
 \begin{proof}[Proof sketch]
 	The full proof is in Appendix~\ref{app:bound-tree-size}.
-	We consider a branch reaching maximal altitude: we mark along that branch all the nodes that have a greater altitude than all the previous ones (see Figure~\ref{fig:max-height-bound}). They are necessarily "follower" nodes as "boss" nodes are below their parent. This sequence (reversed) is so that the $i$th term is at altitude $\altmax-i$ and we can bound its size with respect to $i$ with the previous arguments. Along with Lemma~\ref{lem:shortening-branches}, we can apply the "Length function theorem" on that sequence to bound its length, hence we bound the maximal altitude (Lemma~\ref{lem:bound-max-height}).
+	We consider a branch reaching maximal altitude: we mark along that branch all the nodes that have a greater altitude than all the previous ones (see Figure~\ref{fig:max-height-bound}). They are necessarily "follower" nodes as a "boss" node is below its parent. This sequence (taken from highest to lowest altitude) is so that the $i$th term is at altitude $\altmax-i$ and we can bound its size with respect to $i$ with the previous arguments. Along with Lemma~\ref{lem:shortening-branches}, we can apply the "Length function theorem" on that sequence to bound its length, hence we bound the maximal altitude (Lemma~\ref{lem:bound-max-height}).
 	
-	This yields in turn a bound on the root label, as its altitude ($0$) has a bounded difference with the maximal one. Another application of the "Length function theorem", this time with "boss nodes" lets us bound the minimal altitude of a node of this tree (Lemma~\ref{lem:bound-min-height}).
+	This yields in turn a bound on the root label, as its altitude ($0$) has a bounded difference with the maximal one. Another application of the "Length function theorem", this time with "boss nodes", allows us to bound the minimal altitude of a node of this tree (Lemma~\ref{lem:bound-min-height}).
 	
 	Once we have bounded both the maximal and minimal altitudes, we can infer a bound on the size of all nodes (Lemma~\ref{lem:bound-node-size}), and then on branches as we can shorten branches as soon as they have two nodes with the same specification.
 	The bound on the size of the tree then follows from the observation that as nodes have bounded "local runs", they only see a bounded amount of values and thus need a bounded amount of children.
