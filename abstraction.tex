@@ -34,16 +34,17 @@
 %
 %Intuitively, a "gang" corresponds to the set of agents with a given "register value". The "boss" $\boss$ represents the process that had this value at the beginning and the "clique" $\clique$ the set of states of processes who have received and stored this register value. If the original owner of this value no longer has it, then $\boss = \noboss$. Note that we define the clique as the set of states $q$ such that \emph{at some point in the run} some agent was in state $q$ with value $v$. This is because we can use the copycat principle to add a large amount of agents that are in state $q$ with value $v$, and thus we can assume that there is always one.
 
-We can then define a natural abstract semantics based on gangs. An abstract configuration consists in a set of states $S$ (states covered so far by some agents) and a clique $(b, K)$ (the original owner of the value $v$ we are keeping track of and the states reached by other agents with that value). If the original owner of $v$ receives a new value we set $b = \bot$.
+In a concrete "run" of our system, gangs of distinct values may only interact with one another by covering states $q$ which are needed by the other gang (in the form of a broadcast or of a $\quotemarks{\enregact}$ reception from $q$); therefore our abstraction also keeps track of the set of coverable states, which may only grow. However, it only needs to keep track of one gang at a time.
 
-Abstract transitions are defined simply by applying transitions of the protocol while assuming that we have unlimited supplies of agents in every state of $S$ and of agents with the same value $v$ in states of $K$.
-We also allow \emph{gang resets}, which maintain $S$ but reinitialise $(b,K)$ to $(q_0, \emptyset)$ (we start keeping track of a new value).
+This leads us to a natural abstract semantics based on gangs. An abstract configuration consists in a set of states $S$ (states covered so far by some agents) and a gang $(b, K)$ (the original owner of the value $v$ we are keeping track of and the states reached by other agents with that value). If the original owner of $v$ stores a new value we set $b = \bot$.
+Abstract transitions are defined simply by applying transitions of the protocol while assuming that we have unlimited supplies of agents in every state of $S$ and of agents with value $v$ in states of $K$.
+At any time, there is the possiblity of \emph{gang resets}, which maintain $S$ but reinitialise $(b,K)$ to $(q_0, \emptyset)$ (we track a new value). 
 
-We define formally this abstraction and show its soundness and completeness in the appendix.
-It is then easy to show that $S$ should grow between two gang resets (otherwise they reset to the same abstract configuration) and that there may be at most $O(\size{Q}^2)$ abstract steps between two resets (as $K$ can only increase and there are only $\size{Q}+1$ possibilities for $b$). This means that if there is an abstract run covering a state, there is one of size $O(\size{Q}^3)$, giving us polynomial-size witnesses for coverability, and thus an \NP algorithm.
+We define formally this abstraction and show its soundness and completeness in Appendix~\ref{app:cover-one-reg}.
+To bound the length of relevant runs in our abstraction, we impose that $S$ should grow between two gang resets (otherwise they reset to the same abstract configuration) and that there may be at most $O(\size{Q}^2)$ abstract steps between two resets (as $K$ can only increase and there are only $\size{Q}+1$ possibilities for $b$). This means that if there is an abstract run covering a state, there is one of size $O(\size{Q}^3)$, proving the \NP membership of \COVER. 
 
-The \NP lower bound follows from a reduction from 3SAT (an agent sends a sequence of messages with its identifier representing a valuation to other agents which broadcast it back to it, allowing it to check the satisfaction of a 3SAT formula).
-Those results yield the main theorem of this section:
+The \NP lower bound follows from a reduction from 3SAT (an agent $a$ sends a sequence of messages representing a valuation, with its identifier, to other agents which broadcast it back, playing the role of external memory, allowing $a$ to check the satisfaction of a 3SAT formula).
+These results yield the main theorem of this section:
 
 
 \begin{restatable}{theorem}{thmNPComplete}
