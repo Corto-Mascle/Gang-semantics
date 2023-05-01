@@ -6,7 +6,7 @@
 	
 	We proceed by strong induction on the lexicographic order on $\nats \times \set{\text{follower}, \text{boss}}$ with the length of the run as first component and the type of "specification" as second component, ``boss'' being considered higher than ``follower'' (so that, for a fixed "run" length, we prove it for "boss specifications" then for "follower specifications"). 
 	
-	If $\spec = \epsilon$ is an empty "boss specification" then the tree with a single node labelled with an empty run and an empty "specification" satisfies it.
+	If $\spec = \epsilon$ is an empty "boss specification" then the tree with a single node labeled with an empty run and an empty "specification" satisfies it.
 	This covers in particular the case of a "run" of length $0$, as they cannot satisfy any other specification.
 	Let $\run$ be a "run", and assume that the property is true for "runs" whose length is less than the one of $\run$. Write $\agents$ the set of agents of $\run$.
 	Because $\run$ satisfies $\spec$, there exists a value $v$ and an agent $a$ in $\run$ such that:

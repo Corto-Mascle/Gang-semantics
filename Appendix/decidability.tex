@@ -23,7 +23,7 @@
 	As a result, there exists a "unfolding tree" satisfying $m$ if and only if there is one of size at most $f(\size{\prot}+2)$ in which values do not exceed $f(\size{\prot}+2)$. A description of such a tree requires a space that is polynomial in its size.
 	
 	We can therefore bound the size of the description of such a "unfolding tree" by a function of $\Ffunction{\omega^{\size{\messages}}}$.
-	An algorithm for \COVER thus consists in enumerating all trees labelled by local runs of $\prot$ of size at most $f(\size{\prot}+2)$ with values not exceeding $f(\size{\prot}+2)$, and accepting if and only if one of them satisfies the conditions to be a "unfolding tree" satisfying $m$.
+	An algorithm for \COVER thus consists in enumerating all trees labeled by local runs of $\prot$ of size at most $f(\size{\prot}+2)$ with values not exceeding $f(\size{\prot}+2)$, and accepting if and only if one of them satisfies the conditions to be a "unfolding tree" satisfying $m$.
 	This can all be done in exponential time in $f(\size{\prot}+2)$, thus this algorithm terminates in time $f'(\size{\prot})$ where $f'$ is a function of $\Ffunction{\omega^{\size{\messages}}}$.
 	
 	\COVER for BNRA therefore lies in the complexity class $\Fcomplexity{\omega^\omega}$.
