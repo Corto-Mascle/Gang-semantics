@@ -4,7 +4,7 @@
 \SimpleReduction*
 
 \begin{proof}
-	We construct a "protocol" $\prot'$ with no "local equality tests" so that any "run" of $\prot$ may be turned into an run of $\prot'$ and vice-versa. 
+	We construct a "protocol" $\prot'$ with no "local equality tests" so that any "run" of $\prot$ may be turned into a "run" of $\prot'$ and vice-versa. 
 	The intuition is as follows. $\prot'$ corresponds to $\prot$, where an abstract layer is added in the treatments of the registers. In $\prot'$, we do not directly store each register but rather equality relations between them, so that a value shared by several registers is only stored once. We dub registers of $\prot'$ ""memory slots"" to distinguish them from the registers of $\prot$. A "memory slot" will be used to store a value shared between registers. 
 	We will need $\regnum$ "memory slots" to do so. Moreover, we will need a mapping $\map : \nset{1}{r} \to \nset{1}{r}$ that tells, for each register, in which "memory slot" its value is stored. This mapping will be directly encoded in the set of states of $\prot'$, which causes an exponential blow-up in the "size" of the "protocol".
 	
