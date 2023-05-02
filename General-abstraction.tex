@@ -115,7 +115,7 @@ We split $\localrun$ into $u_0,\dots,u_\ell$ based on the first point where each
 
 Condition~\ref{item:condition3_follower_node} directly states that a "follower node" $\node$ receives word $\followlabelword{\node}$ with value $\valuelabel{\node}$ and broadcasts message $(\followlabelmessage{\node}, \valuelabel{\node})$. Condition \ref{item:condition4_boss_node} expresses that a "boss node" witnesses the broadcast of a sequence of messages $\bosslabel{\node}$ with a single value; in this sequence, some messages may come from auxiliary agents encoded in "follower" children, which is why we have the condition that $\bosslabel{\node} \in \langdec{\decsymb}$ and not simply $ \voutput{\valuelabel{\node}}{\localrun} \subword \bosslabel{\node}$. 
 
-Our aim is to prove that we can study \COVER directly on "unfolding trees". For \COVER, we consider trees whose root $\node$ is a "boss node", as they suffice to witness "coverability" (a "follower node" implicitely relies on its parent's ability to broadcast some messages \nico{a discuter}). 
+Our aim is to prove that we can study \COVER directly on "unfolding trees". For \COVER, we consider trees whose root $\node$ is a "boss node", as they suffice to witness "coverability" (a "follower node" implicitely relies on its parent's ability to broadcast some messages). 
 % Hence the following definition: 
 
 \begin{definition}
@@ -186,7 +186,7 @@ In order to bound the size of the nodes, we use the following result, which esse
 
 \begin{restatable}{lemma}{lemShortLocalRuns}
 	\label{lem:short-local-runs}
-	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun'} \leq \towerfun(\size{\prot} + \size{\Vinit},r)$ and:
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun'} \leq \towerfun(\size{\prot} -r + \size{\Vinit},r)$ and:
 	\begin{enumerate}
 		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
@@ -237,17 +237,17 @@ We now use the previous lemma to bound the label of each node $\node$ with respe
 		\begin{itemize}
 			\item If $\node$ is the root of $\tree$ then $\bosslabel{\node} = w$, otherwise $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$ with $\node'$ its parent
 			
-			\item In both cases $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r) + 1)\Big[ \size{\bosslabel{\node}} + \size{\messages}rK \Big]$
+			\item In both cases $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r) + 1)\Big[ \size{\bosslabel{\node}} + \size{\messages}rK \Big]$
 		\end{itemize}
 		
-		\item If $\node$ is a "follower node" then  $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}+r,r) +1)\Big[ 1 + \size{\messages}rK \Big]$
+		\item If $\node$ is a "follower node" then  $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r) +1)\Big[ 1 + \size{\messages}rK \Big]$
 			
 	\end{enumerate}
 \end{restatable}
 
 \begin{proof}[Proof sketch]
 	A node $\node$ has at most $\size{\messages}$ "follower" children for each "initial value", hence at most $\size{\messages}r$ in total, each one of them requires at most $K$ messages. The node $\node$ may have to output $\bosslabel{\node}$ extra messages to satisfy its "specification" if it is a "boss node", or just one extra message if it is a "follower node".
-	This gives a bound on the number of messages $\localrunlabel{\node}$ needs to broadcast. We mark the positions at which $\localrunlabel{\node}$ sends them and use Lemma~\ref{lem:short-local-runs} to bound the length of sections of the "run" connecting two such broadcasts by $\towerfun(\size{\prot}+r,r)$, which yields the bounds above.
+	This gives a bound on the number of messages $\localrunlabel{\node}$ needs to broadcast. We mark the positions at which $\localrunlabel{\node}$ sends them and use Lemma~\ref{lem:short-local-runs} to bound the length of sections of the "run" connecting two such broadcasts by $\towerfun(\size{\prot},r)$, which yields the bounds above.
 \end{proof}
 
 This lemma allows us to bound the size of the labels of the nodes of maximal altitude. Applying it inductively, we can then bound the sizes of the labels of all nodes at a given altitude $i$ depending on its difference with the maximal one $\altmax-i$ (Lemma~\ref{lem:bound-length-at-height-h}). We then use those results to bound the size of the tree.
@@ -255,17 +255,18 @@ This lemma allows us to bound the size of the labels of the nodes of maximal alt
  
 \begin{restatable}{proposition}{PropBoundTreeSize}
 	\label{prop:bound-tree-size}
-	There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labeled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f(\size{\prot} + \size{w}+1)$.
+	There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for every positive instance $(\prot,q_f)$ of \COVER, there exists a "coverability witness" $\tree$ of size bounded by $f(\size{\prot})$.
 \end{restatable}
 
 \begin{proof}[Proof sketch]
-	The full proof is in Appendix~\ref{app:bound-tree-size}.
-	We consider a branch reaching maximal altitude: we mark along that branch all the nodes that have a greater altitude than all the previous ones (see Figure~\ref{fig:max-height-bound}). They are necessarily "follower" nodes as a "boss" node is below its parent. This sequence (taken from highest to lowest altitude) is so that the $i$th term is at altitude $\altmax-i$ and we can bound its size with respect to $i$ with the previous arguments. Along with Lemma~\ref{lem:shortening-branches}, we can apply the "Length function theorem" on that sequence to bound its length, hence we bound the maximal altitude (Lemma~\ref{lem:bound-max-height}).
+	The full proof is in Appendix~\ref{app:bound-tree-size}, we provide here some intuition. $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for it thanks to Proposition~\ref{prop:trees-sound-complete}.
+	We consider a branch reaching maximal altitude: we mark along that branch the nodes that have a greater altitude than all the previous ones (see Figure~\ref{fig:max-height-bound}). They are necessarily "follower" nodes as a "boss" node is below its parent. This sequence (taken from highest to lowest altitude) is so that the $i$th term is at altitude $\altmax-i$ and we can bound its size with respect to $i$ with the previous arguments. Along with Lemma~\ref{lem:shortening-branches}, we apply the "Length function theorem" on that sequence to bound its length hence the maximal altitude (Lemma~\ref{lem:bound-max-height}).
 	
 	This yields in turn a bound on the root label, as its altitude ($0$) has a bounded difference with the maximal one. Another application of the "Length function theorem", this time with "boss nodes", allows us to bound the minimal altitude of a node of this tree (Lemma~\ref{lem:bound-min-height}).
 	
 	Once we have bounded both the maximal and minimal altitudes, we can infer a bound on the size of all nodes (Lemma~\ref{lem:bound-node-size}), and then on branches as we can shorten branches as soon as they have two nodes with the same specification.
-	The bound on the size of the tree then follows from the observation that as nodes have bounded "local runs", they only see a bounded amount of values and thus need a bounded amount of children.
+	The bound on the size of the tree then follows from the observation that as nodes have bounded "local runs", they only see a bounded amount of values and thus need a bounded amount of children. 
+	
 \end{proof}
 
 

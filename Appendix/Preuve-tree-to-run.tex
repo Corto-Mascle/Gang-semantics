@@ -278,7 +278,7 @@ We are now ready to prove Lemma~\ref{lem:tree-to-run}.
 		\item if $\tree$ satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ then there exists a "partial run" $\run$ and a value $v$ such that $\Input{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \subword \followwordspec$, and $\voutput{v}{\run}$ contains $\followmessagespec$.
 	\end{itemize}
 	
-	Let $\tau$ be a "unfolding tree", let $\node$ be its root.
+	Let $\tree$ be a "unfolding tree", let $\node$ be its root.
 	
 	We see $u := \localrunlabel{\node}$ as a "partial run" with a single agent.
 	We are going to compose $u$ with some runs given by the children of $\node$ to construct a run satisfying the properties above.
@@ -407,7 +407,7 @@ We repeat the arguments from Section~\ref{sec:tree-to-run-step-two}, but we use 
 	\item $\bosslabel{\node} \subword \voutput{\valuelabel{\node}}{\Tilde{\run}}$
 \end{itemize}
 
-If $\tau$ satisfies a "boss specification" $w$  then $w \subword \bosslabel{\node} $ and thus $w \subword \voutput{\valuelabel{\node}}{\Tilde{\run}}$.
+If $\tree$ satisfies a "boss specification" $w$  then $w \subword \bosslabel{\node} $ and thus $w \subword \voutput{\valuelabel{\node}}{\Tilde{\run}}$.
 
 As a result, $\Tilde{\run}$ satisfies $w$ as well.
 
