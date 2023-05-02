@@ -1,4 +1,4 @@
-\section{Cover decidability}
+\section{Cover Decidability}
 \label{sec:cover-decidability}
 
 This section is dedicated to the proof of the main result of this paper:
@@ -23,7 +23,7 @@ To represent "runs", we consider \emph{unfolding trees} that represent all such 
 In Section~\ref{sec:decidability-defs}, we introduce several useful notions. In Section~\ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In Section~\ref{sec:tree-bounds}, we bound the size of the "unfolding trees" that we have to consider. In Section~\ref{sec:decidability-end}, we conclude by exposing our decidability procedure. 
 In Section~\ref{sec:undec-target}, we prove that the \TARGET problem is, by contrast, undecidable.
 
-\subsection{Useful definitions}
+\subsection{Useful Definitions}
 \label{sec:decidability-defs}
 
 We define a notion of "local run", which may be seen as the projection of a "run" onto a given agent. In this local vision, we do not specify the origin of the received messages.
@@ -67,7 +67,7 @@ We define a notion of "local run", which may be seen as the projection of a "run
 %	
 
 
-\subsection{Unfolding trees}
+\subsection{Unfolding Trees}
 \label{sec:decidability-tree-unfoldings}
 
 An \emph{unfolding tree} is an abstraction of a "run" in the form of a tree where each node is assigned a "local run" and a specification of its role. In this vision, the node at the root corresponds to the "local run" of the agent that we are interested in (\emph{e.g.}, the agent covering $q_f$), and children nodes are here to provide messages that this agent needs to receive; such needs are expressed using "specifications". 
@@ -162,7 +162,7 @@ See Appendix~\ref{app:trees-sound-complete} for the full proof.
 
 
 
-\subsection{Bounding the size of the "unfolding tree"}
+\subsection{Bounding the Size of the Unfolding Tree}
 \label{sec:tree-bounds}
 
 Our aim is now to provide bounds on the "size@@tree" of the "coverability witness". We start with two simple observations. First, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then any subword of $\bossspec$ can also be received. 
