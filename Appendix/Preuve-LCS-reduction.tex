@@ -13,7 +13,7 @@
 	where $\subword$ denotes the "subword" order.
 	This subword order encodes the lossiness of the channel (a non-lossy channel would have equalities instead); intuitively, it expresses the fact that letters in the channel may get lost. 
 	
-	The existence of such a transition for some $\ltrans \in \transitions$ is denoted $(\lstate,w) \lstep{} (\lstate',w')$, and its transitive closure is denoted $\lstep{*}$. The ""reachability problem@@lcs"" asks, given $\los$ and two locations $\lstate_i, \lstate_f \in \lstates$, whether there exists an execution $(\lstate_i,\epsilon) \lstep{*} (\lstate_f, w)$ for some $w$. 
+	The existence of such a transition for some $\ltrans \in \transitions$ is denoted $(\lstate,w) \lstep{} (\lstate',w')$, and its transitive closure is denoted $\lstep{*}$. The (control-state) ""reachability problem@@lcs"" asks, given $\los$ and two locations $\lstate_i, \lstate_f \in \lstates$, whether there exists an execution $(\lstate_i,\epsilon) \lstep{*} (\lstate_f, w)$ for some $w$. 
 	
 	We aim at constructing a "protocol" $\prot$ with two registers with a distinguished state $q_f$ such that $q_f$ may be covered if and only if $(\los, q_i, q_f)$ is a positive instance of the "reachability problem@@lcs". 
 	The intuition of $\prot$ is the following. Agents will organize in chains so that each agent of a chain knows the identifier of its predecessor in the chain, hence is able to check that the messages it received come from it. Each agent of the chain is meant to encode a step of the execution in the "lossy channel system". 

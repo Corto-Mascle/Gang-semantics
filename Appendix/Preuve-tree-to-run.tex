@@ -133,9 +133,9 @@ Intuitively, this is done by renaming values in those runs in a suitable way so 
 	
 	If $\vinput{v}{\run} \neq \epsilon$, then let $j$ be such that $\vinput{v}{\run_j} \neq \epsilon$, then we can decompose $\run_j$ as $\run_j = \config_{j} \pstep{\run_j^-} \config_j^- \extmessage{m_{j'}}{v} \config_j^+ \pstep{\run_j^+} \config_{j+1}$ with $j'\leq j$. 
 	
-	There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
+	By hypothesis, there exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_{j'}$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
 	
-	Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \pstep{\run_{{j'},1}'} \config_{{j'},1} \cdots \pstep{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
+	Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \pstep{\run_{{j'},1}'} \config_{{j'},1} \cdots \pstep{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$. 
 	
 	We then proceed in a similar way as in Lemma~\ref{lem:boss-composition}.
 	We can rename agents so that $\run$ and $\run'_j$ are on disjoint sets of agents, and apply a renaming of values in $\run_j'$ so that $v_j$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
