@@ -284,7 +284,7 @@ We are now ready to prove Lemma~\ref{lem:tree-to-run}.
 	Let $V$ be the set of values appearing in $u$ and $V_{init}$ be the set of "initial@@partial" values of $u$.
 	
 	
-	\subsubsection{Step 1: "Non-initial@@partial" values}
+	\subsubsection{Step 1: "Non-initial@@partial" Values}
 	\label{sec:tree-to-run-step-one}
 	
 	We show the following statement by induction on $\size{V'}$ for $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$. It expresses that we can complete $u$ into an "initial partial run" that does not require any input over its "non-initial@@partial" values. This is done by induction, using Lemma~\ref{lem:boss-composition} and the "initial runs" obtained via the "boss" children to eliminate the input of $u$ over each of its "non-initial@@partial" values without adding some input requirements on other values or modifying its behaviour over values that were previously there.
@@ -332,7 +332,7 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 		\item If $v \notin (V_{init}\cup \set{\valuelabel{\node}})$ then $\vinput{v}{\run} = \epsilon$
 	\end{itemize}  
 	
-	\subsubsection{Step 2: "Initial@@partial" values}
+	\subsubsection{Step 2: "Initial@@partial" Values}
 	\label{sec:tree-to-run-step-two}
 	
 	We proceed in the same way as in the previous part: the goal is now to use the "partial runs" yielded by the "follower" children to eliminate, one by one, using Lemma~\ref{lem:follower-composition-completion}, the input over each "non-initial@@partial" value of $u$, except maybe for $\valuelabel{\node}$, which requires a special case.

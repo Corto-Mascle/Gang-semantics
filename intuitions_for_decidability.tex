@@ -4,11 +4,11 @@
 
 Our aim is to prove the decidability of coverability for BNRA which can only send a single value in each broadcast. The constructions will actually lead us to a decidability proof for specifications of two different types, both subsuming the coverability specification.
 
-\paragraph*{Step 1 : simplification} In Lemma~\ref{prop:loc-eq-test-elimination} we prove that all protocols, even those which can apply several operations when receiving a broadcast, can be simulated by a protocol with a single operation upon reception of a message and no $*$ operation. A previous lemma already allowed us to remove $\diseqtestact$, thus we only have to prove decidability for systems with one operation per reception and only $\enregact$ and $\eqtestact$ operations.
+\paragraph*{Step 1 : Simplification} In Lemma~\ref{prop:loc-eq-test-elimination} we prove that all protocols, even those which can apply several operations when receiving a broadcast, can be simulated by a protocol with a single operation upon reception of a message and no $*$ operation. A previous lemma already allowed us to remove $\diseqtestact$, thus we only have to prove decidability for systems with one operation per reception and only $\enregact$ and $\eqtestact$ operations.
 
 Lemma~\ref{prop:loc-eq-test-elimination} is placed within the decidability proof as the constructions defined there may simplify the proof of the lemma (they allow us to prove that BRNA can simulate each other simply by proving that their local runs have the same behaviour).
 
-\paragraph*{Step 2 : run decomposition} Say we have a global run $\rho$ in which an agent broadcasts a message $m_f$. We isolate the local run $u$ of the first agent $a$ broadcasting $m_f$.
+\paragraph*{Step 2 : Run Decomposition} Say we have a global run $\rho$ in which an agent broadcasts a message $m_f$. We isolate the local run $u$ of the first agent $a$ broadcasting $m_f$.
 In order to execute $u$, we need to receive a sequence of broadcast that matches the sequence of receive transitions in $u$. Let $v$ be a value appearing in $u$.
 
 \begin{itemize}
@@ -35,7 +35,7 @@ We can decompose any run satisfying one of those specifications into a local run
 
 Hence we can turn a global run satisfying a given specification into a finite tree where nodes are labeled by local runs and specifications of one of the two types above.
 
-\subsection{Bounds on the size of the minimal decomposition}
+\subsection{Bounds on the Size of the Minimal Decomposition}
 
 The previous section provides witnesses for the satisfiability of specifications, in the form of a tree decomposition.
 
@@ -69,5 +69,5 @@ We say that a local run is cheaper than another one if the set of children it sp
  The number of different nodes along a branch is also bounded, hence also the size of that branch (if the same node appears twice we can reduce the branch).
  This lets us bound the overall size of the tree with a function of $F_{\omega^k}$, yielding decidability and complexity of the problem.
 
-\subsection{Formal proof}
+\subsection{Formal Proof}
 \fi
