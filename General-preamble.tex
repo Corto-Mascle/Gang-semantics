@@ -169,11 +169,11 @@
 
 \newcommand{\val}{v}
 \newcommand{\trace}[1]{\mathsf{tr}(#1)}
-\newcommand{\Input}[1]{\mathsf{In}(#1)}
-\newcommand{\vinput}[2]{\mathsf{In}_{#1}(#2)}
-\newcommand{\Output}[1]{\mathsf{Out}(#1)}
-\newcommand{\voutput}[2]{\mathsf{Out}_{#1}(#2)}
-\newcommand{\vproj}[2]{{#2}|_{#1}}
+\knowledgenewrobustcmd{\Input}[1]{\cmdkl{\mathsf{In}}(#1)}
+\knowledgenewrobustcmd{\vinput}[2]{\cmdkl{\mathsf{In}}_{#1}(#2)}
+\knowledgenewrobustcmd{\Output}[1]{\cmdkl{\mathsf{Out}}(#1)}
+\knowledgenewrobustcmd{\voutput}[2]{\cmdkl{\mathsf{Out}}_{#1}(#2)}
+\knowledgenewrobustcmd{\vproj}[2]{{#2}\cmdkl{|}_{#1}}
 
 \newcommand{\inputword}{in}
 \newcommand{\Outputword}{out}
@@ -181,7 +181,7 @@
 
 \newcommand{\decsymb}{\mathtt{dec}}
 \newcommand{\subdec}{\unlhd}
-\newcommand{\langdec}[1]{\mathcal{L}^{\mathtt{#1}}}
+\knowledgenewrobustcmd{\langdec}[1]{\cmdkl{\mathcal{L}}^{\mathtt{#1}}}
 
 \newcommand{\tree}{\tau}
 \newcommand{\node}{\mu}
