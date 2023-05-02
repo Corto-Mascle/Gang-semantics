@@ -132,13 +132,8 @@ A ""coverability witness"" for $(\prot, q_f)$ is an "unfolding tree" over $\prot
 \end{figure}
 
 \begin{example}
-	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the "run" of \cref{ex:example-1}. The tables represent "local run", each column is a "local configuration" and the step labels are omitted for simplicity. For instance, the "local run" at $\node_1$ is  
-	\begin{multline*} 
-	(q_0, (x_1,y_1)) \intstep{(q_0, \br{m_2}{1},q_1)} (q_1, (x_1, y_1)) \extbr{(q_1, \rec{m_4}{2}{\enregact}, q_4)}{y_2} (q_4, (x_1, y_2)) \\ 
-	\extbr{(q_4, \rec{m_6}{1}{\eqtestact}, q_7)}{x_1} (q_7, (x_1, y_2)) \intstep{(q_7, \br{m_7}{1},q_7)} (q_7, (x_1, y_2)) 
-\end{multline*} 
-	
-	
+	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the "run" of \cref{ex:example-1}. The tables represent "local run", each column is a "local configuration" and the step labels are omitted for simplicity. For instance, the "local run" at $\node_1$ is \begin{multline*} 
+	(q_0, (x_1,y_1)) \intstep{(q_0, \br{m_2}{1},q_1)} (q_1, (x_1, y_1)) \extbr{(q_1, \rec{m_4}{2}{\enregact}, q_4)}{y_2} (q_4, (x_1, y_2)) \\ \extbr{(q_4, \rec{m_6}{1}{\eqtestact}, q_7)}{x_1} (q_7, (x_1, y_2)) \intstep{(q_7, \br{m_7}{1},q_7)} (q_7, (x_1, y_2)) \end{multline*}
 	
 	We explain why conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied at the root $\node_1$ of the tree. Let $\localrun := \localrunlabel{\node_1}$ its "local run". 
 	The only "non-initial value" in $\localrun$ is $y_2$, and $\vinput{y_2}{\localrun} = m_4$; condition \ref{item:condition1_non_initial_value} is satisfied as $\node_1$ has a boss child with a "boss specification" containing $m_4$. 
@@ -259,7 +254,7 @@ Thanks to the previous lemma, we bound the size of a node with respect to its al
 	Let $(\prot,q_f)$ be a positive instance of \COVER, $\tree$ a "coverability witness" for $(\prot,q_f)$, $\altmax$ the maximal "altitude" in $\tree$. There exists a primitive recursive function $f_0$ such that any node $\node$ of $\tree$ has size bounded by $f_0(\size{\prot} + \altmax - \altitude{\node})$.
 \end{restatable}
 \begin{proof}[Proof sketch]
-Applying Lemma~\ref{lem:bound-successor-height} inductively from highest to lowest altitude, we bound the sizes of the labels of all nodes at a given altitude $i$ depending on its difference with the maximal one $\altmax-i$.
+Applying Lemma~\ref{lem:bound-successor-height} inductively from highest to lowest altitude, we bound the sizes of the labels of all nodes at a given altitude $i$ with respect to $\altmax-i$.
 See Appendix~\ref{app:bound-node-size-with-altitude} for the detailed proof. 
 \end{proof}
  
@@ -269,12 +264,12 @@ See Appendix~\ref{app:bound-node-size-with-altitude} for the detailed proof.
 \end{restatable}
 
 \begin{proof}[Proof sketch]
-	The full proof is in Appendix~\ref{app:bound-tree-size}, we provide here some intuition. $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for it thanks to Proposition~\ref{prop:trees-sound-complete}.
-	We consider a branch reaching maximal altitude: we mark along that branch the nodes that have a greater altitude than all the previous ones (see Figure~\ref{fig:max-height-bound}). They are necessarily "follower" nodes as a "boss" node is below its parent. This sequence (taken from highest to lowest altitude) is so that the $i$th term is at altitude $\altmax-i$ and we can bound its "size@@tree" with respect to $i$ with the previous arguments. Along with Lemma~\ref{lem:shortening-branches}, we apply the "Length function theorem" on that sequence to bound its length hence the maximal altitude (Lemma~\ref{lem:bound-max-height}).
+	The full proof is in Appendix~\ref{app:bound-tree-size}. $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for it thanks to Proposition~\ref{prop:trees-sound-complete}; we consider the "coverability witness" $\tree$ of minimal size.
+	In a branch of $\tree$ reaching maximal altitude, we mark the nodes that have a greater altitude than all the previous ones (see Figure~\ref{fig:max-height-bound}). They are necessarily "follower" nodes as a "boss" node is below its parent. This sequence (taken from highest to lowest altitude) is so that the $i$th term is at altitude $\altmax-i$ and we can bound its "size@@tree" with respect to $i$ with the previous arguments. Along with Lemma~\ref{lem:shortening-branches}, we apply the "Length function theorem" on that sequence to bound its length hence the maximal altitude (Lemma~\ref{lem:bound-max-height}).
 	
 	This yields in turn a bound on the root label, as its altitude ($0$) has a bounded difference with the maximal one. Another application of the "Length function theorem", this time with "boss nodes", allows us to bound the minimal altitude of a node of this tree (Lemma~\ref{lem:bound-min-height}).
 	
-	Once we have bounded both the maximal and minimal altitudes, we can infer a bound on the size of all nodes (Lemma~\ref{lem:bound-node-size}), and then on branches as we can shorten branches as soon as they have two nodes with the same specification.
+	Once we have bounded both the maximal and minimal altitudes, we can infer a bound on the size of all nodes using Lemma~\ref{lem:bound-length-at-height-h}, and then on branches as we can shorten branches as soon as they have two nodes with the same specification.
 	The bound on the "size@@tree" of the tree then follows from the observation that as nodes have bounded "local runs", they only see a bounded amount of values and thus need a bounded amount of children. 
 \end{proof}
 
