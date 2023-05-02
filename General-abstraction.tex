@@ -51,7 +51,7 @@ We define a notion of "local run", which may be seen as the projection of a "run
 	\AP A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either a "reception step" or an "internal step". 
 	\AP A ""local run"" $\localrun$ is a sequence of "local steps" denoted $(q_0, \nu_0) \step{*} (q, \nu)$.
 	A value $\aval \in \nats$ appearing in $\localrun$ is ""initial"" if it appears in $\nu_0$ and ""non-initial"" otherwise. 
-	The ""inprojeut"" of $\localrun$, written $\intro*\Input{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of its "reception steps", its ""output"", written $\intro*\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages broadcast in $\localrun$. 
+	The ""input"" of $\localrun$, written $\intro*\Input{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of its "reception steps", its ""output"", written $\intro*\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages broadcast in $\localrun$. 
 	% The $\aval$-input $\vinput{\aval}{\localrun}$ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the sequence containing message types of "reception steps" (resp. broadcast steps) of $\localrun$ with value $\val$. 
 	For $\aval \in \nats$, the $\aval$-input $\intro*\vinput{\aval}{\localrun}$ (resp. $\val$-output $\intro*\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$. 
  
@@ -179,7 +179,7 @@ For "follower specifications", it goes in the opposite direction: for a fixed $\
 \end{restatable}
 
 
-We now show that there is a computable bound on the "size@@tree" of the "unfolding tree" achieving a given specification and labeled with a "protocol" $\prot$. Lemma~\ref{lem:shortening-branches} leads us towards an application of the "Length function theorem";however, this theorem requires a bound on the lengths of the words. In fact, there is no reason to think that the lengths of the labels of the children of a node can be bounded with respect to the length of the label of that node. 
+We now show that there is a computable bound on the "size@@tree" of the "unfolding tree" achieving a given specification and labeled with a "protocol" $\prot$. Lemma~\ref{lem:shortening-branches} leads us towards an application of the "Length function theorem"; however, this theorem requires a bound on the lengths of the words. In fact, there is no reason to think that the lengths of the labels of the children of a node can be bounded with respect to the length of the label of that node. 
 
 In order to bound the size of the nodes, we use the following result, which essentially states that if there is a "local run" between two local configurations $(q, \nu)$ and $(q', \nu')$ then there is one of length bounded by a primitive recursive function and which does not require larger inputs than the previous one.
 
@@ -193,7 +193,7 @@ In order to bound the size of the nodes, we use the following result, which esse
 \end{restatable}
 
 \begin{proof}[Proof sketch]
-	First, we prove that any long portion of $\localrun$ must change the value of every register at least once; otherwise we can shorten the "run" using an induction on the number of registers. We then manage to prove that, if $\localrun$ includes twice the same sequence of transitions of sufficient length, then we can cut off anything in the middle and glue back together the ends. While shortening the "local run" we may add some fresh values to it (see Figure~\ref{fig:pumping} in the appendix), which is not a problem as we ensure that they are less constraining than the ones that were in the original "run". However, for technical reasons, we want to prevent fresh values added in the proof from mimicking "initial" values of the agent.
+	First, we prove that any long portion of $\localrun$ must change the value of every register at least once; otherwise we can shorten the "run" using an induction on the number of registers. We then manage to prove that, if $\localrun$ includes twice the same sequence of transitions of sufficient length, then we can cut off anything in the middle and glue back together the ends. While shortening the "local run" we may add some fresh values to it (see Figure~\ref{fig:pumping} in the appendix), which is not a problem as we ensure that they are less constraining than the ones that were in the original "run". For technical reasons, we want to prevent fresh values added in the proof from mimicking "initial" values of the agent.
 	See Appendix~\ref{app:tower-lemma} for the full proof.
 \end{proof}
 
