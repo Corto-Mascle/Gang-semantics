@@ -11,19 +11,19 @@
 	Clearly the new "protocol" $\prot'$ satisfies the "boss specification" $m$ if and only if $q$ is coverable in $\prot$.
 	
 	By Lemmas~\ref{lem:run-to-tree} and \ref{lem:tree-to-run}, there is a run of $\prot'$ satisfying $m$ if and only if there is a "unfolding tree" satisfying $m$.
-	By Lemma~\ref{prop:bound-tree-size}, there is such a "unfolding tree" if and only if there is one of size at most $f(\size{\prot}+2)$, where $f$ is a function of the class $\Ffunction{\omega^{\size{\messages}}}$.
+	By Lemma~\ref{prop:bound-tree-size}, there is such a "unfolding tree" if and only if there is one of "size@@tree" at most $f(\size{\prot}+2)$, where $f$ is a function of the class $\Ffunction{\omega^{\size{\messages}}}$.
 	
-	The last problem we have is that the size of a "unfolding tree" does not take into account the values used in it. This can be solved by noticing that the conditions in the definition of a "unfolding tree" and the condition to satisfy a "specification" still hold after applying an injective renaming to the values. 
+	The last problem we have is that the "size@@tree" of an "unfolding tree" does not take into account the values used in it. This can be solved by noticing that the conditions in the definition of a "unfolding tree" and the condition to satisfy a "specification" still hold after applying an injective renaming to the values. 
 	
 	Suppose there exists $\tree$ a "unfolding tree" satisfying $m$, let $V$ be the set of values appearing in that tree. In a node $\node$ the values appearing are $\valuelabel{\node}$, the initial values of $\localrunlabel{\node}$ (there are $r$ such values), the non-initial values (at most $\size{\localrunlabel{\node}}$ as they all need to be received).
 	Hence there are at most $\size{\localrunlabel{\node}} + r +1$ different values appearing in each node.
 	In total there are thus at most $\sum_{\node \in \tree} \size{\localrunlabel{\node}} + r +1$ different values in $\tree$, which is less than $(r+2)\size{\tree}$.
 	
 	We can apply an injective renaming $V \to \nset{1}{(r+2)\size{\tree}}$ to the values to obtain another "unfolding tree" satisfying $m$ and whose values do not exceed $(r+2)\size{\tree}$.
-	As a result, there exists a "unfolding tree" satisfying $m$ if and only if there is one of size at most $f(\size{\prot}+2)$ in which values do not exceed $f(\size{\prot}+2)$. A description of such a tree requires a space that is polynomial in its size.
+	As a result, there exists a "unfolding tree" satisfying $m$ if and only if there is one of "size@@tree" at most $f(\size{\prot}+2)$ in which values do not exceed $f(\size{\prot}+2)$. A description of such a tree requires a space that is polynomial in its "size@@tree".
 	
-	We can therefore bound the size of the description of such a "unfolding tree" by a function of $\Ffunction{\omega^{\size{\messages}}}$.
-	An algorithm for \COVER thus consists in enumerating all trees labeled by local runs of $\prot$ of size at most $f(\size{\prot}+2)$ with values not exceeding $f(\size{\prot}+2)$, and accepting if and only if one of them satisfies the conditions to be a "unfolding tree" satisfying $m$.
+	We can therefore bound the "size@@tree" of the description of such a "unfolding tree" by a function of $\Ffunction{\omega^{\size{\messages}}}$.
+	An algorithm for \COVER thus consists in enumerating all trees labeled by local runs of $\prot$ of "size@@tree" at most $f(\size{\prot}+2)$ with values not exceeding $f(\size{\prot}+2)$, and accepting if and only if one of them satisfies the conditions to be a "unfolding tree" satisfying $m$.
 	This can all be done in exponential time in $f(\size{\prot}+2)$, thus this algorithm terminates in time $f'(\size{\prot})$ where $f'$ is a function of $\Ffunction{\omega^{\size{\messages}}}$.
 	
 	\COVER for BNRA therefore lies in the complexity class $\Fcomplexity{\omega^\omega}$.

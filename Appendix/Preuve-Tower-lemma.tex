@@ -234,7 +234,7 @@ Note that in the lemma statement, $w'_i$ could be small regarding the decomposit
 	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
 	
 	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
-	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of size at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
+	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of length at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
 	
 	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$, $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
 	
