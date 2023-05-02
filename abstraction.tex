@@ -36,8 +36,8 @@
 
 In a concrete "run" of our system, gangs of distinct values may only interact with one another by covering states $q$ which are needed by the other gang (in the form of a broadcast or of a $\quotemarks{\enregact}$ reception from $q$); therefore our abstraction also keeps track of the set of coverable states, which may only grow. However, it only needs to keep track of one gang at a time.
 
-This leads us to a natural abstract semantics based on gangs. An abstract configuration consists in a set of states $S$ (states covered so far by some agents) and a gang $(b, K)$ (the original owner of the value $v$ we are keeping track of and the states reached by other agents with that value). If the original owner of $v$ stores a new value we set $b = \bot$.
-Abstract transitions are defined simply by applying transitions of the protocol while assuming that we have unlimited supplies of agents in every state of $S$ and of agents with value $v$ in states of $K$.
+This leads us to a natural abstract semantics based on gangs. An abstract configuration consists of a set of states $S$ (states covered so far by some agents) and a gang $(b, K)$ (the original owner of the value $v$ we are keeping track of and the states reached by other agents with that value). If the original owner of $v$ stores a new value we set $b = \bot$.
+Abstract transitions are defined by applying transitions of the protocol while assuming that we have unlimited supplies of agents in every state of $S$ and of agents with value $v$ in states of $K$.
 At any time, there is the possibility of \emph{gang resets}, which maintain $S$ but reinitialise $(b,K)$ to $(q_0, \emptyset)$ (we track a new value). 
 
 We define formally this abstraction and show its soundness and completeness in Appendix~\ref{app:cover-one-reg}.
