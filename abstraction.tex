@@ -38,10 +38,9 @@ In a concrete "run" of our system, gangs of distinct values may only interact wi
 
 This leads us to a natural abstract semantics based on gangs. An abstract configuration consists of a set of states $S$ (states covered so far by some agents) and a gang $(b, K)$ (the original owner of the value $v$ we are keeping track of and the states reached by other agents with that value). If the original owner of $v$ stores a new value we set $b = \bot$.
 Abstract transitions are defined by applying transitions of the protocol while assuming that we have unlimited supplies of agents in every state of $S$ and of agents with value $v$ in states of $K$.
-At any time, there is the possibility of \emph{gang resets}, which maintain $S$ but reinitialise $(b,K)$ to $(q_0, \emptyset)$ (we track a new value). 
-
+At any time, we can apply a \emph{gang reset}, which maintains $S$ but reinitializes $(b,K)$ to $(q_0, \emptyset)$ (we track a new value). 
 We define formally this abstraction and show its soundness and completeness in Appendix~\ref{app:cover-one-reg}.
-To bound the length of relevant runs in our abstraction, we impose that $S$ should grow between two gang resets (otherwise they reset to the same abstract configuration) and that there may be at most $O(\size{Q}^2)$ abstract steps between two resets (as $K$ can only increase and there are only $\size{Q}+1$ possibilities for $b$). This means that if there is an abstract run covering a state, there is one of size $O(\size{Q}^3)$, proving the \NP membership of \COVER. 
+To bound the length of relevant abstract runs, we impose that $S$ should grow between two gang resets (otherwise they reset to the same abstract configuration) and that there may be at most $O(\size{Q}^2)$ abstract steps between two resets (as $K$ can only increase and there are only $\size{Q}+1$ possibilities for $b$). This means that if there is an abstract run covering a state, there is one of size $O(\size{Q}^3)$, proving the \NP upper bound. 
 
 The \NP lower bound follows from a reduction from 3SAT (an agent $a$ sends a sequence of messages representing a valuation, with its identifier, to other agents which broadcast it back, playing the role of external memory, allowing $a$ to check the satisfaction of a 3SAT formula).
 These results yield the main theorem of this section:
