@@ -2,12 +2,23 @@
 \label{app:tower-lemma}
 
 	We start by defining the notion of "trace". 
-	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
-
+	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. 
+	
+	
 
 We prove the following result:
 
 \lemShortLocalRuns*
+
+We actually prove a slightly more general version of the lemma, to reduce the notations in the proof. The previous lemma can be obtained simply by applying the following one with $W$ the set of "initial" values of $\localrun_0$ (and noticing that $W$ then contains $r$ values).
+
+\begin{lemma}
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun'} \leq \towerfun(\size{\prot} -r + \size{\Vinit},r)$ and:
+	\begin{enumerate}
+		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'} \subword \vinput{\aval}{\localrun}$,
+		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$. 
+	\end{enumerate}
+\end{lemma}
 
 Intuitively, the set $V$ represents values that are already used somewhere and therefore cannot be used as fresh values, and $\Vinit$ represents values that other values should not copy because their behavior is special (this will later correspond to initial values of the run). However, because this lemma is meant to be applied to several parts of a run, we have to state it for any value for $V$ and $\Vinit$.  
 
@@ -161,7 +172,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues} and that is strictly shorter that $\localrun$, which proves the "shortening property".
 	
 	We build a "local run" of length less that $\towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup W$ where $W$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
-	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot}-r + \size{\Vinit},\regnum)$, which concludes the proof of Lemma~\ref{lem:short-local-runs}. 
+	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot}-r + \size{\Vinit},\regnum)$, which concludes the proof of the lemma. 
 \end{proof}
 
 %We now prove the following, stronger version of Lemma~\ref{lem:short-run-for-output}.
@@ -216,7 +227,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 %To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with $\Vinit$ the set of initial values of $\localrun$ and observe that this gives $\size{\Vinit} \leq \regnum$.
 
 
-The following lemma allow us to bound the size of a node regarding its follower children nodes.
+Our aim  is now to bound the size of a node with respect to its "follower" children (and its father if it is a "boss node"). Those are the nodes representing agents that may require a large input from that node. We start with a technical lemma explaining that the "decompositions" witnessing the satisfaction of conditions~\ref{item:condition2_initial_value} and \ref{item:condition3_follower_node} of "unfolding trees" do not need to be larger than the sum of the sizes of the corresponding "follower" children¨.
 
 \begin{lemma}
 	\label{lem:short-dec}
@@ -242,6 +253,9 @@ Note that in the lemma statement, $w'_i$ could be small regarding the decomposit
 	
 	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{v_{i,j}} = \sum_{i=0}^{\ell} \size{w'_i}$.
 \end{proof}
+
+We can now prove Lemma~\ref{lem:bound-successor-height}. Essentially, given a node, we use the labels of its "follower" children (and its father if it is a "boss node") to obtain a bounded output that it needs to produce to give them all enough messages.
+We then use Lemma~\ref{lem:short-local-runs} to bound the section of "local run" between two of those outputs.
 
 \lemBoundSuccessorHeight*
 

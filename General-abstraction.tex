@@ -185,15 +185,15 @@ In order to bound the size of the nodes, we use the following result, which esse
 
 \begin{restatable}{lemma}{lemShortLocalRuns}
 	\label{lem:short-local-runs}
-	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun'} \leq \towerfun(\size{\prot} -r + \size{\Vinit},r)$ and:
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers, for every "local run" $\localrun_0: (q_0, \localdata_0) \step{*} (q_f, \localdata_f)$ in $\prot$, for every section $\localrun : (q, \localdata) \step{*} (q, \localdata')$ of $\localrun_0$,  for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun''} \leq \towerfun(\size{\prot},r)$ and:
 	\begin{enumerate}
-		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
-		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$. 
+		\item for all $\aval' \in \nats \setminus V$, there exists $\aval$ a "non-initial" value of $\localrun_0$ such that $\vinput{\aval'}{\localrun'}\subword \vinput{\aval}{\localrun}$,
+		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$. 
 	\end{enumerate}
 \end{restatable}
 
 \begin{proof}[Proof sketch]
-	First, we prove that any long portion of $\localrun$ must change the value of every register at least once; otherwise we can shorten the "run" using an induction on the number of registers. We then manage to prove that, if $\localrun$ includes twice the same sequence of transitions of sufficient length, then we can cut off anything in the middle and glue back together the ends. While shortening the "local run" we may add some fresh values to it (see Figure~\ref{fig:pumping} in the appendix), which is not a problem as we ensure that they are less constraining than the ones that were in the original "run". The set $W$ should be thought of as the set of "initial values" of the "run" we are shortening: for technical reasons, we want to prevent fresh values added in the proof from mimicking such values.
+	First, we prove that any long portion of $\localrun$ must change the value of every register at least once; otherwise we can shorten the "run" using an induction on the number of registers. We then manage to prove that, if $\localrun$ includes twice the same sequence of transitions of sufficient length, then we can cut off anything in the middle and glue back together the ends. While shortening the "local run" we may add some fresh values to it (see Figure~\ref{fig:pumping} in the appendix), which is not a problem as we ensure that they are less constraining than the ones that were in the original "run". However, for technical reasons, we want to prevent fresh values added in the proof from mimicking "initial" values of the agent.
 	See Appendix~\ref{app:tower-lemma} for the full proof.
 \end{proof}
 
