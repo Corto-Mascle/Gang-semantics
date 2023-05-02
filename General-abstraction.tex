@@ -199,7 +199,7 @@ In order to bound the size of the nodes, we use the following result, which esse
 \end{proof}
 
 \begin{remark}
-The function $\towerfun(n,k)$ defined above is actually a tower of exponentials of height $k$ where each floor is a polynomial in $n$. Perhaps surprinsingly, this bound is tight in the sense that one may need a "local run" as large as a tower of exponentials to reach a given "local configuration" while being allowed to receive sequences of messages of same value from a given fixed set. 
+The function $\towerfun(n,k)$ defined above is actually a tower of exponentials of height $k$ where each floor is a polynomial in $n$. Perhaps surprinsingly, this bound is tight: one may need a "local run" of length a tower of exponentials to reach a given "local configuration" while being allowed to receive sequences of messages of same value from a given fixed set. 
 \end{remark}
 
 % \begin{remark}
@@ -237,25 +237,32 @@ We now use the previous lemma to bound the label of each node $\node$ with respe
 		\begin{itemize}
 			\item If $\node$ is the root of $\tree$ then $\bosslabel{\node} = w$, otherwise $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$ with $\node'$ its parent
 			
-			\item In both cases $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r) + 1)\Big[ \size{\bosslabel{\node}} + \size{\messages}rK \Big]$
+			\item In both cases $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r)\Big[ \size{\bosslabel{\node}} + \size{\messages}rK +1 \Big]$
 		\end{itemize}
 		
-		\item If $\node$ is a "follower node" then  $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r) +1)\Big[ 1 + \size{\messages}rK \Big]$
+		\item If $\node$ is a "follower node" then  $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r)\Big[ 1 + \size{\messages}rK \Big]$
 			
 	\end{enumerate}
 \end{restatable}
 
 \begin{proof}[Proof sketch]
 	A node $\node$ has at most $\size{\messages}$ "follower" children for each "initial value", hence at most $\size{\messages}r$ in total, each one of them requires at most $K$ messages. The node $\node$ may have to output $\bosslabel{\node}$ extra messages to satisfy its "specification" if it is a "boss node", or just one extra message if it is a "follower node".
-	This gives a bound on the number of messages $\localrunlabel{\node}$ needs to broadcast. We mark the positions at which $\localrunlabel{\node}$ sends them and use Lemma~\ref{lem:short-local-runs} to bound the length of sections of the "run" connecting two such broadcasts by $\towerfun(\size{\prot},r)$, which yields the bounds above.
+	This gives a bound on the number of messages $\localrunlabel{\node}$ needs to broadcast. We mark the positions at which $\localrunlabel{\node}$ sends them and use Lemma~\ref{lem:short-local-runs} to bound the length of sections of the "run" connecting two such broadcasts by $\towerfun(\size{\prot},r)$, which yields the bounds above. See Appendix~\ref{app:bound-node-with-spec} for the full proof.
 \end{proof}
 
-This lemma allows us to bound the size of the labels of the nodes of maximal altitude. Applying it inductively, we can then bound the sizes of the labels of all nodes at a given altitude $i$ depending on its difference with the maximal one $\altmax-i$ (Lemma~\ref{lem:bound-length-at-height-h}). We then use those results to bound the size of the tree.
-
+Thanks to the previous lemma, we bound the size of a node with respect to its altitude: 
+\begin{restatable}{lemma}{lemBoundLengthHeightH}
+	\label{lem:bound-length-at-height-h}
+	Let $(\prot,q_f)$ be a positive instance of \COVER, $\tree$ a "coverability witness" for $(\prot,q_f)$, $\altmax$ the maximal "altitude" in $\tree$. There exists a primitive recursive function $f_0$ such that any node $\node$ of $\tree$ has size bounded by $f_0(\size{\prot} + \altmax - \altitude{\node})$.
+\end{restatable}
+\begin{proof}[Proof sketch]
+Applying Lemma~\ref{lem:bound-successor-height} inductively from highest to lowest altitude, we bound the sizes of the labels of all nodes at a given altitude $i$ depending on its difference with the maximal one $\altmax-i$.
+See Appendix~\ref{app:bound-node-size-with-altitude} for the detailed proof. 
+\end{proof}
  
 \begin{restatable}{proposition}{PropBoundTreeSize}
 	\label{prop:bound-tree-size}
-	There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for every positive instance $(\prot,q_f)$ of \COVER, there exists a "coverability witness" $\tree$ of size bounded by $f(\size{\prot})$.
+	There exists a function $f$ of class $\Ffunction{\omega^{\size{\messages}+1}}$ such that an instance $(\prot,q_f)$ of \COVER is positive if and only if it has a "coverability witness" $\tree$ of size bounded by $f(\size{\prot})$.
 \end{restatable}
 
 \begin{proof}[Proof sketch]
@@ -266,7 +273,6 @@ This lemma allows us to bound the size of the labels of the nodes of maximal alt
 	
 	Once we have bounded both the maximal and minimal altitudes, we can infer a bound on the size of all nodes (Lemma~\ref{lem:bound-node-size}), and then on branches as we can shorten branches as soon as they have two nodes with the same specification.
 	The bound on the size of the tree then follows from the observation that as nodes have bounded "local runs", they only see a bounded amount of values and thus need a bounded amount of children. 
-	
 \end{proof}
 
 
