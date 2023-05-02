@@ -115,7 +115,7 @@ We split $\localrun$ into $u_0,\dots,u_\ell$ based on the first point where each
 
 Condition~\ref{item:condition3_follower_node} directly states that a "follower node" $\node$ receives word $\followlabelword{\node}$ with value $\valuelabel{\node}$ and broadcasts message $(\followlabelmessage{\node}, \valuelabel{\node})$. Condition \ref{item:condition4_boss_node} expresses that a "boss node" witnesses the broadcast of a sequence of messages $\bosslabel{\node}$ with a single value; in this sequence, some messages may come from auxiliary agents encoded in "follower" children, which is why we have the condition that $\bosslabel{\node} \in \langdec{\decsymb}$ and not simply $ \voutput{\valuelabel{\node}}{\localrun} \subword \bosslabel{\node}$. 
 
-Our aim is to prove that we can study \COVER directly on "unfolding trees". For \COVER, we consider trees whose root $\node$ is a "boss node", as they suffice to witness "coverability" (a "follower node" implicitely relies on its parent's ability to broadcast some messages. 
+Our aim is to prove that we can study \COVER directly on "unfolding trees". We consider trees whose root is a "boss node", as they suffice to witness "coverability"  (a "follower node" implicitely relies on its parent's ability to broadcast some messages). 
 
 \begin{definition}
 \label{def:cov_witness}
@@ -128,12 +128,14 @@ A ""coverability witness"" for $(\prot, q_f)$ is an "unfolding tree" over $\prot
 			\input{Figures/tree-example1}
 		}
 	\end{center}
-	\caption{Example of an "unfolding tree"}\label{fig-ex-unfolding-tree}
+	\caption{Example of an "unfolding tree". The step labels in "local runs" are omitted for simplicity.}\label{fig-ex-unfolding-tree}
 \end{figure}
 
 \begin{example}
-	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the "run" of \cref{ex:example-1}. The tables represent "local run", each column is a "local configuration" and the step labels are omitted for simplicity. For instance, the "local run" at $\node_1$ is \begin{multline*} 
+	In \cref{fig-ex-unfolding-tree}~we display an "unfolding tree" obtained from the "run" of \cref{ex:example-1}. Tables are "local runs", columns are "local configurations". For instance, the "local run" at $\node_1$ is \begin{multline*} 
 	(q_0, (x_1,y_1)) \intstep{(q_0, \br{m_2}{1},q_1)} (q_1, (x_1, y_1)) \extbr{(q_1, \rec{m_4}{2}{\enregact}, q_4)}{y_2} (q_4, (x_1, y_2)) \\ \extbr{(q_4, \rec{m_6}{1}{\eqtestact}, q_7)}{x_1} (q_7, (x_1, y_2)) \intstep{(q_7, \br{m_7}{1},q_7)} (q_7, (x_1, y_2)) \end{multline*}
+	
+
 	
 	We explain why conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} are satisfied at the root $\node_1$ of the tree. Let $\localrun := \localrunlabel{\node_1}$ its "local run". 
 	The only "non-initial value" in $\localrun$ is $y_2$, and $\vinput{y_2}{\localrun} = m_4$; condition \ref{item:condition1_non_initial_value} is satisfied as $\node_1$ has a boss child with a "boss specification" containing $m_4$. 

@@ -104,7 +104,7 @@ In our model, agents may only send one value per message. Indeed, \cite{Delzanno
 	In order to reach $q_f$, an agent must perform a sequence of transitions in which it receives the "configurations" of $k$ agents and checks that they satisfy the query.
 \end{remark}
 
-As a first result, we can get rid of "local equality tests" at the cost of an exponential blow-up in the number of states.
+We can get rid of "local equality tests" at the cost of an exponential blow-up:
 
 \begin{restatable}{proposition}{SimpleReduction}
 	\label{prop:loc-eq-test-elimination}
@@ -142,7 +142,7 @@ We will use the following result, known as the Length function theorem \cite{Sch
 
 \subsection{Link with LCS}
 
-""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate by sending messages from a finite alphabet through unbounded lossy FIFO channels. The reachability problem asks whether a given control state of the system may be covered. Unlike in the non-lossy case \cite{BZ83}, reachability is decidable for "lossy channel systems" \cite{AbdullaJ1996verif}, but has non-primitive recursive complexity \cite{Schnoebelen2002verifying} and is in fact $\Fcomplexity{\omega^{\omega}}$-complete \cite{ChambartS08ordinal}. 
+""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate by sending messages from a finite alphabet through lossy FIFO channels. Unlike in the non-lossy case \cite{BZ83}, reachability of a state is decidable for "lossy channel systems" \cite{AbdullaJ1996verif}, but has non-primitive recursive complexity \cite{Schnoebelen2002verifying} and is in fact $\Fcomplexity{\omega^{\omega}}$-complete \cite{ChambartS08ordinal}. 
 By simulating LCS using BNRA, we obtain our $\Fcomplexity{\omega^{\omega}}$ lower bound for \COVER:
 
 \begin{restatable}{proposition}{propReductionLCS}
