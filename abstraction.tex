@@ -41,8 +41,7 @@ Abstract transitions are defined by applying transitions of the protocol while a
 At any time, we can apply a \emph{gang reset}, which maintains $S$ but reinitializes $(b,K)$ to $(q_0, \emptyset)$ (we track a new value). 
 We define formally this abstraction and show its soundness and completeness in Appendix~\ref{app:cover-one-reg}.
 To bound the length of relevant abstract runs, we impose that $S$ should grow between two gang resets (otherwise they reset to the same abstract configuration) and that there may be at most $O(\size{Q}^2)$ abstract steps between two resets (as $K$ can only increase and there are only $\size{Q}+1$ possibilities for $b$). This means that if there is an abstract run covering a state, there is one of size $O(\size{Q}^3)$, proving the \NP upper bound. 
-
-The \NP lower bound follows from a reduction from 3SAT (an agent $a$ sends a sequence of messages representing a valuation, with its identifier, to other agents which broadcast it back, playing the role of external memory, allowing $a$ to check the satisfaction of a 3SAT formula).
+The \NP lower bound follows from a reduction from 3SAT (an agent $a$ broadcasts a valuation with its identifier to other agents which broadcast it back, allowing $a$ to check the satisfaction of a 3SAT formula).
 These results yield the main theorem of this section:
 
 
