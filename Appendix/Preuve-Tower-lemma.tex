@@ -254,9 +254,8 @@ Note that in the lemma statement, $w'_i$ could be small regarding the decomposit
 	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{v_{i,j}} = \sum_{i=0}^{\ell} \size{w'_i}$.
 \end{proof}
 
-We can now prove Lemma~\ref{lem:bound-successor-height}. Essentially, given a node, we use the labels of its "follower" children (and its father if it is a "boss node") to obtain a bounded output that it needs to produce to give them all enough messages.
-We then use Lemma~\ref{lem:short-local-runs} to bound the section of "local run" between two of those outputs.
-
+\section{Proof of Lemma~\ref{lem:bound-successor-height}}
+\label{app:bound-node-with-spec}
 \lemBoundSuccessorHeight*
 
 \begin{proof}
@@ -330,7 +329,7 @@ It is now left to prove that the resulting tree is indeed an unfolding tree.
 	If $v'$ does not appear in $u$ then let $a$ be the first index such that $v'$ appears in $u'_a$. Then we have $v' \in V_b$ for all $b \geq a$, hence $\vinput{v'}{u'_b} = \epsilon$ for all $b\neq a$. Furthermore, there exists $v$ such that $\vinput{v'}{u'_a} \subword \vinput{v}{u_a}$, hence $\vinput{v'}{u'} \subword \vinput{v}{u}$. Hence we can use the "boss" child of $\node$ previously witnessing the satisfaction of condition~\ref{item:condition1_non_initial_value} for $v$ to witness the satisfaction of condition~\ref{item:condition1_non_initial_value} for $v'$.
 	
 	As a consequence, all conditions of an "unfolding tree" are still satisfied. 
-	By minimality of $\tree$, we must have $\size{u} \leq \size{u'} \leq (\towerfun(\size{\prot}, r) +1) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large]$. We have shown the first point of the lemma.
+	By minimality of $\tree$, we must have $\size{u} \leq \size{u'} \leq\towerfun(\size{\prot}, r) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large+1]$. We have shown the first point of the lemma.
 	
 	Now let $\node$ be a "follower node", by condition~\ref{item:condition3_follower_node} we have $\vinput{\valuelabel{\node}}{\localrunlabel{\node}} = \followlabelword{\node}$ and thus $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}}$.
 	

@@ -1,46 +1,50 @@
-\section{Proofs of Proposition~\ref{prop:bound-tree-size}}
-\label{app:bound-tree-size}
+\section{Proof of Lemma~\ref{lem:bound-length-at-height-h}}
+\label{app:bound-node-size-with-altitude}
 
+\lemBoundLengthHeightH*
+
+We actually prove the following, stronger statement:
 \begin{restatable}{lemma}{lemBoundLengthHeightH}
-	\label{lem:bound-length-at-height-h}
+	\label{lem:bound-length-at-height-h-extended}
 	Let $\prot$ be a protocol, let $\node$ be a node of a "unfolding tree" of minimal "size@@tree" labeled by $\prot$ satisfying a "boss specification" $w$.
-	Let $\altmax$ be the maximal "altitude" in $\tree$, let $N = \size{w} + \size{\prot} +1$ and let $f_0 : \nats \to \nats$ be the function mapping each $n \in \nats$ to $f_0(n)=(N^2 \towerfun(N,N))^{n+1}$, with $\towerfun$ the function defined in Lemma~\ref{lem:short-local-runs}.
+	Let $\altmax$ be the maximal "altitude" in $\tree$, let $N = \size{w} + \size{\prot} +1$ and let $f_0' : n \in \nats \mapsto ((n+2)^2 \towerfun(n,n))^{n+1}$, with $\towerfun$ the function defined in Lemma~\ref{lem:short-local-runs}.
 	
 	\begin{itemize}
-		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node})$ and $\size{\localrunlabel{\node}} \leq f_0(\altmax - \altitude{\node}+1)$.
+		\item If $\node$ is a "boss node" then $\size{\bosslabel{\node}} \leq f_0'(\size{\prot} +\altmax - \altitude{\node})$ and $\size{\localrunlabel{\node}} \leq f_0'(\size{\prot} +\altmax - \altitude{\node}+1)$.
 		
-		\item If $\node$ is a "follower node" then $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq f_0(\altmax - \altitude{\node}+1)$.
+		\item If $\node$ is a "follower node" then $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq f_0'(\size{\prot} + \altmax - \altitude{\node}+1)$.
 	\end{itemize} 
 \end{restatable}
-
 \begin{proof}
 	The proof is by strong induction on $\altmax-\altitude{\node}$.
 
 	%initialization added for clarity although one could factorize it with the rest of the induction
-	First, let $\node$ such that $\altitude{\node} = \altmax$. This implies that $\node$ has no follower node (hence we can set $K=0$ in Lemma~\ref{lem:bound-successor-height}).  If $\node$ is the root of the tree, then it is a "boss node" and applying Lemma~\ref{lem:bound-successor-height} proves that $\size{\bosslabel{\node}} \leq \size{w}$ and $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r) \size{w} \leq f_0(0)$ ($\towerfun$ defined in Lemma~\ref{lem:short-local-runs} is of course monotone for both arguments). If $\node$ is not the root of the tree, then it is necessarily a "follower node", and the application of Lemma~\ref{lem:bound-successor-height} again yields that $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r) \leq f_0(0)$.   
+	First, let $\node$ such that $\altitude{\node} = \altmax$. This implies that $\node$ has no follower node (hence we can set $K=0$ in Lemma~\ref{lem:bound-successor-height}).  If $\node$ is the root of the tree, then it is a "boss node"; we can impose that its "boss specification" is of length $1$ (coverability of $q_f$) and applying Lemma~\ref{lem:bound-successor-height} proves that $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r) \leq f_0'(\size{\prot})$ ($\towerfun$ defined in Lemma~\ref{lem:short-local-runs} is of course monotone for both arguments). If $\node$ is not the root of the tree, then it is necessarily a "follower node" (a "boss node" with a parent would not have maximum altitude), and the application of Lemma~\ref{lem:bound-successor-height} again yields that $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r) \leq f_0'(\size{\prot})$.   
 
 	Let $\node$ be a node, and suppose that the statement is true for all nodes of altitude greater than $\altitude{\node}$ and that $\altitude{\node} < \altmax$. 
 	Let $\node_1, \ldots, \node_k$ be its "follower" children, and $K$ the maximum of all $\size{\followlabelword{\node_i}}$.  By induction hypothesis for all $i$ we have 
-	$\size{\followlabelword{\node_i}} \leq f_0(\altmax-\altitude{\node})$ because $\altitude{\node_i} = \altitude{\node}+1$, and thus $K \leq f_0(\altmax-\altitude{\node})$. If $\node$ is not the root of $\tree$ then let $\node'$ be its parent.
+	$\size{\followlabelword{\node_i}} \leq f_0'(\size{\prot} + \altmax-\altitude{\node})$ because $\altitude{\node_i} = \altitude{\node}+1$, and thus $K \leq f_0'(\size{\prot} + \altmax-\altitude{\node})$. If $\node$ is not the root of $\tree$ then let $\node'$ be its parent.
 	
-	Suppose first that $\node$ is a "boss node". If it is at the root then by Lemma~\ref{lem:bound-successor-height}, we have $\size{\bosslabel{\node}} = \size{w} \leq N \leq f_0(\altmax - \altitude{\node})$. If not, $\node'$ is above $\node$ therefore we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}} \leq f_0(\altmax - \altitude{\node})$ by Lemma~\ref{lem:bound-successor-height} and induction hypothesis. In both cases we have $\size{\bosslabel{\node}} \leq f_0(\altmax - \altitude{\node})$.	
-	Again by Lemma~\ref{lem:bound-successor-height}, we obtain \[\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r)+1) \Big[f_0(\altmax-\altitude{\node}) + \size{\messages}rK\Big]. \]
+	Suppose first that $\node$ is a "boss node". If it is at the root then we can assume that $\size{\bosslabel{\node}} \leq 1$.  If not, $\node'$ is above $\node$ therefore we have $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}} \leq f_0'(\size{\prot} + \altmax - \altitude{\node})$ by Lemma~\ref{lem:bound-successor-height} and induction hypothesis. In both cases we have $\size{\bosslabel{\node}} \leq f_0'(\size{\prot} +\altmax - \altitude{\node})$.	
+	Again by Lemma~\ref{lem:bound-successor-height}, we obtain \[\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r) \Big[f_0'(\size{\prot} + \altmax-\altitude{\node}) + \size{\messages}rK +1 \Big]. \]
 	
 	 As a result, 
 	\begin{align*}
 	\size{\localrunlabel{\node}}& 
-	\leq (\towerfun(\size{\prot},r)+1) f_0(\altmax-\altitude{\node})(\size{\messages} r +1) \\&  
-	\leq N^2(\towerfun(N,N) +1) f_0(\altmax - \altitude{\node}) \\& 
-	\leq f_0(\altmax - \altitude{\node}+1)
+	\leq \towerfun(\size{\prot},r) f_0'(\size{\prot} + \altmax-\altitude{\node})(\size{\messages} r +2) \\&  
+	\leq (\size{\prot}+2)^2 \towerfun(\size{\prot},\size{\prot}) f_0'(\size{\prot} + \altmax - \altitude{\node}) \\& 
+	\leq f_0'(\size{\prot} + \altmax - \altitude{\node}+1)
 	\end{align*}
 	
 	Suppose now that $\node$ is a "follower node". By Lemma~\ref{lem:bound-successor-height}, we have 
-	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r)+1) \Big[1+\size{\messages}rK\Big]$.
-	By the same argument as above, this proves that $\size{\localrunlabel{\node}} \leq f_0(\altmax - \altitude{\node}+1)$.
+	$\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r) \Big[1+\size{\messages}rK\Big]$.
+	By the same argument as above, this proves that $\size{\localrunlabel{\node}} \leq f_0'(\size{\prot} + \altmax - \altitude{\node}+1)$.
 \end{proof}
 
 
 
+\section{Proofs of Proposition~\ref{prop:bound-tree-size}}
+\label{app:bound-tree-size}
 
 \begin{figure}[h]
 	\input{Figures/max-height-bound}
@@ -66,11 +70,9 @@
 	Therefore, as $\node_{i_1}$ is a descendant of $\node_{i_2}$, by second case of Lemma~\ref{lem:shortening-branches} there would exist a "unfolding tree" of smaller "size@@tree" than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
 	
 	As a result, the sequence $(w_i)_{1\leq i \leq \altmax}$ is a "bad sequence" over the alphabet $\messages\cup\set{\#}$.
-	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\altmax-i+2) = (N^2(\towerfun(N,N)+1))^{i}$ therefore $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{i}+2$.
+	Furthermore, by Lemma~\ref{lem:bound-length-at-height-h}, for all $i$, as $\altitude{\node'_{i}} = \altmax-i+1$, we have $\size{\followlabelword{\node_{j_a}}} \leq f_0(\size{\prot} + i)$ therefore $\size{w_i} \leq f_0^{(i)}(\size{\prot})$ (with $f_0^{(i)}$ denoting $f_0$ applied $i$ times).
 	
-	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n,n)+1)) n +2$. By immediate induction, for all $i\geq 1$ we have $g^{(i)}(N) \geq (N^2(\towerfun(N,N)+1))^{i} +2 \geq N$. As a consequence, for all $a$, $\size{w_i} \leq g^{(i)}(N)$ and $g$ is primitive-recursive.
-	
-	By Theorem~\ref{thm:lengthfcttheorem}, there exists a function $f_1' \in \Ffunction{\omega^{\size{\messages}}}$ such that the sequence $(w_i)_{i \in \nset{1}{\altmax}}$ is of length at most $f_1'(N)$. This prove that $\altmax \leq f_1'(N) = f_1'(\size{\prot} + \size{w} + 1)$. Letting $f_1 :n \mapsto f_1'(n+1)$ concludes the proof.
+	Because $f_0$ is primitive-recursive, we can apply Theorem~\ref{thm:lengthfcttheorem}: there exists a function $f_1' \in \Ffunction{\omega^{\size{\messages}}}$ such that the sequence $(w_i)_{i \in \nset{1}{\altmax}}$ is of length at most $f_1'(N)$. This prove that $\altmax \leq f_1'(N) = f_1'(\size{\prot} + \size{w} + 1)$. Letting $f_1 :n \mapsto f_1'(n+1)$ concludes the proof.
 \end{proof}
 
 
@@ -91,26 +93,18 @@ By using a similar argument as for the maximal altitude, we consider a branch re
 	For all $a \in \nset{\altmin}{0}$, let $j_a$ be the minimal index such that $\altitude{\node_{j_a}} = a$. This index exists as $\altitude{\node_0} = 0$, $\altitude{\node_m} = \altmin$ and for all $i$, $\altitude{\node_{i}} \geq \altitude{\node_{i-1}}-1$.
 	Furthermore as $j_a$ is the minimal such index, we cannot have $\altitude{\node_j} \leq a$ for any $j < j_a$ as otherwise there would be a $j'$ such that $j' \leq j < j_a$ with $\altitude{\node_{j'}} = a$.
 	
-	As a consequence, we have $j_0 < j_1 < j_2 < \ldots < j_{\altmin}$. Moreover, $\node_{j_a}$ is necessarily a "boss node" for all $a<0$ as otherwise we would have $\altitude{\node_{j_a-1}} = a-1 \leq a$, and $\node_{j_0}$ is the root and therefore also a "boss node" as $\tree$ satisfies $w$.
+	As a consequence, we have $j_0 < j_1 < j_2 < \ldots < j_{|\altmin|}$. Moreover, $\node_{j_a}$ is necessarily a "boss node" for all $a<0$ as otherwise we would have $\altitude{\node_{j_a-1}} = a-1 \leq a$, and $\node_{j_0}$ is the root and therefore also a "boss node" as $\tree$ satisfies $w$.
 	
-	Let $N = \size{w} + \size{\prot}+1$. For all $i \in \nset{0}{-\altmin}$ let $\node'_i = \node_{j_{-i}}$ and $w_i = \bosslabel{\node'_{i}} \in \messages^*$.
+	Let $N := \size{w} + \size{\prot}+1$. For all $i \in \nset{0}{|\altmin|}$ let $\node'_i = \node_{j_{-i}}$ and $w_i = \bosslabel{\node'_{i}} \in \messages^*$.
 	
 	We claim that we cannot have $w_{i_1}\subword w_{i_2}$ for any  $i_1< i_2$.
 	Suppose by contradiction that there exist such $i_1$ and $i_2$ with $i_1 < i_2$. Then we would have $\bosslabel{\node'_{i_1}} \subword \bosslabel{\node'_{i_2}}$, hence, as $\node_{i_2}$ is a descendant of $\node_{i_1}$, by first case of Lemma~\ref{lem:shortening-branches} there would exist a "unfolding tree" of smaller "size@@tree" than $\tree$ satisfying $w$, contradicting the minimality of $\tree$.
 	
 	As a result, the sequence $(w_i)_{1\leq i \leq \altmax}$ is a "bad sequence" for the "subword order" over the alphabet $\messages\cup\set{\#}$.
-	By Lemma~\ref{lem:bound-length-at-height-h}, for all $\node'_i$ we have $\size{\bosslabel{\node'_i}} \leq f_0(\altmax - \altitude{\node'_i}+1) = f_0(\altmax +i+1)$.
-	By Lemma~\ref{lem:bound-max-height}, we have $\altmax \leq f_1(N)$ and thus $\size{\bosslabel{\node'_i}} \leq  f_0(f_1(N)+i)$
+	By Lemma~\ref{lem:bound-length-at-height-h}, for all $\node'_i$ we have $\size{\bosslabel{\node'_i}} \leq f_0(\size{\prot} + \altmax - \altitude{\node'_i}+1) = f_0(\size{\prot} + \altmax +i+1)$.
+	By Lemma~\ref{lem:bound-max-height}, we have $\altmax \leq f_1(N)$ and thus $\size{\bosslabel{\node'_i}} \leq  f_0(N+f_1(N)+i)$. Let $g: k \geq 1 \mapsto f_0(k)$; clearly, for all $i$, $\size{w_i} \leq g^{(i)}(M)$ where $M := f_0(N + f_1(N)+1)$ (obviously, $f_0(k) > k+1$) and $g$ is primitive-recursive.
 	
-	Let $g$ be the function such that $g(n) = (n^2(\towerfun(n,n)+1))n+2$. 
-	Let $M = f_0(f_1(N)+1)$. Clearly for all $i\geq 0$ we have $g^{(i)}(M) \geq (N^2(\towerfun(N,N)+1))^{f_1(N) + i}$.
-	
-	We have $\size{w_0} \leq M = g^{(0)}(N)$ and for all $i>0$, $\size{w_i} \leq (N^2(\towerfun(N,N)+1))^{f_1(N) + i} + 2 \leq (N^2(\towerfun(N,N)+1)) g^{(i-1)}(M) + 2 \leq g^{(i)}(M)$ and $g$ is primitive-recursive.
-	
-	By definition of the function $f_1 \in \Ffunction{\omega^{\size{\messages}}}$ defined in Lemma~\ref{lem:bound-max-height}, all "bad" sequences of words whose $i$-th term is of length at most $g^{(i)}(M)$ have at most $f_1(M)$ elements.
-	
-	Hence the sequence $(w_i){1\leq i \leq \altmax}$ cannot have more than $f_1(M)$ elements, thus $\altmin \leq f_1(M) = f_1(f_0(f_1(N)+1))$.
-	We define $f_2'$ as $f_1 \circ f_0 \circ f_1$ and $f_2 : k \mapsto f_2'(k+2)$, so that $f_2(\size{\prot} + \size{w}) \geq f_1(f_0(f_1(N)+1))$. It is a function of $\Ffunction{\omega^{\size{\messages}+1}}$ as $f_0$ and $f_1$ are in $\Ffunction{\omega^{\size{\messages}}} \subseteq \Ffunction{\omega^{\size{\messages}+1}}$ and $\Ffunction{\omega^{\size{\messages}+1}}$ is closed by composition with functions of $\Ffunction{\omega^{\size{\messages}}}$.
+	We apply Theorem~\ref{thm:lengthfcttheorem} to obtain $h \in \Ffunction{\omega^{\size{\messages}}}$ such that $(w_i){1\leq i \leq \altmax}$ cannot have more than $h(M)$ elements, thus $|\altmin| \leq h(M)+1 = f_4(f_0(N+f_1(N)+1))$. By defining $f_2: n \mapsto f_4(f_0(n+f_1(n+1)+2))$, this means that $|\altmin| \leq f_2(\size{\prot} + \size{w})$. Moreover, $f_2$ is a function of $\Ffunction{\omega^{\size{\messages}+1}}$ as $f_0$, $f_1$ and $h$ are in $\Ffunction{\omega^{\size{\messages}}} \subseteq \Ffunction{\omega^{\size{\messages}+1}}$ and $\Ffunction{\omega^{\size{\messages}+1}}$ is closed by composition with functions of $\Ffunction{\omega^{\size{\messages}}}$.
 \end{proof}
 
 With the bounds on the maximal and minimal altitudes, Lemma~\ref{lem:bound-length-at-height-h} yields a bound on the size of all nodes in the tree.
