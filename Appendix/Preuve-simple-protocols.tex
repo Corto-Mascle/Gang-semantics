@@ -53,19 +53,20 @@
 	the subset of $\memoryproj{\config}$ containing configurations 
 	$\config'$ that additionally satisfy that, for every agent, for every $j \ne j' \in \nset{1}{r}$, $\localdata'(j) \ne \localdata'(j')$ (we call such configurations ""perfect configurations"" of $\prot'$).
 
-	Let $\run: \config_0 \step{*} \config_f$ a "run" on $\prot$ over some set of agents $\agents$. We prove by induction on the length of $\run$ that there exists a "run" $\run': \config_0' \step{*} \config_f'$ on $\prot'$ such that $\config_f' \in \perfproj{\config_f}$. This property is trivially true for $\run$ of length $0$. It therefore suffices to prove that given $\config_1 \step{} \config_2$ and $\config_1' \in \perfproj{\config_1}$, there exists $\config_2' \in \perfproj{\config_2}$ such that $\config_1' \step{} \config_2'$. We denote by $s$ the "step" $\config_1 \step{} \config_2$; and by $s'$ the "step" $\config'_1 \step{} \config'_2$ that we are building. 
+	Let $\run: \config_0 \step{*} \config_f$ a "run" on $\prot$ over some set of agents $\agents$. We prove by induction on the length of $\run$ that there exists a "run" $\run': \config_0' \step{*} \config_f'$ on $\prot'$ over $\agents$ such that $\config_f' \in \perfproj{\config_f}$. This property is trivially true for $\run$ of length $0$. It therefore suffices to prove that given $\config_1 \step{} \config_2$ and $\config_1' \in \perfproj{\config_1}$, there exists $\config_2' \in \perfproj{\config_2}$ such that $\config_1' \step{} \config_2'$. We denote by $s$ the "step" $\config_1 \step{} \config_2$ and by $s'$ the "step" $\config'_1 \step{} \config'_2$ that we are building. 
 	Let $a \in \agents$ that performs a transition in $s$.
 	\begin{itemize}
-	\item If $a$ performs a local test $\loc{i_1}{i_2}{\diseqtestact}$ in $s$, then it may perform the corresponding local test in $s'$ because $\config_1' \in \perfproj{\config_1}$ hence $\config_1'(a)$ maps $i_1$ and $i_2$ to "memory slots" of distinct values. 
+	\item If $a$ performs a local test $\loc{i_1}{i_2}{\diseqtestact}$ in $s$, then it may perform the corresponding local test in $s'$ because $\config_1' \in \memoryproj{\config_1}$ hence $\config_1'(a)$ maps $i_1$ and $i_2$ to "memory slots" of distinct values. 
 	\item If $a$ performs a local test  $\loc{i_1}{i_2}{\eqtestact}$, then because $\config_1'\in \perfproj{\config_1}$, it maps $i_1$ and $i_2$ to the same "memory slot" and $a$ may perform the corresponding internal transition in $\prot'$.  
 	\item If $a$ performs a broadcast in $s$, then we make it perform the corresponding broadcast in $s'$. Note that, because $\config_1' \in \memoryproj{\config_1}$, the broadcast value is the same in $s$ and $s'$. 
 	\item 
 	Suppose now that $a$ performs a reception $\rec{\amessage}{i}{\anact}$ in $s$. Let $\aval$ the value of the message. By the previous case, the corresponding broadcast is performed in $s'$ with the same value $\aval$. 
 		\begin{itemize}
 		\item If $\anact = \quotemarks{\dummyact}$, then we make $a$ perform the corresponding transition in $s'$. 
-		\item If $\anact = \quotemarks{\eqtestact}$, then if $\aval$ appears in some "memory slot" $j$ in $\config_1'$, we make $a$ perform the corresponding $\rec{\amessage}{j}{\eqtestact}$ transition in $s'$. 
+		\item If $\anact = \quotemarks{\enregact}$, then if $\aval$ appears in some "memory slot" $j$ in $\config_1'$, we make $a$ perform the corresponding $\rec{\amessage}{j}{\eqtestact}$ transition in $s'$. 
 		If $\aval$ does not appear in any "memory slot", then we make $a$ take the $\rec{\amessage}{j}{\enregact}$ transition with $j$ a "memory slot" that did not store the value of any register other that $i$ (it necessarily exists by the pigeonhole principle). This case disjunction guarantees that $\config_2'(a)$ does not have twice the same value in its "memory slots", hence that $\config_2'$ is "perfect".
-		\item If $\anact = \quotemarks{\diseqtestact}$, then we make $a$ perform the corresponding transition in $s'$ with the operation $\rec{m}{\map(j)}{\neq}$; as $\config_1' \in \memoryproj{\config_1}$,  the value stored in $\map(j)$ is the one stored in $j$ in $\config_1(a)$, which is different from the one received, thus the test passes.
+		\item If $\anact = \quotemarks{\diseqtestact}$, then we make $a$ perform the corresponding transition in $s'$ with the operation $\rec{m}{\map(j)}{\diseqtestact}$; because $\config_1' \in \memoryproj{\config_1}$,  we have $\config_1'(a)(\map(j)) = \config_1(a)(j) \ne v$ and the test passes.
+		\item If $\anact = \quotemarks{\diseqtestact}$, then we make $a$ perform the corresponding transition in $s'$ with the operation $\rec{m}{\map(j)}{\eqtestact}$; because $\config_1' \in \memoryproj{\config_1}$,  we have $\config_1'(a)(\map(j)) = \config_1(a)(j) = v$ and the test passes.	
 		\end{itemize}
 	\end{itemize}
 

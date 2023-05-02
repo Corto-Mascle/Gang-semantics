@@ -2,7 +2,7 @@
 \label{app:tower-lemma}
 
 	We start by defining the notion of "trace". 
-	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\tau} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
+	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
 
 
 We prove the following result:
@@ -36,7 +36,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	
 	Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(n,k+1)$.
 	
-	First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of length $\towerfun(n,k)+1$ with only $k$ active registers, then it suffices to apply the induction hypothesis on $u_i$ and $V$.
+	First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of length $\towerfun(n,k)+1$ with only $k$ active registers, then it suffices to apply the induction hypothesis on $u_i$ (and $V$, $W$).
 	
 	Suppose now that there exists no such infix "local run".
 	Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n,k){+}1$, we have $\towerfun(n,k+1) = 2M [((n+1)^2)^{2M}+1]$. 
@@ -64,7 +64,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	For every active register $i \in I$, let $e_i \in \nset{1}{2M}$ denote the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$ and $f_i \in \nset{1}{2M}$ the index of the last $\quotemarks{\enregact}$ on register $i$ in $s$. By hypothesis, because $s$ is of length $2M$, it contains at least two $\quotemarks{\enregact}$ on register $i$, one in the first half and one in the second half, hence $e_i \leq M < M +1 \leq f_i$. 
 	
 	For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define the $j$-th "local step" of $\atrace$ as $\intlabel{\delta_j}$. 
-	Suppose now that $\delta_j$ is a "reception" of the form $\rec{\amessage}{i}{\anact}$. The $j$-th "local step" of $\localrun_a$ (resp. $\localrun_b$) has underlying transition $\delta_j$ hence is an "reception step" of the form $\extlabel{\delta_j}{\aval_a}$ for some $\aval_a \in V$ (resp. $\extlabel{\delta_j}{\aval_b}$ for some $\aval_b \in V$).
+	Suppose now that $\delta_j$ is a "reception" of the form $\rec{\amessage}{i}{\anact}$. The $j$-th "local step" of $\localrun_a$ (resp. $\localrun_b$) has underlying transition $\delta_j$ hence is a "reception step" of the form $\extlabel{\delta_j}{\aval_a}$ for some $\aval_a \in V$ (resp. $\extlabel{\delta_j}{\aval_b}$ for some $\aval_b \in V$).
 	Because $V$ is finite and $\Vinit \subseteq V$, there exists an injective function $\phi: V \rightarrow \nats$ such that for all $v \in \Vinit$, $\phi(v) = v$ and for all $v \notin \Vinit$, $\phi(v) \notin V$.
 	We define the $j$-th "local step" of $\atrace$ to be $\extlabel{\delta_j}{\aval}$ where:
 	\begin{itemize}
@@ -152,7 +152,9 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	
 	Let $(q_m, \localdata_m)$ the "local configuration" after $M$ steps of $\atrace$ from $(q_1, \localdata_1)$; write $\localrun_1$ the local run from $(q_1,\localdata_1)$ to $(q_m, \localdata_m)$ corresponding to the first $M$ steps of $\atrace$ in $\localrun'$, and $\localrun_2$ the "local run" from $(q_m, \localdata_m)$ to $(q_4, \localdata_4)$ corresponding to the last $M$ steps of $\atrace$ in $\localrun'$.  
 	
-	Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\atrace$, the "reception steps" in the first $M$ steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the last $M$ steps. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval \in V$ and values of $V$ satisfy conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues}. 
+	We now prove the desired properties on $\localrun_{1}$.
+	
+	Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\atrace$, the "reception steps" in the first $M$ steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the last $M$ steps. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval \in V$ and values of $V$ satisfy conditions \ref{item:shorterrun_oldvalues}. 
 	
 	Let $\aval' \in \nats \setminus V$; $\aval'$ does not appear in $\localrun$. Either $\aval'$ does not appear in $\localrun'$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. As $\phi$ is injective and $\phi(\Vinit) = \Vinit$ and $\aval'\notin \Vinit$, $\aval \notin \Vinit$. 
 	But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "reception steps" with value $\phi(\aval)$ correspond to "reception steps" in $\localrun_a$ with value $\aval$, and similarly for $\localrun_2$ and $\localrun_b$. This proves condition \ref{item:shorterrun_anyvalue} for every $\aval' \in \nats \setminus V$.
@@ -214,6 +216,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 %To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with $\Vinit$ the set of initial values of $\localrun$ and observe that this gives $\size{\Vinit} \leq \regnum$.
 
 
+The following lemma allow us to bound the size of a node regarding its follower children nodes.
 
 \begin{lemma}
 	\label{lem:short-dec}
@@ -223,15 +226,17 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that, for all $i$, $\widehat{w}_i \subword w_i$ and $w'_i \in \langdec{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$), and $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \size{w'_i}$. 
 \end{lemma}
 
+Note that in the lemma statement, $w'_i$ could be small regarding the decomposition $\decsymb_i$, the lemma states that we can consider decompositions smaller than the words $w'_1 \dots w'_\ell$.
+
 \begin{proof}
-	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we define the word projection $\wordproj{M}{w}$ as the word obtained when deleting from $w$ every symbol not in $M$.
+	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we define the word projection $\wordproj{w}{M}$ as the word obtained when deleting from $w$ every symbol not in $M$.
 	
 	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
 	
 	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
 	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of size at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
 	
-	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$ $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
+	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$, $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
 	
 	We obtain that for all $i$, $w'_i = v_{i,0} \cdots v_{i,i}$ with, for all $j \in \nset{0}{i}$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_j}} \subword \widehat{w}_j$. Hence we have $w'_i \in \langdec{\decsymb_i}$.
 	
@@ -264,7 +269,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	
 	We have shown the first point of property 1. For the second one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "unfolding tree" conditions and then bound the length of $\localrunlabel{\node}$ using Lemma~\ref{lem:short-local-runs}.
 	
-	Let $u = \localrunlabel{\node}$, let $v \in Vinit$ be an initial value of $u$. If $v = \valuelabel{\node}$ then by condition~\ref{item:condition4_boss_node} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_{v,1}, \ldots, \node_{v,\ell_v}$ such that
+	Let $u = \localrunlabel{\node}$, let $v$ be an initial value of $u$. If $v = \valuelabel{\node}$ then by condition~\ref{item:condition4_boss_node} there exists a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_{v,1}, \ldots, \node_{v,\ell_v}$ such that
 	\begin{itemize}
 		\item $\bosslabel{\node} \in \langdec{\decsymb_v}$
 		\item $u$ can be split into $u_{v,0}, \ldots, u_{v,\ell_v}$ so that for all $i$, $w_{v,i} \subword \voutput{v}{u_{v,i}}$ and $\vinput{v}{u_{v,i}} \in \set{m_{v,1}, \ldots, m_{v,i-1}}^*$
@@ -278,11 +283,11 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	
 	For all $v\in \Vinit$, we define $J_v$ as a set of positions in $\localrun$ corresponding to the broadcasts of the letters of all the $w_{v,i}$. Formally, let $w_v = w_{v,0} \cdots w_{v,\ell_v}$, $J_v$ is a set of indices $j_{v,1} < j_{v,2} < \ldots < j_{v,N_v}$ such that: 
 	\begin{itemize}
-		\item $N = \size{w_v}$
+		\item $N_v = \size{w_v}$
 		
 		\item for all $a \in [1,N_v]$, the $j_{v,a}$th step of $u$ is a broadcast of the $a$th letter of $w_v$ with value $v$.
 		
-		\item for all index $j'$, if the $j'$th step in $u$ is a reception step of $m_{v, i}$ then $w_{v,0} \cdots w_{v,i-1}$ has already been broadcast, i.e., $w_{v,0} \cdots w_{v,i-1}$ is a prefix of the sequence of message types broadcast at positions in $J \cap [1, j']$.
+		\item for all index $j'$, if the $j'$th step in $u$ is a reception step of $m_{v, i}$ then $w_{v,0} \cdots w_{v,i-1}$ has already been broadcast, i.e., $w_{v,0} \cdots w_{v,i-1}$ is a prefix of the sequence of message types broadcast at positions in $J_v \cap [1, j']$.
 	\end{itemize}
 
 	We have, by definition, $\size{J_v} \leq \sum_{i=0}^{\ell_v} \size{w_{v,i}}$ for all $v$.
@@ -302,6 +307,8 @@ Let $u'$ be the run obtained by replacing all $u_a$ with $u'_a$. Using the bound
 
 We replace the local run label of $\node$ with $u'$. 
 
+
+It is now left to prove that the resulting tree is indeed an unfolding tree.
 	For all $v \in \Vinit$ of $u'$ (which are the same as for $u$), as $v \in V_0$ and as $(V_a)$ is an increasing sequence, $v \in V_a$ for all $a$. As a consequence, $\vinput{\aval}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$ for all $a$. As $J$ contains $J_v$, we can conclude that $u'$ matches "decomposition" $\decsymb_v$ in the same way as $u$, hence conditions~\ref{item:condition2_initial_value} and~\ref{item:condition4_boss_node} are still satisfied.
 	
 	For  all non-initial value $v'$ of $u'$, if $v'$ appears in $u$ then the $\vinput{\aval'}{\localrun'_a}$ is a subword of $\vinput{\aval'}{\localrun_a}$ for all $a$, hence $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval'}{\localrun}$. Hence we can use the same "boss" child of $\node$ to witness the satisfaction of condition~\ref{item:condition1_non_initial_value} for $v$.
