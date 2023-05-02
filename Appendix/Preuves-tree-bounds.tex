@@ -3,7 +3,7 @@
 
 \begin{restatable}{lemma}{lemBoundLengthHeightH}
 	\label{lem:bound-length-at-height-h}
-	Let $\prot$ be a protocol, let $\node$ be a node of a "unfolding tree" of minimal size labeled by $\prot$ satisfying a "boss specification" $w$.
+	Let $\prot$ be a protocol, let $\node$ be a node of a "unfolding tree" of minimal "size@@tree" labeled by $\prot$ satisfying a "boss specification" $w$.
 	Let $\altmax$ be the maximal "altitude" in $\tree$, let $N = \size{w} + \size{\prot} +1$ and let $f_0 : \nats \to \nats$ be the function mapping each $n \in \nats$ to $f_0(n)=(N^2 \towerfun(N,N))^{n+1}$, with $\towerfun$ the function defined in Lemma~\ref{lem:short-local-runs}.
 	
 	\begin{itemize}
@@ -49,7 +49,7 @@
 \end{figure}
 \begin{restatable}{lemma}{lemBoundMaxHeight}
 	\label{lem:bound-max-height}
-	There exists a function $f_1$ of the class $\Ffunction{\omega^{\size{\messages}}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labeled by $\prot$ satisfying a "boss specification" $w$, the maximal altitude of a node of $\tree$ is bounded by $f_1(\size{\prot} + \size{w})$.
+	There exists a function $f_1$ of the class $\Ffunction{\omega^{\size{\messages}}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal "size@@tree" labeled by $\prot$ satisfying a "boss specification" $w$, the maximal altitude of a node of $\tree$ is bounded by $f_1(\size{\prot} + \size{w})$.
 \end{restatable}
 \begin{proof}
 	Let $\tree$ be a "unfolding tree" of minimal "size@@tree" labeled by $\prot$ satisfying a "boss specification" $w$. Let $\altmax$ be the maximal altitude of a node in $\tree$. Let $\node_0$ the root of the tree, and  $\node_0, \ldots, \node_m$ a branch of the tree going from the root to a node $\node_m$ of altitude $\altmax$ (for all $i$, $\node_i$ is a child of $\node_{i-1}$).
@@ -81,7 +81,7 @@ By using a similar argument as for the maximal altitude, we consider a branch re
 
 \begin{restatable}{lemma}{lemBoundMinHeight}
 	\label{lem:bound-min-height}
-	There exists a function $f_2$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labeled by $\prot$ satisfying a "boss specification" $w$, the absolute value of the minimal "altitude" of a node of $\tree$ is bounded by $f_2(\size{\prot} + \size{w})$.
+	There exists a function $f_2$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal "size@@tree" labeled by $\prot$ satisfying a "boss specification" $w$, the absolute value of the minimal "altitude" of a node of $\tree$ is bounded by $f_2(\size{\prot} + \size{w})$.
 \end{restatable}
 
 \begin{proof}
@@ -139,10 +139,10 @@ Finally, as we now have a bound on all nodes, we can easily bound the length of 
 	% There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labeled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f(\size{\prot} + \size{w})$.
 
 \begin{proof}
-	Recall that the size of $\tree$ is defined as the sum of the sizes of its nodes. 
+	Recall that the "size@@tree" of $\tree$ is defined as the sum of the sizes of its nodes. 
 
 	Thanks to Proposition~\ref{prop:trees-sound-complete}, $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for $(\prot,q_f)$.
-	Let $\tree$ be a "coverability witness" of $(\prot,q_f)$, \emph{i.e.}, its root is a "boss node" whose local run covers $q_f$. Let $N = \size{\prot}+1$. Observe that one can encode the condition that this local run covers $q_f$ in the "boss specification" of the protocol (adding a special broadcast message only broadcast from $q_f$); in the following we will forget about the condition that the local run at the root covers $q_f$.
+	Let $\tree$ be a "coverability witness" of $(\prot,q_f)$, \emph{i.e.}, its root is a "boss node" whose "local run" covers $q_f$. Let $N = \size{\prot}+1$. Observe that one can encode the condition that this "local run" covers $q_f$ in the "boss specification" of the protocol (adding a special broadcast message only broadcast from $q_f$); in the following we will forget about the condition that the "local run" at the root covers $q_f$.
 	
 	We first bound the height of $\tree$ (\emph{i.e.}, the difference between its maximum and minimum "altitude"), then its arity (the maximal number of children of a node), which allows us to obtain a bound on the number of nodes. The sizes of the nodes will finally be bounded using the height. 
 	
@@ -163,10 +163,10 @@ Finally, as we now have a bound on all nodes, we can easily bound the length of 
 	
 	By combining the bounds on the length of branches and the arity of nodes, we obtain that $\tree$ has at most $\sum_{h=0}^{H} (f_3(N) + \size{\messages}r)^h$ nodes. Let $G: n \mapsto (H(n)+1)(f_3(n) + n^2)^{H(n)}$. The total number of nodes in $\tree$ is at most $G(N)$.
 
-	Finally, we obtain a bound on the size of $\tree$ by taking the product of the bounds on the number of nodes and on the size of each node label: 
+	Finally, we obtain a bound on the "size@@tree" of $\tree$ by taking the product of the bounds on the number of nodes and on the size of each node label: 
 	\[ \size{\tree} \leq  G(N) (2 f_3(N)+1)\]
 	
 	Let $f: n \mapsto  G(n+1) (2 f_3(n+1) +1)$; using the fact that $n \leq f_3(n)$, we can bound $f_4$ by the composition of an elementary fonction with $f_3$, hence as $f_3 \in \Ffunction{\omega^{\messages}}$ and $\Ffunction{\omega^{\messages}}$ is closed by composition with elementary functions, we have that $f_4 \in \Ffunction{\omega^{\messages}}$.
-	Overall, we have shown that the size of a minimal "coverability witness" for $(\prot,q_f)$ is bounded by $f(\size{\prot})$ with $f \in \Ffunction{\omega^{\size{\messages}}}$.
+	Overall, we have shown that the "size@@tree" of a minimal "coverability witness" for $(\prot,q_f)$ is bounded by $f(\size{\prot})$ with $f \in \Ffunction{\omega^{\size{\messages}}}$.
 \end{proof}
 

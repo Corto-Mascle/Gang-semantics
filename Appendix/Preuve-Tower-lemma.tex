@@ -296,16 +296,16 @@ Note that in the lemma statement, $w'_i$ could be small regarding the decomposit
 	We now use Lemma~\ref{lem:short-local-runs} repeatedly. Let $j_1< \ldots < j_N$ be the indices of $J$, in increasing order. For all $a \in [1,N]$, let $(q_a, \nu_a)$ (resp. $(q'_a, \nu'_a))$) be the local configuration right after (resp. before) the $j_a$th step of $u$, and let $u_a$ be the section of $u$ from $(q_{a-1}, \nu_{a-1})$ (with $(q_0, \nu_0)$ the initial configuration of $u$) to $(q'_a, \nu'_a)$.
 	
 	For each $a$, we are going to define a local run $u'_a : (q_{a-1}, \nu_{a-1}) \step{*} (q'_a, \nu'_a)$ and a finite set of values $V_a$.
-	We do this in increasing order: let $V_0$ be the set of values appearing in $u$ and for each $a$, let $u'_a$ be the run obtained by applying Lemma~\ref{lem:short-local-runs} to $u_a$ with $V=V_{a-1}$. Let $V_a$ be $V_{a-1}$ to which we added all values appearing in $u'_{a}$.
+	We do this in increasing order: let $V_0$ be the set of values appearing in $u$ and for each $a$, let $u'_a$ be the "local run" obtained by applying Lemma~\ref{lem:short-local-runs} to $u_a$ with $V=V_{a-1}$. Let $V_a$ be $V_{a-1}$ to which we added all values appearing in $u'_{a}$.
 	
 	We obtain, for each $a$, a local run $u'_a : (q_{a-1}, \nu_{a-1}) \step{*} (q'_a, \nu'_a)$ of length at most $\towerfun(\size{\prot}-r+r, r) = \towerfun(\size{\prot}, r)$ such that 
 	\begin{enumerate}
 		\item for all $\aval' \in \nats \setminus V_{a-1}$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$,
 		\item for all $\aval \in V_{a-1}$, $\vinput{\aval}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$. 
 	\end{enumerate}
-Let $u'$ be the run obtained by replacing all $u_a$ with $u'_a$. Using the bounds on $\size{J}$ and on $\size{u'_a}$ for each $a$, we obtain that $\size{u'} \leq (\towerfun(\size{\prot}, r) +1) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large]$.
+Let $u'$ be the "local run" obtained by replacing all $u_a$ with $u'_a$. Using the bounds on $\size{J}$ and on $\size{u'_a}$ for each $a$, we obtain that $\size{u'} \leq (\towerfun(\size{\prot}, r) +1) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large]$.
 
-We replace the local run label of $\node$ with $u'$. 
+We replace the "local run" label of $\node$ with $u'$. 
 
 
 It is now left to prove that the resulting tree is indeed an unfolding tree.
@@ -320,6 +320,6 @@ It is now left to prove that the resulting tree is indeed an unfolding tree.
 	
 	Now let $\node$ be a "follower node", by condition~\ref{item:condition3_follower_node} we have $\vinput{\valuelabel{\node}}{\localrunlabel{\node}} = \followlabelword{\node}$ and thus $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}}$.
 	
-	The proof of the second point is analogous to the one for "boss nodes": we identify the necessary broadcasts in the local run and reduce the runs in-between them using Lemma~\ref{lem:short-local-runs}. The only difference is that instead of broadcasting the letters of its boss label, $\node$ only has to broadcast the message $(\followlabelmessage{\node}, \valuelabel{\node})$ in addition to the messages required by its "follower" children, hence the $\size{\bosslabel{\node}}$ term is replaced by $1$ in the inequality.
+	The proof of the second point is analogous to the one for "boss nodes": we identify the necessary broadcasts in the "local run" and reduce the "local runs" in-between them using Lemma~\ref{lem:short-local-runs}. The only difference is that instead of broadcasting the letters of its boss label, $\node$ only has to broadcast the message $(\followlabelmessage{\node}, \valuelabel{\node})$ in addition to the messages required by its "follower" children, hence the $\size{\bosslabel{\node}}$ term is replaced by $1$ in the inequality.
 \end{proof}
 

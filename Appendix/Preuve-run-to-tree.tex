@@ -4,11 +4,11 @@
 
 \begin{proof}
 	
-	We proceed by strong induction on the lexicographic order on $\nats \times \set{\text{follower}, \text{boss}}$ with the length of the run as first component and the type of "specification" as second component, ``boss'' being considered higher than ``follower'' (so that, for a fixed "run" length, we prove it for "boss specifications" then for "follower specifications"). 
+	We proceed by strong induction on the lexicographic order on $\nats \times \set{\text{follower}, \text{boss}}$ with the length of the "run" as first component and the type of "specification" as second component, ``boss'' being considered higher than ``follower'' (so that, for a fixed "run" length, we prove it for "boss specifications" then for "follower specifications"). 
 	
-	If $\spec = \epsilon$ is an empty "boss specification" then the tree with a single node labeled with an empty run and an empty "specification" satisfies it.
+	If $\spec = \epsilon$ is an empty "boss specification" then the tree with a single node labeled with an empty "local run" and an empty "specification" satisfies it.
 	This covers in particular the case of a "run" of length $0$, as they cannot satisfy any other specification.
-	Let $\run$ be a "run", and assume that the property is true for "runs" whose length is less than the one of $\run$. Write $\agents$ the set of agents of $\run$.
+	Let $\run$ be an "initial run", and assume that the property is true for "initial runs" whose length is less than the one of $\run$. Write $\agents$ the set of agents of $\run$.
 	Because $\run$ satisfies $\spec$, there exists a value $v$ and an agent $a$ in $\run$ such that:
 	\begin{itemize}
 	\item if $\spec= \bossspec$ is a "boss specification", $\bossspec$ is a subword of the sequence of "message types" sent with value $v$ in $\run$ and $a$ is the agent which has $v$ as an "initial value",
@@ -32,7 +32,7 @@
 	We claim that the tree constructed satisfies conditions \ref{item:condition1_non_initial_value} to \ref{item:condition4_boss_node} thus is an "unfolding tree". It suffices to check the conditions at the root $\node$, as all we did is attach "unfolding trees" below that root. 
 	\begin{itemize}
 	\item Condition \ref{item:condition1_non_initial_value} is satisfied by construction of the trees $\tree'$.
-	\item For condition \ref{item:condition2_initial_value}, let $v'$ an initial value of $a$ in $u$. We reuse the notations from above. $u$ may be split into successive runs $u_0, \dots, u_\ell$. Moreover, $w_i  = \voutput{v'}{u_i}$ by definition and $\vinput{v}{u_i} \in \set{m_1,\dots,m_{i-1}}$ because $u_i$ is before the first broadcast of $m_i$ by some agent other that $a$. Also, for every $i$, $\tree_i$ satisfies "follower specification" $(w_i',m_i)$ and $w_i'$ is the $v'$-input of $a_i$ in $\run_i$ hence $w_i' \in \langdec{\decsymb_i}$.
+	\item For condition \ref{item:condition2_initial_value}, let $v'$ an initial value of $a$ in $u$. We reuse the notations from above. $u$ may be split into successive "local runs" $u_0, \dots, u_\ell$. Moreover, $w_i  = \voutput{v'}{u_i}$ by definition and $\vinput{v}{u_i} \in \set{m_1,\dots,m_{i-1}}$ because $u_i$ is before the first broadcast of $m_i$ by some agent other that $a$. Also, for every $i$, $\tree_i$ satisfies "follower specification" $(w_i',m_i)$ and $w_i'$ is the $v'$-input of $a_i$ in $\run_i$ hence $w_i' \in \langdec{\decsymb_i}$.
 	\item Condition \ref{item:condition3_follower_node}, assuming that $\spec$ is a "follower specification" $(\followwordspec, \followmessagespec)$, is immediate as we selected $a$  to be a witness that $\run$ satisfies $(\followwordspec, \followmessagespec)$ with value $v$. 
 	\item For condition \ref{item:condition4_boss_node}, assume that $\spec$ is a "boss specification" $\bossspec$. We selected $a$ so that $v$ is an initial value of $a$. Let $w$ the sequence of messages broadcast with value $v$ in $\run$ (by all agents). 
 	Because $\run$ satisfies $\bossspec$, $\bossspec \subword w$. Moreover, $w \in \langdec{\decsymb}$ by construction of $\decsymb$, therefore $w \in \langdec{\decsymb}$.

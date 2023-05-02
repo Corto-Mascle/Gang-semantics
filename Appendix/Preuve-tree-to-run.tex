@@ -3,7 +3,7 @@
 
 \LemTreeToRun*
 
-We start with some useful definitions. Indeed, in the rest of this paper, we were using the notion of "local run", that corresponds to the behaviour of a given agent in a "run". For the proof of Lemma~\ref{app:tree-to-run}, we need the more general notion of "partial run", which corresponds to the projection of a "run" onto a subset of agents. Note that a "partial run" may receive message from outside, and therefore one cannot automatically turn a partial run into a run. Intuitively, we will make partial runs correspond with "subtrees" of an "unfolding tree" (by ""subtree"", we mean the tree composed of a node of the original tree and every node below it). 
+We start with some useful definitions. Indeed, in the rest of this paper, we were using the notion of "local run", that corresponds to the behaviour of a given agent in a "run". For the proof of Lemma~\ref{app:tree-to-run}, we need the more general notion of "partial run", which corresponds to the projection of a "run" onto a subset of agents. Note that a "partial run" may receive message from outside, and therefore one cannot automatically turn a "partial run" into a "run". Intuitively, we will make "partial runs" correspond with "subtrees" of an "unfolding tree" (by ""subtree"", we mean the tree composed of a node of the original tree and every node below it). 
 
 We define a new semantics over the set of configurations, in which some messages may be received from the outside (without any condition as to where those messages come from). We denote the steps of this new semantics with $\pstep{}$.  
 \begin{definition}
@@ -23,19 +23,21 @@ We define a new semantics over the set of configurations, in which some messages
 	
 	\AP The ""input@@partial"" $\vinput{v}{\run}$ (resp. ""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ such that the projection on $\messages \times \set{in}$ (resp. $\messages\times \set{out}$) of $\vproj{v}{\run}$ is $(m_0, in) \cdots (m_k, in)$ (resp. $(m_0, out)\cdots(m_k, out)$).
 	
-	\AP Given a "local run" $\run$ and a value $v \in \nats$ appearing in $\run$, $v$ is ""initial@@partial"" in $\run$ if it is "initial" for some agent in $\run$. Note that this is not always true for partial runs, unlike for runs, because it could be that $v$ was received in $\run$ through an "external message@@global". 
+	\AP A "partial run" is ""initial@@partial"" if it starts in an "initial configuration".
+	
+	\AP Given a "partial run" $\run$ and a value $v \in \nats$ appearing in $\run$, $v$ is ""initial@@partial"" in $\run$ if it is "initial" for some agent in $\run$. Note that this is not always true for "partial runs", unlike for "runs", because it could be that $v$ was received in $\run$ through an "external message@@global". 
 
 	For all configurations $\config$ over $\agents$ and $\config'$ over $\agents'$ such that $\agents \cap \agents' = \emptyset$, we write $\config \sqcup \config'$ for the configuration over $\agents \cup \agents'$ such that $\config \sqcup \config'(a)$ is $\config(a)$ if $a \in \agents$ and $\config'(a)$ if $a \in \agents'$. 
 
 	\end{definition}
 
-The following lemma explains that, when a partial run $\run$ needs to receive a given word on a "non-initial@@partial" value $v$ and a "run" $\run'$ is able to provide this word for one of its "initial@@partial" values $v'$, then we can make a new partial run that no longer needs to receive anything on this value by ``plugging'' the output of $\run'$ on $v'$ and the input of $\run$ on $v$. All we need to do is execute those runs in parallel over disjoint sets of agents, after renaming values so that the $v'$-output of $\run'$ is now on $v$ (which does not induce any conflict as $v$ does not appear as an "initial@@partial" value in $\run$). We execute $\run$, and every time it requires a message $(m,v)$, we run $\run'$ up until its next broadcast of $(m,v)$ and use it to complete $\run$.
+The following lemma explains that, when an "initial partial run" $\run$ needs to receive a given word on a "non-initial@@partial" value $v$ and an "initial run" $\run'$ is able to provide this word for one of its "initial@@partial" values $v'$, then we can make a new "initial partial run" that no longer needs to receive anything on this value by ``plugging'' the output of $\run'$ on $v'$ and the input of $\run$ on $v$. All we need to do is execute those "runs" in parallel over disjoint sets of agents, after renaming values so that the $v'$-output of $\run'$ is now on $v$ (which does not induce any conflict as $v$ does not appear as an "initial@@partial" value in $\run$). We execute $\run$, and every time it requires a message $(m,v)$, we run $\run'$ up until its next broadcast of $(m,v)$ and use it to complete $\run$.
 
 The conditions at the end of the lemma express the fact that this operation does not affect the behaviour of $\run$ on the values it used before, and that if new values are introduced (the ones appearing in $\run'$), they do not require any extra message from outside. Intuitively, the resulting run $\Tilde{\run}$ requires less input than $\run$ but achieves the same things. This lemma will be used to complete the local run of the root of an "unfolding tree" over its "non-initial@@partial" values using its "boss" children. 
 
 \begin{lemma}
 	\label{lem:boss-composition}
-	Let $\run$ be a "partial run", $\run'$ a "run".
+	Let $\run$ be an "initial partial run", $\run'$ an "initial run".
 	If there exist values $v, v' \in \nats$ such that $\vinput{v}{\run} \subword \voutput{v'}{\run'}$ and $v'$ is an "initial@@partial" value in $\run'$ but $v$ is "non-initial@@partial" in $\run$, then there exists a "partial run" $\Tilde{\run}$ such that 
 	\begin{itemize}
 		\item $\vinput{v}{\Tilde{\run}} = \varepsilon$ 
@@ -97,21 +99,21 @@ The conditions at the end of the lemma express the fact that this operation does
 %	\end{itemize}
 %\end{lemma}
 
-The following proofs are more technical, we now want to be able to merge a partial run broadcasting one of its "initial@@partial" values $v$ and partial runs that play the roles of follower nodes, i.e., receive a sequence of messages with value $v$ (which is not "initial@@partial" for them) and then broadcast in turn a message with value $v$. The following lemma will make a step in this direction.
+The following proofs are more technical, we now want to be able to merge an "initial partial run" broadcasting one of its "initial@@partial" values $v$ and "initial partial runs" that play the roles of follower nodes, i.e., receive a sequence of messages with value $v$ (which is not "initial@@partial" for them) and then broadcast in turn a message with value $v$. The following lemma will make a step in this direction.
 
-Its statement can be understood as follows: Say we have a "partial run" $\run$ which requires some input over one of its "initial@@partial" values $v$. More precisely, we have a "decomposition" $\decsymb = (w_0, m_1, \ldots, w_\ell)$ such that $\run$ can be split into parts that each output $w_i$ while only requiring some "message types" in $\set{m_J \mid j<i }$ as input over $v$. On the other hand, we have for each $i$ a "partial run" $\run'_i$ which can output $m_i$ with some "non-initial@@partial" value $v_j$ while only requiring an input over $v_j$ that forms a word matching "decomposition" $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$. 
-Then we can obtain  a run $\Tilde{\run}$ that can be split the same way as $\run$ but no longer requires input over $v$.
+Its statement can be understood as follows: Say we have an "initial partial run" $\run$ which requires some input over one of its "initial@@partial" values $v$. More precisely, we have a "decomposition" $\decsymb = (w_0, m_1, \ldots, w_\ell)$ such that $\run$ can be split into parts that each output $w_i$ while only requiring some "message types" in $\set{m_J \mid j<i }$ as input over $v$. On the other hand, we have for each $i$ an "initial partial run" $\run'_i$ which can output $m_i$ with some "non-initial@@partial" value $v_j$ while only requiring an input over $v_j$ that forms a word matching "decomposition" $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$. 
+Then we can obtain  an "initial partial run" $\Tilde{\run}$ that can be split the same way as $\run$ but no longer requires input over $v$, has the same "projection" as $\run$ on values appearing in $\run$, and does not require any input on other values.
 
 Intuitively, this is done by renaming values in those runs in a suitable way so that the $\run'_i$ now have an output over value $v$. We take the last message type $m_\ell$ and use (many copies of) $\run'_\ell$ to eliminate the $(m_\ell, v)$ inputs in the last part of $\run$, while using the output of $\run$ to complete some of the input of $\run'$. 
 The remaining input then only consists of messages $m_{i}$ with $i<\ell$, which allows us to conclude by induction.
 
 \begin{lemma}
 	\label{lem:follower-composition-completion}
-	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $\config_0, \ldots, \config_{\ell+1}$ configurations and $v$ a value appearing in $\config_0$ such that for all $j \in\nset{0}{\ell}$ there exists a "partial run" $\run_j$ from $\config_{j}$ to $\config_{j+1}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$. 
+	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $\config_0, \ldots, \config_{\ell+1}$ configurations (with $\config_0$ an "initial configuration") and $v$ a value appearing in $\config_0$ such that for all $j \in\nset{0}{\ell}$ there exists an "partial run" $\run_j$ from $\config_{j}$ to $\config_{j+1}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$. 
 	
-	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
+	Suppose that for all $j \in\nset{1}{\ell}$ there exists an "initial partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
 	
-	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$ such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
+	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$, with $\Tilde{\config}_0$ an "initial configuration", such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
 	\begin{itemize}
 		\item $\voutput{v}{\run_j} \subword \voutput{v}{\Tilde{\run}_j}$, 
 		
@@ -125,8 +127,7 @@ The remaining input then only consists of messages $m_{i}$ with $i<\ell$, which 
 
 
 \begin{proof}
-	
-	We prove the property by strong induction on $(\size{\vinput{v}{\run}}_{m_\ell}, \ldots, \size{\vinput{v}{\run}}_{m_1})$, with the lexicographic ordering, $\run$ being the run obtained by concatenating $\run_1, \ldots, \run_\ell$.
+	We prove the property by strong induction on $(\size{\vinput{v}{\run}}_{m_\ell}, \ldots, \size{\vinput{v}{\run}}_{m_1})$, with the lexicographic ordering, $\run$ being the "initial partial run" obtained by concatenating $\run_1, \ldots, \run_\ell$.
 	
 	If $\vinput{v}{\run} = \epsilon$ then we can set $\Tilde{\run} = \run$ to obtain the result.
 	
@@ -137,7 +138,7 @@ The remaining input then only consists of messages $m_{i}$ with $i<\ell$, which 
 	Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \pstep{\run_{{j'},1}'} \config_{{j'},1} \cdots \pstep{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$. 
 	
 	We then proceed in a similar way as in Lemma~\ref{lem:boss-composition}.
-	We can rename agents so that $\run$ and $\run'_j$ are on disjoint sets of agents, and apply a renaming of values in $\run_j'$ so that $v_{j'}$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
+	We can rename agents so that $\run$ and $\run'_j$ are on disjoint sets of agents, and apply a renaming of values in $\run_j'$ so that $v_{j'}$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$. In particular the $\config_0$ and $\config_{j',0}$ have no common values, hence $\config_0 \sqcup \config_{j',0}$ is an "initial configuration".
 	We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\run_i$ for all $i\in\nset{1}{\ell}$. As $w_i \subword \voutput{v}{\run_i}$, we can match the "internal messages@@global" of $\run_j$ with some "external messages@@global" of $\run'_{j',i}$ so that the remaining "external messages@@global" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
 	We obtain, for each $i \in \nset{1}{j'-1}$, a run $\run''_i$ from $\config_{i-1} \sqcup \config_{j', i-1}$ to $\config_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
 	
@@ -171,7 +172,7 @@ However, the previous lemma will not suffice, as if we have a "boss node" with a
 
 \begin{figure}
 	\input{Figures/Fig-tree-to-run}
-	\caption{Illustration of Lemma~\ref{lem:follower-composition-output}}
+	\caption{Illustration of Lemma~\ref{lem:follower-composition-output} (we only show messages over a single value).}
 	\label{fig:tree-to-run}
 \end{figure}
 
@@ -180,11 +181,11 @@ However, the previous lemma will not suffice, as if we have a "boss node" with a
 	\label{lem:follower-composition-output}
 	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $w'_0, \ldots, w'_\ell \in \messages^*$ such that for all $i \in \nset{0}{\ell}$, the projection of $w'_i$ on $\messages\setminus \set{m_1, \ldots, m_{i-1}}$ is a subword of $w_i$.
 	
-	Let $\config_0, \ldots, \config_{\ell+1}$ be configurations and $v$ a value such that for all $j \in\nset{1}{\ell+1}$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
+	Let $\config_0, \ldots, \config_{\ell+1}$ be configurations, with $\config_0$ an "initial configuration" and $v$ a value such that for all $j \in\nset{1}{\ell+1}$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
 	
-	Suppose that for all $j \in\nset{1}{\ell}$ there exists a "partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
+	Suppose that for all $j \in\nset{1}{\ell}$ there exists an "initial partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
 	
-	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$ such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
+	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$, with $\Tilde{\config}_0$ an "initial configuration" such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
 \begin{itemize}
 	\item $w'_j \subword \voutput{v}{\Tilde{\run}_j}$, 
 	
@@ -204,7 +205,7 @@ However, the previous lemma will not suffice, as if we have a "boss node" with a
 	
 	Suppose it is not the case. Then there exists $j, j'$ such that $j' \leq j$ and $m_{j'}$ appears in $w'_j$. Let $w'_j = w^-_j m_{j'} w^+_j$ and let $w''_j$ be the word $w^-_jw^+_j$.
 	
-	Then, there exist "configurations" $\widehat{\config}_0, \ldots, \widehat{\config}_{\ell+1}$ such that for all $i \in\nset{0}{\ell}$, there is a "partial run" $\widehat{\run}_i$ from $\widehat{\config}_i$ to $\widehat{\config}_{i+1}$ and
+	Then, there exist "configurations" $\widehat{\config}_0, \ldots, \widehat{\config}_{\ell+1}$, with $\widehat{\config}_0$ an "initial configuration" such that for all $i \in\nset{0}{\ell}$, there is a "partial run" $\widehat{\run}_i$ from $\widehat{\config}_i$ to $\widehat{\config}_{i+1}$ and
 \begin{itemize}
 	\item $w'_i \subword \voutput{v}{\widehat{\run}_i}$ if $i \neq j$,
 	
@@ -220,11 +221,11 @@ However, the previous lemma will not suffice, as if we have a "boss node" with a
 From these runs we infer a sequence of "partial runs" that output $w'_0, \ldots, w'_\ell$ but have a non-empty $v$-input. We then use Lemma~\ref{lem:follower-composition-completion} to obtain the desired runs with an empty $v$-input.
 
 We proceed in a similar manner as in Lemma~\ref{lem:follower-composition-completion}.
-There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_j$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
+There exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_{j'}$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
 
 Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \pstep{\run_{{j'},1}'} \config_{{j'},1} \cdots \pstep{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$.
 
-We can rename agents so that the $\widehat{\run}_i$ and $\run'_{j',i}$ are on disjoint sets of agents, and apply a renaming of values in $\run'_{j'}$ so that $v_{j'}$ is mapped to $v$ and all other values are mapped to values that do not appear in $\run$.
+We can rename agents so that the $\widehat{\run}_i$ and $\run'_{j',i}$ are on disjoint sets of agents, and apply a renaming of values in $\run'_{j'}$ so that $v_{j'}$ is mapped to $v$ and all other values are mapped to values that do not appear in the $\run_i$. In particular $\widehat{\config}_0$ and $\config_{j',0}$ do not share any values, thus $\widehat{\config}_0 \sqcup \config_{j',0}$ is an "initial configuration".
 We then construct a sequence of runs by executing in parallel $\run_{j',i}'$ and $\widehat{\run}_i$ for all $i\in\nset{1}{\ell}$. As $w_i \subword \voutput{v}{\widehat{\run}_i}$, we can match the "internal messages@@global" of $\widehat{\run}_i$ with some "external messages@@global" of $\run'_{j',i}$ so that the remaining "external messages@@global" with value $v$ in $\run'_{j',i}$ are all in $\set{m_1, \ldots, m'_{j'}}$. 
 We obtain, for each $i \in \nset{1}{j'-1}$, a run $\run''_i$ from $\widehat{\config}_{i-1} \sqcup \config_{j', i-1}$ to $\widehat{\config}_{i} \sqcup \config_{j', i}$ with $\vinput{v}{\run''_i} \in \set{m_1, \ldots, m_{i-1}}^*$. 
 
@@ -269,18 +270,16 @@ We are now ready to prove Lemma~\ref{lem:tree-to-run}.
 
 \LemTreeToRun*
 
-
-	We prove the following statement by induction on the length of the longest branche in the "unfolding tree" $\tree$.  
-	
+	We actually prove a stronger statement by induction on the "unfolding tree".
 	The induction property is as follows. For every "unfolding tree" $\tree$:
 	\begin{itemize}
-		\item if $\tree$ satisfies a "boss specification" $w \in \messages^*$, then there exists a run $\run$ satisfying $w$.
-		\item if $\tree$ satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ then there exists a "partial run" $\run$ and a value $v$ such that $\Input{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \subword \followwordspec$, and $\voutput{v}{\run}$ contains $\followmessagespec$.
+		\item if $\tree$ satisfies a "boss specification" $w \in \messages^*$, then there exists an "initial run" $\run$ satisfying $w$.
+		\item if $\tree$ satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ then there exists an "initial partial run" $\run$ and a value $v$ such that $\Input{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \subword \followwordspec$, and $\voutput{v}{\run}$ contains $\followmessagespec$.
 	\end{itemize}
 	
 	Let $\tree$ be a "unfolding tree", let $\node$ be its root.
 	
-	We see $u := \localrunlabel{\node}$ as a "partial run" with a single agent.
+	We see $u := \localrunlabel{\node}$ as an "partial run" with a single agent. Recall that by definition of an "unfolding tree", $u$ starts with distinct values in all its registers, hence it is an "initial partial run".
 	We are going to compose $u$ with some runs given by the children of $\node$ to construct a run satisfying the properties above.
 	Let $V$ be the set of values appearing in $u$ and $V_{init}$ be the set of "initial@@partial" values of $u$.
 	
@@ -288,9 +287,10 @@ We are now ready to prove Lemma~\ref{lem:tree-to-run}.
 	\subsubsection{Step 1: "Non-initial@@partial" values}
 	\label{sec:tree-to-run-step-one}
 	
-	We show the following statement by induction on $\size{V'}$ for $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$. It expresses that we can complete $u$ into a "partial run" that does not require any input over its "non-initial@@partial" values. This is done by induction, using Lemma~\ref{lem:boss-composition} and the runs obtained via the "boss" children to eliminate the input of $u$ over each of its "non-initial@@partial" values without adding some input requirements on other values or modifying its behaviour over values that were previously there.
+	We show the following statement by induction on $\size{V'}$ for $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$. It expresses that we can complete $u$ into an "initial partial run" that does not require any input over its "non-initial@@partial" values. This is done by induction, using Lemma~\ref{lem:boss-composition} and the "initial runs" obtained via the "boss" children to eliminate the input of $u$ over each of its "non-initial@@partial" values without adding some input requirements on other values or modifying its behaviour over values that were previously there.
+	Here is the statement:
 	
-For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, there exists a "partial run" $\run$ such that for all $v \in \nats$:
+For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, there exists an "initial partial run" $\run$ such that for all $v \in \nats$:
 \begin{itemize}
 	\item If $v \in V \setminus V'$ then $\vproj{v}{\run} = \vproj{v}{u}$
 	
@@ -299,7 +299,7 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 	
 	If $V' = \emptyset$ then this is clear as we can simply take $\run := \localrun$.
 	
-	Now suppose there exists $v \in V \setminus (V_{init}\cup \set{\valuelabel{\node}} \cup V')$. Let $V'' = V' \cup \set{v}$. By induction hypothesis (on $\size{V'}$) there exists a "partial run" $\run'$ such that for all $v' \in \nats$:
+	Now suppose there exists $v \in V \setminus (V_{init}\cup \set{\valuelabel{\node}} \cup V')$. Let $V'' = V' \cup \set{v}$. By induction hypothesis (on $\size{V'}$) there exists an "initial partial run" $\run'$ such that for all $v' \in \nats$:
 	\begin{itemize}
 		\item If $v' \in V \setminus V'$ then $\vproj{v'}{\run} = \vproj{v'}{u}$
 		
@@ -307,11 +307,11 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 	\end{itemize}
 
 	As $v \neq \valuelabel{\node}$, by condition~\ref{item:condition1_non_initial_value} $\node$ has a child $\node'$ such that $\vinput{v}{\localrunlabel{\mu}} \subword  \bosslabel{\node'}$.
-	By induction hypothesis (on the "unfolding tree"), as the subtree rooted in $\mu'$ satisfies the "boss specification" $\vinput{v}{\mu}$, there exists a run $\run_v$ satisfying $\vinput{v}{\localrunlabel{\mu}}$.
+	By induction hypothesis (on the "unfolding tree"), as the subtree rooted in $\mu'$ satisfies the "boss specification" $\vinput{v}{\mu}$, there exists an "initial run" $\run_v$ satisfying $\vinput{v}{\localrunlabel{\mu}}$.
 	
 	Let $v' \in \nats$ be such that $\vinput{v}{\localrunlabel{\node}} \subword \voutput{v'}{\run_v}$. 
 	
-	We apply Lemma~\ref{lem:boss-composition} to obtain a run $\Tilde{\run}$ such that 
+	We apply Lemma~\ref{lem:boss-composition} to obtain an "initial run" $\Tilde{\run}$ such that 
 		\begin{itemize}			
 		\item $\vinput{v}{\Tilde{\run}} = \varepsilon$ 
 		
@@ -320,9 +320,9 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 		\item for all $v'' \neq v$, if $\vproj{v''}{\run} = \varepsilon$ then $\vinput{v''}{\Tilde{\run}} = \varepsilon$.
 	\end{itemize}
 	
-	As a result, $\Tilde{\run}$ is a partial run satisfying the three requirements for $V''$.  This concludes our induction.
+	As a result, $\Tilde{\run}$ is an "initial partial run" satisfying the three requirements for $V''$.  This concludes our induction.
 	
-	In particular, with $V' = V\setminus (V_{init}\cup \set{\valuelabel{\node}})$, we obtain that there exists a run $\run$ such that,
+	In particular, with $V' = V\setminus (V_{init}\cup \set{\valuelabel{\node}})$, we obtain that there exists an "initial run" $\run$ such that,
 	for all $v \in \nats$:
 	\begin{itemize}
 		\item $\voutput{v}{u} \subword \voutput{v}{\run}$
@@ -339,25 +339,25 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 	
 	We show the following statement by induction on $\size{V'}$ for $V'$ such that $V \setminus (V_{init} \cup \set{\valuelabel{\node}}) \subseteq V' \subseteq V \setminus \set{\valuelabel{\node}}$ .
 	
-	For all $V'$ such that $V \setminus (V_{init} \cup \set{\valuelabel{\node}}) \subseteq V' \subseteq V \setminus \set{\valuelabel{\node}}$, there exists a "partial run" $\run'$ such that for all $v \in \nats$:
+	For all $V'$ such that $V \setminus (V_{init} \cup \set{\valuelabel{\node}}) \subseteq V' \subseteq V \setminus \set{\valuelabel{\node}}$, there exists an "initial partial run" $\run'$ such that for all $v \in \nats$:
 	\begin{itemize}		
 		\item If $v \in V \setminus V'$ then $\vproj{v}{\run'} = \vproj{v}{u}$
 		
 		\item If $v \in V' \cup (\nats \setminus V)$ then $\vinput{v}{\run'} = \epsilon$
 	\end{itemize}  
 
-If $V' = V \setminus (V_{init} \cup \set{\valuelabel{\node}})$ then this is clear as we can simply take the run $\run$ constructed in Section~\ref{sec:tree-to-run-step-one}.
+If $V' = V \setminus (V_{init} \cup \set{\valuelabel{\node}})$ then this is clear as we can simply take the "run" $\run$ constructed in Section~\ref{sec:tree-to-run-step-one}.
 
-Now suppose there exists $v \in V \setminus (\set{\valuelabel{\node}} \cup V')$. Let $V'' = V' \cup \set{v}$. By induction hypothesis (on $\size{V'}$) there exists a "partial run" $\run'$ such that for all $v' \in \nats$:
+Now suppose there exists $v \in V \setminus (\set{\valuelabel{\node}} \cup V')$. Let $V'' = V' \cup \set{v}$. By induction hypothesis (on $\size{V'}$) there exists an "initial partial run" $\run'$ such that for all $v' \in \nats$:
 \begin{itemize}
 	\item If $v' \in V \setminus V'$ then $\vproj{v'}{\run} = \vproj{v'}{u}$
 	
 	\item If $v' \in (\nats \setminus V) \cup V'$ then $\vinput{v'}{\run} = \epsilon$
 \end{itemize}
 
-As $v \neq \valuelabel{\node}$, by condition~\ref{item:condition2_initial_value}, there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into successive local runs $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$, $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdec{\decsymb_i}$ with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
+As $v \neq \valuelabel{\node}$, by condition~\ref{item:condition2_initial_value}, there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into successive "local runs" $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$, $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdec{\decsymb_i}$ with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
 
-By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exists a run $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v_i'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$.
+By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exists an "initial partial run" $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v_i'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$.
 
 For each $i$ we consider the shortest prefix $\run''_i$ of $\run'_i$ ending with an "internal message@@global" $\intmessage{\followlabelmessage{\node_i}}{v'_i}$, we have that $\vinput{v'_i}{\run''_i} \subword \vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$.
 
@@ -373,9 +373,9 @@ We apply Lemma~\ref{lem:follower-composition-completion} to obtain a sequence of
 	\item for all $v' \neq v$, if $\vproj{v}{\run} = \varepsilon$ then $\vinput{v''}{\Tilde{\run}} = \varepsilon$.
 \end{itemize}
 
-As a result, $\Tilde{\run}$ is a partial run satisfying the three requirements for $V''$.  This concludes our induction.
+As a result, $\Tilde{\run}$ is an "initial partial run" satisfying the three requirements for $V''$.  This concludes our induction.
 
-	In particular, with $V' = V\setminus \set{\valuelabel{\node}}$, we obtain that there exists a run $\widehat{\run}$ such that 
+	In particular, with $V' = V\setminus \set{\valuelabel{\node}}$, we obtain that there exists an "initial partial run" $\widehat{\run}$ such that 
 for all $v \in \nats$:
 \begin{itemize}
 	\item If $v = \valuelabel{\node}$ then $\vproj{v}{\widehat{\run}} = \vproj{v}{\run} = \vproj{v}{u}$
@@ -387,7 +387,7 @@ for all $v \in \nats$:
 
 In this final part, we use Lemma~\ref{lem:follower-composition-output} to complete the "partial run" previously obtained so that it has enough output on $\valuelabel{\node}$ to satisfy the specification of $\node$. In fact, if $\node$ is a "follower node", the "partial run" constructed so far suffices. If $\node$ is a "boss node", we need to apply Lemma~\ref{lem:follower-composition-output}.
 	
-In Section~\ref{sec:tree-to-run-step-two} we constructed a run $\widehat{\run}$ such that for all $v \in \nats$:
+In Section~\ref{sec:tree-to-run-step-two} we constructed an "initial partial run" $\widehat{\run}$ such that for all $v \in \nats$:
 \begin{itemize}
 	\item If $v = \valuelabel{\node}$ then $\vproj{v}{\widehat{\run}} = \vproj{v}{u}$
 	
@@ -400,7 +400,7 @@ If $\mu$ is a "boss node" then there exists a decomposition $\decsymb=(w_0, m_1,
 
 As $\bosslabel{\node} \in \langdec{\decsymb}$, we have $\bosslabel{\node} = w'_0 \cdots w'_\ell$ where for all $i$ the projection of $w'_i$ on $\messages\setminus\set{m_1, \ldots, m_{i-1}}$ is a subword of $w_i$. 
 
-We repeat the arguments from Section~\ref{sec:tree-to-run-step-two}, but we use Lemma~\ref{lem:follower-composition-output} instead of Lemma~\ref{lem:follower-composition-completion} to obtain a run $\Tilde{\run}$ such that,
+We repeat the arguments from Section~\ref{sec:tree-to-run-step-two}, but we use Lemma~\ref{lem:follower-composition-output} instead of Lemma~\ref{lem:follower-composition-completion} to obtain an "initial run" $\Tilde{\run}$ such that,
 \begin{itemize}	
 	\item $\vinput{v}{\Tilde{\run}} = \epsilon$ for all $v \in \nats$
 	
@@ -408,9 +408,7 @@ We repeat the arguments from Section~\ref{sec:tree-to-run-step-two}, but we use 
 \end{itemize}
 
 If $\tree$ satisfies a "boss specification" $w$  then $w \subword \bosslabel{\node} $ and thus $w \subword \voutput{\valuelabel{\node}}{\Tilde{\run}}$.
-
 As a result, $\Tilde{\run}$ satisfies $w$ as well.
-
 If $\node$ is a "follower node" then the run $\widehat{\run}$ previously constructed is such that  
 
 \begin{itemize}	

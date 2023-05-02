@@ -58,7 +58,7 @@ We define a notion of "local run", which may be seen as the projection of a "run
 	A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. 
 	A word $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$. 
 	We denote by $\langdec{\decsymb}$ the language of words that "admit decomposition" $\decsymb$. 
-	This definition will be useful later; the intuition is that a "decomposition" describes the sequence of messages sent with some value $v$ in a "run". The $w_i$ are messages sent by the agent with that value initially, and the $m_i$ mark the times at which each message type is broadcast for the first time by another agent. This is all the information we need as if an agent manages to send some message $(m,v)$ with a value $v$ it did not have initially, then from this point on we can assume that we have an unlimited supply of messages $(m,v)$, using (essentially) the "copycat principle".  
+	This definition will be useful later; the intuition is that a "decomposition" describes the sequence of messages sent with some value $v$ in a "run". The $w_i$ are "message types" sent by the agent with that value initially, and the $m_i$ mark the times at which each message type is broadcast for the first time by another agent. This is all the information we need as if an agent manages to send some message $(m,v)$ with a value $v$ it did not have initially, then from this point on we can assume that we have an unlimited supply of messages $(m,v)$, using (essentially) the "copycat principle".  
 	% This definition will be crucial to derive from a "local run" a set of "specifications" that make it feasible.
 
 %	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "reception steps".
@@ -254,12 +254,12 @@ This lemma allows us to bound the lengths of the labels of the nodes of maximal 
  
 \begin{restatable}{proposition}{PropBoundTreeSize}
 	\label{prop:bound-tree-size}
-	There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for every positive instance $(\prot,q_f)$ of \COVER, there exists a "coverability witness" $\tree$ of size bounded by $f(\size{\prot})$.
+	There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for every positive instance $(\prot,q_f)$ of \COVER, there exists a "coverability witness" $\tree$ of "size@@tree" bounded by $f(\size{\prot})$.
 \end{restatable}
 
 \begin{proof}[Proof sketch]
 	The full proof is in Appendix~\ref{app:bound-tree-size}, we provide here some intuition. $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for it thanks to Proposition~\ref{prop:trees-sound-complete}.
-	We consider a branch reaching maximal altitude: we mark along that branch the nodes that have a greater altitude than all the previous ones (see Figure~\ref{fig:max-height-bound}). They are necessarily "follower" nodes as a "boss" node is below its parent. This sequence (taken from highest to lowest altitude) is so that the $i$th term is at altitude $\altmax-i$ and we can bound its size with respect to $i$ with the previous arguments. Along with Lemma~\ref{lem:shortening-branches}, we apply the "Length function theorem" on that sequence to bound its length hence the maximal altitude (Lemma~\ref{lem:bound-max-height}).
+	We consider a branch reaching maximal altitude: we mark along that branch the nodes that have a greater altitude than all the previous ones (see Figure~\ref{fig:max-height-bound}). They are necessarily "follower" nodes as a "boss" node is below its parent. This sequence (taken from highest to lowest altitude) is so that the $i$th term is at altitude $\altmax-i$ and we can bound its "size@@tree" with respect to $i$ with the previous arguments. Along with Lemma~\ref{lem:shortening-branches}, we apply the "Length function theorem" on that sequence to bound its length hence the maximal altitude (Lemma~\ref{lem:bound-max-height}).
 	
 	This yields in turn a bound on the root label, as its altitude ($0$) has a bounded difference with the maximal one. Another application of the "Length function theorem", this time with "boss nodes", allows us to bound the minimal altitude of a node of this tree (Lemma~\ref{lem:bound-min-height}).
 	

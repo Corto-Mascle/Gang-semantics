@@ -40,9 +40,9 @@ We start with a basic observation that adding agents to a configuration cannot d
 \end{restatable}
 
 \begin{proof}
-	First, if $(\prot, q_f)$ is positive then so is $(\tilde{\prot}, q_f)$, as one can easily lift any "run" in $\prot$ to an equivalent "run" in $\tilde{\prot}$ (transitions are less guarded  in $\tilde{\prot}$ that in $\prot$). 
+	First, if $(\prot, q_f)$ is positive then so is $(\tilde{\prot}, q_f)$, as one can easily lift any "initial run" in $\prot$ to an equivalent "initial run" in $\tilde{\prot}$ (transitions are less guarded  in $\tilde{\prot}$ that in $\prot$). 
 	
-	Suppose now that $(\tilde{\prot}, q_f)$ is a positive instance of the "coverability problem". There exists a "run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that covers $q_f$. We prove by induction on the length of $\tilde{\run}$ that there exists a "run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (note that if $\tilde{\config}$ covers a state, then so does $\config$). 
+	Suppose now that $(\tilde{\prot}, q_f)$ is a positive instance of the "coverability problem". There exists an "initial run" $\tilde{\run}: \tilde{\config}_0 \step{*} \tilde{\config}$ in $\tilde{\prot}$ that covers $q_f$. We prove by induction on the length of $\tilde{\run}$ that there exists an "initial run" $\run$ reaching a configuration $\config$ such that $\tilde{\config} \lessthan \config$ (note that if $\tilde{\config}$ covers a state, then so does $\config$). 
 	
 	If $\tilde{\config} = \tilde{\config}_0$ then $\run = \tilde{\run}$ suffices. Suppose that $\tilde{\run}$ has length $k \geq 1$, and that the result if true for "runs" of length $k-1$. Decompose $\tilde{\run}$ into $\tilde{\run}_{k-1}: \tilde{\config}_0 \step{*} \tilde{\config}_{k-1}$ of length $k-1$ and a final step $\tilde{\config}_{k-1} \step{} \tilde{\config}_k$. 
 	By induction hypothesis, there exists $\run_{k-1}: \config_0 \step{*} \config_{k-1}$ such that $\tilde{\config}_{k-1} \lessthan \config_{k-1}$: there exists an injective function $\pi : \tilde{\agents} \rightarrow \agents$
@@ -195,7 +195,7 @@ The following remark formalizes the intuition that, because the only way to take
 
 \begin{lemma}
 	\label{lem:proof_completeness_covset_constant}
-	For all "runs" $\run: \config_0 \step{*} \config$ and $\aval \in \valsof{\run}$, $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. 
+	For all "initial runs" $\run: \config_0 \step{*} \config$ and $\aval \in \valsof{\run}$, $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. 
 \end{lemma}
 
 \begin{proof}
@@ -237,11 +237,11 @@ We may now prove completeness of the abstraction.
 
 \begin{lemma}
 	\label{lem:abstraction_complete}
-	If $\run$ is a (concrete) "run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
+	If $\run$ is an "initial run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
 \end{lemma}
 
 \begin{proof}
-	Let $\run$ a "run".
+	Let $\run$ an "initial run".
 	We proceed by induction on the size of the set $\statesin{\run}$. 
 	First, if $\statesin{\run}$ is of size $1$ then $\statesin{\run} = \set{q_0}$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} directly gives $\aconfiginit = (\set{q_0}, q_0, \noboss) \step{*} \absproj{\aval}{\run}$.
 	
@@ -278,7 +278,7 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 	
 	Let $\sigma_0 \in \aconfiginitset$, and $\sigma_0 \to \sigma_1 \to \cdots \to \sigma_n$ an "abstract run". For all $i$ let $(S_i, b_i, K_i) := \sigma_i$. Let $M = \size{\Delta}+1$.
 	
-	For all $i$, there exists a set of agents $\agents_i$, a configuration $\config_i$, a "run" $\run_i : \config_0 \step{*} \config_i$ over $\agents_i$, agents $a_0, \cdots, a_n \in \agents_i$ and values $v_0, \ldots, v_n \in \nats$ such that:
+	For all $i$, there exists a set of agents $\agents_i$, a configuration $\config_i$, an "initial run" $\run_i : \config_0 \step{*} \config_i$ over $\agents_i$, agents $a_0, \cdots, a_n \in \agents_i$ and values $v_0, \ldots, v_n \in \nats$ such that:
 	\begin{itemize}
 		\item for all $s \in S_i$, there are at least $M^{n-i}$ agents (different from $a_i$) in state $s$ 
 		
@@ -372,7 +372,7 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 
 \begin{proof}
 	The right-to-left direction is given by Lemma~\ref{cor:soundness}.
-	For the left-to-right direction, let $\run$ be a "run" ending in a configuration $\config$ covering $q_f$. Let $v \in \nats$ be such that $\config$ has some agents with value $v$ in state $q_f$.
+	For the left-to-right direction, let $\run$ be an "initial run" ending in a configuration $\config$ covering $q_f$. Let $v \in \nats$ be such that $\config$ has some agents with value $v$ in state $q_f$.
 	
 	We construct a suitable "abstract run" as follows: by Lemma~\ref{lem:abstraction_complete} there exists an "abstract run" from some $\sigma_0 \in \aconfiginitset$ to an abstract configuration $\absproj{v}{\run} = (S, b, K')$ for some $S,b,K$ such that $q_f \in S$ and $q_f \in \set{b} \cup K$.
 	%	
