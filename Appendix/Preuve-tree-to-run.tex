@@ -111,7 +111,7 @@ The remaining input then only consists of messages $m_{i}$ with $i<\ell$, which 
 	\label{lem:follower-composition-completion}
 	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a "decomposition", $\config_0, \ldots, \config_{\ell+1}$ configurations (with $\config_0$ an "initial configuration") and $v$ a value appearing in $\config_0$ such that for all $j \in\nset{0}{\ell}$ there exists an "partial run" $\run_j$ from $\config_{j}$ to $\config_{j+1}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$. 
 	
-	Suppose that for all $j \in\nset{1}{\ell}$ there exists an "initial partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
+	Suppose that for all $j \in\nset{1}{\ell}$ there exist an "initial partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
 	
 	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$, with $\Tilde{\config}_0$ an "initial configuration", such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
 	\begin{itemize}
@@ -133,7 +133,7 @@ The remaining input then only consists of messages $m_{i}$ with $i<\ell$, which 
 	
 	If $\vinput{v}{\run} \neq \epsilon$, then let $j$ be such that $\vinput{v}{\run_j} \neq \epsilon$, then we can decompose $\run_j$ as $\run_j = \config_{j} \pstep{\run_j^-} \config_j^- \extmessage{m_{j'}}{v} \config_j^+ \pstep{\run_j^+} \config_{j+1}$ with $j'\leq j$. 
 	
-	By hypothesis, there exists a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_{j'}$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
+	By hypothesis, there exist a "partial run" $\run'_{j'}$ and a value $v_{j'}$ such that $\vinput{v_{j'}}{\run'_{j'}} \in \langdec{\decsymb_{j'}}$,  $\vinput{v'}{\run'_{j'}} = \varepsilon$ for all $v' \neq v_{j'}$  and the last step of $\run'_{j'}$ is an internal message $\intmessage{m}{v_{j'}}$.
 	
 	Hence $\run'_{j'}$ can be decomposed as $\config_{{j'},0} \pstep{\run_{{j'},1}'} \config_{{j'},1} \cdots \pstep{\run_{{j'},j'-1}'} \config_{{j'},j'} \intmessage{m_{j'}}{v} \config'_{j'}$ where, for all $i \in \nset{1}{j'-1}$, the projection of $\vinput{v_{j'}}{\run_{{j'},i}'}$ on ${\messages\setminus\set{m_1, \ldots, m_{{i}-1}}}$ is a subword of $w_i$. 
 	
@@ -183,7 +183,7 @@ However, the previous lemma will not suffice, as if we have a "boss node" with a
 	
 	Let $\config_0, \ldots, \config_{\ell+1}$ be configurations, with $\config_0$ an "initial configuration" and $v$ a value such that for all $j \in\nset{1}{\ell+1}$ there exists a "partial run" $\run_j$ from $\config_{j-1}$ to $\config_{j}$ with $w_j \subword \voutput{v}{\run_j}$ and $\vinput{v}{\run_j} \in \set{m_1,\ldots, m_{j-1}}^*$.
 	
-	Suppose that for all $j \in\nset{1}{\ell}$ there exists an "initial partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
+	Suppose that for all $j \in\nset{1}{\ell}$ there exist an "initial partial run" $\run'_j$ and a value $v_j$ such that $\vinput{v_j}{\run'_j} \in \langdec{\decsymb_j}$ where $\decsymb_j = (w_0, m_1, \ldots, w_{j-1})$, $\vinput{v'}{\run'_j} = \varepsilon$ for all $v' \neq v_j$ and the last step of $\run'_j$ is an internal message $\intmessage{m}{v_j}$.
 	
 	Then, there exist "configurations" $\Tilde{\config}_0, \ldots, \Tilde{\config}_{\ell+1}$, with $\Tilde{\config}_0$ an "initial configuration" such that for all $j \in\nset{0}{\ell}$, there is a "partial run" $\Tilde{\run}_j$ from $\Tilde{\config}_j$ to $\Tilde{\config}_{j+1}$ and
 \begin{itemize}
@@ -203,7 +203,7 @@ However, the previous lemma will not suffice, as if we have a "boss node" with a
 	
 	If for all $j$ we have $w'_j \subword w_j$  (and thus $w'_j \subword \voutput{v}{\run_j}$), the result is a direct consequence of Lemma~\ref{lem:follower-composition-completion}.
 	
-	Suppose it is not the case. Then there exists $j, j'$ such that $j' \leq j$ and $m_{j'}$ appears in $w'_j$. Let $w'_j = w^-_j m_{j'} w^+_j$ and let $w''_j$ be the word $w^-_jw^+_j$.
+	Suppose it is not the case. Then there exist $j, j'$ such that $j' \leq j$ and $m_{j'}$ appears in $w'_j$. Let $w'_j = w^-_j m_{j'} w^+_j$ and let $w''_j$ be the word $w^-_jw^+_j$.
 	
 	Then, there exist "configurations" $\widehat{\config}_0, \ldots, \widehat{\config}_{\ell+1}$, with $\widehat{\config}_0$ an "initial configuration" such that for all $i \in\nset{0}{\ell}$, there is a "partial run" $\widehat{\run}_i$ from $\widehat{\config}_i$ to $\widehat{\config}_{i+1}$ and
 \begin{itemize}
@@ -274,7 +274,7 @@ We are now ready to prove Lemma~\ref{lem:tree-to-run}.
 	The induction property is as follows. For every "unfolding tree" $\tree$:
 	\begin{itemize}
 		\item if $\tree$ satisfies a "boss specification" $w \in \messages^*$, then there exists an "initial run" $\run$ satisfying $w$.
-		\item if $\tree$ satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ then there exists an "initial partial run" $\run$ and a value $v$ such that $\Input{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \subword \followwordspec$, and $\voutput{v}{\run}$ contains $\followmessagespec$.
+		\item if $\tree$ satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ then there exist an "initial partial run" $\run$ and a value $v$ such that $\Input{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \subword \followwordspec$, and $\voutput{v}{\run}$ contains $\followmessagespec$.
 	\end{itemize}
 	
 	Let $\tree$ be a "unfolding tree", let $\node$ be its root.
@@ -299,7 +299,7 @@ For all $V' \subseteq V \setminus (V_{init}\cup \set{\valuelabel{\node}})$, ther
 	
 	If $V' = \emptyset$ then this is clear as we can simply take $\run := \localrun$.
 	
-	Now suppose there exists $v \in V \setminus (V_{init}\cup \set{\valuelabel{\node}} \cup V')$. Let $V'' = V' \cup \set{v}$. By induction hypothesis (on $\size{V'}$) there exists an "initial partial run" $\run'$ such that for all $v' \in \nats$:
+	Now suppose that there exists $v \in V \setminus (V_{init}\cup \set{\valuelabel{\node}} \cup V')$. Let $V'' = V' \cup \set{v}$. By induction hypothesis (on $\size{V'}$) there exists an "initial partial run" $\run'$ such that for all $v' \in \nats$:
 	\begin{itemize}
 		\item If $v' \in V \setminus V'$ then $\vproj{v'}{\run} = \vproj{v'}{u}$
 		
@@ -357,7 +357,7 @@ Now suppose there exists $v \in V \setminus (\set{\valuelabel{\node}} \cup V')$.
 
 As $v \neq \valuelabel{\node}$, by condition~\ref{item:condition2_initial_value}, there exists a "decomposition" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ such that $u$ can be split into successive "local runs" $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$, $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdec{\decsymb_i}$ with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
 
-By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exists an "initial partial run" $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v_i'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$.
+By induction hypothesis (on the "unfolding tree"), for each $i \in\nset{1}{\ell}$ there exist an "initial partial run" $\run'_i$ and a value $v'_i$ such that $\vinput{v''}{\run'_i} = \epsilon$ for all $v'' \neq v_i'$, $\vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$ and $\voutput{v'_i}{\run'_i}$ contains $\followlabelmessage{\node_i}$.
 
 For each $i$ we consider the shortest prefix $\run''_i$ of $\run'_i$ ending with an "internal message@@global" $\intmessage{\followlabelmessage{\node_i}}{v'_i}$, we have that $\vinput{v'_i}{\run''_i} \subword \vinput{v'_i}{\run'_i} \subword \followlabelword{\node_i}$.
 
