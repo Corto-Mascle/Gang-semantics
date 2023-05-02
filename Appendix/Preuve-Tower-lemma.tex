@@ -2,12 +2,23 @@
 \label{app:tower-lemma}
 
 	We start by defining the notion of "trace". 
-	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. %peut-être qu'on peut mettre une partie de ça en annexe au niveau de la preuve du lemme tower
-
+	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. 
+	
+	
 
 We prove the following result:
 
 \lemShortLocalRuns*
+
+We actually prove a slightly more general version of the lemma, to reduce the notations in the proof. The previous lemma can be obtained simply by applying the following one with $W$ the set of "initial" values of $\localrun_0$ (and noticing that $W$ then contains $r$ values).
+
+\begin{lemma}
+	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun'} \leq \towerfun(\size{\prot} -r + \size{\Vinit},r)$ and:
+	\begin{enumerate}
+		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'} \subword \vinput{\aval}{\localrun}$,
+		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$. 
+	\end{enumerate}
+\end{lemma}
 
 Intuitively, the set $V$ represents values that are already used somewhere and therefore cannot be used as fresh values, and $\Vinit$ represents values that other values should not copy because their behavior is special (this will later correspond to initial values of the run). However, because this lemma is meant to be applied to several parts of a run, we have to state it for any value for $V$ and $\Vinit$.  
 
@@ -161,7 +172,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues} and that is strictly shorter that $\localrun$, which proves the "shortening property".
 	
 	We build a "local run" of length less that $\towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup W$ where $W$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
-	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot}-r + \size{\Vinit},\regnum)$, which concludes the proof of Lemma~\ref{lem:short-local-runs}. 
+	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot}-r + \size{\Vinit},\regnum)$, which concludes the proof of the lemma. 
 \end{proof}
 
 %We now prove the following, stronger version of Lemma~\ref{lem:short-run-for-output}.
@@ -216,7 +227,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 %To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with $\Vinit$ the set of initial values of $\localrun$ and observe that this gives $\size{\Vinit} \leq \regnum$.
 
 
-The following lemma allow us to bound the size of a node regarding its follower children nodes.
+Our aim  is now to bound the size of a node with respect to its "follower" children (and its father if it is a "boss node"). Those are the nodes representing agents that may require a large input from that node. We start with a technical lemma explaining that the "decompositions" witnessing the satisfaction of conditions~\ref{item:condition2_initial_value} and \ref{item:condition3_follower_node} of "unfolding trees" do not need to be larger than the sum of the sizes of the corresponding "follower" children¨.
 
 \begin{lemma}
 	\label{lem:short-dec}
@@ -234,7 +245,7 @@ Note that in the lemma statement, $w'_i$ could be small regarding the decomposit
 	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
 	
 	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
-	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of size at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
+	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of length at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
 	
 	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$, $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
 	
@@ -298,16 +309,16 @@ Note that in the lemma statement, $w'_i$ could be small regarding the decomposit
 	We now use Lemma~\ref{lem:short-local-runs} repeatedly. Let $j_1< \ldots < j_N$ be the indices of $J$, in increasing order. For all $a \in [1,N]$, let $(q_a, \nu_a)$ (resp. $(q'_a, \nu'_a))$) be the local configuration right after (resp. before) the $j_a$th step of $u$, and let $u_a$ be the section of $u$ from $(q_{a-1}, \nu_{a-1})$ (with $(q_0, \nu_0)$ the initial configuration of $u$) to $(q'_a, \nu'_a)$.
 	
 	For each $a$, we are going to define a local run $u'_a : (q_{a-1}, \nu_{a-1}) \step{*} (q'_a, \nu'_a)$ and a finite set of values $V_a$.
-	We do this in increasing order: let $V_0$ be the set of values appearing in $u$ and for each $a$, let $u'_a$ be the run obtained by applying Lemma~\ref{lem:short-local-runs} to $u_a$ with $V=V_{a-1}$. Let $V_a$ be $V_{a-1}$ to which we added all values appearing in $u'_{a}$.
+	We do this in increasing order: let $V_0$ be the set of values appearing in $u$ and for each $a$, let $u'_a$ be the "local run" obtained by applying Lemma~\ref{lem:short-local-runs} to $u_a$ with $V=V_{a-1}$. Let $V_a$ be $V_{a-1}$ to which we added all values appearing in $u'_{a}$.
 	
 	We obtain, for each $a$, a local run $u'_a : (q_{a-1}, \nu_{a-1}) \step{*} (q'_a, \nu'_a)$ of length at most $\towerfun(\size{\prot}-r+r, r) = \towerfun(\size{\prot}, r)$ such that 
 	\begin{enumerate}
 		\item for all $\aval' \in \nats \setminus V_{a-1}$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$,
 		\item for all $\aval \in V_{a-1}$, $\vinput{\aval}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$. 
 	\end{enumerate}
-Let $u'$ be the run obtained by replacing all $u_a$ with $u'_a$. Using the bounds on $\size{J}$ and on $\size{u'_a}$ for each $a$, we obtain that $\size{u'} \leq (\towerfun(\size{\prot}, r) +1) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large]$.
+Let $u'$ be the "local run" obtained by replacing all $u_a$ with $u'_a$. Using the bounds on $\size{J}$ and on $\size{u'_a}$ for each $a$, we obtain that $\size{u'} \leq (\towerfun(\size{\prot}, r) +1) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large]$.
 
-We replace the local run label of $\node$ with $u'$. 
+We replace the "local run" label of $\node$ with $u'$. 
 
 
 It is now left to prove that the resulting tree is indeed an unfolding tree.
@@ -322,6 +333,6 @@ It is now left to prove that the resulting tree is indeed an unfolding tree.
 	
 	Now let $\node$ be a "follower node", by condition~\ref{item:condition3_follower_node} we have $\vinput{\valuelabel{\node}}{\localrunlabel{\node}} = \followlabelword{\node}$ and thus $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}}$.
 	
-	The proof of the second point is analogous to the one for "boss nodes": we identify the necessary broadcasts in the local run and reduce the runs in-between them using Lemma~\ref{lem:short-local-runs}. The only difference is that instead of broadcasting the letters of its boss label, $\node$ only has to broadcast the message $(\followlabelmessage{\node}, \valuelabel{\node})$ in addition to the messages required by its "follower" children, hence the $\size{\bosslabel{\node}}$ term is replaced by $1$ in the inequality.
+	The proof of the second point is analogous to the one for "boss nodes": we identify the necessary broadcasts in the "local run" and reduce the "local runs" in-between them using Lemma~\ref{lem:short-local-runs}. The only difference is that instead of broadcasting the letters of its boss label, $\node$ only has to broadcast the message $(\followlabelmessage{\node}, \valuelabel{\node})$ in addition to the messages required by its "follower" children, hence the $\size{\bosslabel{\node}}$ term is replaced by $1$ in the inequality.
 \end{proof}
 
