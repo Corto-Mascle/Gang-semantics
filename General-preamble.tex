@@ -186,12 +186,12 @@
 \newcommand{\tree}{\tau}
 \newcommand{\node}{\mu}
 
-\newcommand{\localrunlabel}[1]{\mathbf{lr}(#1)}
-\newcommand{\valuelabel}[1]{\mathbf{val}(#1)}
-\newcommand{\bosslabel}[1]{\mathbf{bw}(#1)}
-\newcommand{\followlabelword}[1]{\mathbf{fw}(#1)}
-\newcommand{\followlabelmessage}[1]{\mathbf{fm}(#1)}
-\newcommand{\speclabel}[1]{\mathbf{spec}(#1)}
+\knowledgenewrobustcmd{\localrunlabel}[1]{\cmdkl{\mathbf{lr}}(#1)}
+\knowledgenewrobustcmd{\valuelabel}[1]{\cmdkl{\mathbf{val}}(#1)}
+\knowledgenewrobustcmd{\bosslabel}[1]{\cmdkl{\mathbf{bw}}(#1)}
+\knowledgenewrobustcmd{\followlabelword}[1]{\cmdkl{\mathbf{fw}}(#1)}
+\knowledgenewrobustcmd{\followlabelmessage}[1]{\cmdkl{\mathbf{fm}}(#1)}
+\knowledgenewrobustcmd{\speclabel}[1]{\cmdkl{\mathbf{spec}}(#1)}
 \newcommand{\spec}{\mathsf{spec}}
 \newcommand{\bossspec}{\mathsf{bw}}
 \newcommand{\followwordspec}{\mathsf{fw}}
@@ -229,7 +229,7 @@
 \newcommand{\repexp}[2]{\mathsf{repexp}(#1,#2)}
 \newcommand{\Vinit}{W}
 
-\newcommand{\subword}{\preceq}
+\knowledgenewrobustcmd{\subword}{~\cmdkl{\preceq}~}
 \newcommand{\supword}{\succeq}
 
 \newcommand{\binrel}[3]{#1 \mathrel{#2} #3}

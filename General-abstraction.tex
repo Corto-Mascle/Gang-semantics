@@ -53,12 +53,12 @@ We define a notion of "local run", which may be seen as the projection of a "run
 	A value $\aval \in \nats$ appearing in $\localrun$ is ""initial"" if it appears in $\nu_0$ and ""non-initial"" otherwise. 
 	The ""input"" of $\localrun$, written $\intro*\Input{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of its "reception steps", its ""output"", written $\intro*\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages broadcast in $\localrun$. 
 	% The $\aval$-input $\vinput{\aval}{\localrun}$ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the sequence containing message types of "reception steps" (resp. broadcast steps) of $\localrun$ with value $\val$. 
-	For $\aval \in \nats$, the $\aval$-input $\intro*\vinput{\aval}{\localrun}$ (resp. $\val$-output $\intro*\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$. 
+	For $\aval \in \nats$, the $\aval$-""input"" $\intro*\vinput{\aval}{\localrun}$ (resp. $\val$-""output"" $\intro*\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$. 
  
 	A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. 
 	A word $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$. 
 	We denote by $\intro*\langdec{\decsymb}$ the language of words that "admit decomposition" $\decsymb$. 
-	This definition will be useful later; the intuition is that a "decomposition" describes the sequence of messages sent with some value $v$ in a "run". The $w_i$ are "message types" sent by the agent with that value initially, and the $m_i$ mark the times at which each message type is broadcast for the first time by another agent. This is all the information we need as if an agent manages to send some message $(m,v)$ with a value $v$ it did not have initially, then from this point on we can assume that we have an unlimited supply of messages $(m,v)$, using (essentially) the "copycat principle".  
+	This definition will be useful later; the intuition is that a "decomposition" describes the sequence of messages sent with some value $v$ in a "run". The $w_i$ are "message types" sent by the agent with that value initially, and the $m_i$ mark the times at which each "message type" is broadcast for the first time by another agent. This is all the information we need as if an agent manages to send some message $(m,v)$ with a value $v$ it did not have initially, then from this point on we can assume that we have an unlimited supply of messages $(m,v)$, using (essentially) the "copycat principle".  
 	% This definition will be crucial to derive from a "local run" a set of "specifications" that make it feasible.
 
 %	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "reception steps".
@@ -80,11 +80,11 @@ We first provide the formal definition of "unfolding trees". We will then explai
 \AP An ""unfolding tree"" $\tree$ over $\prot$ is
 a finite tree where nodes $\node$ have three labels:
 \begin{itemize}
-	\item a "local run" of $\prot$, written $\localrunlabel{\node}$, starting in the initial state with distinct register values;
+	\item a "local run" of $\prot$, written $\intro*\localrunlabel{\node}$, starting in the initial state with distinct register values;
 	
-	\item a value in $\nats$, written $\valuelabel{\node}$;
+	\item a value in $\nats$, written $\intro*\valuelabel{\node}$;
 	
-	\item a ""specification"" $\speclabel{\node}$, which is either a word $\bosslabel{\node} \in \messages^*$ ("boss specification") or a pair $(\followlabelword{\node}, \followlabelmessage{\node}) \in \messages^* \times \messages$ ("follower specification"). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
+	\item a ""specification"" $\intro*\speclabel{\node}$, which is either a word $\intro*\bosslabel{\node} \in \messages^*$ ("boss specification") or a pair $(\intro*\followlabelword{\node}, \intro*\followlabelmessage{\node}) \in \messages^* \times \messages$ ("follower specification"). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
 \end{itemize} 
 Moreover, all nodes $\node$ in an "unfolding tree" must satisfy the four following conditions:
 \begin{enumerate}[label= (\roman*), ref=(\roman*)]
@@ -224,7 +224,7 @@ If we had in our "unfolding tree" only "boss nodes" or only "follower nodes", th
 	\label{fig:rearrange-tree}
 \end{figure}
 
-We now use the previous lemma to bound the label of each node $\node$ with respect to its neighbors of higher altitude, i.e., its "follower" children and its parent if it is a "boss node". The idea is that these nodes define the number of messages that $\localrunlabel{\node}$ must output to satisfy the "unfolding tree" conditions.
+We now use the previous lemma to bound the label of each node $\node$ with respect to its neighbors of higher altitude, i.e., its "follower" children and its parent if it is a "boss node". The idea is that these nodes define the number of messages that $\localrunlabel{\node}$ must output to satisfy the "unfolding tree" conditions. The function $\psi$ in the statement below is the one from Lemma~\ref{lem:short-local-runs}.
 
 \begin{restatable}{lemma}{lemBoundSuccessorHeight}
 	\label{lem:bound-successor-height}

@@ -158,7 +158,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	This proves that $\locallabel$ is valid from $(q,\localdata)$ which concludes the induction. 
 	We have proven that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$; moreover $\atrace$ is of length $2M$ and there are at least $2M+1$ steps between $(q_1,\localdata_1)$ and $(q_4, \localdata_4)$ in $\localrun$. Therefore, replacing this part of $\localrun$ with $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ yields a "local run" $\localrun': (q_i, \localdata_i) \step{*} (q_f,\localdata_f)$ with strictly less steps that $\localrun$. 
 	
-	It remains to prove the conditions on the "$v$-inputs" of $\localrun'$. If suffices to prove the condition for the part between $(q_1, \localdata_1)$ to $(q_4, \localdata_4)$,
+	It remains to prove the conditions on the $v$-"input" of $\localrun'$ for each $v$. If suffices to prove the condition for the part between $(q_1, \localdata_1)$ to $(q_4, \localdata_4)$,
 	because the rest of $\localrun$ is left untouched. 
 	
 	Let $(q_m, \localdata_m)$ the "local configuration" after $M$ steps of $\atrace$ from $(q_1, \localdata_1)$; write $\localrun_1$ the local run from $(q_1,\localdata_1)$ to $(q_m, \localdata_m)$ corresponding to the first $M$ steps of $\atrace$ in $\localrun'$, and $\localrun_2$ the "local run" from $(q_m, \localdata_m)$ to $(q_4, \localdata_4)$ corresponding to the last $M$ steps of $\atrace$ in $\localrun'$.  
@@ -227,7 +227,11 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 %To prove Lemma~\ref{lem:short-run-for-output}, we apply the previous lemma with $\Vinit$ the set of initial values of $\localrun$ and observe that this gives $\size{\Vinit} \leq \regnum$.
 
 
-Our aim  is now to bound the size of a node with respect to its "follower" children (and its father if it is a "boss node"). Those are the nodes representing agents that may require a large input from that node. We start with a technical lemma explaining that the "decompositions" witnessing the satisfaction of conditions~\ref{item:condition2_initial_value} and \ref{item:condition3_follower_node} of "unfolding trees" do not need to be larger than the sum of the sizes of the corresponding "follower" children¨.
+
+\section{Proof of Lemma~\ref{lem:bound-successor-height}}
+\label{app:bound-node-with-spec}
+
+Our aim  is now to bound the size of a node with respect to its "follower" children (and its father if it is a "boss node"). Those are the nodes representing agents that may require a large "input" from that node. We start with a technical lemma explaining that the "decompositions" witnessing the satisfaction of conditions~\ref{item:condition2_initial_value} and \ref{item:condition3_follower_node} of "unfolding trees" do not need to be larger than the sum of the sizes of the corresponding "follower" children¨.
 
 \begin{lemma}
 	\label{lem:short-dec}
@@ -240,7 +244,7 @@ Our aim  is now to bound the size of a node with respect to its "follower" child
 Note that in the lemma statement, $w'_i$ could be small regarding the decomposition $\decsymb_i$, the lemma states that we can consider decompositions smaller than the words $w'_1 \dots w'_\ell$.
 
 \begin{proof}
-	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we define the word projection $\wordproj{w}{M}$ as the word obtained when deleting from $w$ every symbol not in $M$.
+	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we denote the word projection of $w$ on $M$ by $\wordproj{w}{M}$.
 	
 	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
 	
@@ -254,9 +258,19 @@ Note that in the lemma statement, $w'_i$ could be small regarding the decomposit
 	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{v_{i,j}} = \sum_{i=0}^{\ell} \size{w'_i}$.
 \end{proof}
 
-\section{Proof of Lemma~\ref{lem:bound-successor-height}}
-\label{app:bound-node-with-spec}
+
+
+
+
+
+
+
+
+
 \lemBoundSuccessorHeight*
+
+
+
 
 \begin{proof}
 	Let $\node$ be a node of $\tree$.
