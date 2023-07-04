@@ -1,0 +1,98 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheorem{theorem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+%\usepackage[notion, quotation, silent]{knowledge}
+%remove silent to have knowledge warnings
+%\input{kl}
+
+
+\newcommand{\nats}{\mathbb{N}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\GH}{\mathcal{GH}}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\size}[1]{|#1|}
+
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem*{metaproblem}{Meta Problem}
+\newtheorem{realproblem}[theorem]{Problem}
+\newtheorem{invariant}{Invariant}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+
+\title{Reconfigurable broadcast networks with registers}
+\author{Lucie Guillou, Corto Mascle, Nicolas Waldburger}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section{Introduction}
+	
+	Broadcast networks were introduced in ??. Then RBN ?? were extensively studied. One weakness is that agents are not identified, while in other models they are $\to$ dynamic models with registers ??
+	
+	\begin{definition}
+		A \emph{Broadcast network with registers} is ... + ref
+	\end{definition}
+	
+	\textbf{EXAMPLES}
+	
+	We can check that several messages come from the same agent, we can get confirmations that a message was received.
+	We can form chains of agents echoing a flow of information.
+	
+	\begin{theorem}
+		There is a PTIME reduction from LCS to BNRA.
+	\end{theorem}
+	
+	\begin{definition}
+		The coverability problem is...
+	\end{definition}
+	
+	\section{With one register per agent}
+	
+	When an agent stores a new value it forgets its identity and becomes "copycatable"
+	
+	In NP by a clique abstraction, NP-complete by a 3SAT reduction
+	
+	\section{With more than one register per agent}
+	
+	\textbf{To simplify, we assume that agents only broadcast with their original identifiers}
+	
+	\begin{definition}
+		(Informal def) Tree unfolding -> Figure ! (only boss nodes)
+		Nodes = local runs
+		Children = sources of messages received
+	\end{definition} 
+	
+	\begin{lemma}
+		There exists a run covering $q_f$ if and only if there exists a finite tree unfolding whose root covers $q_f$
+	\end{lemma}
+	
+	We want to bound the size of a tree unfolding.
+	
+	\begin{remark}
+		If a descendant broadcasts more than an ancestor, we can shorten the tree.
+	\end{remark}
+	
+	WQO theory tells us that the subword ordering is a wqo and thus that we can bound the size of a tree branch if we can bound its nth node by a function of $n$.
+	
+	\begin{lemma}
+		Local bound + figure
+	\end{lemma}
+	
+	We get the result, but the general case is harder
+	
+	(Decidability comes from Cover + Parameterized +  Unreliable broadcasts => Copycat. Target is undecidable)
+	
+\end{document}
