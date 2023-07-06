@@ -47,9 +47,36 @@
 	
 	One weakness is that agents are not identified, for this reasons in [ref], they introduced a new model extending reconfigurable broadcast networks: in this model, nodes also have a set of internal registers. Each register can contain any value of an \emph{infinite} alphabet (which can be seen as a set of identifiers). Along with a message, they can now also send one of their register's value. Upon reception, they can now store or compare the received value attached with the message.
 	
+	
 	\begin{definition}
-		A \emph{Broadcast network with registers} is ... + ref
+		A protocol with $r$ registers is a tuple $\mathcal{P} = (Q, \Sigma, \Delta, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\Sigma$ a finite set of message types  and $\Delta \subseteq Q \times \mathsf{Op} \times Q$ a finite set of transitions, with a set of operations: $\mathsf{Op} = \set{\mathbf{br}(m,i), \mathbf{rec}(m,i, \ast), \mathbf{rec}(m,i, \downarrow), \mathbf{rec}(m,i, =),\mathbf{rec}(m,i, \neq) \mid m \in \Sigma, 1 \leq i \leq r}$.
+		Label $\mathbf{br}$ stands for broadcasts and $\mathbf{rec}$ for receptions.
+		
 	\end{definition}
+	
+	We are now ready to define the semantics. 
+		Let $\mathcal{P} = (Q,\Sigma, \Delta, q_0)$ be a protocol with $r$ registers, and $\mathbb{A} \subseteq \nats$ a finite non-empty set of agents.
+		A configuration over a set of agents $\mathbb{A}$ is a function $\gamma : \mathbb{A} \to Q \times \nats^{r}$ mapping each agent to a state and register values. 
+		We write $\mathsf{st}(\gamma)$ for the state component of $\gamma$ and $\mathsf{data}(\gamma)$ for its register component.
+		An {initial configuration} $\gamma$ is one where for all $a \in \mathbb{A}$, $\mathsf{st}(\gamma)(a) = q_0$ and $\mathsf{data}(\gamma)(a, i) \neq \mathsf{data}(\gamma)(a', i')$ for all $(a,i) \neq (a', i')$.
+		
+		% Given a "configuration" $\config \in \allconfigs$, we denote by $\agentsof{\config}$ the set of agents of $\config$.	
+		 Given two configurations $\gamma, \gamma'$ over $\mathbb{A}$, a step $\gamma \rightarrow \gamma'$ is defined when:
+		there exist $m \in \Sigma$, $a_0 \in \mathbb{A}$ and $i \in [1,r]$ s.t.\ $(\mathsf{st}(\gamma)(a_0), \mathbf{br}(m,i), \mathsf{st}(\gamma')(a_0)) \in \Delta$,
+		$\mathsf{data}(\gamma)(a_0) = \mathsf{data}(\gamma')(a_0) $ and, for all $a \ne a_0$, either $\gamma'(a) = \gamma(a)$ or there exists $(\mathsf{st}(\gamma)(a),\mathbf{rec}(m,j, \alpha),\mathsf{st}(\gamma')(a)) \in \Delta$
+		s.t. $\mathsf{data}(\gamma')(a, j') = \mathsf{data}(\gamma)(a, j') $ for $j' \neq j$ and:
+			\begin{itemize}
+				\item if $\alpha = \ast$ 
+				then $\mathsf{data}(\gamma')(a,j) = \mathsf{data}(\gamma)(a,j)$,
+				\item if $\alpha = \downarrow$ then $\mathsf{data}(\gamma')(a,j) = \mathsf{data}(\gamma)(a_0,i)$,
+				\item if $\alpha = =$ then $\mathsf{data}(\gamma')(a,j) = \mathsf{data}(\gamma)(a,j) = \mathsf{data}(\gamma)(a_0,i)$,
+				\item if $\alpha = \neq$ then $\mathsf{data}(\gamma')(a,j) = \mathsf{data}(\gamma)(a,j) \neq \mathsf{data}(\gamma)(a_0,i)$.
+			\end{itemize}
+
+	
+%	\begin{definition}
+%		A \emph{Broadcast network with registers} is ... + ref
+%	\end{definition}
 	
 	\textbf{EXAMPLES}
 	
