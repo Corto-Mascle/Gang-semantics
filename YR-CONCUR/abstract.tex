@@ -50,7 +50,7 @@
 	
 	\maketitle
 	
-	\section{Introduction} 
+%	\section{Introduction} 
 	
 	In reconfigurable broadcast networks, first introduced in \cite{DelzannoSZ2010Adhoc}, each node of the network is modeled with a finite-state automaton. Transitions of the automaton model either an internal action, the broadcast, or the reception of a message taken from a finite alphabet. When a node broadcasts a message, it is received by all its neighbors, and its set of neighbors evolve in an uncontrollable fashion during the execution (unlike in broadcast networks \cite{BZ83} in which the set of neighbors remains the same throughout the execution). The network is parameterized by the number of processes. Reconfigurable broadcast networks have been widely studied in the past years~\cite{Balasubramanian18, BalasubramanianGW22}, and it is well known that the coverability problem (which asks: given a special state, can we reach a configuration in which one process is in this special state?) is in \textsc{Ptime}.
 	
@@ -58,26 +58,22 @@
 	
 	
 	\begin{definition}
-		A protocol with $r$ registers is a tuple $\mathcal{P} = (Q, \Sigma, \Delta, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\Sigma$ a finite set of message types  and $\Delta \subseteq Q \times \mathsf{Op} \times Q$ a finite set of transitions, with a set of operations:\vspace{-0.3cm} \[\mathsf{Op} = \set{\mathbf{br}(m,i), \mathbf{rec}(m,i, \ast), \mathbf{rec}(m,i, \downarrow), \mathbf{rec}(m,i, =),\mathbf{rec}(m,i, \neq) \mid m \in \Sigma, 1 \leq i \leq r}\vspace{-0.3cm}\]
+		A \emph{protocol} with $r$ registers is a tuple $\mathcal{P} = (Q, \Sigma, \Delta, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\Sigma$ a finite set of message types  and $\Delta \subseteq Q \times \mathsf{Op} \times Q$ a finite set of transitions, with a set of operations:\vspace{-0.3cm} \[\mathsf{Op} = \set{\mathbf{br}(m,i), \mathbf{rec}(m,i, \ast), \mathbf{rec}(m,i, \downarrow), \mathbf{rec}(m,i, =),\mathbf{rec}(m,i, \neq) \mid m \in \Sigma, 1 \leq i \leq r}\vspace{-0.3cm}\]
 		Label $\mathbf{br}$ stands for broadcasts and $\mathbf{rec}$ for receptions.
 		
 	\end{definition}
 	
 		
-		A configuration is defined as a function $\gamma : \mathbb{A} \to Q \times \nats^{r}$ mapping \emph{agents} from a finite set of agents $\mathbb{A}$ to a state and register values.
-		
-		Initially, all $a \in \mathbb{A}$ are in the initial state $q_0$ and all have distinct values (which should be thought of as identifiers) in their registers. 
+		A \emph{configuration} is defined as a function $\gamma : \mathbb{A} \to Q \times \nats^{r}$ mapping \emph{agents} from a finite set of agents $\mathbb{A}$ to a state and register values. It is \emph{initial} if all $a \in \mathbb{A}$ are in the initial state $q_0$ and all have distinct values (which should be thought of as identifiers) in their registers. 
 			
-		A step of computation is defined when some a gent $a$ makes a broadcast $\mathbf{br}(m,i)$ with a message type $m$ and the content of its $i$th register. Each other agent can then either:
-			\begin{itemize}
-				\item do nothing (we assume unreliable communication, so the set of agents receiving a message is arbitrary).
-				\item receive the message with a transition $\mathbf{rec}(m, i, \alpha)$, and\vspace{-0.3cm}
+		A \emph{step} of computation is defined when some agent $a$ makes a broadcast $\mathbf{br}(m,i)$ with a message type $m$ and the content of its $i$th register. Each other agent can then either:
+		 do nothing (we assume unreliable communication, so the set of agents receiving a message is arbitrary), or  receive the message with a transition $\mathbf{rec}(m, i, \alpha)$, and:\vspace{-0.3cm}
 				\begin{itemize}
 					\item store the value in its $i$th register if $\alpha = \downarrow$,
 					\item check that the value is equal (resp. not equal) to the one in its $i$th register if $\alpha = =$ (resp. $\neq$),
 					\item ignore the value if $\alpha=*$.
 				\end{itemize}
-			\end{itemize}\vspace{-0.3cm}
+%			\end{itemize}\vspace{-0.3cm}
 	
 	\begin{figure}[h]
 		\centering
@@ -97,21 +93,26 @@
 	\end{figure}
 	
 	
+	The coverability problem asks given a protocol and a special state, if there exists a sequence of steps starting from an initial configuration leading to a configuration in which one of the agent is in the special state. We established the following result.
 	
 	\begin{theorem}
-		The coverability problem is decidable for reconfigurable broadcast networks with registers.
+		The coverability problem is decidable and is non-primitive recursive.
 	\end{theorem}
-	
-The proof uses an abstraction of runs called ``unfolding trees'', with nodes labelled by local runs. The children of a node with a local run $u$ represent the local runs of agents broadcasting the necessary messages to execute $u$.
 
+%\paragraph{Decidablity.}
+The decidability proof uses an abstraction of runs called ``unfolding trees'', with nodes labelled by local runs. The children of a node with a local run $u$ represent the local runs of agents broadcasting the necessary messages to execute $u$.
 We establish a pumping lemma stating that if an agent can send a sequence of $k$ messages, they only require a local run of length $\varphi(\size{\mathcal{P}})k$.
-By applying reduction rules and leveraging well quasi-orders, we can reduce the size of the abstraction and solve the coverability problem. However, this comes at a high (non-primitive recursive) computational cost. We show the inevitability of this cost by encoding Lossy Channel Systems, a well-studied model of communicating automata with unreliable channels, into our model. Since LCS state reachability has known high complexity lower bounds, these bounds also apply to our problem.
+By applying reduction rules and leveraging well quasi-orders, we can reduce the size of the abstraction and solve the coverability problem. 
+
+However, this comes at a high (non-primitive recursive) computational cost. We show the inevitability of this cost by encoding Lossy Channel Systems, a well-studied model of communicating automata with unreliable channels, into our model (this reduction only uses protocols with two registers).
+Since LCS state reachability has known high complexity lower bounds, these bounds also apply to our problem.
+%The reduction from LCS state reachability to reconfigurable broadcast networks with registers is in \textsc{Ptime}~and yields protocols with two registers.
 	
-	\begin{theorem}
-		There is a PTIME reduction from LCS state reachability to reconfigurable broadcast networks with registers.
-	\end{theorem}
+%	\begin{theorem}
+%		There is a PTIME reduction from LCS state reachability to reconfigurable broadcast networks with registers.
+%	\end{theorem}
+%	There is a PTIME reduction from LCS state reachability to reconfigurable broadcast networks with registers.
 	
-	This reduction yields protocols with two registers.
 	We also study protocols with one register, which turn out to be much simpler: an agent cannot simultaneously store its original identifier and the one of another agent. Intuitively, an agent that stores a received value loses its identity and can copied arbitrarily many times.
 	This allows us to solve coverability through a different abstraction. We show that abstract runs can be made short, yielding an NP upper bound.
 	
