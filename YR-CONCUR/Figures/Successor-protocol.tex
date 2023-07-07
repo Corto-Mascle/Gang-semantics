@@ -1,0 +1,29 @@
+\begin{tikzpicture}[xscale=0.5,node distance=2.1cm,auto, AUT style,>= triangle
+	45]
+	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+	distance=.7cm, initial above]
+	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+	%	distance=.7cm,accepting where =right]
+	
+	\node[state, initial, minimum width=0.1pt] (0) at (0,0) {};
+	\node[state] [right of=0] (x) {};
+	\node[state] [right of=x, xshift=0.7cm] (z) {};
+	
+	\node[state] [below right of=0, xshift=0.5cm] (x') {};
+	\node[state] [right of=x',xshift=0.5cm] (z') {};
+	
+	
+	%	\path[->, bend left=10] 	
+	%	(y) edge node[above] {$\mathbf{br}(b)$} (x)
+	%	;
+	
+	
+	\path[->] 	
+	(0) edge node[above] {$\mathbf{br}(a, 1)$} (x)
+	(x) edge node[above] {$\mathbf{rec}(ok, 1, =)$} (z)
+	(x') edge node[above] {$\mathbf{br}(ok, 1)$} (z')
+	;
+	
+	\path[->, bend right=20] (0) edge node[below left] {$\mathbf{rec}(a,1, \downarrow)$} (x');
+	
+\end{tikzpicture}
