@@ -1,0 +1,68 @@
+\begin{tikzpicture}[xscale=0.5,AUT style,node distance=2cm,auto,>= triangle
+	45]
+	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+	distance=.7cm]
+	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+	%	distance=.7cm,accepting where =right]
+	
+	\node[state,initial, minimum width=0.1pt] (0) at (0,0) {0};
+	
+	\node[state] [right of=0] (1) {1};
+	
+	\node [right of=1, xshift=-30pt] (dots) {\huge $\cdots$};
+	
+	
+	\node[state] [right of=dots, xshift=-30pt] (N-1) {N-1};
+	\node[state] [right of=N-1] (N) {N};
+	
+	\node[state] [right of=N] (1') {1'};
+	
+	\node [right of=1', xshift=-30pt] (dots2) {\huge $\cdots$};
+	
+	
+	\node[state] [right of=dots2, xshift=-30pt] (m-1) {m-1'};
+	\node[state] [right of=m-1] (m) {m'};
+	
+	\coordinate[below of=1] (stop);
+	\node[state] [below right of=stop] (r1) {$x_1$};
+	\node [above left of=r1, yshift=-20pt, xshift=10pt] (r1') {$\recone{x_1}{\enregact}$};
+	\node[state] [right of=r1] (r1b) {$\neg x_1$};
+	\node [above left of=r1b, yshift=-20pt, xshift=10pt] (r1b') {$\recone{\neg x_1}{\enregact}$};
+	\node [right of= r1b] (dots3) {\huge $\cdots$};
+	\node[state] [right of=dots3] (rn) {$x_n$};
+	\node [above left of=rn, yshift=-20pt, xshift=10pt] (rn') {$\recone{x_n}{\enregact}$};
+	\node[state] [right of=rn] (rnb) {$\neg x_n$};
+	\node [above left of=rnb, yshift=-20pt, xshift=10pt] (rnb') {$\recone{\neg x_n}{\enregact}$};
+	
+	\draw (0) .. controls +(0,-2) and +(-1,0) .. (stop);
+	\draw[->] (stop) .. controls +(2,0) and +(0,1) .. (r1);
+	\draw[->] (stop) .. controls +(6,0) and +(0,1) .. (r1b);
+	\draw[->] (stop) .. controls +(14,0) and +(0,1) .. (rn);
+	\draw[->] (stop) .. controls +(18,0) and +(0,1) .. (rnb);
+	\path[->, bend left=20]
+	(0) edge node[above] {$\brone{x_1}$} (1)
+	(N-1) edge node[above] {$\brone{x_N}$} (N) 	
+	;
+	\path[->, bend left=40]
+	(N) edge node[above] {$\recone{\ell_1^1}{\eqtestact}$} (1')
+	(m-1) edge node[above] {$\recone{\ell_m^1}{\eqtestact}$} (m) 	
+	;
+	\path[->, bend right=20] 
+	(0) edge node[below] {$\brone{\neg x_1}$} (1)
+	(N-1) edge node[below] {$\brone{\neg x_N}$} (N) 
+	;
+	\path[->, bend right=30] 
+	(N) edge node[below] {$\recone{\ell_1^3}{\eqtestact}$} (1')
+	(m-1) edge node[below] {$\recone{\ell_m^3}{\eqtestact}$} (m)	
+	;
+	\path[->]
+	(N) edge node[above] {$\recone{\ell_1^2}{\eqtestact}$} (1')
+	(m-1) edge node[above] {$\recone{\ell_m^2}{\eqtestact}$} (m) 	
+	;
+	\path[->, loop below]
+	(r1) edge node[below] {$\brone{x_1}$} (r1)
+	(r1b) edge node[below] {$\brone{\neg x_1}$} (r1b) 	
+	(rn) edge node[below] {$\brone{x_n}$} (rn)
+	(rnb) edge node[below] {$\brone{\neg x_n}$} (rnb) 	
+	;
+\end{tikzpicture}

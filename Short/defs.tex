@@ -1,0 +1,43 @@
+	In the section, we study the restriction of \COVER to "protocols" with one register. We will establish that this problem is actually \NP-complete, meaning that having only one register per agent makes the problem significantly easier. 
+	We shall call BNRA with one register 1-BNRA. Due to space constraints, formal proofs are not included in this section; they can be found in Appendix~\ref{app:cover-one-reg}. Here we intend to present the key observations that allow us to abstract runs into short witnesses, leading to an \NP algorithm for the problem.
+	
+	In 1-BNRA, thanks to the "copycat principle", any received message can be broadcast with a fresh value, therefore one can always circumvent $\quotemarks{\diseqtestact}$ tests. In the end, our main challenge for 1-BNRA is $\quotemarks{\eqtestact}$ tests upon reception.
+	For this reason, we look at clusters of agents that share the value in their registers. 
+
+	Consider a "run" in which some agent $a$ starts with value $v$. If the "run" puts some agent $a' \ne a$ in some state $q$ with value $v$, then we can duplicate agent $a'$ to have an unlimited supply of agents in state $q$ with value $v$. Indeed, at some point in the "run", $a'$ was in a state $q'$, executed a $\quotemarks{\enregact}$ transition, received a message with value $v$, stored it in its register and went to a state $q''$. Because we have an unlimited supply of agents in $q'$ (thanks to the "copycat principle"), we also have an unlimited supply of agents in $q''$ with value $\aval$. We can then make all those agents copy the transitions of $a'$, which gives us an unlimited supply of agents in state $q$ with value $\aval$. Agent $a$ is unique and called \emph{boss}, agents like $a'$ are clonable and called \emph{followers}. For value $v$, the only relevant information is ""boss@@ganginformal"" state, \emph{i.e.}, the state of the agent $a$ that had $v$ initially (this agent cannot be cloned), and the ""clique@@informal"", \emph{i.e.}, the set of states reached by other agents with that value $v$. 
+
+	We thus define "gangs@@informal", an abstraction of configurations%not exactly, but simplier for the reader I think
+	 of the 1-BNRA with respect to a value $v$. A "gang" is composed of a "boss@@ganginformal" state and a "clique@@informal". The clique may only increase throughout the abstract runs we will consider, because we assume that we always have enough copies of each agent so that we can leave many agents with value $v$ in every state they visited.
+	\AP More formally, let $(Q,\messages, \transitions, q_0)$ be a protocol.
+	A ""gang@@informal"" is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. The element $\boss$ is the ""boss@@ganginformal"" and the set $\clique$ is the ""clique@@informal"" of the "gang@@informal". 	
+	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \valsof{\run}$. The "gang@@informal" of value $\aval$ in $\run$ is the "gang@@informal" $(\boss, \clique)$ such that:
+	\begin{itemize}
+		\item if there exists $a_0$ an agent which has value $v$ in $\config_0$ and keeps it in all $\config_i$ then $\boss$ is its state in $\config_k$, otherwise $\boss := \noboss$, 
+		\item  $\clique$ is the set of states $q$ such that there is an agent in $q$ with value $v$ in some $\config_i$.
+	\end{itemize}
+	
+  
+% We restrict our attention to "protocols" with one register. Our motivation is to find a restriction that tempers the high complexity of the general case. We shall call BNRA with one register 1-BNRA. Due to space constraints, the formal proof is not included in this section; it can be found in Appendix~\ref{app:cover-one-reg}. Here we intend to present the key observations that allow us to abstract runs into short witnesses, as well as the principle of our \NP-completeness proof.
+	
+	% The "coverability problem" is much easier in 1-BNRAs than in the general case. Intuitively, it suffices to keep track of the state of one \emph{boss} agent (the one who broadcasts its initial value), a set of states containing \emph{follower} processes with that same register value, and a set of states containing agents with any register values. This way, we can (i) compute the set of reachable states and (ii) decide if a state is coverable or not. In this section, we prove that the "cover problem" for 1-BNRAs is \NP-complete.
+
+	% Suppose we have a set of states $S$ (containing the initial state $q_0$) that we know to be coverable. We can always start by running many copies of runs covering them to obtain an arbitrarily large number of agents (with possibly different values) in each state of $S$. Thus from now on we will assume that we have an unlimited supply of agents in those states.
+
+	% Now say there exists a run covering a state outside of $S$. As $q_0 \in S$, we can take a prefix $\run$ of that run whose last step puts an agent $a$ in a state $s' \notin S$, and that only has agents in states of $S$ before. 
+	% Let $v$ be the value of $a$ just before that last step.
+	% We want to keep track of the set of agents that have value $v$ through $\run$.
+	% An important observation is that whenever an agent gets in a state $q$ with a value $\aval$ that is not its initial one, it means that at some point in the run, it was in a state $q'$ and executed a transition in which it received a message with value $v$, stored it in its register and went to a state $q''$. 
+	% As mentioned before, we can copy the run up to that point to have an unlimited supply of agents in $q'$, and thus an unlimited supply of agents in $q''$ with value $\aval$. We can then make all those agents copy the broadcasts of $a$ and receive the same messages so that they all reach $q$ with value $\aval$. Hence if we have an agent in a state $q$ with a value $\aval$ that is not its initial one, we can assume that we have as many agents in $q$ with value $\aval$ as we need.	
+	
+	% We thus define "gangs@@informal", which abstract runs with respect to a value $v$. A "gang" is made of a "boss@@ganginformal" state (the state of the agent which had that value at the start) and a "clique@@informal", the states reached by other agents with that value. The clique may only increase through the abstract run, intuitively we assume that we always have enough copies of each agent so that we can leave many agents with value $v$ in every state they visited.
+	% \AP More formally, let $(Q,\messages, \transitions, q_0)$ be a protocol.
+	% A ""gang@@informal"" is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. The element $\boss$ is the ""boss@@ganginformal"" and the set $\clique$ is the ""clique@@informal"" of the "gang@@informal". 	
+	% Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \valsof{\run}$. The "gang@@informal" of value $\aval$ in $\run$ is the "gang@@informal" $(\boss, \clique)$ such that, 
+	% \begin{itemize}
+	% 	\item if there exists $a_0$ an agent which has value $v$ in $\config_0$ and keeps it in all $\config_i$ then $\boss$ is its state in $\config_k$, otherwise $\boss := \noboss$, 
+	% 	\item  $\clique$ is the set of states $q$ such that there is an agent in $q$ with value $v$ in some $\config_i$.
+	% \end{itemize}
+	
+
+
+

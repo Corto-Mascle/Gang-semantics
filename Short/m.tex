@@ -1,0 +1,178 @@
+\documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
+%This is a template for producing LIPIcs articles. 
+%See lipics-v2021-authors-guidelines.pdf for further information.
+%for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
+%for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
+%for section-numbered lemmas etc., use "numberwithinsect"
+%for enabling cleveref support, use "cleveref"
+%for enabling autoref support, use "autoref"
+%for anonymousing the authors (e.g. for double-blind review), add "anonymous"
+%for enabling thm-restate support, use "thm-restate"
+%for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
+%for producing a PDF according the PDF/A standard, add "pdfa"
+
+%\pdfoutput=1 %uncomment to ensure pdflatex processing (mandatatory e.g. to submit to arXiv)
+%\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
+
+%\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
+
+\bibliographystyle{plainurl}% the mandatory bibstyle
+\title{Parameterized Broadcast Networks with Registers: from NP to the Frontiers of Decidability}
+
+\titlerunning{Parameterized broadcast networks with registers} %TODO optional, please use if title is longer than one line
+
+%\author{Jane {Open Access}}{Dummy University Computing Laboratory, [optional: Address], Country \and My second affiliation, Country \and \url{http://www.myhomepage.edu} }{johnqpublic@dummyuni.org}{https://orcid.org/0000-0002-1825-0097}{(Optional) author-specific funding acknowledgements}%TODO mandatory, please use full name; only 1 author per \author macro; first two parameters are mandatory, other parameters can be empty. Please provide at least the name of the affiliation and the country. The full address is optional. Use additional curly braces to indicate the correct name splitting when the last name consists of multiple name parts.
+
+%\author{Joan R. Public\footnote{Optional footnote, e.g. to mark corresponding author}}{Department of Informatics, Dummy College, [optional: Address], Country}{joanrpublic@dummycollege.org}{[orcid]}{[funding]}
+
+\author{Lucie Guillou}{IRIF, CNRS, Université Paris Cité}{}{}{}
+\author{Corto Mascle}{LaBRI, Université de Bordeaux}{}{}{}
+\author{Nicolas Waldburger}{IRISA, Universit\'e de Rennes}{}{}{}
+
+\authorrunning{L. Guillou, C. Mascle, N. Waldburger} %TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
+
+\Copyright{Lucie Guillou, Corto Mascle and Nicolas Waldburger} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+
+%\ccsdesc[100]{\textcolor{red}{Replace ccsdesc macro with valid one}}
+%%TODO mandatory: Please choose ACM 2012 classifications from
+%%https://dl.acm.org/ccs/ccs_flat.cfm
+
+% \begin{CCSXML}
+% 	<ccs2012>
+% 	<concept>
+% 	<concept_id>10003752.10003753.10003761.10003763</concept_id>
+% 	<concept_desc>Theory of computation~Distributed computing models</concept_desc>
+% 	<concept_significance>500</concept_significance>
+% 	</concept>
+% 	</ccs2012>
+% \end{CCSXML}
+
+\ccsdesc[500]{Theory of computation~Verification by model checking}
+\ccsdesc[300]{Theory of computation~Distributed computing models}
+
+% \ccsdesc{Theory of computation~Models of computation~Concurrency~Distributed computing models}
+
+\keywords{parameterized verification, concurrent systems, well quasi-orders} %TODO mandatory; please add comma-separated list of keywords
+
+
+
+%\category{} %optional, e.g. invited paper
+
+%\relatedversion{} %optional, e.g. full version hosted on arXiv, HAL, or other respository/website
+%\relatedversiondetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93]{Classification (e.g. Full Version, Extended Version, Previous Version}{URL to related version} %linktext and cite are optional
+
+%\supplement{}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
+%\supplementdetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93, subcategory={Description, Subcategory}, swhid={Software Heritage Identifier}]{General Classification (e.g. Software, Dataset, Model, ...)}{URL to related version} %linktext, cite, and subcategory are optional
+
+%\funding{(Optional) general funding statement \dots}%optional, to capture a funding statement, which applies to all authors. Please enter author specific funding statements as fifth argument of the \author macro.
+
+%\acknowledgements{I want to thank \dots}%optional
+
+%\nolinenumbers %uncomment to disable line numbering
+
+
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \EventEditors{John Q. Open and Joan R. Access}
+% \EventNoEds{2}
+% \EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
+% \EventShortTitle{CVIT 2016}
+% \EventAcronym{CVIT}
+% \EventYear{2016}
+% \EventDate{December 24--27, 2016}
+% \EventLocation{Little Whinging, United Kingdom}
+% \EventLogo{}
+% \SeriesVolume{42}
+\ArticleNo{1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\newcommand{\cortoin}[1]{\todo[color=blue!20,inline]{\small #1}}
+\newcommand{\corto}[1]{\todo[color=blue!20]{\small #1}}
+
+\newcommand{\nicoin}[1]{\todo[color=red!20,inline]{\small #1}}
+\newcommand{\nico}[1]{\todo[color=red!20]{\small #1}}
+
+\newcommand{\luin}[1]{\todo[color=teal!20,inline]{\small #1}}
+\newcommand{\lu}[1]{\todo[color=teal!20]{\small #1}}
+
+\newif\ifproofs
+\proofstrue
+
+\newif\ifintuition
+\intuitionfalse
+
+\newif\ifbasic
+\basicfalse
+
+\input{General-preamble} 
+\input{kl}
+
+
+% just a first idea
+
+
+
+\begin{document}
+	
+	\maketitle
+	
+	% \begin{abstract}
+	% 	We consider the parameterized verification of a model representing an arbitrarily large network of agents which communicate by broadcasting and receiving messages. The broadcast topology is reconfigurable, hence a message sent may be received by any set of agents.
+	% 	Agents have local registers which contain identifiers. They may broadcast, receive, store and compare these values using their registers.
+	% 	We consider the coverability problem, where one asks whether a given state of the system may be reached by at least one agent. We show that this problem is decidable; however, it is as hard as coverability in lossy channel systems, which is non-primitive recursive. 
+	% 	We also consider other classical problems on such systems, in particular the target problem where all processes must synchronize on a given state. This problem is however undecidable for our model. 
+	% 	By contrast, we prove that the coverability problem is \NP-complete when each agent has only one register.
+		
+	% 	\keywords{Parameterized verification \and Well quasi-orders \and Distributed systems }
+	% \end{abstract}
+	
+
+	\begin{abstract}
+	We consider the parameterized verification of arbitrarily large networks of agents which communicate by broadcasting and receiving messages. In our model, the broadcast topology is reconfigurable so that a sent message can be received by any set of agents. In addition, agents have local registers which are initially distinct and may therefore be thought of as identifiers.
+	When an agent broadcasts a message, it appends to the message the value stored in one of its registers. Upon reception, an agent can store the received value or test this value for equality with one of its own registers. 
+
+	We consider the coverability problem, where one asks whether a given state of the system may be reached by at least one agent. We establish that this problem is decidable; however, it is as hard as coverability in lossy channel systems, which is non-primitive recursive. 
+	This model lies at the frontier of decidability as other classical problems on this model are undecidable; this is in particular true for the target problem where all processes must synchronize on a given state. 
+	By contrast, we show that the coverability problem is \NP-complete when each agent has only one register.
+	
+	\keywords{Parameterized verification \and Well quasi-orders \and Distributed systems }
+	\end{abstract}
+
+	\input{Intro}
+%\input{todo}
+	\input{General-defs}
+	\input{General-abstraction}
+	\input{General-target}
+	\section{Cover in 1-BNRA}
+	\label{sec:cover-1BNRA}
+	\input{defs}
+	\input{lower-bounds}
+	\input{abstraction}
+%	
+%\input{Figures/zoom-on-tree}
+	\section{Conclusion}
+	We have established the decidability and $\Fcomplexity{\omega^\omega}$-completeness of the coverability problem for BNRA, as well as the \NP-completeness of the problem for 1-BNRA.
+	One may want to enrich the transition systems of our protocols, for instance to pushdown automata. While this adds little difficulty in the general case (it suffices to extend Lemma~\ref{lem:short-local-runs} to pushdown protocols using a classical cut-hill argument), the case of one register may be trickier.
+	Another open problem is the complexity of the target problem with one register. While we can show that this is a decidable problem, its exact complexity is unclear. 
+	Finally, one may want to extend this model with inequality tests, as in classical related models such as data nets.
+	
+	\subparagraph*{Acknowledgements.} We are grateful to Arnaud Sangnier for encouraging us to work on BNRA, for the discussions about his work in \cite{DelzannoST13} and in general for his valuable advice. We also thank Philippe Schnoebelen for the interesting discussion and Sylvain Schmitz for the exchange on complexity class $\Fcomplexity{\omega^{\omega}}$ and related topics.   
+	\bibliography{biblio}
+	
+	\newpage
+	
+	\appendix
+%	\input{Appendix/Preuve-simple-protocols}
+	\input{Appendix/Preuve-LCS-reduction} 
+	\input{Appendix/Preuve-trees-sound-complete.tex}
+
+	\input{Appendix/Preuves-reductions-branches}
+	\input{Appendix/Preuve-Tower-lemma}
+	\input{Appendix/Preuves-tree-bounds}
+	\input{Appendix/decidability}
+	\input{Appendix/Preuve-Target}
+	\input{Appendix/one-reg-proofs}
+\end{document}

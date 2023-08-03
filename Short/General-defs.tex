@@ -1,0 +1,146 @@
+\section{Preliminaries}
+\label{sec:preliminaries}
+
+\subsection{Definitions of the Model}
+A ""Broadcast Network of Register Automata"" (BNRA) \cite{DelzannoST13} is a model describing broadcast networks of agents with local registers. A finite transition system describing the behavior of an agent; an agent can broadcast and receive messages with integer values, store them in local registers and perform equality tests. 
+There are arbitrarily many agents. When an agent broadcasts a message, each other agent independently may or may not receive it. 
+
+\begin{definition}[Protocols]
+	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""message types""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with a set of operations
+	\[
+	\operations = \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq \regnum}\]
+	Label $\brsymb$ stands for ""broadcasts"" and $\recsymb$ for ""receptions"".
+	Given a reception $\rec{\amessage}{i}{\anact}$, $\anact$ is its ""action"". 
+The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
+$\quotemarks{\eqtestact}$ is an ""equality test"", $\quotemarks{\diseqtestact}$ is a ""disequality test"", $\quotemarks{\enregact}$ is a ""store action"" and $\quotemarks{\dummyact}$ is a ""dummy action"" with no effect.
+The ""size"" of $\prot$ is $\size{\prot} := \size{Q} + \size{\messages} + \size{\transitions} + r$.
+\end{definition}
+
+We now define the semantics of those systems. Essentially, we have a finite set of agents with $r$ registers each; all registers initially contain distinct values. A step is either an agent performing a local action or an agent broadcasting a message received by some other agents.
+
+\begin{definition}[Semantics]
+	Let $(Q,\messages, \transitions, q_0)$ be a "protocol" with $\regnum$ registers, and $\agents \subseteq \nats$ a finite non-empty set of ""agents"".
+	A ""configuration"" over a set of agents $\agents$ is a function $\config : \agents \to Q \times \nats^{\regnum}$ mapping each agent to a state and ""register values"". 
+	We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component.
+	An \intro{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and $\data{\config}(a, i) \neq \data{\config}(a', i')$ for all $(a,i) \neq (a', i')$.
+	
+	% Given a "configuration" $\config \in \allconfigs$, we denote by $\agentsof{\config}$ the set of agents of $\config$.	
+	\AP Given a finite set of agents $\agents$ and two "configurations" $\config, \config'$ over $\agents$, a ""step"" $\config \step{} \config'$ is defined when there exist $\amessage \in \messages$, $a_0 \in \agents$ and $i \in \nset{1}{r}$ s.t. $(\st{\config}(a_0),\br{\amessage}{i}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and, for all $a \ne a_0$, either $\config'(a) = \config(a)$ or there exists $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a)) \in \transitions$
+		s.t. $\data{\config'}(a, j') = \data{\config}(a, j')$ for $j' \neq j$ and:
+		\begin{itemize}
+				\item if $\anact = \quotemarks{\dummyact}$ 
+				then $\data{\config'}(a,j) = \data{\config}(a,j)$,
+				\item if $\anact = \quotemarks{\enregact}$ then $\data{\config'}(a,j) = \data{\config}(a_0,i)$,
+				\item if $\anact = \quotemarks{\eqtestact}$ then $\data{\config'}(a,j) = \data{\config}(a,j) =\data{\config}(a_0,i)$,
+				\item if $\anact = \quotemarks{\diseqtestact}$ then $\data{\config'}(a,j) = \data{\config}(a,j) \ne \data{\config}(a_0,i)$.
+			\end{itemize}
+	
+	\AP A ""run"" is a sequence of steps $\apath : \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$. 
+	We write $\config_0 \step{*} \config_k$ when there exists such a "run".
+	A "run" is ""initial@@run"" when $\config_0$ is an "initial configuration".  
+	A "run" $\run: \config_0 \step{*} \config_f$ ""covers"" a state $q \in Q$ when there exists $a \in \agents$ such that $\st{\config_f}(a) = q$. 
+\end{definition}
+\begin{remark}
+\label{rem:several_values_per_message}
+In our model, agents may only send one value per message. Indeed, \cite{DelzannoST13} establishes undecidability of "coverability" if agents can broadcast two values at once.
+\end{remark}
+
+\begin{example}\label{ex:example-1}
+	We give an example of a "protocol" with 2 registers in Figure \ref{fig:ex1}. 
+	Let $\agents = \{a_1, a_2\}$. We denote a "configuration" $\config$ over $\agents$ by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$. The following sequence is an "initial run", where $x_1,y_1,x_2,y_2$ are distinct natural integers:
+	\begin{multline*}
+	\tuple{(q_0, (x_1,y_1)), (q_0,(x_2,y_2))} \step{} \tuple{(q_1, (x_1,y_1)), (q_5,(x_1,y_2))} \step{} \\ 
+	\tuple{(q_4, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))}
+	\end{multline*}
+
+	The broadcast messages are, in this order: $(m_2,x_1)$ by $a_1$, $(m_4,y_2)$ by $a_2$, $(m_6,x_1)$ by $a_1$ and $(m_7,x_1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
+\end{example}
+
+\begin{figure}[t]
+	\input{Figures/fig-ex1}
+	\caption{Example of a "protocol".}\label{fig:ex1}
+\end{figure}
+	
+	
+
+
+\begin{remark}
+	\label{rem:copycat-principle}
+	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can build a run in which each agent of $\run$ has  a clone in the same state but with different register values. To obtain this, it suffices to add new agents that mimic $\run$ in parallel of the original agents, with which they will not share any register values.  This property is called ""copycat principle"": if state $q$ is coverable, then for all $n$ there exists an augmented "run" which puts $n$ agents on $q$.
+\end{remark}
+
+	
+\begin{definition}
+
+	\AP The ""coverability problem"" \COVER asks, given a "protocol" $\prot$ and a state $q_f$, whether there is an "initial run" of $\prot$ that "covers" $q_f$.
+	
+	\AP The ""target reachability problem"" \TARGET asks, given a "protocol" $\prot$ and a state $q_f$, whether there is an "initial run" $\config_0 \step{*} \config_f$ of $\prot$ such that $\st{\config_f}(\agents) = \{q_f\}$, i.e all agents end on $q_f$.
+\end{definition}
+
+\begin{example}\label{example-2}
+	Let $\prot$ the "protocol" of Example~\ref{fig:ex1}. As proven in Example~\ref{ex:example-1}, $(\prot,q_7)$ is a positive instance of \COVER. However, $(\prot,q_7)$ is a negative instance of \TARGET: there must be an agent staying on $q_4$ to broadcast $m_6$. Meanwhile, $(\prot,q_1)$ is a positive instance of \TARGET: all agents can broadcast $m_1$ to get to $q_1$. Also, $(\prot, q_3)$ is a negative instance of \COVER: we would need one agent on $q_2$ and one on $q_5$ with the same value in their first registers, hence we need a broadcast $(m_1,v)$ and a broadcast $(m_2,v)$ for some $v$. The two messages need to be sent by the agent having $v$ as initial value, but this agent cannot send both messages.
+\end{example}
+
+\begin{remark}
+	In \cite{DelzannoST13}, the authors considered ``queries'', which are conjunctions of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{\mathsf{reg}_j(\var{z}) = \mathsf{reg}_{j'}(\var{z}')}$, $\quotemarks{\mathsf{reg}_j(\var{z}) \neq \mathsf{reg}_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$, $q\in Q$ and $j,j' \in \nset{1}{r}$. A "configuration" satisfies a query if we can assign an agent to each variable so that all conjuncts are satisfied.
+	This problem reduces to \COVER.
+	Given a "protocol" $\prot$ with $r$ registers and a query $\query$ with $k$ variables, we can construct a "protocol" $\prot'$ with $O(\size{\prot}^k + \size{\query})$ states and $kr$ registers that allows each agent to simulate $k$ agents of the previous system.
+	There is an "initial run" of the first BNRA satisfying $\query$ if and only if there is one of the second in which one agent simulates the $k$ agents satisfying $\query$; in order to cover $q_f$, this agent must check locally that $\query$ is satisfied by the $k$ agents it encodes.
+	This reduction is exponential; note however that complexity class ($\Fcomplexity{\omega^{\omega}}$) is stable by exponential reductions.
+	
+	In the case of one register, we even have a polynomial-time reduction. To do so, we extend the "protocol" so that any agent can share its local "configuration" in a single broadcast (going to some sink state).
+	In order to reach $q_f$, an agent must perform a sequence of transitions in which it receives the "configurations" of $k$ agents and checks that they satisfy the query.
+\end{remark}
+
+
+\subsection{Classical Definitions}
+
+
+\subparagraph*{Fast-growing hierarchy}
+
+For $\alpha$ an ordinal in Cantor normal form, we denote by $\Ffunction{\alpha}$ the class of functions corresponding to level $\alpha$ in the Fast-Growing Hierarchy. We moreover denote by $\Fcomplexity{\alpha}$ the associated complexity class and use the notion of $\Fcomplexity{\alpha}$-completeness. All these notions are defined in \cite{Schmitz16}. We will specifically work with complexity class $\Fcomplexity{\omega^{\omega}}$. For readers unfamiliar with these notions, $\Fcomplexity{\omega^{\omega}}$-complete problems are problems which are decidable but with very high complexity (non-primitive recursive, and even non-multiply recursive). 
+
+We highlight that our main result is the decidability of the problem. We show that the problem lies in $\Fcomplexity{\omega^{\omega}}$ because it does not complicate our decidability proof significantly; also, it fits nicely into the landscape of high-complexity problems arising from well quasi-orders. 
+
+\subparagraph*{Well-quasi orders}
+
+For our decidability result, we rely on the theory of well quasi-orders in the context of subword ordering.
+Let $\Sigma$ be a finite alphabet, $w_1, w_2 \in \Sigma^*$, $w_1$ is a ""subword"" of $w_2$, denoted $w_1 \intro*\subword w_2$, when $w_1$ can be obtained from $w_2$ by erasing some letters. 
+A sequence of words $w_0, w_1, \ldots$ is ""good"" if there exist $i<j$ such that $w_i \subword w_j$, and ""bad"" otherwise. Higman's lemma \cite{Higman52} states that every "bad" sequence of words over a finite alphabet is finite.
+In order to bound the length of a "bad" sequence, one must bound the growth of the sequence of words. 
+We will use the following result, known as the Length function theorem \cite{SchmitzS2011upperHigman}:
+
+\begin{theorem}[""Length function theorem"" \cite{SchmitzS2011upperHigman}]
+	\label{thm:lengthfcttheorem}
+	Let $\Sigma$ be a finite alphabet, let $g : \nats \to \nats$ be a primitive recursive function.
+	There exists a function $f \in \Ffunction{\omega^{\size{\Sigma} - 1}}$ such that, for all $n \in \nats$, every "bad" sequence $w_1, w_2, \ldots$ such that $\size{w_i} \leq g^{(i)}(n)$ for all $i$ is of length at most $f(n)$. 
+\end{theorem}
+
+
+
+\subsection{Link with LCS}
+
+""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate by sending messages from a finite alphabet through lossy FIFO channels. Unlike in the non-lossy case \cite{BZ83}, reachability of a state is decidable for "lossy channel systems" \cite{AbdullaJ1996verif}, but has non-primitive recursive complexity \cite{Schnoebelen2002verifying} and is in fact $\Fcomplexity{\omega^{\omega}}$-complete \cite{ChambartS08ordinal}. 
+By simulating LCS using BNRA, we obtain our $\Fcomplexity{\omega^{\omega}}$ lower bound for \COVER:
+
+\begin{restatable}{proposition}{propReductionLCS}
+	\label{prop:reduction-LCS}
+	The "coverability problem" for BNRA is $\Fcomplexity{\omega^\omega}$-hard.
+\end{restatable}
+\begin{proof}[Proof sketch]
+Given an "LCS" $\los$, we build a "protocol" $\prot$ with two registers. The first register is never modified and plays the role of a permanent identifier.
+Each agent starts by receiving a foreign identifier and storing it in its second register; it then only accepts messages with this identifier, using an equality test on every reception.
+ This way, agents form chains where messages propagate in one direction and where each agent has at most one predecessor. 
+ Each agent of the chain simulates a step of an execution of $\los$: an agent receives from its predecessor a "configuration" of $\los$, chooses the next "configuration" of $\los$ and broadcasts it, sending first the location of $\los$ and then, letter by letter, the content of the channel. 
+ Some messages might get lost, hence the lossiness. The full proof can be found in Appendix~\ref{app:reduction-lcs}.
+\end{proof}
+% Note that one special agent has to start the execution, and send the initial configuration before receiving anything. The final state is the final state of the "LCS" and if one agent reaches it, one can argue that there is an execution of the "LCS" described by the sent messages in the chain of agent starting with an agent sending the initial configuration.
+
+
+%The proof is in Appendix~\ref{app:reduction-lcs}.
+
+\begin{remark}
+	This reduction can be adapted to show that repeat-coverability (whether there is an infinite run covering $q_f$ infinitely often) is undecidable for BNRA, as it is for "LCS"~\cite{AbdullaJ1996undec}. 
+	% This highlights the fact that the abstraction presented below relies on the fact that we only have to consider finite runs for coverability.
+\end{remark}
+

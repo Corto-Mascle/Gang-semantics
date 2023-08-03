@@ -1,0 +1,423 @@
+\definecolor{Blue Sapphire}{HTML}{002346} 
+\definecolor{Gamboge}{HTML}{ee9b00}
+\definecolor{Ruby Red}{HTML}{800000}
+
+\IfKnowledgePaperModeTF{
+	%
+}{
+	% If we are NOT in paper mode (i.e. in composition mode or electronic mode)
+	\knowledgestyle{intro notion}{color={Ruby Red}, emphasize}
+	\knowledgestyle{notion}{color={Blue Sapphire}}
+	\hypersetup{
+		colorlinks=true,
+		breaklinks=true,
+		linkcolor={Blue Sapphire}, % Links to sections, pages, etc.
+		citecolor={Blue Sapphire}, % Links to bibliography
+		filecolor={Blue Sapphire}, % Links to local file
+		urlcolor={Blue Sapphire},
+	}
+}
+\IfKnowledgeCompositionModeTF{
+	% If we are in composition mode, highlight unknown stuff (in yellow) and display the anchor point.
+	\knowledgeconfigure{anchor point color={Ruby Red}, anchor point shape=corner}
+	\knowledgestyle{intro unknown}{color={Gamboge}, emphasize}
+	\knowledgestyle{intro unknown cont}{color={Gamboge}, emphasize}
+	\knowledgestyle{kl unknown}{color={Gamboge}}
+	\knowledgestyle{kl unknown cont}{color={Gamboge}}
+}{
+	%
+}
+
+\knowledge{notion}
+|Broadcast Network of Register Automata
+|BNRA
+
+\knowledge{notion}
+| copycat principle
+
+\knowledge{notion}
+| protocol
+| protocols
+
+\knowledge{notion}
+| register value
+| register values
+
+\knowledge{notion}
+| messages
+| message
+
+\knowledge{notion}
+| broadcasts
+| broadcast
+
+\knowledge{notion}
+| receptions
+| reception
+
+\knowledge{notion}
+| local tests
+| local test
+| local equality test
+| local equality tests
+| local disequality tests
+| local disequality test
+
+\knowledge{notion}
+|coverability witness
+|coverability witnesses
+
+\knowledge{notion}
+| simple
+| simple protocol
+| simple protocols
+
+\knowledge{notion}
+| size
+
+\knowledge{notion}
+| step
+| steps
+
+\knowledge{notion}
+| agents
+| agent
+
+\knowledge{notion}
+| covers
+
+\knowledge{notion}
+| configuration
+| initial configuration
+| configurations
+
+\knowledge{notion}
+| transition
+| transitions
+
+\knowledge{notion}
+| action
+| actions
+| equality test
+| disequality test
+| store action
+| dummy action
+
+
+\knowledge{notion}
+| initial run
+| initial runs
+| run
+| runs
+
+\knowledge{notion}
+| Length function theorem
+
+\knowledge{notion}
+| subword 
+| subword order
+
+
+\knowledge{notion}
+| size@tree 
+
+\knowledge{notion}
+| message type
+| message types
+
+\knowledge{notion}
+| good
+
+\knowledge{notion}
+| bad
+| bad sequence
+
+\knowledge{notion}
+| LCS 
+| Lossy channel systems
+
+\knowledge{notion}
+| initial run
+| initial@run
+| initial runs
+
+\knowledge{notion}
+| initial partial run
+| initial@partial
+| initial partial runs
+
+\knowledge{notion}
+| input
+| $v$-input
+| $v$-inputs
+| $v'$-input
+| $\aval$-input
+| $\aval'$-input
+| $\val$-input
+| $\val'$-input
+
+\knowledge{notion}
+| output
+| $v$-output
+| $v$-outputs
+| $v'$-output
+| $\aval$-output
+| $\aval'$-output
+| $\val$-output
+| $\val'$-output
+
+\knowledge{notion}
+| local run
+| local runs
+
+\knowledge{notion}
+| local configuration
+| local configurations
+
+\knowledge{notion}
+| query
+| queries
+
+\knowledge{notion}
+| query coverability problem
+
+\knowledge{notion}
+| contradictory
+| non-contradictory
+
+\knowledge{notion}
+| abstract configuration
+| abstract configurations
+
+\knowledge{notion}
+| abstract step
+| abstract steps
+
+
+\knowledge{notion}
+| abstract run
+| abstract runs
+
+
+\knowledge{notion}
+| gang
+| gangs
+
+\knowledge{notion}
+| boss@gang
+
+\knowledge{notion}
+| clique
+
+\knowledge{notion}
+| gang@informal
+| gangs@informal
+
+\knowledge{notion}
+| boss@ganginformal
+
+\knowledge{notion}
+| clique@informal
+
+
+\knowledge{notion}
+| Broadcast from boss
+| broadcast from boss
+
+\knowledge{notion}
+| Broadcast from clique
+| broadcast from clique
+
+\knowledge{notion}
+| External broadcast
+| external broadcast
+
+\knowledge{notion}
+| Gang reset
+| gang reset
+| gang resets
+| resets
+| reset
+
+%%%%%%%%%%%%%%% General case
+
+\knowledge{notion}
+| boss nodes
+| boss node
+| boss
+| bosses
+
+\knowledge{notion}
+| boss specification
+| boss specifications
+
+\knowledge{notion}
+| specification
+
+\knowledge{notion}
+| follower
+| followers
+| follower node
+| follower nodes
+
+\knowledge{notion}
+| follower specification
+| follower specifications
+
+\knowledge{notion}
+| unfolding tree
+| unfolding trees
+
+\knowledge{notion}
+| external reception
+| reception@@external
+
+\knowledge{notion}
+| partial run
+| partial runs
+
+\knowledge{notion}
+| altitude
+| altitudes
+
+\knowledge{notion}
+| admits decomposition
+| admit decomposition
+
+\knowledge{notion}
+| decomposition
+| decompositions
+
+\knowledge{notion}
+| trace
+| traces
+
+\knowledge{notion}
+| specification
+| specifications
+
+%%%%%%%%%%%%%%% TOWER
+
+\knowledge{notion}
+| active
+| active register
+| active registers
+
+\knowledge{notion}
+| shortening property
+
+\knowledge{notion}
+| \memoryproj
+
+\knowledge{notion}
+| \memoryproj
+
+\knowledge{notion}
+| local step
+| local steps
+
+\knowledge{notion}
+| reception step
+| reception steps
+
+\knowledge{notion}
+| internal step
+| internal steps
+
+%%%%%%%%%%%% COVER TARGET
+
+\knowledge{notion}
+| Cover
+| cover problem
+| coverability problem
+| coverability
+
+\knowledge{notion}
+| Target
+| target problem
+| target reachability problem
+
+%%%%%%%%%%%%%%%%%%% LCS
+
+\knowledge{notion}
+| lossy channel system
+| lossy channel systems
+| Lossy channel systems
+| LCS
+
+\knowledge{notion}
+| root
+
+\knowledge{notion}
+| link
+
+\knowledge{notion}
+| push
+
+\knowledge{notion}
+| pop
+
+\knowledge{notion}
+| reachability problem@lcs
+
+%%%%%%%%%%%%%%%%% local = elimination
+
+\knowledge{notion}
+| memory slot
+| memory slots
+
+\knowledge{notion}
+| perfect configurations
+| perfect configuration
+| perfect
+
+%%%%%%%%%%%%%%%% tree to run
+
+\knowledge{notion}
+| internal test@global
+
+\knowledge{notion}
+| internal message@global
+| internal messages@global
+
+\knowledge{notion}
+| external message@global
+| external messages@global
+
+\knowledge{notion}
+| internal step@global
+
+\knowledge{notion}
+| partial step
+| partial steps
+
+\knowledge{notion}
+| projection
+
+\knowledge{notion}
+| input@partial
+
+\knowledge{notion}
+| output@partial
+
+\knowledge{notion}
+| subtree
+| subtrees
+
+\knowledge{notion}
+| initial@partial
+| Initial@partial
+| initial value@partial
+| initial values@partial
+| non-initial@partial
+| Non-initial@partial
+| non-initial value@partial
+| non-initial values@partial
+
+\knowledge{notion}
+| initial
+| initial value
+| initial values
+| non-initial
+| non-initial value
+| non-initial values

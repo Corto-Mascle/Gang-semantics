@@ -1,0 +1,25 @@
+\begin{tikzpicture}[xscale=0.5,AUT style,node distance=2.1cm,auto,>= triangle
+	45]
+	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+	distance=.7cm]
+	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+	%	distance=.7cm,accepting where =right]
+	
+	\node[state,initial, minimum width=0.1pt] (0) at (0,0) {$q_0$};
+	\node[state] [right of=0, yshift=20] (x) {};
+	\node[state] [right of=0, yshift=-20] (y) {};
+	\node[state] [right of=x, xshift=20] (1) {$q_1$};
+	\node[state] [right of=y, xshift=20] (2) {$q_2$};
+	
+	\path[->, bend left=10] 	
+	(0) edge node[above, xshift=-10] {$\br{init}{1}$} (x)
+	;
+	\path[->, bend right=10] 	
+	(0) edge node[below, xshift=-10] {$\rec{init}{2}{\enregact}$} (y)
+	;
+	\path[->] 	
+	(x) edge node {$\rec{init}{2}{\enregact}$} (1)
+	(y) edge node {$\br{init}{1}$} (2)
+	;
+
+\end{tikzpicture}

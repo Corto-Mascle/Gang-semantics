@@ -1,0 +1,110 @@
+
+\begin{tikzpicture}[ >=stealth', shorten >=1pt,node distance=2cm,on grid, initial text = {}] 
+	
+	\tikzset{
+		tnode/.style = {rectangle, draw, thick, minimum width=1cm,
+			minimum height = 0.6cm}
+	}
+
+
+
+%	\begin{axis}[
+%		xmin = -2,
+%		xmax = 1,
+%		grid = both,
+%		grid style = {
+%			line width=.1pt, 
+%			draw=gray!10},
+%		major grid style = {
+%			line width = 0.2pt,
+%			draw = gray!50},
+%		axis lines = middle,
+%		minor tick num = 0, % à changer pour plus de subdivisions
+%		enlargelimits = { abs = 0 },
+%		axis line style = {-},
+%		ticklabel style = {
+%			font = \tiny,
+%			fill = white},
+%		xlabel style = {
+%			at = {(ticklabel* cs:1)},
+%			anchor = north west
+%		},
+%		ylabel style = {
+%			at = {(ticklabel* cs:1)},
+%			anchor = south west
+%		}
+%		]
+
+	\draw[black, ->, thick](-5,-2.2)--(-5,1.4);
+	\node[black, thick] at (-5,1.6) {altitude};
+	\foreach \y in {-2,...,1} \draw[black, thick] (-5.1, \y )node[left, thick]{\y} -- (-4.9, \y);
+	
+	 \node[tnode, fill=pink!] (root) { Boss};
+	 \node[tnode] (n1) [above = 1cm of root, xshift = 2cm]{ Follower};
+	 \node[tnode] (n2) [below = 1cm of root, xshift = 2cm]{ Boss};
+	 \node[tnode] (n3) [right = 4cm of root]{ Boss};
+	 \node[tnode] (n4) [above = 1cm of n3, xshift = 2cm]{ Follower};
+	 \node[tnode] (n5) [below = 1cm of n3, xshift = 2cm]{ Boss};
+%	 \node[tnode] (n6) [below = 3cm of root]{ $\bossspec$};
+%	\node[tnode] (n7) [above = 2.6cm of root]{ $(\followwordspec, \followmessagespec)$};
+%	\node[tnode] (n8) [above = 1cm of n4, xshift = -2cm]{ $(\followwordspec, \followmessagespec)$};
+
+	
+	\node[tnode] (m1) [below = 1cm of root, xshift = -2cm]{ Boss};
+	\node[tnode] (m2) [above = 1cm of m1, xshift = -2cm]{Follower};
+	\node [tnode] (m3) [above = 1cm of m2, xshift = 2cm] {Follower};
+	\node[tnode] (n9) [below = 1cm of m1, xshift = 2cm]{ Boss};
+	
+	
+	\path[->]
+	(root) edge [ ]  node {} (n1)
+				edge node {} (n2)
+				edge [ ] node {} (m1)
+	(n1) edge node {} (n3)
+	(n3) edge node {}  (n4)
+			edge node {}   (n5)
+			
+	(m1) edge node {} (m2)
+	(m2) edge node {} (m3)
+%	(n4) edge [  ] node {} (n8) 
+	(m1) edge [ ] node {} (n9)
+	;
+	
+	
+		\path[->, dashed, teal, thick] 
+		(root.east) edge node {} ([xshift = -0.2cm]n1.south)
+		(n2.west) edge node {} (root.south)
+		([xshift = 0.2cm]m1.north) edge node {} (root.west)
+		(n3.west) edge node {} ([xshift = 0.2cm]n1.south)
+		([yshift = 0.1cm]n3.east) edge node {} ([xshift = -0.2cm]n4.south)
+		 
+		([xshift = -0.2cm]n5.north) edge node {}  ([yshift = -0.1cm]n3.east) 
+%		([yshift = 0.1cm]n4.west) edge node {} ([xshift = 0.2cm]n8.south)
+		
+		([xshift = -0.2cm]m1.north) edge node {} ([yshift = -0.1cm]m2.east)
+		([xshift = 0.2cm]m2.north) edge node {} (m3.west)
+		 ([xshift = -0.2cm]n9.north) edge node {} (m1.east) 
+		;
+		
+%		\path[->, dashed, teal] 
+%		 ([xshift = -0.2cm]n1.south) edge node {} (root.east)
+%		(root.south) edge node {} (n2.west)
+%		(root.west) edge node {} ([xshift = 0.2cm]m1.north)
+%		([xshift = 0.2cm]n1.south) edge node {} (n3.west)
+%		([xshift = -0.2cm]n4.south) edge node {} ([yshift = 0.1cm]n3.east) 
+%		([yshift = -0.1cm]n3.east) edge node {}   ([xshift = -0.2cm]n5.north)
+%		([xshift = 0.2cm]n8.south) edge node {} ([yshift = 0.1cm]n4.west) 
+%		
+%		([yshift = -0.1cm]m2.east) edge node {} ([xshift = -0.2cm]m1.north)
+%		(m3.west) edge node {} ([xshift = 0.2cm]m2.north)
+%		(m1.east) edge node {} ([xshift = -0.2cm]n9.north)
+%		;
+
+	    %\draw[>={Stealth[round,sep]}](n8) --  (n7);
+	
+%	  \draw [->, red, thick, dotted] (n8) -- (n7);
+%	  \draw[->, blue, thick, dotted] (n9) -- (n6);
+	
+	
+	
+\end{tikzpicture}
