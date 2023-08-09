@@ -8,6 +8,86 @@ This section is dedicated to the proof of the main result of this paper:
 \COVER for BNRA is decidable and $\Fcomplexity{\omega^\omega}$-complete.
 \end{restatable}
 
+For the sake of clarity, we will first focus on the case of "partitioned protocols". 
+
+\subsection{Cover Decidability for "Partitioned Protocols"}
+We first prove decdability of \COVER for "partitioned protocols". We start with the following observation: when an agent receives messages, it may  compare the values in the messages only with previously received values. Indeed, it may only use its "reception-only" registers upon reception, and the initial value in "reception-only" registers are not relevant as they can never be shared by other processes. Therefore, from the point of view of a given agent $a$, the actual values of the messages received is not relevant, only equality between values of received messages is relevant. We say that $a$ \emph{receives a word $w \in \messages^*$} if $a$ receives a sequence of messages with all the same value with sequence of message types $w$. With this definition, what $a$ needs from other agents may be stated as a set of words that it needs to receive. 
+Another crucial observation is that, because of the copycat property,  we will be able to clone agents so that agents sending messages to $a$ with distinct values are distinct and so that communication between agents only go one way.
+
+We call ""specifications@@partitioned"" words of $\messages^*$. A "specification" is meant to encode the task that a given agent accomplishes. To represent runs, we consider ""unfolding trees@@partitioned"" that represent such specifications, dependencies between them and how they are carried out. 
+We start by defining a notion of "local run", meant to represent the projection of a run onto a given agent.
+
+\subsubsection{Local runs}
+\AP A ""local configuration"" is a pair $(q, \localdata) \in Q \times \nats^r$.  
+\AP An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\localdata = \localdata'$ and $\atrans =(q, \br{m}{i}, q')$ is a "broadcast".  
+\AP A ""reception step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans$ is of the form $(q,\rec{m}{j}{\anact},q')$ with $\localdata(j') = \localdata'(j')$ for all $j' \neq j$ and one of the following holds:
+	
+	\begin{minipage}[t]{6cm}
+		\begin{itemize}
+			\item $\anact = \quotemarks{\dummyact}$ 
+			and $\localdata(j) = \localdata'(j)$
+			\item $\anact = \quotemarks{\enregact}$ and $\localdata'(j) = v$
+		\end{itemize}
+	\end{minipage}
+	\begin{minipage}[t]{6cm}
+		\begin{itemize}
+			\item $\anact = \quotemarks{\eqtestact}$ and $\localdata(j) = \localdata'(j)= v$
+			\item $\anact = \quotemarks{\diseqtestact}$ and $\localdata(j) = \localdata'(j) \ne v$.
+		\end{itemize}
+	\end{minipage}
+	
+
+	%Said otherwise, $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$ when an agent in $(q,\localdata)$ may perform $\atrans$ upon receiving a message of type $\amessage$ and of value $\aval$.
+	\AP A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either a "reception step" or an "internal step". 
+	\AP A ""local run"" $\localrun$ is a sequence of "local steps" denoted $(q_0, \nu_0) \step{*} (q, \nu)$.
+	A value $\aval \in \nats$ appearing in $\localrun$ is ""initial"" if it appears in $\nu_0$ and ""non-initial"" otherwise. 
+	The ""input"" of $\localrun$, written $\intro*\Input{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of its "reception steps", its ""output"", written $\intro*\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages broadcast in $\localrun$. 
+	% The $\aval$-input $\vinput{\aval}{\localrun}$ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the sequence containing message types of "reception steps" (resp. broadcast steps) of $\localrun$ with value $\val$. 
+	For $\aval \in \nats$, the $\aval$-""input"" $\intro*\vinput{\aval}{\localrun}$ (resp. $\val$-""output"" $\intro*\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$. 
+ 
+ We  now introduce the concept of "unfolding trees", which will be meant to abstractly represent executions in order to obtain a bounded witness of coverability.
+
+\subsubsection{Unfolding trees}
+\label{sec:unfolding_tree_partitioned}
+An \emph{unfolding tree} is an abstraction of a "run" in the form of a tree where each node is assigned a "local run" and the "specification" that it carries out. 
+We first provide the formal definition of "unfolding trees@@pt". We will then explain this definition and why this notion is relevant for \COVER. 
+
+\begin{definition}
+\label{def:unfolding_tree_partitioned}
+\AP An ""unfolding tree@@pt"" $\tree$ over $\prot$ is
+a finite tree where nodes $\node$ have three labels:
+\begin{itemize}
+	\item a "local run" of $\prot$, written $\intro*\localrunlabel{\node}$, starting in the initial state with distinct register values;
+	
+	\item a value in $\nats$, written $\intro*\valuelabel{\node}$;
+	
+	\item a ""specification"" $\intro*\speclabel{\node} \in \messages^*$.
+\end{itemize} 
+Moreover, all nodes $\node$ in an "unfolding tree" must satisfy the two following conditions, where $\subword$ denotes the subword relation:
+\begin{enumerate}[label= (\roman*), ref=(\roman*)]
+	\item \label{item:condition1_non_initial_value_pt} For each value $\aval$ received in $\localrunlabel{\node}$, $\node$ has a child $\node'$ such that $\vinput{\aval}{\localrunlabel{\node}} \subword \speclabel{\node'}$,
+	\item \label{item:condition4_boss_node_pt} $\speclabel{\node} \subword \voutput{\valuelabel{\node}}{\localrunlabel{\node}}$.
+\end{enumerate}
+
+\AP Lastly, given $\tree$ an "unfolding tree@@pt", we define its ""size@@tree"" by $\size{\tree} := \sum_{\node \in \tree} \size{\localrunlabel{\node}} + \size{\speclabel{\node}}$. Note that the "size@@tree" of $\tree$ takes into account the size of its nodes, so that a tree $\tree$ can be stored in space polynomial in $\size{\tree}$ (renaming the values appearing in $\tree$ if needed). 
+\end{definition}
+
+Given $\node$ a "node@@pt" of an "unfolding tree@@pt", condition \ref{item:condition1_non_initial_value_pt} expresses that the "specifications" of children of $\node$ are wtinesses that messages received in the "local run" $\localrun{\node}$ can be broadcast by other agents. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{General Case}
 In order to abstract our "runs", we want to understand what an agent $a$ needs from other agents in order to cover a state $q$. 
 In general, $a$ may receive messages with several values from the same agent. However, because each message contains a single value, we will in fact be able to clone agents so that agents sending messages to $a$ with distinct values are distinct and do not interact with each other. 
 % The other key ingredient of the construction is the "specifications" presented below; they describe the two ways an agent may receive messages with a value $v$.
@@ -21,7 +101,7 @@ To represent "runs", we consider \emph{unfolding trees} that represent all such 
 In Section~\ref{sec:decidability-defs}, we introduce several useful notions. In Section~\ref{sec:decidability-tree-unfoldings}, we define the notion of "unfolding tree". In Section~\ref{sec:tree-bounds}, we bound the size of the "unfolding trees" that we have to consider. In Section~\ref{sec:decidability-end}, we conclude by exposing our decidability procedure. 
 In Section~\ref{sec:undec-target}, we prove that the \TARGET problem is, by contrast, undecidable.
 
-\subsection{Useful Definitions}
+\subsubsection{Useful Definitions}
 \label{sec:decidability-defs}
 
 We define a notion of "local run", which may be seen as the projection of a "run" onto a given agent. In this local vision, we do not specify the origin of the received messages.
@@ -57,15 +137,9 @@ We define a notion of "local run", which may be seen as the projection of a "run
 	A word $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$. 
 	We denote by $\intro*\langdec{\decsymb}$ the language of words that "admit decomposition" $\decsymb$. 
 	This definition will be useful later; the intuition is that a "decomposition" describes the sequence of messages sent with some value $v$ in a "run". The $w_i$ are "message types" sent by the agent with that value initially, and the $m_i$ mark the times at which each "message type" is broadcast for the first time by another agent. This is all the information we need as if an agent manages to send some message $(m,v)$ with a value $v$ it did not have initially, then from this point on we can assume that we have an unlimited supply of messages $(m,v)$, using (essentially) the "copycat principle".  
-	% This definition will be crucial to derive from a "local run" a set of "specifications" that make it feasible.
-
-%	The ""input"" of a "local run" $\localrun$ is the sequence $\Input{\localrun} \in (\messages \times \nats)^*$ containing messages types and values of its "reception steps".
-%	Similarly, its ""output"", which we denote by $\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of (internal) broadcast steps made in $\localrun$.
-%	Given a value $v \in \nats $, the $v$-input $\vinput{\aval}{\localrun} $(resp. the $v$-output $\voutput{\aval}{\localrun}$) of $\localrun$ is defined as the sequence of messages of $\Input{\localrun}$ (resp. $\Output{\localrun}$) that have value $\aval$. Formally, $\vinput{\aval}{\localrun}$ is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ on $\messages \times \set{\aval}$. 
-%	
 
 
-\subsection{Unfolding Trees}
+\subsubsection{Unfolding Trees}
 \label{sec:decidability-tree-unfoldings}
 
 An \emph{unfolding tree} is an abstraction of a "run" in the form of a tree where each node is assigned a "local run" and a specification of its role. In this vision, the node at the root corresponds to the "local run" of the agent that we are interested in (\emph{e.g.}, the agent covering $q_f$), and children nodes are here to provide messages that this agent needs to receive; such needs are expressed using "specifications". 
@@ -162,7 +236,7 @@ See Appendix~\ref{app:trees-sound-complete} for the full proof.
 
 
 
-\subsection{Bounding the Size of the Unfolding Tree}
+\subsubsection{Bounding the Size of the Unfolding Tree}
 \label{sec:tree-bounds}
 
 Our aim is now to provide bounds on the "size@@tree" of the "coverability witness". We start with two simple observations. First, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then any subword of $\bossspec$ can also be received. 
@@ -274,7 +348,7 @@ See Appendix~\ref{app:bound-node-size-with-altitude} for the detailed proof.
 \end{proof}
 
 
-\subsection{Decidability}
+\subsubsection{Decidability}
 \label{sec:decidability-end}
 
 In Section~\ref{sec:decidability-tree-unfoldings}, we showed that "unfolding trees" are a sound and complete abstraction for \COVER. In Section~\ref{sec:tree-bounds}, we proved that there is a computable bound (of the class $\Ffunction{\omega^\omega}$) on the "size@@tree" of a minimal "coverability witness", if it exists. Our decidability procedure computes that bound, enumerates all trees of "size@@tree" below the bound and checks for each of them whether it is "coverability witness". Details can be found in Appendix~\ref{app:decidability}.

@@ -98,10 +98,7 @@
 \newcommand{\diseqtestact}{{\ne}}
 \newcommand{\eqtestact}{{=}}
 
-%quotes in math mode
-\DeclareMathSymbol{\mlq}{\mathord}{operators}{``}
-\DeclareMathSymbol{\mrq}{\mathord}{operators}{`'}
-\newcommand{\quotemarks}[1]{\mlq #1 \mrq}
+
 
 
 % projection of a configuration on state part and register part
@@ -258,3 +255,11 @@
 \knowledgenewrobustcmd\perfproj[1]{\cmdkl{\mathsf{perf}}(#1)}
 
 \newcommand{\tuple}[1]{\langle #1 \rangle}
+
+%partitioned protocols
+\newcommand{\partitionlimit}{l}
+
+%quotes in math mode
+\DeclareMathSymbol{\mlq}{\mathord}{operators}{``}
+\DeclareMathSymbol{\mrq}{\mathord}{operators}{`'}
+\newcommand{\quotemarks}[1]{\mlq #1 \mrq}

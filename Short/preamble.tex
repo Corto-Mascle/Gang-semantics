@@ -75,11 +75,6 @@
 \newcommand{\diseqtestact}{{\ne}}
 \newcommand{\eqtestact}{{=}}
 
-%quotes in math mode
-\DeclareMathSymbol{\mlq}{\mathord}{operators}{``}
-\DeclareMathSymbol{\mrq}{\mathord}{operators}{`'}
-\newcommand{\quotemarks}[1]{\mlq #1 \mrq}
-
 
 % projection of a configuration on state part and register part
 \newcommand{\st}[1]{\mathsf{st}(#1)}
@@ -136,3 +131,12 @@
 \newcommand{\agentbr}{a_{\brsymb}} %agent broadcasting
 \newcommand{\agentboss}{a_{\mathsf{boss}}}
 \newcommand{\statebr}{q_{\brsymb}}
+
+%partitioned protocols
+\newcommand{\partitionlimit}{l}
+
+
+%quotes in math mode
+\DeclareMathSymbol{\mlq}{\mathord}{operators}{``}
+\DeclareMathSymbol{\mrq}{\mathord}{operators}{`'}
+\newcommand{\quotemarks}[1]{\mlq #1 \mrq}
