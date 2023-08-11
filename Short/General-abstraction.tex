@@ -8,16 +8,10 @@ This section is dedicated to the proof of the main result of this paper:
 \COVER for BNRA is decidable and $\Fcomplexity{\omega^\omega}$-complete.
 \end{restatable}
 
-For the sake of clarity, we will first focus on the case of "partitioned protocols". 
+For the sake of clarity, we will first focus on the case of "signature BNRA". 
+As a preliminary, we start by defining a notion of "local run" meant to represent the projection of a run onto a given agent
 
-\subsection{Cover Decidability for "Partitioned Protocols"}
-We first prove decdability of \COVER for "partitioned protocols". We start with the following observation: when an agent receives messages, it may  compare the values in the messages only with previously received values. Indeed, it may only use its "reception-only" registers upon reception, and the initial value in "reception-only" registers are not relevant as they can never be shared by other processes. Therefore, from the point of view of a given agent $a$, the actual values of the messages received is not relevant, only equality between values of received messages is relevant. We say that $a$ \emph{receives a word $w \in \messages^*$} if $a$ receives a sequence of messages with all the same value with sequence of message types $w$. With this definition, what $a$ needs from other agents may be stated as a set of words that it needs to receive. 
-Another crucial observation is that, because of the copycat property,  we will be able to clone agents so that agents sending messages to $a$ with distinct values are distinct and so that communication between agents only go one way.
-
-We call ""specifications@@partitioned"" words of $\messages^*$. A "specification" is meant to encode the task that a given agent accomplishes. To represent runs, we consider ""unfolding trees@@partitioned"" that represent such specifications, dependencies between them and how they are carried out. 
-We start by defining a notion of "local run", meant to represent the projection of a run onto a given agent.
-
-\subsubsection{Local runs}
+\subsection{Local runs}
 \AP A ""local configuration"" is a pair $(q, \localdata) \in Q \times \nats^r$.  
 \AP An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\localdata = \localdata'$ and $\atrans =(q, \br{m}{i}, q')$ is a "broadcast".  
 \AP A ""reception step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans$ is of the form $(q,\rec{m}{j}{\anact},q')$ with $\localdata(j') = \localdata'(j')$ for all $j' \neq j$ and one of the following holds:
@@ -43,18 +37,20 @@ We start by defining a notion of "local run", meant to represent the projection 
 	A value $\aval \in \nats$ appearing in $\localrun$ is ""initial"" if it appears in $\nu_0$ and ""non-initial"" otherwise. 
 	The ""input"" of $\localrun$, written $\intro*\Input{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of its "reception steps", its ""output"", written $\intro*\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages broadcast in $\localrun$. 
 	% The $\aval$-input $\vinput{\aval}{\localrun}$ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the sequence containing message types of "reception steps" (resp. broadcast steps) of $\localrun$ with value $\val$. 
-	For $\aval \in \nats$, the $\aval$-""input"" $\intro*\vinput{\aval}{\localrun}$ (resp. $\val$-""output"" $\intro*\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$. 
- 
- We  now introduce the concept of "unfolding trees", which will be meant to abstractly represent executions in order to obtain a bounded witness of coverability.
+	For $\aval \in \nats$, the $\aval$-""input"" $\intro*\vinput{\aval}{\localrun}$ (resp. $\val$-""output"" $\intro*\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$.
+
+\subsection{Cover Decidability for "Signature BNRA"}
+We first prove decdability of \COVER for "signature BNRA". We start with the following observation: when an agent receives messages, it can compare the values in the messages only with previously received values; the initial values in "reception-only" registers are not relevant as they can never be shared with other processes. Therefore, a given agent $a$ can only see which received messages have the same value, \emph{i.e.}, coming from the same agent, so that what $a$ needs from other agents may be stated as a set of words where each word must be received in messages of the same value. 
+
+We call ""specifications@@signature"" words of $\messages^*$. A "specification" is meant to encode the task that a given agent accomplishes. To represent runs, we consider ""unfolding trees@@signature"" that represent such specifications, dependencies between them and how they are carried out. Because of copycat arguments, we will in fact be able to clone agents so that communications between agents only go one way, hence the tree structure.
 
 \subsubsection{Unfolding trees}
-\label{sec:unfolding_tree_partitioned}
+\label{sec:unfolding_tree_signature}
 An \emph{unfolding tree} is an abstraction of a "run" in the form of a tree where each node is assigned a "local run" and the "specification" that it carries out. 
-We first provide the formal definition of "unfolding trees@@pt". We will then explain this definition and why this notion is relevant for \COVER. 
 
 \begin{definition}
-\label{def:unfolding_tree_partitioned}
-\AP An ""unfolding tree@@pt"" $\tree$ over $\prot$ is
+\label{def:unfolding_tree_signature}
+\AP An ""unfolding tree@@sg"" $\tree$ over $\prot$ is
 a finite tree where nodes $\node$ have three labels:
 \begin{itemize}
 	\item a "local run" of $\prot$, written $\intro*\localrunlabel{\node}$, starting in the initial state with distinct register values;
@@ -63,30 +59,104 @@ a finite tree where nodes $\node$ have three labels:
 	
 	\item a ""specification"" $\intro*\speclabel{\node} \in \messages^*$.
 \end{itemize} 
-Moreover, all nodes $\node$ in an "unfolding tree" must satisfy the two following conditions, where $\subword$ denotes the subword relation:
+Moreover, all nodes $\node$ in $\tree$ must satisfy the two following conditions:
 \begin{enumerate}[label= (\roman*), ref=(\roman*)]
-	\item \label{item:condition1_non_initial_value_pt} For each value $\aval$ received in $\localrunlabel{\node}$, $\node$ has a child $\node'$ such that $\vinput{\aval}{\localrunlabel{\node}} \subword \speclabel{\node'}$,
-	\item \label{item:condition4_boss_node_pt} $\speclabel{\node} \subword \voutput{\valuelabel{\node}}{\localrunlabel{\node}}$.
+	\item \label{item:condition1_non_initial_value_sg} For each value $\aval$ received in $\localrunlabel{\node}$, $\node$ has a child $\node'$ such that $\vinput{\aval}{\localrunlabel{\node}} \subword \speclabel{\node'}$,
+	\item \label{item:condition2_boss_node_sg} $\speclabel{\node} \subword \voutput{\valuelabel{\node}}{\localrunlabel{\node}}$.
 \end{enumerate}
 
-\AP Lastly, given $\tree$ an "unfolding tree@@pt", we define its ""size@@tree"" by $\size{\tree} := \sum_{\node \in \tree} \size{\localrunlabel{\node}} + \size{\speclabel{\node}}$. Note that the "size@@tree" of $\tree$ takes into account the size of its nodes, so that a tree $\tree$ can be stored in space polynomial in $\size{\tree}$ (renaming the values appearing in $\tree$ if needed). 
+\AP Lastly, given $\tree$ an "unfolding tree@@sg", we define its ""size@@tree"" by $\size{\tree} := \sum_{\node \in \tree} \size{\node}$ where $\size{\node} := \size{\localrunlabel{\node}} + \size{\speclabel{\node}}$. Note that the "size@@tree" of $\tree$ takes into account the size of its nodes, so that a tree $\tree$ can be stored in space polynomial in $\size{\tree}$ (renaming the values appearing in $\tree$ if needed). 
 \end{definition}
 
-Given $\node$ a "node@@pt" of an "unfolding tree@@pt", condition \ref{item:condition1_non_initial_value_pt} expresses that the "specifications" of children of $\node$ are wtinesses that messages received in the "local run" $\localrun{\node}$ can be broadcast by other agents. 
+Given $\node$ a "node@@sg" of an "unfolding tree@@sg", condition \ref{item:condition1_non_initial_value_sg} expresses that the "specifications" of children of $\node$ are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents. Condition \ref{item:condition2_boss_node_sg} expresses that $\node$ witnesses the broadcast of a sequence of messages $\speclabel{\node}$ with the same value. Note that we can use the subword relation $\subword$ because of the lossiness: it suffices to ensure that all received messages are broadcast, but some broadcast messages may not be received.  
+
+\begin{example}
+\todo{} %simple example of signature protocol, run and corresponding unfolding tree
+\end{example}
+
+\begin{lemma}
+\label{lem:coverability_witness_sg}
+Given a "signature protocol" $\prot$ with a state $q_f$, $(\prot,q_f)$ is a positive instance of \COVER if and only if there exists an "unfolding tree@@sg" whose root node's local run covers $q_f$. We call such an "unfolding tree@@sg" a ""coverability witness@@sg"".
+\end{lemma}
+\begin{proof}
+Given an "execution" $\run$, we say that an agent $a$ in $\run$ satisfies a "specification@@sg" $w \in \messages^*$ if, in $\run$, the sequence of "message types" broadcast by $a$ admits $w$ as "subword".% if such an agent $a$ exists, we say that $\run$ satisfies "specification@@sg" $w$.   
+
+Suppose that we have such an "unfolding tree@@sg" $\tree$. We prove by induction on the size of the subtree $\tree'$ of $\tree$ the following property: by letting $\node$ the root of $\tree'$, there exists a "run" $\run$ with an agent $a$ satisfying the "specification@@sg" $\speclabel{\node}$ and whose "local run" in $\run$ is $\localrunlabel{\node}$. Let $\tree'$ a subtree of $\tree$, let $\node$ the "root" of $\tree'$, $\localrun := \localrunlabel{\node}$ and $\aval_1, \dots, \aval_c$ the values received in $\localrun$; applying condition \ref{item:condition1_non_initial_value_sg} gives the existence of corresponding children $\node_1, \dots, \node_c$ in $\tree'$. We apply the induction hypothesis on the "subtrees" rooted in $\node_1, \dots, \node_c$ to obtain "runs" $\run_1, \dots, \run_c$ satisfying the "specifications@@sg" of the children of $\node$. Up to renaming agents, we can assume the set of agents of these runs are disjoint; up to renaming values, we can assume that $\aval_j = \valuelabel{\node_j}$ for all $j$. We build a run $\run$ whose "agents" is the union of the "agents" of the $c$ runs along with a fresh agent $a$. In $\run$, we make $\run_1$ to $\run_c$ progress in parallel and make $a$ follow the "local run" $\localrun$, matching reception with value $v_j$ in $\localrun$ with a broadcast in $\run_j$. This is possible because, for all $j$, $\vinput{v_j}{\localrun} \subword \speclabel{\node_j} \subword \voutput{v_j}{\run_j}$. 
+
+Conversely, consider a "run" $\run$. We prove the following by induction on the length of $\run$: for every agent $a$ in $\run$ and for every $v \in \nats$, there exists an "unfolding tree" whose root has "local run" the projection of $\run$ onto $a$ and "specification@@sg" the $v$-output of $a$ in $\run$. If $\run$ is the empty run, consider the "unfolding tree" with a single node whose "local run" and "specification@@sg" are empty. Suppose now that $\run$ has non-zero length, let $a$ an agent in $\run$, $v \in \nats$ and let $\run_p$ the prefix run of $\run$ of length $\size{\run}-1$.
+Let $\tree_1$ the "induction tree" obtained by applying the induction hypothesis to $\run_p$, $a$ and $v$, and consider $\tree_2$ obtained by simply appending the last step of $a$ in $\run$ to the "local run" at the root of $\tree_1$. If this last step is a broadcast, we obtain an "unfolding tree"; if the broadcast value is $v$, we append the broadcast "message type" to the "specification@@sg" at the root of $\tree_2$ and we are done. 
+Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{i}{\anact},q')$ of a message $(m,\aval')$. We might need to adapt $\tree_2$ to respect condition \ref{item:condition1_non_initial_value_sg} at the root. Let $a'$ the agent broadcasting in the last step of $\run$. Let $\tree_3$ the "unfolding tree@@sg" obtained by applying the induction to $\run_p$ ,$a'$ and $v'$. Let $\tree_4$ the "unfolding tree@@sg" obtained by appending the last broadcast to the "local run" at the root of $\tree_3$ and the corresponding "message type" to the "specification@@sg" at the root of $\tree_3$. Attaching $\tree_4$ to the root of $\tree_2$ gives an "unfolding tree@@sg" satisfying the desired properties. 
+% Note that this construction may generate more children than needed at the root - maybe another child was already there to witness broadcasts of $a'$ in $\run_p$, in which case this child may be deleted. 
+\end{proof}
+
+Our aim is now to bound the size of the "coverability witness@@sg" that we have to consider.
+
+\subsubsection{Bounding the Size of the Unfolding Tree}
+Observe that, because of the lossiness of the system, a longer "specification@@sg" is generally better. We formalize this idea as follows:
+
+\begin{lemma}
+\label{lem:no_subword_in_branch_sg}
+Let $\tree$ be a "coverability witness@@sg" for $(\prot,q_f)$ with $\prot$ a "signature protocol". Let $\node, \node'$ be two nodes of $\tree$ such that $\node$ is a strict ancestor of $\node'$. If $\speclabel{\node} \subword \speclabel{\node'}$, then there exists a "coverability witness@@sg" for $(\prot, q_f)$ of size strictly smaller than $\size{\tree}$.
+\end{lemma}
+\begin{proof}
+It suffices to replace the subtree rooted in $\node$ with the one rooted in $\node'$.
+\end{proof}
+
+With the previous lemma, we would now like to use the "Length function theorem" to bound the size of the tree. However, to do that, we first need a bound on the "size@@treesg" of a node with respect to its parent's "size@@treesg". The following lemma essentially states that the local run of a node may be bounded by a primitive recursive function with respect to the "size@@sg" of its "specification@@sg".
+
+\begin{lemma}
+\label{lem:towerbound_signature}
+There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "signature protocol" with $r+1$ registers, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ such that $\size{u'} < \towerfun(\size{\prot},r)$ and for all value $v \in \nats$,  $\vinput{v}{u'} \subword \vinput{v}{u}$. 
+\end{lemma}
+\begin{proof}
+Register $i$ is ""active@@sg"" in $u$ if $u$ has at least one $\quotemarks{\enregact}$ action on register $i$.  We define $\towerfun(n,k)$ by $\towerfun(n,0) = n+1$ and $\towerfun(n+1,k) = \towerfun(n,k) \cdot ({\size{\transitions}}^{\towerfun(n,k)}+1)$. Observe that $\towerfun(n,k)$ is a tower of exponentials of height $k$, which is primitive-recursive although non-elementary.
+We prove by induction on $k$ that $u$ can be shortened. Let $n := \size{\prot}$ and $M = \towerfun(n,k)$.
+ 
+
+If $k=0$, register values do not change and any state repetition can be removed. Suppose that $\size{u} > \towerfun(n,k+1)$ and that the set $I \subseteq \nats$ of active registers of $u$ is such that $\size{I} = k+1$. If there exists an infix run of $u$ of length $M$ with only $k$ active register, we shorten $u$ using the induction hypothesis. Otherwise, every sequence of $M$ steps in $u$ has a $\quotemarks{\enregact}$ on each register of $I$. Because there are $\size{\transitions}^M$ such sequences and $\size{\localrun} > M \cdot (\size{\transitions}^M +1)$, one sequence $s \in \transitions^M$ appears twice (disjointly) in $\localrun$: in infix run $u_1$ first, then in infix run $u_2$. We shorten $u$ by removing all steps between $u_1$ and $u_2$ and merging $u_1$ and $u_2$. Note that $u_1$ and $u_2$ may differ in terms of values received. To merge them, for a given $i \in I$, let $j$ the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$; we replace in $u_1$, from step $j$ onwards, the values of all receptions involving $i$ by the corresponding values in $u_2$. This guarantees that all equality and disequality tests still pass. The obtained run is shorter than $u$ and satisfies the desired property; we iterate this shortening procedure until the length of the local run is less that $\towerfun(n,k+1)$.
+\end{proof}
+
+Using the previous lemma, we may bound the size of a node of a well-chosen "unfolding tree@@sg" with respect to its "specification@@sg".
+
+\begin{lemma}
+\label{lem:bounds_tree_sg}
+Suppose that $(\prot, q_f)$ is a positive instance of \COVER where $\prot$ is a "signature protocol" with $r+1$ registers. Let $\tree$ be a "coverability witness" of minimal "size@@treesg".
+For every node $\node$ in $\tree$: \begin{itemize}
+\item $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}, r) (\size{\speclabel{\node}}+1)$,
+\item if $\node$ is the child of $\node'$, $\size{\node} \leq \size{\node'} \cdot (\towerfun(\size{\prot},r)+2)$.
+\end{itemize} 
+\end{lemma}
+\begin{proof}
+For the first statement, we identify in $\localrunlabel{\node}$ the broadcasts witnessing $\speclabel{\node}$, and shorten the "local run" in between these steps using Lemma~\ref{lem:towerbound_signature}.
+For the second statement, we observe that, by minimality of $\tree$, $\size{\speclabel{\node}} \leq \max_{v \in \nats} \size{\vinput{v}{\localrunlabel{\node'}}} \leq \size{\node'}$.  
+\end{proof}
+
+This finally allows us to bound the size of a "coverability witness" of "minimal size", using the "Length function theorem":
+
+\begin{proposition}*
+\label{prop:bounded_witness_sg}
+There exists a function $h$ of class $\Ffunction{w^{\size{\messages}+1}}$ such that, 
+for all positive instance $(\prot, q_f)$ of \COVER where $\prot$ is a "signature protocol", there exists a "coverability witness" $\tree$ of size $\size{\tree} \leq f(\size{\prot})$.
+\end{proposition}
+\begin{proof}
+Let $n := \size{\prot}$, let $r+1$ the number of registers in $\prot$. 
+Let $\tree$ a "coverability witness" (which exists thanks to Lemma~\ref{lem:coverability_witness_sg}). Thanks to Lemma~\ref{lem:no_subword_in_branch_sg}, for all $\node \ne \node'$ in 
+$\tree$ with $\node$ ancestor of $\node'$, $\speclabel{\node}$ is not a subword of $\speclabel{\node'}$.  Let $\node_1, \dots, \node_m$ the node appearing in a branch of $\tree$, from root to leaf. The sequence $\speclabel{\node_1}, \dots, \speclabel{\node_m}$ is a "bad sequence".
+Thanks to Lemma~\ref{lem:bounds_tree_sg}, for all $i<m$, $\size{\speclabel{\node_{i}}} \leq \towerfun(n,r) (\size{\speclabel{\node_i}} +1)$ (with $\speclabel{\node_1} = 1$ as the root must cover $q_f$). By direct induction, $\size{\speclabel{\node_i}}$ is bounded by $g^{(i)}(n)$ where $g: n \mapsto (\towerfun(n,n)+1) \cdot n$ which is a primitive-recursive function. Let $f$ of class $\Ffunction{\omega^{\size{\messages}+1}}$ the function obtained when applying the "Length function theorem" on $g$ and $\messages$; we have $m \leq f(n)$. 
+
+This allows to bound the "size@@sg" of every node in $\tree$ by $f'(n) = (\towerfun(n,n)+2)^{f(n) + 1}$ thanks to Lemma~\ref{lem:bounds_tree_sg} and to an immediate induction. 
+% (initialization thanks to Lemma~\ref{lem:towerbound_signature}). 
+By minimality of $\tree$, the number of children of a node is bounded by the number of values appearing in its "local run" hence by $f'(n)$, so the total number of nodes is bounded by $f'(n)^{f(n)+1}$ and the total size of the tree by $h:n \mapsto f'(n)^{f(n)+2}$. Because $\Ffunction{\omega^{\size{\messages}+1}}$ contains all primitive-recursive functions and is closed under multiplication and exponentiation, $h$ is in $\Ffunction{\omega^{\size{\messages}+1}}$.
+\end{proof}
+
+The previous argument shows that \COVER for "signature protocols" is decidable and lies in complexity class $\Fcomplexity{\omega^{m+1}}$ for a fixed-size alphabet of size $m$ and in $\Fcomplexity{\omega^\omega}$ in general. Because the hardness from Proposition~\ref{prop:reduction-LCS} holds for "signature protocols", \COVER is in fact complete for this complexity class.
+
+We now extend this method to the general case. 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
+%%%%%%%%% no change after this point
 \subsection{General Case}
 In order to abstract our "runs", we want to understand what an agent $a$ needs from other agents in order to cover a state $q$. 
 In general, $a$ may receive messages with several values from the same agent. However, because each message contains a single value, we will in fact be able to clone agents so that agents sending messages to $a$ with distinct values are distinct and do not interact with each other. 
