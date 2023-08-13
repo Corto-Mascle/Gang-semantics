@@ -61,7 +61,7 @@ a finite tree where nodes $\node$ have three labels:
 \end{itemize} 
 Moreover, all nodes $\node$ in $\tree$ must satisfy the two following conditions:
 \begin{enumerate}[label= (\roman*), ref=(\roman*)]
-	\item \label{item:condition1_non_initial_value_sg} For each value $\aval$ received in $\localrunlabel{\node}$, $\node$ has a child $\node'$ such that $\vinput{\aval}{\localrunlabel{\node}} \subword \speclabel{\node'}$,
+	\item \label{item:condition1_non_initial_value_sg} For each value $\aval$ received in $\localrunlabel{\node}$, $\node$ has a child $\node'$ such that $\vinput{\aval}{\localrunlabel{\node}} \subword \speclabel{\node'}$\lu{trivial dans le cas de protocole signé : l'enfant avec la valeur $v$ doit broadcast $v$, donc c'est son premier registre initial, et personne d'autre que lui ne peut envoyer ce message ainsi pas d'input -> à enlever de cette partie ? },
 	\item \label{item:condition2_boss_node_sg} $\speclabel{\node} \subword \voutput{\valuelabel{\node}}{\localrunlabel{\node}}$.
 \end{enumerate}
 
@@ -71,7 +71,30 @@ Moreover, all nodes $\node$ in $\tree$ must satisfy the two following conditions
 Given $\node$ a "node@@sg" of an "unfolding tree@@sg", condition \ref{item:condition1_non_initial_value_sg} expresses that the "specifications" of children of $\node$ are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents. Condition \ref{item:condition2_boss_node_sg} expresses that $\node$ witnesses the broadcast of a sequence of messages $\speclabel{\node}$ with the same value. Note that we can use the subword relation $\subword$ because of the lossiness: it suffices to ensure that all received messages are broadcast, but some broadcast messages may not be received.  
 
 \begin{example}
-\todo{} %simple example of signature protocol, run and corresponding unfolding tree
+	We now give an example of a "signature protocol", and present the corresponding "unfolding treee" of a simple "local run". 
+	\begin{figure}[t]
+		\input{Figures/fig-ex2}
+		\caption{Example of a "signature protocol".}\label{fig:ex2}
+	\end{figure}
+Let $\agents = \set{a_1, a_2,a_3}$, the following sequence is an initial run covering $q_4$, where $x_1, y_1, z_1, x_2, x_3$ are distinct natural integers:
+	\begin{align*}
+		&\tuple{(q_0, (x_1,y_1,z_1)), (q_0, (x_2,,)) , (q_0, (x_3,,))} \step{} \tuple{(q_1, (x_1,x_2,z_1)), (q_5,(x_2,,)) , (q_0, (x_3,,))} \step{} \\ 
+		&\tuple{(q_2, (x_1,x_2,x_3)), (q_5,(x_2,,)), (q_5, (x_3,,))} \step{} \tuple{(q_3, (x_1,x_2,x_2)), (q_5,(x_2,,)), (q_5, (x_3,,))} \step{} \\
+		&\tuple{(q_4, (x_1,x_2,x_2)),(q_5,(x_2,,)), (q_5, (x_3,,))} 
+	\end{align*}
+	For readability's sake we don't write the second and third registers' values of agent $a_2$ and $a_3$ as there are neither broadcast, tested and nothing is store on those registers during the run.
+	First agent $a_2$ broadcasts message $hello$ with its second register's value, then $a_3$ broadcasts message $hey$ with its third register's value. Then, agent $a_2$ broadcasts message $ack$ with its second register's value and finally, agent $a_3$ broadcasts the same message but with its third register's value.
+	All messages are received by agent $a_1$ which hence reaches $q_4$.
+	We show now how to build the unfolding tree regarding the local run of agent $a_1$ in \cref{fig:unfolding-tree-sign}. Tables are (part of) "local runs", columns are (part of) "local configurations": we only display registers used in the local runs (the one broadcast or with a reception action on it). For $\node_2$, the transition between $q_0$ and $q_5$ should be understood as the broadcast of $hello$, whereas for $\node_3$ it should be understand as the broadcast of $hey$.
+	\begin{figure}[t]
+		\input{Figures/tree-example-sign}
+		\caption{Example of an unfolding tree.}\label{fig:unfolding-tree-sign}
+	\end{figure}
+
+
+	The local run of node $\node_1$ is the local run of agent $a_1$ of the run described above. 
+	By completing partial local runs by fresh integers in the other registers, one can verify that all nodes are labeled by local runs of the protocol (where the broadcast between $q_0$ and $q_5$ is with $hello$ for $\node_2$, and with $hey$ for $\node_3$).
+	We now verify that conditions  \ref{item:condition1_non_initial_value_sg} and \ref{item:condition2_boss_node_sg} hold for the three nodes. Values received in $\localrunlabel{\node_1}$ are $x_2$ and $x_3$, hence from condition \ref{item:condition1_non_initial_value_sg}, node $\node_1$ has two children $\node_2$ and $\node_3$. Note that $\vinput{x_2}{\localrunlabel{\node_2}} = \vinput{x_3}{\localrunlabel{\node_3}} = \epsilon$\lu{si on modifie la condition, on peut enlever cette phrase}. As $\spec(\node_1) = \epsilon$, condition \ref{item:condition2_boss_node_sg} is trivially true for $\node_1$. Note that nodes $\node_2$ and $\node_3$ don't receive any message on their respective local runs and so condition \ref{item:condition1_non_initial_value_sg} is trivially true. Furthermore, $\voutput{x_2}{\localrunlabel{\node_2}} = hello \cdot ack = \spec(\node_2)$ and $\voutput{x_3}{\localrunlabel{\node_3}} = hey \cdot ack = \spec(\node_3)$.
 \end{example}
 
 \begin{lemma}
@@ -133,7 +156,7 @@ For the second statement, we observe that, by minimality of $\tree$, $\size{\spe
 
 This finally allows us to bound the size of a "coverability witness" of "minimal size", using the "Length function theorem":
 
-\begin{proposition}*
+\begin{proposition}
 \label{prop:bounded_witness_sg}
 There exists a function $h$ of class $\Ffunction{w^{\size{\messages}+1}}$ such that, 
 for all positive instance $(\prot, q_f)$ of \COVER where $\prot$ is a "signature protocol", there exists a "coverability witness" $\tree$ of size $\size{\tree} \leq f(\size{\prot})$.

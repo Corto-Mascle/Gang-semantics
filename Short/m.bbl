@@ -146,8 +146,8 @@ Graham Higman.
 \newblock Ordering by divisibility in abstract algebras.
 \newblock {\em Proceedings of the London Mathematical Society},
   s3-2(1):326--336, 1952.
-\newblock \href {https://doi.org/10.1112/plms/s3-2.1.326}
-  {\path{doi:10.1112/plms/s3-2.1.326}}.
+\newblock \href {https://doi.org/https://doi.org/10.1112/plms/s3-2.1.326}
+  {\path{doi:https://doi.org/10.1112/plms/s3-2.1.326}}.
 
 \bibitem{LazicNORW08}
 Ranko Lazic, Thomas~Christopher Newcomb, Jo{\"{e}}l Ouaknine, A.~W. Roscoe, and
