@@ -95,8 +95,8 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	
 	For every register $i$, let $\localdata_a(i), \localdata_b(i)$ the content of register $i$ after the $l$-th step in $\localrun_a$ and $\localrun_b$ respectively.
 	
-	\noindent \textbf{$\locallabel$ is an "reception step"} \\
-	If $\locallabel$ is an "reception step" of the form $\extlabel{\atrans}{\aval}$, then $\atrans$ has action $\rec{\amessage}{i}{\anact}$. Let $\aval_a$, $\aval_b$ the value of the corresponding "reception step" in $\localrun_a$ and $\localrun_b$ respectively. If $i \notin I$ then $\alpha$ is either $\quotemarks{\dummyact}$ or a test, which is valid as  $\localdata(i) = \localdata_a(i) = \localdata_b(i)$.
+	\noindent \textbf{$\locallabel$ is a "reception step"} \\
+	If $\locallabel$ is a "reception step" of the form $\extlabel{\atrans}{\aval}$, then $\atrans$ has action $\rec{\amessage}{i}{\anact}$. Let $\aval_a$, $\aval_b$ the value of the corresponding "reception step" in $\localrun_a$ and $\localrun_b$ respectively. If $i \notin I$ then $\alpha$ is either $\quotemarks{\dummyact}$ or a test, which is valid as  $\localdata(i) = \localdata_a(i) = \localdata_b(i)$.
 	
 	The only problematic cases are when $i \in I$ and either $\anact = \quotemarks{\diseqtestact}$ or $\anact = \quotemarks{\eqtestact}$. 
 	
