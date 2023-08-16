@@ -305,9 +305,22 @@ Our aim is to prove that we can study \COVER directly on "unfolding trees". We c
 \subsubsection{Bounding the Size of the Unfolding Tree}
 \label{sec:tree-bounds}
 
-Our aim is now to provide bounds on the "size@@tree" of the "coverability witness". 
+Our aim is now to provide bounds on the "size@@tree" of the "coverability witness".  We first explain why the technique we used for "signature protocol" is no longer sufficient.
+
 As in the "signature protocol" case, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then any subword of $\bossspec$ can also be broadcast. 
-For "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better. \cref{lem:no_subword_in_branch_sg} is then replaced by the following lemma, which provides two ways of shortening an "unfolding tree". Its proof can be found in Appendix~\ref{app:proofs-reduction-branches}.
+However, for "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better. 
+
+Previously, \cref{lem:no_subword_in_branch_sg,lem:towerbound_signature} lead us to the "Length function theorem". The reasoning that we were able to bound the size of a node with respect to the nodes to which it must send long words of messages. This means we can find a bound for a node $\node$ with respect to its parent's size. However, now, we cannot bound the "size@@tree" of the "unfolding tree" from the root to the leaves because of "follower nodes" nor from the leaves to the root because of "boss nodes". 
+We will thus rearrange the tree in a convenient manner. 
+
+New versions of \cref{lem:no_subword_in_branch_sg,lem:towerbound_signature} can be found below: \cref{lem:shortening-branches} provides two ways of shortening an "unfolding tree", its proof can be found in Appendix~\ref{app:proofs-reduction-branches}, and \cref{lem:short-local-runs}~is the direct adaptation of \cref{lem:towerbound_signature}.
+
+
+
+
+
+
+%\cref{lem:no_subword_in_branch_sg} is then replaced by the following lemma, which 
 
 \begin{restatable}{lemma}{lemShorteningBranches} 
 \label{lem:shortening-branches}
@@ -321,10 +334,10 @@ For "follower specifications", it goes in the opposite direction: for a fixed $\
 
 
 
-We now show that there is a computable bound on the "size@@tree" of the "unfolding tree" achieving a given specification and labeled with a "protocol" $\prot$. Lemma~\ref{lem:shortening-branches} leads us towards an application of the "Length function theorem"; however, this theorem requires a bound on the lengths of the words. In fact, there is no reason to think that the lengths of the labels of the children of a node can be bounded with respect to the length of the label of that node. 
-
-
-In order to bound the size of the nodes, we now wish to adapt \cref{lem:towerbound_signature}~to the general case.
+%We now show that there is a computable bound on the "size@@tree" of the "unfolding tree" achieving a given specification and labeled with a "protocol" $\prot$. Lemma~\ref{lem:shortening-branches} leads us towards an application of the "Length function theorem"; however, this theorem requires a bound on the lengths of the words. In fact, there is no reason to think that the lengths of the labels of the children of a node can be bounded with respect to the length of the label of that node. 
+%
+%
+%In order to bound the size of the nodes, we now wish to adapt \cref{lem:towerbound_signature}~to the general case.
 %We use the following result, which essentially states that if there is a "local run" between two local configurations $(q, \nu)$ and $(q', \nu')$ then there is one of length bounded by a primitive recursive function and which does not require larger inputs than the previous one.
 
 \begin{restatable}{lemma}{lemShortLocalRuns}
@@ -356,7 +369,8 @@ In order to bound the size of the nodes, we now wish to adapt \cref{lem:towerbou
 % 	The function $\towerfun$ above is a tower of exponentials of height $\regnum$. Perhaps surpringly, this tower bound is tight in the sense that one can find a family of protocols and of "local runs" such that the best $\towerfun$ possible is a tower of exponentials of height linear in $\regnum$. Suppose that we have a protocol $\prot$ and a state $q_f$ such that $q_f$ may only be reached by going exactly $N$ times through some state $q_r$. From $\prot$, we build a "protocol" $\prot'$ with two extra registers $r_0$ and $r_1$; $\prot'$ uses $\prot$ to consider sequences of messages of length $N$ (duplicate $q_r$ into $q_r'$ and $q_r''$ and add transitions in between). Words received by $r_0$ and $r_1$ are of length $N$ with the same value, we see those as binary encodings using $\mathsf{0}, \mathsf{1} \in \messages$. $\prot'$ first requires that $r_0$ receives a word of length $N$ encoding $0$, then iteratively requires that $r_{1-i}$ receives a message encoding value $m+1$ where $m$ is the value last received in $r_i$ (to be able to compare, the words received are of the form $w \#w$ with $w$ of length $N$; the comparison requires to be able to store the value of $i$, whether there is a carry,... which can be done using a third register to avoid a multiplicative factor between sizes of $\prot$ and $\prot'$). We only cover $q_f'$ when word $\mathsf{1}^N$ is received, which is only possible after going exactly $N'$ times through $q_r'$ steps with $N'$ exponential in $N$.
 % \end{remark}
 
-If we had in our "unfolding tree" only "boss nodes" or only "follower nodes", then the previous result would allow us to apply the "Length function theorem" (note that this is the case in the "signature protocol" case). Indeed, we can bound the size of a node with respect to the nodes to which it must send long words of messages. This means we can find a bound for a node $\node$ that depends on $\node$'s "follower" children's size and, if $\node$ is a "boss" node, with respect to its parent's size. However, we cannot bound the "size@@tree" of an "unfolding tree" from the root to the leaves because of "follower nodes" nor from the leaves to the root because of "boss nodes". We thus rearrange the tree as in Figure~\ref{fig:rearrange-tree} to make it so that long sequences of messages are sent upwards. We formalize this with the notion of altitude:
+The rearrangement of the tree is such that long sequences of messages are sent upwards as displayed in Figure~\ref{fig:rearrange-tree}. It will eventually allow us to apply the "Length function theorem". 
+We formalize this with the notion of altitude:
 
 \begin{definition}
 	Let $\tree$ an "unfolding tree". We define the ""altitude"" of a node $\node$ of $\tree$, written $\altitude{\node}$, recursively as follows:
@@ -385,7 +399,7 @@ We now use the previous lemma to bound the label of each node $\node$ with respe
 	\begin{enumerate}				
 		\item  If $\node$ is a "boss node" then 
 		\begin{itemize}
-			\item If $\node$ is the root of $\tree$ then $\bosslabel{\node} = w$, otherwise $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$ with $\node'$ its parent\lu{moi pas comprendre ce $w$ et cette formulation}
+			\item If $\node$ is the root of $\tree$ then $\bosslabel{\node} = w$, otherwise $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$ with $\node'$ its parent\lu{moi pas comprendre prq $w$ et la formulation}
 			
 			\item In both cases $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r)\Big[ \size{\bosslabel{\node}} + \size{\messages}rK +1 \Big]$
 		\end{itemize}
