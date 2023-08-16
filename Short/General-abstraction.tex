@@ -308,9 +308,12 @@ Our aim is to prove that we can study \COVER directly on "unfolding trees". We c
 Our aim is now to provide bounds on the "size@@tree" of the "coverability witness".  We first explain why the technique we used for "signature protocol" is no longer sufficient.
 
 As in the "signature protocol" case, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then any subword of $\bossspec$ can also be broadcast. 
-However, for "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better. 
+However, for "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better ($\followwordspec$ should be seen as a needed ressource in order to repeat the value with message type $\followmessagespec$). 
 
-Previously, \cref{lem:no_subword_in_branch_sg,lem:towerbound_signature} lead us to the "Length function theorem". The reasoning that we were able to bound the size of a node with respect to the nodes to which it must send long words of messages. This means we can find a bound for a node $\node$ with respect to its parent's size. However, now, we cannot bound the "size@@tree" of the "unfolding tree" from the root to the leaves because of "follower nodes" nor from the leaves to the root because of "boss nodes". 
+Previously, \cref{lem:no_subword_in_branch_sg,lem:towerbound_signature} lead us to the "Length function theorem". We were able to bound the size of a node with respect to the nodes to which it must send long words of messages (in the signature protocol: from leaves to root), i.e. we could find a bound for a node $\node$ with respect to its parent's size. However, this is not possible for "follower nodes", as it goes in the opposite direction: a node now might need to send long sequence of messages to its "follower node" child, in order for this node to repeat a value. 
+\luin{sans doute qu'il faut plus d'explications ici}
+
+Hence, here, we cannot bound the "size@@tree" of the "unfolding tree" from the root to the leaves because of "follower nodes", nor from the leaves to the root because of "boss nodes". 
 We will thus rearrange the tree in a convenient manner. 
 
 New versions of \cref{lem:no_subword_in_branch_sg,lem:towerbound_signature} can be found below: \cref{lem:shortening-branches} provides two ways of shortening an "unfolding tree", its proof can be found in Appendix~\ref{app:proofs-reduction-branches}, and \cref{lem:short-local-runs}~is the direct adaptation of \cref{lem:towerbound_signature}.
