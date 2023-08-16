@@ -311,7 +311,9 @@ As in the "signature protocol" case, for "boss specifications", the longer the w
 However, for "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better ($\followwordspec$ should be seen as a needed ressource in order to repeat the value with message type $\followmessagespec$). 
 
 Previously, \cref{lem:no_subword_in_branch_sg,lem:towerbound_signature} lead us to the "Length function theorem". We were able to bound the size of a node with respect to the nodes to which it must send long words of messages (in the signature protocol: from leaves to root), i.e. we could find a bound for a node $\node$ with respect to its parent's size. However, this is not possible for "follower nodes", as it goes in the opposite direction: a node now might need to send long sequence of messages to its "follower node" child, in order for this node to repeat a value. 
-\luin{sans doute qu'il faut plus d'explications ici}
+
+
+We cannot thus shorten a branch directly: if we want to reason on the long word attached to the nodes, our first observation on "boss nodes" (the one used in the "signature protocol" case) is that, if $\node$ is an ancestor of $\node'$, both are "boss nodes", and the specification of $\node$ is a subword of $\node'$, then the branch can be cut (as $\node$ can be replaced by $\node'$ which will play the same role as $\node$). However, the second observation made on "follower nodes" leads us to the following: if $\node$ is an ancestor of $\node'$, both are "follower nodes" with the same message type to broadcast, and the specification of $\node'$ is a subword of $\node$, then the branch can be cut (as $\node$ can be replaced by $\node'$ which will play the same role as $\node$ with smaller ressources). 
 
 Hence, here, we cannot bound the "size@@tree" of the "unfolding tree" from the root to the leaves because of "follower nodes", nor from the leaves to the root because of "boss nodes". 
 We will thus rearrange the tree in a convenient manner. 
