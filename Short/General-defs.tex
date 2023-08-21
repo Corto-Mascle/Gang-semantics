@@ -6,9 +6,9 @@ A ""Broadcast Network of Register Automata"" (BNRA) \cite{DelzannoST13} is a mod
 There are arbitrarily many agents. When an agent broadcasts a message, each other agent independently may or may not receive it. 
 
 \begin{definition}[Protocols]
-	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""message types""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with a set of operations
+	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""message types""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with operations $\operations =$
 	\[
-	\operations = \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq \regnum}\]
+	 \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq \regnum}\]
 	Label $\brsymb$ stands for ""broadcasts"" and $\recsymb$ for ""receptions"".
 	Given a reception $\rec{\amessage}{i}{\anact}$, $\anact$ is its ""action"". 
 The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
@@ -26,7 +26,7 @@ We now define the semantics of those systems. Essentially, we have a finite set 
 	An \intro{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and $\data{\config}(a, i) \neq \data{\config}(a', i')$ for all $(a,i) \neq (a', i')$.
 	
 	% Given a "configuration" $\config \in \allconfigs$, we denote by $\agentsof{\config}$ the set of agents of $\config$.	
-	\AP Given a finite set of agents $\agents$ and two "configurations" $\config, \config'$ over $\agents$, a ""step"" $\config \step{} \config'$ is defined when there exist $\amessage \in \messages$, $a_0 \in \agents$ and $i \in \nset{1}{r}$ s.t. $(\st{\config}(a_0),\br{\amessage}{i}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and, for all $a \ne a_0$, either $\config'(a) = \config(a)$ or there exists $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a)) \in \transitions$
+	\AP Given a finite set of agents $\agents$ and two "configurations" $\config, \config'$ over $\agents$, a ""step"" $\config \step{} \config'$ is defined when there exist $\amessage \in \messages$, $a_0 \in \agents$ and $i \in \nset{1}{r}$ such that \linebreak $(\st{\config}(a_0),\br{\amessage}{i}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and, for all $a \ne a_0$, either $\config'(a) = \config(a)$ or there exists $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a)) \in \transitions$
 		s.t. $\data{\config'}(a, j') = \data{\config}(a, j')$ for $j' \neq j$ and:
 		\begin{itemize}
 				\item if $\anact = \quotemarks{\dummyact}$ 
@@ -48,10 +48,10 @@ In our model, agents may only send one register's value per message. Indeed, \ci
 
 \begin{example}\label{ex:example-1}
 	We give an example of a "protocol" with 2 registers in Figure \ref{fig:ex1}. 
-	Let $\agents = \{a_1, a_2\}$. We denote a "configuration" $\config$ over $\agents$ by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$. The following sequence is an "initial run", where $x_1,y_1,x_2,y_2$ are distinct natural integers:
+	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run", where $x_1,y_1,x_2,y_2$ are distinct natural integers:
 	\begin{multline*}
-	\tuple{(q_0, (x_1,y_1)), (q_0,(x_2,y_2))} \step{} \tuple{(q_1, (x_1,y_1)), (q_5,(x_1,y_2))} \step{} \\ 
-	\tuple{(q_4, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))}
+	\tuple{(q_0, (x_1,y_1)), (q_0,(x_2,y_2))} \step{} \tuple{(q_1, (x_1,y_1)), (q_5,(x_1,y_2))} \step{} 
+	\tuple{(q_4, (x_1,y_2)),\\ (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))}
 	\end{multline*}
 
 	The broadcast messages are, in this order: $(m_2,x_1)$ by $a_1$, $(m_4,y_2)$ by $a_2$, $(m_6,x_1)$ by $a_1$ and $(m_7,x_1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
@@ -59,6 +59,7 @@ In our model, agents may only send one register's value per message. Indeed, \ci
 
 \begin{figure}[t]
 	\input{Figures/fig-ex1}
+	\vspace{-0.4cm}
 	\caption{Example of a "protocol".}\label{fig:ex1}
 \end{figure}
 	
@@ -102,13 +103,13 @@ A ""signature protocol"" with $\regnum$ registers is a "protocol" $\prot = (Q, \
 \subsection{Classical Definitions}
 
 
-\subparagraph*{Fast-growing hierarchy}
+\paragraph*{Fast-growing hierarchy}
 
 For $\alpha$ an ordinal in Cantor normal form, we denote by $\Ffunction{\alpha}$ the class of functions corresponding to level $\alpha$ in the Fast-Growing Hierarchy. We denote by $\Fcomplexity{\alpha}$ the associated complexity class and use the notion of $\Fcomplexity{\alpha}$-completeness. All these notions are defined in \cite{Schmitz16}. We will specifically work with complexity class $\Fcomplexity{\omega^{\omega}}$. For readers unfamiliar with these notions, $\Fcomplexity{\omega^{\omega}}$-complete problems are problems which are decidable but with very high complexity (non-primitive recursive, and even higher than the Ackermann class $\Fcomplexity{\omega}$). 
 
 We highlight that our main result is the decidability of the problem. We show that the problem lies in $\Fcomplexity{\omega^{\omega}}$ because it does not complicate our decidability proof significantly; also, it fits nicely into the landscape of high-complexity problems arising from well quasi-orders. 
 
-\subparagraph*{Well-quasi orders}
+\paragraph*{Well-quasi orders}
 
 For our decidability result, we rely on the theory of well quasi-orders in the context of subword ordering.
 Let $\Sigma$ be a finite alphabet, $w_1, w_2 \in \Sigma^*$, $w_1$ is a ""subword"" of $w_2$, denoted $w_1 \intro*\subword w_2$, when $w_1$ can be obtained from $w_2$ by erasing some letters. 

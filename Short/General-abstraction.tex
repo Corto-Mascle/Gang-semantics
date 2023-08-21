@@ -1,15 +1,15 @@
-\section{Cover Decidability}
+\section{Cover Decidability for Signature Protocols}
 \label{sec:cover-decidability}
 
-This section is dedicated to the proof of the main result of this paper:
+This section and the next one are dedicated to the proof of the main result of this paper:
 
 \begin{restatable}{theorem}{decidablecover}
 \label{thm:decidable-cover}
 \COVER for BNRA is decidable and $\Fcomplexity{\omega^\omega}$-complete.
 \end{restatable}
 
-For the sake of clarity, we will first focus on the case of "signature BNRA". 
-As a preliminary, we start by defining a notion of "local run" meant to represent the projection of a run onto a given agent
+For the sake of clarity, in this section, we will first focus on the case of "signature BNRA". 
+As a preliminary, we start by defining a notion of "local run" meant to represent the projection of a run onto a given agent.
 
 \subsection{Local runs}
 \AP A ""local configuration"" is a pair $(q, \localdata) \in Q \times \nats^r$.  
@@ -33,27 +33,27 @@ As a preliminary, we start by defining a notion of "local run" meant to represen
 
 	%Said otherwise, $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$ when an agent in $(q,\localdata)$ may perform $\atrans$ upon receiving a message of type $\amessage$ and of value $\aval$.
 	\AP A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either a "reception step" or an "internal step". 
-	\AP A ""local run"" $\localrun$ is a sequence of "local steps" denoted $(q_0, \nu_0) \step{*} (q, \nu)$.
+	\AP A ""local run"" $\localrun$ is a sequence of "local steps" denoted $(q_0, \nu_0) \step{*} (q, \nu)$. %where $\nu_0$ has distinct values.
 	A value $\aval \in \nats$ appearing in $\localrun$ is ""initial"" if it appears in $\nu_0$ and ""non-initial"" otherwise. 
 	The ""input"" of $\localrun$, written $\intro*\Input{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages of its "reception steps", its ""output"", written $\intro*\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages broadcast in $\localrun$. 
 	% The $\aval$-input $\vinput{\aval}{\localrun}$ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the sequence containing message types of "reception steps" (resp. broadcast steps) of $\localrun$ with value $\val$. 
 	For $\aval \in \nats$, the $\aval$-""input"" $\intro*\vinput{\aval}{\localrun}$ (resp. $\val$-""output"" $\intro*\voutput{\aval}{\localrun}$) is the word $m_0 \cdots m_{\ell} \in \messages^*$ such that $(m_0, \aval) \cdots (m_{\ell}, \aval)$ is the projection of $\Input{\localrun}$ (resp. $\Output{\localrun}$) on $\messages \times \set{\aval}$.
 
 \subsection{Cover Decidability for "Signature BNRA"}
-We first prove decdability of \COVER for "signature BNRA". We start with the following observation: when an agent receives messages, it can compare the values in the messages only with previously received values; the initial values in "reception-only" registers are not relevant as they can never be shared with other processes. Therefore, a given agent $a$ can only see which received messages have the same value, \emph{i.e.}, coming from the same agent, so that what $a$ needs from other agents may be stated as a set of words where each word must be received in messages of the same value. 
+We first prove decdability of \COVER for "signature BNRA". We start with the following observation: when an agent receives a message, it can compare the value of the message only with previously received values; the initial values in "reception-only" registers are not relevant as they can never be shared with other agents. Therefore, a given agent $a$ can only see which received messages have the same value, \emph{i.e.}, come from the same agent, so that what $a$ needs from other agents may be stated as a set of words where each word must be received in messages of the same value. 
 
 We call ""specifications@@signature"" words of $\messages^*$. A "specification" is meant to encode the task that a given agent accomplishes. To represent runs, we consider ""unfolding trees@@signature"" that represent such specifications, dependencies between them and how they are carried out. Because of copycat arguments, we will in fact be able to clone agents so that communications between agents only go one way, hence the tree structure.
 
 \subsubsection{Unfolding trees}
 \label{sec:unfolding_tree_signature}
-An \emph{unfolding tree} is an abstraction of a "run" in the form of a tree where each node is assigned a "local run" and the "specification" that it carries out. 
+An \emph{unfolding tree} is an abstraction of a "run" into a tree where each node is assigned a "local run" and the "specification" that it carries out. 
 
 \begin{definition}
 \label{def:unfolding_tree_signature}
 \AP An ""unfolding tree@@sg"" $\tree$ over $\prot$ is
 a finite tree where nodes $\node$ have three labels:
 \begin{itemize}
-	\item a "local run" of $\prot$, written $\intro*\localrunlabel{\node}$, starting in the initial state with distinct register values;
+	\item a "local run" of $\prot$, written $\intro*\localrunlabel{\node}$;
 	
 	\item a value in $\nats$, written $\intro*\valuelabel{\node}$;
 	
@@ -61,34 +61,46 @@ a finite tree where nodes $\node$ have three labels:
 \end{itemize} 
 Moreover, all nodes $\node$ in $\tree$ must satisfy the two following conditions:
 \begin{enumerate}[label= (\roman*), ref=(\roman*)]
-	\item \label{item:condition1_non_initial_value_sg} For each value $\aval$ received in $\localrunlabel{\node}$, $\node$ has a child $\node'$ such that $\vinput{\aval}{\localrunlabel{\node}} \subword \speclabel{\node'}$\lu{trivial dans le cas de protocole signé : l'enfant avec la valeur $v$ doit broadcast $v$, donc c'est son premier registre initial, et personne d'autre que lui ne peut envoyer ce message ainsi pas d'input -> à enlever de cette partie ? },
+	\item \label{item:condition1_non_initial_value_sg} For each value $\aval$ received in $\localrunlabel{\node}$, $v$ is "non-initial" in $\localrunlabel{\node}$ and $\node$ has a child $\node'$ such that $\vinput{\aval}{\localrunlabel{\node}} \subword \speclabel{\node'}$,
 	\item \label{item:condition2_boss_node_sg} $\speclabel{\node} \subword \voutput{\valuelabel{\node}}{\localrunlabel{\node}}$.
 \end{enumerate}
 
 \AP Lastly, given $\tree$ an "unfolding tree@@sg", we define its ""size@@tree"" by $\size{\tree} := \sum_{\node \in \tree} \size{\node}$ where $\size{\node} := \size{\localrunlabel{\node}} + \size{\speclabel{\node}}$. Note that the "size@@tree" of $\tree$ takes into account the size of its nodes, so that a tree $\tree$ can be stored in space polynomial in $\size{\tree}$ (renaming the values appearing in $\tree$ if needed). 
 \end{definition}
-
-Given $\node$ a "node@@sg" of an "unfolding tree@@sg", condition \ref{item:condition1_non_initial_value_sg} expresses that the "specifications" of children of $\node$ are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents. Condition \ref{item:condition2_boss_node_sg} expresses that $\node$ witnesses the broadcast of a sequence of messages $\speclabel{\node}$ with the same value. Note that we can use the subword relation $\subword$ because of the lossiness: it suffices to ensure that all received messages are broadcast, but some broadcast messages may not be received.  
+% subword explaination
+Given $\node$ a "node@@sg" of an "unfolding tree@@sg", condition \ref{item:condition1_non_initial_value_sg} expresses that the "specifications" of children of $\node$ are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents. Because the protocol is a "signature protocol", "initial" values of the "local run" should not be received. Condition \ref{item:condition2_boss_node_sg} expresses that $\node$ witnesses the broadcast of a sequence of messages $\speclabel{\node}$ with the same value. We can use the subword relation $\subword$, and not equality, because of the lossiness: it suffices to ensure that all received messages are broadcast, but some broadcast messages may not be received.  
 
 \begin{example}
-	We now give an example of a "signature protocol", and present the corresponding "unfolding treee" of a simple "local run". 
+	Figure~\ref{fig:example-signature-protocol} provides an example of a "signature protocol".
 	\begin{figure}[t]
+		\label{fig:example-signature-protocol}
+		\centering
 		\input{Figures/fig-ex2}
 		\caption{Example of a "signature protocol".}\label{fig:ex2}
 	\end{figure}
-Let $\agents = \set{a_1, a_2,a_3}$, the following sequence is an initial run covering $q_4$, where $x_1, y_1, z_1, x_2, x_3$ are distinct natural integers:
-	\begin{align*}
-		&\tuple{(q_0, (x_1,y_1,z_1)), (q_0, (x_2,,)) , (q_0, (x_3,,))} \step{} \tuple{(q_1, (x_1,x_2,z_1)), (q_5,(x_2,,)) , (q_0, (x_3,,))} \step{} \\ 
-		&\tuple{(q_2, (x_1,x_2,x_3)), (q_5,(x_2,,)), (q_5, (x_3,,))} \step{} \tuple{(q_3, (x_1,x_2,x_2)), (q_5,(x_2,,)), (q_5, (x_3,,))} \step{} \\
-		&\tuple{(q_4, (x_1,x_2,x_2)),(q_5,(x_2,,)), (q_5, (x_3,,))} 
-	\end{align*}
-	For readability's sake we don't write the second and third registers' values of agent $a_2$ and $a_3$ as there are neither broadcast, tested and nothing is store on those registers during the run.
-	First agent $a_2$ broadcasts message $hello$ with its second register's value, then $a_3$ broadcasts message $hey$ with its third register's value. Then, agent $a_2$ broadcasts message $ack$ with its second register's value and finally, agent $a_3$ broadcasts the same message but with its third register's value.
-	All messages are received by agent $a_1$ which hence reaches $q_4$.
+Let $\agents = \set{a_1, a_2,a_3}$, let $\run$ the run where the following occurs, where $\tuple{q,q',q''}$ denotes the tuple of states of $a_1$, $a_2$ and $a_3$ (the values of the registers are omitted):
+\begin{itemize}
+\item $a_2$ broadcasts $\exready$, $a_1$ receives: $\tuple{q_1, q_0,q_0}$,
+\item $a_3$ broadcasts $\exready$, $a_1$ and $a_2$ receive: $\tuple{q_2, q_5,q_0}$,
+\item $a_2$ broadcasts $\exready$, $a_3$ receives: $\tuple{q_2,q_5,q_5}$,
+\item $a_2$ broadcasts $\exgo$, $a_1$ receives, then $a_3$ broadcasts $\exgo$ and $a_1$ received: $\tuple{q_4,q_5,q_5}$.
+\end{itemize}
+Observe that the equality tests pass because $a_1$ stores $a_2$'s identifier in its second register and $a_3$'s identifier in its third register. 
+% the following sequence is an initial run covering $q_4$:
+	% \begin{align*}
+	% 	&\tuple{(q_0, (\valsymb{1},2,3)), (q_0, (x_2,\_,\_)) , (q_0, (x_3,\_,\_))} \step{} \tuple{(q_1, (x_1,x_2,z_1)), (q_5,(x_2,\_,\_)) , (q_0, (x_3,\_,\_))} \step{} \\ 
+	% 	&\tuple{(q_2, (x_1,x_2,x_3)), (q_5,(x_2,\_,\_)), (q_5, (x_3,\_,\_))} \step{} \tuple{(q_3, (x_1,x_2,x_2)), (q_5,(x_2,\_,\_)), (q_5, (x_3,\_,\_))} \step{} \\
+	% 	&\tuple{(q_4, (x_1,x_2,x_2)),(q_5,(x_2,\_,\_)), (q_5, (x_3,\_,\_))} 
+	% \end{align*}
+	% For readability's sake we don't write the second and third registers' values of agent $a_2$ and $a_3$ as there are neither broadcast, tested and nothing is store on those registers during the run.
+	% First agent $a_2$ broadcasts message $hello$ with its second register's value, then $a_3$ broadcasts message $hey$ with its third register's value. Then, agent $a_2$ broadcasts message $ack$ with its second register's value and finally, agent $a_3$ broadcasts the same message but with its third register's value.
+	% All messages are received by agent $a_1$ which hence reaches $q_4$.
 	We show now how to build the unfolding tree regarding the local run of agent $a_1$ in \cref{fig:unfolding-tree-sign}. Tables are (part of) "local runs", columns are (part of) "local configurations": we only display registers used in the local runs (the one broadcast or with a reception action on it). For $\node_2$, the transition between $q_0$ and $q_5$ should be understood as the broadcast of $hello$, whereas for $\node_3$ it should be understand as the broadcast of $hey$.
 	\begin{figure}[t]
 		\input{Figures/tree-example-sign}
-		\caption{Example of an unfolding tree.}\label{fig:unfolding-tree-sign}
+		\vspace{-0.5cm}
+		\caption{Example of an unfolding tree.}
+		\label{fig:unfolding-tree-sign}
 	\end{figure}
 
 
@@ -181,7 +193,7 @@ We now extend this method to the general case.
 %%%%%%%%%%%%%%%%%%%
 
 \subsection{General case}
-In the general case, some more complex behaviors occur and the same unfolding tree is not sufficient. A value can now be store by some agent \emph{and repeated}, furthermore, an agent could need some other agents to repeat its initial value in order to issue a transition. Remember run described in \cref{ex:example-1}~where the first agent needs to receive message $(m_6, x_1)$ to reach $q_7$. Hence, because of this new scenario, we now have two types of specifications: \emph{"boss specification"} which describes the usual scenario for "signature protocol" (the value to broadcast among with the specification is initial) and the \emph{"follower specification"}: the role of a node with a "follower specification" is now to repeat a given value. In order to repeat this value, the node is given an input word (a word $w$ of messages types received with the value to repeat) and an objective (a message type to broadcast with the value to repeat).
+In the general case, some more complex behaviors occur and the same unfolding tree is not sufficient. A value can now be store by some agent \emph{and repeated}, furthermore, an agent could need some other agents to repeat its initial value in order to issue a transition. Remember run described in \cref{ex:example-1}~where the first agent needs to receive message$(m_6, x_1)$ to reach $q_7$. Hence, because of this new scenario, we now have two types of specifications: \emph{"boss specification"} which describes the usual scenario for "signature protocol" (the value to broadcast among with the specification is initial) and the \emph{"follower specification"}: the role of a node with a "follower specification" is now to repeat a given value. In order to repeat this value, the node is given an input word (a word $w$ of messages types received with the value to repeat) and an objective (a message type to broadcast with the value to repeat).
 
 \subsubsection{Notations and Definitions}
 \label{sec:decidability-defs}

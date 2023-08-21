@@ -9,7 +9,6 @@
 \usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{amsmath}
-\usepackage{amsthm}
 \usepackage{xspace}
 \usepackage{multicol}
 \usepackage{tikz}
@@ -22,7 +21,7 @@
 \usepackage{multidef}
 \usepackage{xspace}
 \usepackage{mathrsfs}
-
+\usepackage{thm-restate}
 
 \usetikzlibrary{arrows,calc,automata,fit,shapes,positioning}
 \tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append,every state/.style={minimum size=20,inner sep=2}}}
@@ -30,12 +29,22 @@
 
 %\newenvironment{proofsketch}{\noindent\emph{Proof sketch.}}{\hfill$\square$}
 
+% for proof sketch
 \makeatletter
-\def\namedlabel#1#2{\begingroup
-	\def\@currentlabel{#2}%
-	\label{#1}\endgroup
-}
+\renewcommand{\@Opargbegintheorem}[4]{%
+  #4\trivlist\item[\hskip\labelsep{#3#2\@thmcounterend}]}
 \makeatother
+
+%theorems
+\declaretheorem[name=Fact]{fact}
+\makeatletter
+\let\c@proposition\c@theorem
+\let\c@corollary\c@theorem
+\let\c@lemma\c@theorem
+\let\c@definition\c@theorem
+\let\c@example\c@theorem
+\makeatother
+
 
 %%% Basic Math
 
@@ -102,7 +111,7 @@
 
 
 % projection of a configuration on state part and register part
-\renewcommand{\st}[1]{\mathsf{st}(#1)}
+\newcommand{\st}[1]{\mathsf{st}(#1)}
 \newcommand{\data}[1]{\mathsf{data}(#1)}
 
 % a register value
@@ -255,6 +264,32 @@
 \knowledgenewrobustcmd\perfproj[1]{\cmdkl{\mathsf{perf}}(#1)}
 
 \newcommand{\tuple}[1]{\langle #1 \rangle}
+
+% example of signature protocol
+\newcommand{\exready}{\textsf{ready}}
+\newcommand{\exgo}{\textsf{go}}
+
+%unfolding trees in tikz, with 3 registers
+\newcommand{\regbar}[2]{
+	\node (reg1) at (#1, #2+0.15-0.5) {reg $1$};
+	\node (reg2) at (#1, #2+0.15-1) {reg $2$};
+	\node (reg3) at (#1, #2+0.15-1.5) {reg $3$};
+}
+
+% arguments: x and y-cord of start + state + content of registers & fillings
+\newcommand{\onerow}[9]{
+\draw  (#1,#2) rectangle (#1+1, #2-0.5);
+\draw[fill = #5, opacity = 0.4]  (#1,#2) rectangle (#1+1, #2-0.5);
+\draw  (#1,#2-0.5) rectangle (#1+1, #2-1);
+\draw[fill = #7, opacity = 0.4]  (#1,#2-0.5) rectangle (#1+1, #2-1);
+\draw  (#1,#2-1) rectangle (#1+1, #2-1.5);
+\draw[fill = #9, opacity = 0.4]  (#1,#2-1) rectangle (#1+1, #2-1.5);
+\node [] (state) at (#1 +0.5 ,#2 + 0.2) {#3};
+\node[] (reg1) at (#1 +0.5 ,#2 + 0.2 - 0.5) {#4};
+\node[] (reg2) at (#1 +0.5 ,#2 + 0.2 -1) {#6};
+\node[] (reg3) at (#1 +0.5 ,#2 + 0.2 -1.5) {#8};
+}
+
 
 %quotes in math mode
 \DeclareMathSymbol{\mlq}{\mathord}{operators}{``}

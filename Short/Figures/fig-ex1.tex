@@ -1,4 +1,4 @@
-\begin{tikzpicture}[xscale=0.5,AUT style,node distance=2.1cm,auto,>= triangle
+\begin{tikzpicture}[xscale=0.5,AUT style,node distance=2cm,auto,>= triangle
 	45]
 	\tikzstyle{initial}= [initial by arrow,initial text=,initial
 	distance=.7cm]
@@ -6,12 +6,12 @@
 	%	distance=.7cm,accepting where =right]
 	
 	\node[state,initial above, minimum width=0.1pt] (0) at (0,0) {$q_0$};
-	\node[state] [left = 2.5 of 0] (1) {$q_1$};
-	\node[state] [right = 2.5 of 0] (2) {$q_2$};
-	\node[state] [right = 2.5 of 2] (3) {$q_3$};
+	\node[state] [left = 2.2 of 0] (1) {$q_1$};
+	\node[state] [right = 2 of 0] (2) {$q_2$};
+	\node[state] [right = 2 of 2] (3) {$q_3$};
 	\node[state] [below =1 of 1] (4) {$q_4$};
 	\node[state] [below = 1 of 0] (5) {$q_5$};
-	\node[state] [right = 2.5 of 5] (6) {$q_6$};
+	\node[state] [right = 2 of 5] (6) {$q_6$};
 	\node[state] [left = of 4] (7) {$q_7$};
 	
 %	\path[->, bend left=10] 	
@@ -34,7 +34,6 @@
 		(4)  edge [out=330,in=290,looseness=4] node {\small$\br{m_6}{1}$} (4)
 		(4) edge node {$\small \rec{m_6}{1}{=}$} (7)
 		(7)  edge [out=60,in=120,looseness=4] node[above] {\small$\br{m_7}{1}$} (7)
-		
 	;
 	
 \end{tikzpicture}
