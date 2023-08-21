@@ -1,0 +1,39 @@
+\begin{tikzpicture}[xscale=0.5,AUT style,node distance=2.1cm,auto,>= triangle
+	45]
+	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+	distance=.7cm]
+	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+	%	distance=.7cm,accepting where =right]
+	
+
+	\node[state,initial] {$q_0$};
+	\node[state] [right = 2 of 0, yshift = 20] (1) {$q_1$};
+	\node[state] [right = 2.5 of 1] (2) {$q_2$};
+	\node[state] [right = 2.5 of 2] (3) {$q_3$};
+	\node[state] [right = 2.5 of 3] (4) {$q_4$};
+	\node[state] [right = 2 of 0, yshift = -20] (5) {$q_5$};
+	
+%	\node[state] [right = 2.5 of 4] (5) {$q_5$};
+	
+	
+	%	\path[->, bend left=10] 	
+	%	(0) edge node[above, xshift=-10] {$\br{init}{1}$} (x)
+	%	;
+	%	\path[->, bend right=10] 	
+	%	(0) edge node[below, xshift=-10] {$\rec{init}{2}{\enregact}$} (y)
+	%	;
+	\path[->] 	
+%	(0)  edge [out=240,in=300,looseness=3] node[below, xshift = -20] {\small$\br{hello}{1}$} (0)
+			
+	(5) edge [out=-20,in=10,looseness=12] node[right] {\small$\br{ack}{1}$} (5)
+	(0) edge [bend left = 10] node [xshift = 20] {\small $\rec{hello}{2}{\enregact}$} (1)
+	(1) edge node {\small $\rec{hey}{3}{\enregact}$} (2)
+	(2) edge node {\small $\rec{ack}{2}{\eqtestact}$} (3)
+	(3) edge node {\small $\rec{ack}{3}{\eqtestact}$} (4)
+	
+	(0) edge [bend right = 5] node [below]{\small $\br{hello}{1}$} (5)
+			 edge [bend left = 5] node [above]{\small $\br{hey}{1}$} (5)
+
+	;
+	
+\end{tikzpicture}
