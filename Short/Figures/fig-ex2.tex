@@ -6,12 +6,14 @@
 	
 
 	% \node[state,initial] {$q_0$};
-	\node[state, initial] [yshift = -20] (5) {$q_0$};
-	\node[state] [above = 1 of 5] (1) {$q_1$};
+	\node[state, initial] (0) {$q_0$};
+	\node[state] [above = 1 of 0] (1) {$q_1$};
 	\node[state] [right = 2.1 of 1] (2) {$q_2$};
 	\node[state] [right = 2 of 2] (3) {$q_3$};
 	\node[state] [right = 2 of 3] (4) {$q_4$};
-	\node[state] [right = 2.1 of 5] (6) {$q_5$};
+	\node[state] [right = 2.1 of 0] (5) {$q_5$};
+	\node[state] [right = 2 of 5, yshift = 20] (6) {$q_6$};
+	\node[state] [right = 2 of 5, yshift = -20] (7) {$q_7$};
 	
 %	\node[state] [right = 2.5 of 4] (5) {$q_5$};
 	
@@ -25,14 +27,15 @@
 	\path[->] 	
 %	(0)  edge [out=240,in=300,looseness=3] node[below, xshift = -20] {\small$\br{\exready}{1}$} (0)
 			
-	(6) edge [out=-35,in=-5,looseness=15] node[right] {\small$\br{\exgo}{1}$} (6)
-	(6) edge [out=5,in=35,looseness=15] node[right] {\small$\br{\exready}{1}$} (6)
-	(5) edge [out = -105, in = -75, looseness = 4] node[below] {\small $\br{\exready}{1}$} (5)
-	(5) edge node[right] {\small $\rec{\exready}{2}{\enregact}$} (1)
+	(5) edge node[above] {\small$\br{\exgotwo}{1}$} (6)
+	(5) edge node[below, yshift = -2] {\small$\br{\exgothree}{1}$} (7)
+	(5) edge [out = -105, in = -75, looseness = 4] node[below] {\small$\br{\exready}{1}$} (5)
+	(0) edge [out = -105, in = -75, looseness = 4] node[below] {\small $\br{\exready}{1}$} (0)
+	(0) edge node[right] {\small $\rec{\exready}{2}{\enregact}$} (1)
 	(1) edge node {\small $\rec{\exready}{3}{\enregact}$} (2)
-	(2) edge node {\small $\rec{\exgo}{2}{\eqtestact}$} (3)
-	(3) edge node {\small $\rec{\exgo}{3}{\eqtestact}$} (4)
-	(5) edge node [below]{\small $\rec{\exready}{2}{\dummyact}$} (6)
+	(2) edge node {\small $\rec{\exgotwo}{2}{\eqtestact}$} (3)
+	(3) edge node {\small $\rec{\exgothree}{3}{\eqtestact}$} (4)
+	(0) edge node [below]{\small $\rec{\exready}{2}{\dummyact}$} (5)
 
 
 	;

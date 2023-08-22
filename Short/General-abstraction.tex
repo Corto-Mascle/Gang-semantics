@@ -83,9 +83,10 @@ Let $\agents = \set{a_1, a_2,a_3}$, let $\run$ the run where the following occur
 \item $a_2$ broadcasts $\exready$, $a_1$ receives: $\tuple{q_1, q_0,q_0}$,
 \item $a_3$ broadcasts $\exready$, $a_1$ and $a_2$ receive: $\tuple{q_2, q_5,q_0}$,
 \item $a_2$ broadcasts $\exready$, $a_3$ receives: $\tuple{q_2,q_5,q_5}$,
-\item $a_2$ broadcasts $\exgo$, $a_1$ receives, then $a_3$ broadcasts $\exgo$ and $a_1$ received: $\tuple{q_4,q_5,q_5}$.
+\item $a_2$ broadcasts $\exgotwo$, $a_1$ receives:  $\tuple{q_3,q_6,q_5}$,
+\item $a_3$ broadcasts $\exgothree$, $a_1$ received: $\tuple{q_4,q_6,q_7}$.
 \end{itemize}
-Observe that the equality tests pass because $a_1$ stores $a_2$'s identifier in its second register and $a_3$'s identifier in its third register. 
+Observe that the equality tests pass because $a_1$ stores $a_2$'s identifier in its second register and $a_3$'s identifier in its third register. Figure~\ref{fig:ex-unfolding-tree-signature} provides an unfolding tree retrieved from $\run$. A node of the tree corresponds to a given specification carried out in $\run$; because agents $a_2$ and $a_3$ broadcast to several other agents, they each correspond to several nodes of the tree.  
 % the following sequence is an initial run covering $q_4$:
 	% \begin{align*}
 	% 	&\tuple{(q_0, (\valsymb{1},2,3)), (q_0, (x_2,\_,\_)) , (q_0, (x_3,\_,\_))} \step{} \tuple{(q_1, (x_1,x_2,z_1)), (q_5,(x_2,\_,\_)) , (q_0, (x_3,\_,\_))} \step{} \\ 
@@ -95,18 +96,27 @@ Observe that the equality tests pass because $a_1$ stores $a_2$'s identifier in 
 	% For readability's sake we don't write the second and third registers' values of agent $a_2$ and $a_3$ as there are neither broadcast, tested and nothing is store on those registers during the run.
 	% First agent $a_2$ broadcasts message $hello$ with its second register's value, then $a_3$ broadcasts message $hey$ with its third register's value. Then, agent $a_2$ broadcasts message $ack$ with its second register's value and finally, agent $a_3$ broadcasts the same message but with its third register's value.
 	% All messages are received by agent $a_1$ which hence reaches $q_4$.
-	We show now how to build the unfolding tree regarding the local run of agent $a_1$ in \cref{fig:unfolding-tree-sign}. Tables are (part of) "local runs", columns are (part of) "local configurations": we only display registers used in the local runs (the one broadcast or with a reception action on it). For $\node_2$, the transition between $q_0$ and $q_5$ should be understood as the broadcast of $hello$, whereas for $\node_3$ it should be understand as the broadcast of $hey$.
+	% We show now how to build the unfolding tree regarding the local run of agent $a_1$ in \cref{fig:unfolding-tree-sign}. Tables are (part of) "local runs", columns are (part of) "local configurations": we only display registers used in the local runs (the one broadcast or with a reception action on it). For $\node_2$, the transition between $q_0$ and $q_5$ should be understood as the broadcast of $hello$, whereas for $\node_3$ it should be understand as the broadcast of $hey$.
 	\begin{figure}[t]
 		\input{Figures/tree-example-sign}
+		\label{fig:ex-unfolding-tree-signature}
 		\vspace{-0.5cm}
-		\caption{Example of an unfolding tree.}
+		\caption{Example of an unfolding tree derived from $\run$. Grids correspond to "local runs", a row representing a "local configuration"; transitions are omitted but can be retrieved from the protocol, for example the first step of $\localrunlabel{\node_1}$ is $q_0 \step{\rec{\exready}{2}{\enregact}} q_1$. Initial values of "reception-only" registers are irrevelant and written as $\quotemarks{\_}$.}
 		\label{fig:unfolding-tree-sign}
 	\end{figure}
 
 
-	The local run of node $\node_1$ is the local run of agent $a_1$ of the run described above. 
-	By completing partial local runs by fresh integers in the other registers, one can verify that all nodes are labeled by local runs of the protocol (where the broadcast between $q_0$ and $q_5$ is with $hello$ for $\node_2$, and with $hey$ for $\node_3$).
-	We now verify that conditions  \ref{item:condition1_non_initial_value_sg} and \ref{item:condition2_boss_node_sg} hold for the three nodes. Values received in $\localrunlabel{\node_1}$ are $x_2$ and $x_3$, hence from condition \ref{item:condition1_non_initial_value_sg}, node $\node_1$ has two children $\node_2$ and $\node_3$. Note that $\vinput{x_2}{\localrunlabel{\node_2}} = \vinput{x_3}{\localrunlabel{\node_3}} = \epsilon$\lu{si on modifie la condition, on peut enlever cette phrase}. As $\spec(\node_1) = \epsilon$, condition \ref{item:condition2_boss_node_sg} is trivially true for $\node_1$. Note that nodes $\node_2$ and $\node_3$ don't receive any message on their respective local runs and so condition \ref{item:condition1_non_initial_value_sg} is trivially true. Furthermore, $\voutput{x_2}{\localrunlabel{\node_2}} = hello \cdot ack = \spec(\node_2)$ and $\voutput{x_3}{\localrunlabel{\node_3}} = hey \cdot ack = \spec(\node_3)$.
+	% The local run of node $\node_1$ is the local run of agent $a_1$ of the run described above. 
+	% By completing partial local runs by fresh integers in the other registers, one can verify that all nodes are labeled by local runs of the protocol (where the broadcast between $q_0$ and $q_5$ is with $hello$ for $\node_2$, and with $hey$ for $\node_3$).
+	We now explain why this tree is an "unfolding tree@@sg". Condition  \ref{item:condition1_non_initial_value_sg} is satisfied at $\node_1$, 
+	for values $2$ and $3$, because $\node_2$ is a witness that $\exready \cdot \exgotwo$ can be broadcast and $\node_3$ is a witness that $\exready \cdot \exgothree$ can be broadcast.  
+	It is also satisfied at $\node_2$, $\node_3$ and $\node_5$ because their local runs only receive $\exready$ and they each have a node with "specification@@sg" $\exready$. 
+	It is trivially satisfied at $\node_4$ and $\node_6$ as their "local runs" have no reception. 
+	Condition \ref{item:condition2_boss_node_sg} holds at every node because the local run of each node exactly broadcasts the "specification@@g" of the node. 
+	% Values received in $\localrunlabel{\node_1}$ are $x_2$ and $x_3$, hence from condition \ref{item:condition1_non_initial_value_sg}, node $\node_1$ has two children $\node_2$ and $\node_3$. Note that $\vinput{x_2}{\localrunlabel{\node_2}} = \vinput{x_3}{\localrunlabel{\node_3}} = \epsilon$\lu{si on modifie la condition, on peut enlever cette phrase}. As $\spec(\node_1) = \epsilon$, condition \ref{item:condition2_boss_node_sg} is trivially true for $\node_1$. Note that nodes $\node_2$ and $\node_3$ don't receive any message on their respective local runs and so condition \ref{item:condition1_non_initial_value_sg} is trivially true. Furthermore, $\voutput{x_2}{\localrunlabel{\node_2}} = hello \cdot ack = \spec(\node_2)$ and $\voutput{x_3}{\localrunlabel{\node_3}} = hey \cdot ack = \spec(\node_3)$.
+
+	Observe that this tree can be shortened and still witness coverability of $q_4$. 
+	Indeed, in the right branch, $\node_5$ and $\node_6$ share the same specification, therefore $\node5$ can be deleted and replaced with $\node_6$. In fact, we would have also been able to shorten the tree if we only had $speclabel{\node_5} \subword \speclabel{\node_6}$; we will use this argument to bound the size of "unfolding trees" that we have to consider.   
 \end{example}
 
 \begin{lemma}
