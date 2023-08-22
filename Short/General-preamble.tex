@@ -1,5 +1,5 @@
 \usepackage[utf8]{inputenc}
-\usepackage{xcolor}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{hyperref}
 \usepackage{todonotes}
 \usepackage[notion, quotation, silent]{knowledge}
@@ -30,10 +30,11 @@
 %\newenvironment{proofsketch}{\noindent\emph{Proof sketch.}}{\hfill$\square$}
 
 % for proof sketch
-\makeatletter
-\renewcommand{\@Opargbegintheorem}[4]{%
-  #4\trivlist\item[\hskip\labelsep{#3#2\@thmcounterend}]}
-\makeatother
+\let\llncsproof\proof
+\renewcommand{\proof}[1][]{%
+  \ifx!#1!\else\renewcommand{\proofname}{#1}\fi
+  \llncsproof
+}
 
 %theorems
 \declaretheorem[name=Fact]{fact}
@@ -46,6 +47,10 @@
 \makeatother
 
 
+\let\saveendexample\endexample
+\def\endexample{\qed\saveendexample}
+\let\saveendproof\endproof
+\def\endproof{\qed\saveendproof}
 %%% Basic Math
 
 \newcommand{\nats}{\mathbb{N}}
@@ -285,11 +290,14 @@
 \draw  (#1,#2-1) rectangle (#1+1, #2-1.5);
 \draw[fill = #9, opacity = 0.4]  (#1,#2-1) rectangle (#1+1, #2-1.5);
 \node [] (state) at (#1 +0.5 ,#2 + 0.2) {#3};
-\node[] (reg1) at (#1 +0.5 ,#2 + 0.2 - 0.5) {#4};
-\node[] (reg2) at (#1 +0.5 ,#2 + 0.2 -1) {#6};
-\node[] (reg3) at (#1 +0.5 ,#2 + 0.2 -1.5) {#8};
+\node[] (reg1) at (#1 +0.5 ,#2 + 0.25 - 0.5) {#4};
+\node[] (reg2) at (#1 +0.5 ,#2 + 0.25 -1) {#6};
+\node[] (reg3) at (#1 +0.5 ,#2 + 0.25 -1.5) {#8};
 }
-
+\newcommand{\transtable}[3]{
+	\node [align = center] at (#1, #2+0.2) {$\rightarrow$};
+	\node [align = center, font = {\scriptsize}] at (#1,#2+0.6) {#3};
+}
 
 %quotes in math mode
 \DeclareMathSymbol{\mlq}{\mathord}{operators}{``}

@@ -14,7 +14,7 @@ Finally, given a "configuration" $\config$, we write $\data{\config}(a)$ for $\d
 
 Given a "run" $\run$, we write $\intro*\agentsof{\run}$ its set of agents, $\intro*\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\intro*\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
 
-First, to simplify the proofs, we use a lemma allowing us to only consider protocols which do not contain any reception transition with action $\quotemarks{\ne}$. This is feasible as we can execute several copies of a "run" in parallel (with distinct values) so that every broadcast is made in each copy with a different value. Hence if a process receives a message, it can always receive it with a value different from its own, making disequality tests useless. We can thus replace them with receptions with $\quotemarks{\dummyact}$. 
+First, to simplify the proofs, we use a lemma allowing us to only consider protocols which do not contain any reception transition with action $\quotemarks{\ne}$. This is feasible as we can execute several copies of a "run" in parallel (with distinct values) so that every broadcast is made in each copy with a different value. Hence if a agent receives a message, it can always receive it with a value different from its own, making disequality tests useless. We can thus replace them with receptions with $\quotemarks{\dummyact}$. 
 
 
 
@@ -343,7 +343,7 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 		
 		\item For all $k \in K_{i}$, the agents of $\agents_{i,k}^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $k$ and value $v_{i+1}$ in $\config_{i+1}$.
 		
-		\item If the step is not a gang reset, then $v_{i+1} = v_i$ and for all $k' \in K_{i+1} \setminus K_i$, there exists $d \in \Delta$ from some $k$ to $k'$ such that all agents of $\agents_{i,k}^d$ take that transition. Furthermore, if $d$ is of the form $(k,\recone{m}{\enregact},k')$ then the broadcasting process has value $v_i$, thus all those agents keep value $v_i = v_{i+1}$. 
+		\item If the step is not a gang reset, then $v_{i+1} = v_i$ and for all $k' \in K_{i+1} \setminus K_i$, there exists $d \in \Delta$ from some $k$ to $k'$ such that all agents of $\agents_{i,k}^d$ take that transition. Furthermore, if $d$ is of the form $(k,\recone{m}{\enregact},k')$ then the broadcasting agent has value $v_i$, thus all those agents keep value $v_i = v_{i+1}$. 
 		%	As $\size{\agents_{i,k}^d}\geq M^{n-i-1}$, there are at least that many agents with value $v_{i+1} = v_i$ in $k'$.
 		
 		\item For all $s \in S_{i}$, the agents of $\agents_{i,s}^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $s$ in $\config_{i+1}$.
