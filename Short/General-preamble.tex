@@ -281,6 +281,11 @@
 	\node (reg3) at (#1, #2+0.15-1.5) {reg $3$};
 }
 
+\newcommand{\regbartworeg}[2]{
+	\node (reg1) at (#1, #2+0.15-0.5) {reg $1$};
+	\node (reg2) at (#1, #2+0.15-1) {reg $2$};
+}
+
 % arguments: x and y-cord of start + state + content of registers & fillings
 \newcommand{\onerow}[9]{
 \draw  (#1,#2) rectangle (#1+1, #2-0.5);
@@ -297,6 +302,20 @@
 \newcommand{\transtable}[3]{
 	\node [align = center] at (#1, #2+0.2) {$\rightarrow$};
 	\node [align = center, font = {\scriptsize}] at (#1,#2+0.6) {#3};
+}
+
+
+\newcommand{\onerowtworeg}[7]{
+	\draw  (#1,#2) rectangle (#1+1, #2-0.5);
+	\draw[fill = #5, opacity = 0.4]  (#1,#2) rectangle (#1+1, #2-0.5);
+	\draw  (#1,#2-0.5) rectangle (#1+1, #2-1);
+	\draw[fill = #7, opacity = 0.4]  (#1,#2-0.5) rectangle (#1+1, #2-1);
+%	\draw  (#1,#2-1) rectangle (#1+1, #2-1.5);
+%	\draw[fill = #9, opacity = 0.4]  (#1,#2-1) rectangle (#1+1, #2-1.5);
+	\node [] (state) at (#1 +0.5 ,#2 + 0.2) {#3};
+	\node[] (reg1) at (#1 +0.5 ,#2 + 0.25 - 0.5) {#4};
+	\node[] (reg2) at (#1 +0.5 ,#2 + 0.25 -1) {#6};
+%	\node[] (reg3) at (#1 +0.5 ,#2 + 0.25 -1.5) {#8};
 }
 
 %quotes in math mode

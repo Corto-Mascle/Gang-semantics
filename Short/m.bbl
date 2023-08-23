@@ -1,209 +1,166 @@
 \begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
 
 \bibitem{AbdullaAKR14}
-Parosh~Aziz Abdulla, Mohamed~Faouzi Atig, Ahmet Kara, and Othmane Rezine.
-\newblock Verification of dynamic register automata.
-\newblock In {\em 34th International Conference on Foundation of Software
-  Technology and Theoretical Computer Science, {FSTTCS} 2014}, volume~29 of
-  {\em LIPIcs}, pages 653--665. Schloss Dagstuhl - Leibniz-Zentrum f{\"{u}}r
-  Informatik, 2014.
-\newblock \href {https://doi.org/10.4230/LIPIcs.FSTTCS.2014.653}
-  {\path{doi:10.4230/LIPIcs.FSTTCS.2014.653}}.
+Abdulla, P.A., Atig, M.F., Kara, A., Rezine, O.: Verification of dynamic
+  register automata. In: 34th International Conference on Foundation of
+  Software Technology and Theoretical Computer Science, {FSTTCS} 2014. LIPIcs,
+  vol.~29, pp. 653--665. Schloss Dagstuhl - Leibniz-Zentrum f{\"{u}}r
+  Informatik (2014). \doi{10.4230/LIPIcs.FSTTCS.2014.653},
+  \url{https://doi.org/10.4230/LIPIcs.FSTTCS.2014.653}
 
 \bibitem{AbdullaAKR15}
-Parosh~Aziz Abdulla, Mohamed~Faouzi Atig, Ahmet Kara, and Othmane Rezine.
-\newblock Verification of buffered dynamic register automata.
-\newblock In {\em Networked Systems, {NETYS} 2015}, volume 9466 of {\em Lecture
-  Notes in Computer Science}, pages 15--31. Springer, 2015.
-\newblock \href {https://doi.org/10.1007/978-3-319-26850-7\_2}
-  {\path{doi:10.1007/978-3-319-26850-7\_2}}.
+Abdulla, P.A., Atig, M.F., Kara, A., Rezine, O.: Verification of buffered
+  dynamic register automata. In: Networked Systems, {NETYS} 2015. Lecture Notes
+  in Computer Science, vol.~9466, pp. 15--31. Springer (2015).
+  \doi{10.1007/978-3-319-26850-7\_2},
+  \url{https://doi.org/10.1007/978-3-319-26850-7\_2}
 
 \bibitem{AbdullaJ1996undec}
-Parosh~Aziz Abdulla and Bengt Jonsson.
-\newblock Undecidable verification problems for programs with unreliable
-  channels.
-\newblock {\em Information and Computation}, 130(1):71--90, 1996.
-\newblock \href {https://doi.org/10.1006/inco.1996.0083}
-  {\path{doi:10.1006/inco.1996.0083}}.
+Abdulla, P.A., Jonsson, B.: Undecidable verification problems for programs with
+  unreliable channels. Information and Computation  \textbf{130}(1),  71--90
+  (1996). \doi{10.1006/inco.1996.0083},
+  \url{https://doi.org/10.1006/inco.1996.0083}
 
 \bibitem{AbdullaJ1996verif}
-Parosh~Aziz Abdulla and Bengt Jonsson.
-\newblock Verifying programs with unreliable channels.
-\newblock {\em Information and Computation}, 127(2):91--101, 1996.
-\newblock \href {https://doi.org/10.1006/inco.1996.0053}
-  {\path{doi:10.1006/inco.1996.0053}}.
+Abdulla, P.A., Jonsson, B.: Verifying programs with unreliable channels.
+  Information and Computation  \textbf{127}(2),  91--101 (1996).
+  \doi{10.1006/inco.1996.0053}, \url{https://doi.org/10.1006/inco.1996.0053}
 
 \bibitem{Aiswarya2015model}
-C.~Aiswarya.
-\newblock Model checking dynamic distributed systems.
-\newblock In {\em Networked Systems, {NETYS} 2015}, volume 9466 of {\em Lecture
-  Notes in Computer Science}, pages 48--61. Springer, 2015.
-\newblock \href {https://doi.org/10.1007/978-3-319-26850-7\_4}
-  {\path{doi:10.1007/978-3-319-26850-7\_4}}.
+Aiswarya, C.: Model checking dynamic distributed systems. In: Networked
+  Systems, {NETYS} 2015. Lecture Notes in Computer Science, vol.~9466, pp.
+  48--61. Springer (2015). \doi{10.1007/978-3-319-26850-7\_4},
+  \url{https://doi.org/10.1007/978-3-319-26850-7\_4}
 
 \bibitem{Aiswarya2020networks}
-C.~Aiswarya.
-\newblock On network topologies and the decidability of reachability problem.
-\newblock In {\em Networked Systems,{NETYS} 2020}, volume 12129 of {\em Lecture
-  Notes in Computer Science}, pages 3--10. Springer, 2020.
-\newblock \href {https://doi.org/10.1007/978-3-030-67087-0\_1}
-  {\path{doi:10.1007/978-3-030-67087-0\_1}}.
+Aiswarya, C.: On network topologies and the decidability of reachability
+  problem. In: Networked Systems,{NETYS} 2020. Lecture Notes in Computer
+  Science, vol. 12129, pp. 3--10. Springer (2020).
+  \doi{10.1007/978-3-030-67087-0\_1},
+  \url{https://doi.org/10.1007/978-3-030-67087-0\_1}
 
 \bibitem{Balasubramanian18}
-A.~R. Balasubramanian, Nathalie Bertrand, and Nicolas Markey.
-\newblock Parameterized verification of synchronization in constrained
-  reconfigurable broadcast networks.
-\newblock In {\em Tools and Algorithms for the Construction and Analysis of
-  Systems, {TACAS} 2018}, volume 10806 of {\em Lecture Notes in Computer
-  Science}, pages 38--54. Springer, 2018.
-\newblock \href {https://doi.org/10.1007/978-3-319-89963-3\_3}
-  {\path{doi:10.1007/978-3-319-89963-3\_3}}.
+Balasubramanian, A.R., Bertrand, N., Markey, N.: Parameterized verification of
+  synchronization in constrained reconfigurable broadcast networks. In: Tools
+  and Algorithms for the Construction and Analysis of Systems, {TACAS} 2018.
+  Lecture Notes in Computer Science, vol. 10806, pp. 38--54. Springer (2018).
+  \doi{10.1007/978-3-319-89963-3\_3},
+  \url{https://doi.org/10.1007/978-3-319-89963-3\_3}
 
 \bibitem{BalasubramanianGW22}
-A.~R. Balasubramanian, Lucie Guillou, and Chana Weil{-}Kennedy.
-\newblock Parameterized analysis of reconfigurable broadcast networks.
-\newblock In {\em Foundations of Software Science and Computation Structures,
-  {FoSSaCS} 2022}, volume 13242 of {\em Lecture Notes in Computer Science},
-  pages 61--80. Springer, 2022.
-\newblock \href {https://doi.org/10.1007/978-3-030-99253-8\_4}
-  {\path{doi:10.1007/978-3-030-99253-8\_4}}.
+Balasubramanian, A.R., Guillou, L., Weil{-}Kennedy, C.: Parameterized analysis
+  of reconfigurable broadcast networks. In: Foundations of Software Science and
+  Computation Structures, {FoSSaCS} 2022. Lecture Notes in Computer Science,
+  vol. 13242, pp. 61--80. Springer (2022). \doi{10.1007/978-3-030-99253-8\_4},
+  \url{https://doi.org/10.1007/978-3-030-99253-8\_4}
 
 \bibitem{BolligRS21}
-Benedikt Bollig, Fedor Ryabinin, and Arnaud Sangnier.
-\newblock Reachability in distributed memory automata.
-\newblock In {\em Annual Conference on Computer Science Logic, {CSL} 2021},
-  volume 183 of {\em LIPIcs}, pages 13:1--13:16. Schloss Dagstuhl -
-  Leibniz-Zentrum f{\"{u}}r Informatik, 2021.
-\newblock \href {https://doi.org/10.4230/LIPIcs.CSL.2021.13}
-  {\path{doi:10.4230/LIPIcs.CSL.2021.13}}.
+Bollig, B., Ryabinin, F., Sangnier, A.: Reachability in distributed memory
+  automata. In: Annual Conference on Computer Science Logic, {CSL} 2021.
+  LIPIcs, vol.~183, pp. 13:1--13:16. Schloss Dagstuhl - Leibniz-Zentrum
+  f{\"{u}}r Informatik (2021). \doi{10.4230/LIPIcs.CSL.2021.13},
+  \url{https://doi.org/10.4230/LIPIcs.CSL.2021.13}
 
 \bibitem{BZ83}
-Daniel Brand and Pitro Zafiropulo.
-\newblock On communicating finite-state machines.
-\newblock {\em Journal of the ACM}, 30(2):323–342, 1983.
-\newblock \href {https://doi.org/10.1145/322374.322380}
-  {\path{doi:10.1145/322374.322380}}.
+Brand, D., Zafiropulo, P.: On communicating finite-state machines. Journal of
+  the ACM  \textbf{30}(2),  323–342 (1983). \doi{10.1145/322374.322380},
+  \url{https://doi.org/10.1145/322374.322380}
 
 \bibitem{ChambartS08ordinal}
-Pierre Chambart and Philippe Schnoebelen.
-\newblock The ordinal recursive complexity of lossy channel systems.
-\newblock In {\em Annual {IEEE} Symposium on Logic in Computer Science, {LICS}
-  2008}, pages 205--216. {IEEE} Computer Society, 2008.
-\newblock \href {https://doi.org/10.1109/LICS.2008.47}
-  {\path{doi:10.1109/LICS.2008.47}}.
+Chambart, P., Schnoebelen, P.: The ordinal recursive complexity of lossy
+  channel systems. In: Annual {IEEE} Symposium on Logic in Computer Science,
+  {LICS} 2008. pp. 205--216. {IEEE} Computer Society (2008).
+  \doi{10.1109/LICS.2008.47}, \url{https://doi.org/10.1109/LICS.2008.47}
 
 \bibitem{DBLP:journals/computing/ChiniMS22}
-Peter Chini, Roland Meyer, and Prakash Saivasan.
-\newblock Liveness in broadcast networks.
-\newblock {\em Computing}, 104(10):2203--2223, 2022.
-\newblock \href {https://doi.org/10.1007/s00607-021-00986-y}
-  {\path{doi:10.1007/s00607-021-00986-y}}.
+Chini, P., Meyer, R., Saivasan, P.: Liveness in broadcast networks. Computing
+  \textbf{104}(10),  2203--2223 (2022). \doi{10.1007/s00607-021-00986-y},
+  \url{https://doi.org/10.1007/s00607-021-00986-y}
 
 \bibitem{DelzannoST13}
-Giorgio Delzanno, Arnaud Sangnier, and Riccardo Traverso.
-\newblock Parameterized verification of broadcast networks of register
-  automata.
-\newblock In {\em Reachability Problems , {RP} 2013}, volume 8169 of {\em
-  Lecture Notes in Computer Science}, pages 109--121. Springer, 2013.
-\newblock \href {https://doi.org/10.1007/978-3-642-41036-9\_11}
-  {\path{doi:10.1007/978-3-642-41036-9\_11}}.
+Delzanno, G., Sangnier, A., Traverso, R.: Parameterized verification of
+  broadcast networks of register automata. In: Reachability Problems , {RP}
+  2013. Lecture Notes in Computer Science, vol.~8169, pp. 109--121. Springer
+  (2013). \doi{10.1007/978-3-642-41036-9\_11},
+  \url{https://doi.org/10.1007/978-3-642-41036-9\_11}
 
 \bibitem{DelzannoSTZ12}
-Giorgio Delzanno, Arnaud Sangnier, Riccardo Traverso, and Gianluigi Zavattaro.
-\newblock On the complexity of parameterized reachability in reconfigurable
-  broadcast networks.
-\newblock In {\em {IARCS} Annual Conference on Foundations of Software
-  Technology and Theoretical Computer Science, {FSTTCS} 2012}, volume~18 of
-  {\em LIPIcs}, pages 289--300. Schloss Dagstuhl - Leibniz-Zentrum f{\"{u}}r
-  Informatik, 2012.
-\newblock \href {https://doi.org/10.4230/LIPIcs.FSTTCS.2012.289}
-  {\path{doi:10.4230/LIPIcs.FSTTCS.2012.289}}.
+Delzanno, G., Sangnier, A., Traverso, R., Zavattaro, G.: On the complexity of
+  parameterized reachability in reconfigurable broadcast networks. In: {IARCS}
+  Annual Conference on Foundations of Software Technology and Theoretical
+  Computer Science, {FSTTCS} 2012. LIPIcs, vol.~18, pp. 289--300. Schloss
+  Dagstuhl - Leibniz-Zentrum f{\"{u}}r Informatik (2012).
+  \doi{10.4230/LIPIcs.FSTTCS.2012.289}
 
 \bibitem{DelzannoSZ2010Adhoc}
-Giorgio Delzanno, Arnaud Sangnier, and Gianluigi Zavattaro.
-\newblock Parameterized verification of ad hoc networks.
-\newblock In {\em {CONCUR} 2010}, volume 6269 of {\em Lecture Notes in Computer
-  Science}, pages 313--327. Springer, 2010.
-\newblock \href {https://doi.org/10.1007/978-3-642-15375-4\_22}
-  {\path{doi:10.1007/978-3-642-15375-4\_22}}.
+Delzanno, G., Sangnier, A., Zavattaro, G.: Parameterized verification of ad hoc
+  networks. In: {CONCUR} 2010. Lecture Notes in Computer Science, vol.~6269,
+  pp. 313--327. Springer (2010). \doi{10.1007/978-3-642-15375-4\_22},
+  \url{https://doi.org/10.1007/978-3-642-15375-4\_22}
 
 \bibitem{emerson1998model}
-E.~Allen Emerson and Kedar~S. Namjoshi.
-\newblock On model checking for non-deterministic infinite-state systems.
-\newblock In {\em Annual {IEEE} Symposium on Logic in Computer Science, {LICS}
-  1998}, pages 70--80. {IEEE} Computer Society, 1998.
-\newblock \href {https://doi.org/10.1109/LICS.1998.705644}
-  {\path{doi:10.1109/LICS.1998.705644}}.
+Emerson, E.A., Namjoshi, K.S.: On model checking for non-deterministic
+  infinite-state systems. In: Annual {IEEE} Symposium on Logic in Computer
+  Science, {LICS} 1998. pp. 70--80. {IEEE} Computer Society (1998).
+  \doi{10.1109/LICS.1998.705644},
+  \url{https://doi.org/10.1109/LICS.1998.705644}
 
 \bibitem{EsparzaFM1999verification}
-Javier Esparza, Alain Finkel, and Richard Mayr.
-\newblock On the verification of broadcast protocols.
-\newblock In {\em Symposium on Logic in Computer Science, LICS 2014}, pages
-  352--359. IEEE, 1999.
+Esparza, J., Finkel, A., Mayr, R.: On the verification of broadcast protocols.
+  In: Symposium on Logic in Computer Science, LICS 2014. pp. 352--359. IEEE
+  (1999)
 
 \bibitem{Higman52}
-Graham Higman.
-\newblock Ordering by divisibility in abstract algebras.
-\newblock {\em Proceedings of the London Mathematical Society},
-  s3-2(1):326--336, 1952.
-\newblock \href {https://doi.org/https://doi.org/10.1112/plms/s3-2.1.326}
-  {\path{doi:https://doi.org/10.1112/plms/s3-2.1.326}}.
+Higman, G.: Ordering by divisibility in abstract algebras. Proceedings of the
+  London Mathematical Society  \textbf{s3-2}(1),  326--336 (1952).
+  \doi{https://doi.org/10.1112/plms/s3-2.1.326}
 
 \bibitem{LazicNORW08}
-Ranko Lazic, Thomas~Christopher Newcomb, Jo{\"{e}}l Ouaknine, A.~W. Roscoe, and
-  James Worrell.
-\newblock Nets with tokens which carry data.
-\newblock {\em Fundamenta Informaticae}, 88(3):251--274, 2008.
+Lazic, R., Newcomb, T.C., Ouaknine, J., Roscoe, A.W., Worrell, J.: Nets with
+  tokens which carry data. Fundamenta Informaticae  \textbf{88}(3),  251--274
+  (2008)
 
 \bibitem{Rezine17}
-Othmane Rezine.
-\newblock {\em Verification of networks of communicating processes:
-  Reachability problems and decidability issues}.
-\newblock PhD thesis, Uppsala University, Sweden, 2017.
-\newblock URL: \url{https://urn.kb.se/resolve?urn=urn:nbn:se:uu:diva-334788}.
+Rezine, O.: Verification of networks of communicating processes: Reachability
+  problems and decidability issues. Ph.D. thesis, Uppsala University, Sweden
+  (2017), \url{https://urn.kb.se/resolve?urn=urn:nbn:se:uu:diva-334788}
 
 \bibitem{Rosa-Velardo17}
-Fernando Rosa{-}Velardo.
-\newblock Ordinal recursive complexity of unordered data nets.
-\newblock {\em Information and Computation}, 254:41--58, 2017.
-\newblock \href {https://doi.org/10.1016/j.ic.2017.02.002}
-  {\path{doi:10.1016/j.ic.2017.02.002}}.
+Rosa{-}Velardo, F.: Ordinal recursive complexity of unordered data nets.
+  Information and Computation  \textbf{254},  41--58 (2017).
+  \doi{10.1016/j.ic.2017.02.002},
+  \url{https://doi.org/10.1016/j.ic.2017.02.002}
 
 \bibitem{ArnaudErratum}
-Arnaud Sangnier.
-\newblock Erratum to parameterized verification of broadcast networks of
-  register automata, 2023.
-\newblock \url{https://www.irif.fr/~sangnier/publications.html}.
+Sangnier, A.: Erratum to parameterized verification of broadcast networks of
+  register automata (2023),
+  \url{https://www.irif.fr/~sangnier/publications.html}
 
 \bibitem{Schmitz16}
-Sylvain Schmitz.
-\newblock Complexity hierarchies beyond elementary.
-\newblock {\em {ACM} Transactions on Computation Theory}, 8(1):3:1--3:36, 2016.
-\newblock \href {https://doi.org/10.1145/2858784} {\path{doi:10.1145/2858784}}.
+Schmitz, S.: Complexity hierarchies beyond elementary. {ACM} Transactions on
+  Computation Theory  \textbf{8}(1),  3:1--3:36 (2016). \doi{10.1145/2858784},
+  \url{https://doi.org/10.1145/2858784}
 
 \bibitem{SchmitzS2011upperHigman}
-Sylvain Schmitz and Philippe Schnoebelen.
-\newblock Multiply-recursive upper bounds with higman's lemma.
-\newblock In {\em International Colloquium on Automata, Languages and
-  Programming, {ICALP} 2011}, volume 6756 of {\em Lecture Notes in Computer
-  Science}, pages 441--452. Springer, 2011.
-\newblock \href {https://doi.org/10.1007/978-3-642-22012-8\_35}
-  {\path{doi:10.1007/978-3-642-22012-8\_35}}.
+Schmitz, S., Schnoebelen, P.: Multiply-recursive upper bounds with higman's
+  lemma. In: International Colloquium on Automata, Languages and Programming,
+  {ICALP} 2011. Lecture Notes in Computer Science, vol.~6756, pp. 441--452.
+  Springer (2011). \doi{10.1007/978-3-642-22012-8\_35},
+  \url{https://doi.org/10.1007/978-3-642-22012-8\_35}
 
 \bibitem{Schnoebelen2002verifying}
-Philippe Schnoebelen.
-\newblock Verifying lossy channel systems has nonprimitive recursive
-  complexity.
-\newblock {\em Information Processing Letters}, 83(5):251--261, 2002.
-\newblock \href {https://doi.org/10.1016/S0020-0190(01)00337-4}
-  {\path{doi:10.1016/S0020-0190(01)00337-4}}.
+Schnoebelen, P.: Verifying lossy channel systems has nonprimitive recursive
+  complexity. Information Processing Letters  \textbf{83}(5),  251--261 (2002).
+  \doi{10.1016/S0020-0190(01)00337-4},
+  \url{https://doi.org/10.1016/S0020-0190(01)00337-4}
 
 \bibitem{Segoufin06}
-Luc Segoufin.
-\newblock Automata and logics for words and trees over an infinite alphabet.
-\newblock In {\em Computer Science Logic, {CSL} 2006}, volume 4207 of {\em
-  Lecture Notes in Computer Science}, pages 41--57. Springer, 2006.
-\newblock \href {https://doi.org/10.1007/11874683\_3}
-  {\path{doi:10.1007/11874683\_3}}.
+Segoufin, L.: Automata and logics for words and trees over an infinite
+  alphabet. In: Computer Science Logic, {CSL} 2006. Lecture Notes in Computer
+  Science, vol.~4207, pp. 41--57. Springer (2006). \doi{10.1007/11874683\_3},
+  \url{https://doi.org/10.1007/11874683\_3}
 
 \end{thebibliography}

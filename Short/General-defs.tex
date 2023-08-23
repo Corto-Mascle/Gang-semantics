@@ -51,14 +51,17 @@ In our model, agents may only send one register's value per message. Indeed, \ci
 	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run", where $x_1,y_1,x_2,y_2$ are distinct natural integers:
 	\begin{multline*}
 	\tuple{(q_0, (x_1,y_1)), (q_0,(x_2,y_2))} \step{} \tuple{(q_1, (x_1,y_1)), (q_5,(x_1,y_2))} \step{} 
-	\tuple{(q_4, (x_1,y_2)),\\ (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))}
+	\tuple{(q_4, (x_1,y_2)),\\ (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_7,(x_1,y_2))}
 	\end{multline*}
 
 	The broadcast messages are, in this order: $(m_2,x_1)$ by $a_1$, $(m_4,y_2)$ by $a_2$, $(m_6,x_1)$ by $a_1$ and $(m_7,x_1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
 \end{example}
 
 \begin{figure}[t]
-	\input{Figures/fig-ex1}
+	\centering
+	\resizebox*{!}{3.2cm}{
+		\input{Figures/fig-ex1}
+	}
 	\vspace{-0.4cm}
 	\caption{Example of a "protocol".}\label{fig:ex1}
 \end{figure}
