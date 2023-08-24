@@ -1,0 +1,64 @@
+\section{Definitions and Notations of \cref{subsec:cover-general-case}}
+\label{app:def-trees}
+%\subsubsection{Notations and Definitions}
+\label{sec:decidability-defs}
+% decompositions , admits decompositions
+
+We will now need a way to handle and describe "follower specification", and we shall use the following notions.
+A ""decomposition"" is a tuple $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ with $w_0, \ldots, w_\ell \in \messages^*$, and $m_1, \cdots, m_\ell \in \messages$, with $m_i \neq m_j$ for all $i\neq j$. In particular we have $\ell \leq \size{\messages}$. 
+A word $w \in \messages^*$ ""admits decomposition"" $\decsymb = (w_0, m_1, \ldots, m_\ell, w_\ell)$ if $w \subword w'_0 w'_1 \cdots w'_\ell$ where for all $j$, $w'_j$ can be obtained from $w_j$ by adding letters from $\set{m_1, \ldots, m_{j-1}}$. 
+We denote by $\intro*\langdec{\decsymb}$ the language of words that "admit decomposition" $\decsymb$. 
+This definition will be useful later; the intuition is that a "decomposition" describes the sequence of messages sent with some value $v$ in a "run". The $w_i$ are "message types" sent by the agent with that value initially, and the $m_i$ mark the times at which each "message type" is broadcast for the first time by another agent. This is all the information we need as if an agent manages to send some message $(m,v)$ with a value $v$ it did not have initially, then from this point on we can assume that we have an unlimited supply of messages $(m,v)$, using (essentially) the "copycat principle".  
+
+%\subsubsection{New Unfolding trees}
+%\label{sec:decidability-tree-unfoldings}
+%% new definition and conditions 
+%
+%As before, a "boss specification" consists of a word $\bossspec \in \messages^\ast$ describing a sequence of message types that should be broadcast all with the same initial value. A "follower specification" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that one must be able to broadcast $\followmessagespec$ with value $v$ after receiving the sequence $\followwordspec$ with value $v$. 
+
+We are now ready to formally define the unfolding trees.
+
+
+\begin{definition}
+	\label{def:unfolding_tree}
+	\AP An ""unfolding tree"" $\tree$ over $\prot$ is
+	a finite tree where nodes $\node$ have three labels:
+	\begin{itemize}
+		\item a "local run" of $\prot$, written $\intro*\localrunlabel{\node}$, starting in the initial state with distinct register values;
+		
+		\item a value in $\nats$, written $\intro*\valuelabel{\node}$;
+		
+		\item a ""specification"" $\intro*\speclabel{\node}$, which is either a word $\intro*\bosslabel{\node} \in \messages^*$ ("boss specification") or a pair $(\intro*\followlabelword{\node}, \intro*\followlabelmessage{\node}) \in \messages^* \times \messages$ ("follower specification"). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
+	\end{itemize} 
+	Moreover, all nodes $\node$ in an "unfolding tree" must satisfy the four following conditions:
+	\begin{enumerate}[label= (\roman*), ref=(\roman*)]
+		\item \label{item:condition1_non_initial_value} For each "non-initial value" $\aval \ne \valuelabel{\node}$ of $\localrunlabel{\node}$, $\node$ has a child $\node'$ which is a "boss node" such that $\vinput{\aval}{\localrunlabel{\node}}$ is a subword of $\bosslabel{\node'}$.
+		
+		\item \label{item:condition2_initial_value} For each "initial value" $\aval$ in $\localrunlabel{\node}$, there is a "decomposition" $\decsymb = (w_0, m_1, w_1, \ldots, m_{\ell}, w_{\ell})$~s.t.:
+		\begin{itemize}
+			\item $\localrunlabel{\node}$ may be split into successive "local runs" $\localrun_0, \dots, \localrun_{\ell}$ where, for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{\aval}{\localrun_i}$ and $\vinput{\aval}{\localrun_i} \in \set{m_1, \dots, m_{i-1}}^*$,
+			\item for all $i \in [1,\ell]$, $\node$ has a child $\node_i$ which is a "follower node" such that $\followlabelmessage{\node_i} = m_i$ and $\followlabelword{\node_i} \in\langdec{\decsymb_i}$ where $\decsymb_i = (w_0, m_1, w_1, \ldots, m_{i-1}, w_{i-1})$.	\end{itemize}
+		
+		\item \label{item:condition3_follower_node} If $\node$ is a "follower node" then $\valuelabel{\node}$ is not an "initial value" of $\localrun$, $\vinput{\valuelabel{\node}}{\localrun} \subword \followlabelword{\node}$ and 
+		$\voutput{\valuelabel{\node}}{\localrun}$ contains $\followlabelmessage{\node}$.
+		
+		\item \label{item:condition4_boss_node} If $\node$ is a "boss node", then $\valuelabel{\node}$ is an "initial value" of $\localrunlabel{\node}$ and the "decomposition" $\decsymb$ of \ref{item:condition2_initial_value} for $\valuelabel{\node}$ satisfies that $\bosslabel{\node} \in \langdec{\decsymb}$.
+	\end{enumerate}
+	
+	\AP Lastly, as before, given $\tree$ an "unfolding tree", we define its ""size@@tree"" by $\size{\tree} := \sum_{\node \in \tree} \size{\localrunlabel{\node}} + \size{\speclabel{\node}}$. %Note that the "size@@tree" of $\tree$ takes into account the size of its nodes, so that a tree $\tree$ can be stored in space polynomial in $\size{\tree}$ (renaming the values appearing in $\tree$ if needed). 
+\end{definition}
+
+We now explain this definition. Let $\node$ be a node of an "unfolding tree" $\tree$ and let $\localrun := \localrunlabel{\node}$. 
+
+As before, $\localrun$ encodes the "local run" of a given agent, $\speclabel{\node}$ encodes the specification that this "local run" carries out and $\valuelabel{\node}$ encodes the value for which the "specification" is carried out.
+
+Conditions \ref{item:condition1_non_initial_value} and \ref{item:condition2_initial_value} state that the "specifications" of the children of $\node$ are witnesses that messages received in the "local run" $\localrunlabel{\node}$ can be broadcast by other agents. 
+Conditions \ref{item:condition3_follower_node} and \ref{item:condition4_boss_node} state that $\node$ is a witness that its "specification" is carried out. 
+
+As before, condition \ref{item:condition1_non_initial_value} expresses that, for every "non-initial value" $\aval$ of $\localrun$, $\node$ must have a "boss" child witnessing that $\vinput{v}{\localrun}$ can indeed be broadcast. 
+Because $\aval$ was first stored by a "reception step" of $\localrun$, any other (fresh) value with sequence of message types containing $\vinput{v}{\localrun}$ also works and we do not impose the value label of this child to be $v$. 
+
+We now explain condition \ref{item:condition2_initial_value}, which states that every initial value $v$ in $\localrunlabel{\node}$ can indeed be repeated (if needed). Let $v$ be an "initial value" of $\localrun$. Consider a "run" where $\localrun$ is the "local run" of agent $a$. If another agent broadcasts with value $v$, it has first received and stored $\aval$. Therefore, such an agent can be duplicated, and we may afterwards assume that we have an unlimited supply of messages $(m,v)$.
+We split $\localrun$ into $u_0,\dots,u_\ell$ based on the first point where each type of message is received with value $v$. For every $i$, the sequence of messages available with value $v$ during $u_i$ is $\voutput{v}{u_i}$ expanded by freely adding symbols from $\set{m_1,\dots, m_{i-1}}$. Therefore, the child $\node_i$ responsible for the broadcast of $(m_i,v)$ may first receive with value $v$ a subword of $w_0' \cdot w_1' \cdots w_{i-1}'$ where, for all $j \leq i-1$, $w_j$ is obtained from $\voutput{v}{u_i}$ by adding symbols from $\set{m_1, \dots, m_{j-1}}$, which we state as $\followlabelword{\node_i} \in \langdec{\decsymb_i}$.   
+
+Condition~\ref{item:condition3_follower_node} directly states that a "follower node" $\node$ receives word $\followlabelword{\node}$ with value $\valuelabel{\node}$ and broadcasts message $(\followlabelmessage{\node}, \valuelabel{\node})$. Condition \ref{item:condition4_boss_node} expresses that a "boss node" witnesses the broadcast of a sequence of messages $\bosslabel{\node}$ with a single value; whereas in the "signature protocol" case, in this sequence, some messages may come from auxiliary agents encoded in "follower" children, which is why we have the condition that $\bosslabel{\node} \in \langdec{\decsymb}$ and not simply $ \voutput{\valuelabel{\node}}{\localrun} \subword \bosslabel{\node}$. 
