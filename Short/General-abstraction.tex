@@ -209,31 +209,47 @@ We now extend this method to the general case.
 
 \section{Coverability Decidability in the General Case}
 \label{subsec:cover-general-case}
-In the general case, a new phenomenon appears: an agent can now store a value then rebroadcast it, so that several agents may broadcast the same value. Furthermore, an agent starting with value $v$ could broadcast $v$ then require someone else to make a broadcast with value $v$ as well. For example, in the run described in \cref{ex:example-1}, the first agent needs to receive message $(m_6, x_1)$ to reach $q_7$. Hence, because of this new scenario, we now have two types of specifications: \emph{"boss specification"} which describes the usual scenario for "signature protocol" (the value to broadcast among with the specification is initial) and the \emph{"follower specification"}: the role of a node with a "follower specification" is now to repeat a given value. In order to repeat this value, the node is given an input word (a word $w$ of messages types received with the value to repeat) and an objective (a message type to broadcast with the value to repeat).
 
-As before, a "boss specification" consists of a word $\bossspec \in \messages^\ast$ describing a sequence of message types that should be broadcast all with the same initial value. A "follower specification" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that one must be able to broadcast $\followmessagespec$ with value $v$ after receiving the sequence $\followwordspec$ with value $v$. Note that if an agent manages to send some message $(m,v)$ with a value $v$ it did not have initially, then from this point on we can assume that we have an unlimited supply of messages $(m,v)$, using (essentially) the "copycat principle", hence from a finite set of message types which can be sent with value $v$, there is an infinite set of possible $\followwordspec$ to chose: if a message $(m, v)$ is sent from the agent with initial value $v$ then the "copycat principle" does not apply, however, if $(m, v)$ is sent from an agent without $v$ as initial value, message type $m$ can appear as many times as one wants in $\followwordspec$ once it has been sent once. 
-%For instance, in the protocol described in \cref{fig:ex1}, message ($m_6, )
-\lu{ça serait bien de se re appuyer sur un exemple pour expliquer ça}
+\subsection{Generalizing Unfolding Trees}
+\label{sec:unfolding-trees-general}
+In the general case, a new phenomenon appears: an agent can now store a value then rebroadcast it, so that several agents may broadcast the same value. Furthermore, an agent starting with value $v$ could broadcast $v$ then require someone else to make a broadcast with value $v$ as well. For example, in the run described in \cref{ex:example-1}, the first agent needs to receive message $(m_6, x_1)$ to reach $q_7$.
+
+ We now have two types of specifications. The first one is \emph{"boss specifications"} which describe the task of broadcasting with its own initial value (this is the only "specification@@sg" we had in "signature protocols"); as before, a "boss specification" consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. The other one is \emph{"follower specifications"} where the task is to broadcast with a non-initial value received previously. More precisely, a "follower specification" is a contract consisting of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$ asking to broadcast a message $(\followmessagespec,v)$ under the condition of previously receiving word $\followwordspec$ with value $v$.
+
+% As before, a "boss specification" consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. A "follower specification" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that one must be able to broadcast $\followmessagespec$ with value $v$ after receiving the sequence $\followwordspec$ with value $v$. 
+
+Note that, once an agent $a$ broadcasts some message $(m,v)$ where $a$ did not have $v$ initially, then from this point we have an unlimited supply of messages $(m,v)$ by duplicating $a$ using a "copycat" argument. 
 
 \begin{example}
-	We give an example of a new unfolding tree in \cref{fig-ex-unfolding-tree}. This is the unfolding tree associated to the execution of \cref{ex:example-1}~and agent $a_1$. 
-	\luin{todo}
+\label{ex:decomposition}
+Assume that agent $a_1$ has initially value $v$ and does the following all with value $v$: it broadcasts $\textsf{a} \cdot \textsf{b}$, receives $\textsf{c}$ from $a_2$, broadcasts $\textsf{a}^3$ and receives $\textsf{b}$ from $a_3$. The "follower specification" corresponding to $a_2$'s task must be of the form $(w, \textsf{c})$ where $w \subword \textsf{a} \cdot \textsf{b}$ (we again have the subword relation because messages may get lost). However, $a_3$'s "follower spefication" may be of the form $(w \cdot w', \textsf{c}$ where $w \subword \textsf{a} \cdot \textsf{b}$ and $w' \in \set{\textsf{a},\textsf{c}}^*$ is a subword of $\textsf{a}^3$ enriched with as many $\textsf{c}$ as desired, thanks to the copycar argument. For example, one could have $w= \textsf{b} $ and $w' = \textsf{c} \cdot \textsf{a} \cdot \textsf{c}^4 \cdot \textsf{a} \cdot \textsf{c}^2$. This idea is formalized by using the notion of "decomposition" (in the appendix); in this case, the previous condition would be stated as: $w \cdot w'$ \emph{"admits decomposition"} $(\textsf{a} \cdot \textsf{b}, \textsf{c}, \textsf{a}^3)$.   
+\end{example}
+% Therefore, if one later needs an agent to broadcast $(m',v)$ then this agent is allowed  hence from a finite set of message types which can be sent with value $v$, there is an infinite set of possible $\followwordspec$ to chose: if a message $(m, v)$ is sent from the agent with initial value $v$ then the "copycat principle" does not apply, however, if $(m, v)$ is sent from an agent without $v$ as initial value, message type $m$ can appear as many times as one wants in $\followwordspec$ once it has been sent once. 
+%For instance, in the protocol described in \cref{fig:ex1}, message ($m_6, )
+
+We now extend "unfolding trees" so that nodes are of two types: "boss nodes" whose specifications are "boss specification" and "follower nodes" whose specifications are "follower specification". A "follower node" $\node$ with "follower specification" $(\followwordspec, \followmessagespec)$ is allowed, for value $\valuelabel{\node}$ (which must be "non-initial" in its local run), to receive messages $\followwordspec$ with value $v$ without it being broadcast by any child. Other than that, conditions on "non-initial" values are the same as for "signature protocols". For a given node $\node$ for each "non-initial" value received in the "local run", $\node$ must have a "boss child" broadcasting this word. For each "initial value" $v$ received, $\node$ essentially needs a "follower child" that is able to broadcast the message after receiving previous messages with value $v$; the formal statement is more technical because it takes into account the observation of Example~\ref{ex:decomposition}. 
+The formal definition of "unfolding tree" is given in \cref{app:def-trees}.
+
+
+\begin{example}
+	We give an example of a new unfolding tree in \cref{fig:ex-unfolding-tree}. 
+	This is the unfolding tree associated to the execution of \cref{ex:example-1}~and agent $a_1$. 
+	Observe that the "follower node" $\node_3$ has a $m_2$ reception that does not need to be matched by any child; morally, this is because the broadcast is made in $a_1$. 
+	In order to have a child with a "follower specification", a node needs to guarantee that the conditions of the contract are met; 
+	this is the case here thanks to the $\intlabel{\atrans_{b2}}$ step in $\node_1$.  
 \end{example}
 \begin{figure}[t]
 	\begin{center}
-			\resizebox{\textwidth}{!}{
+			% \resizebox{\textwidth}{!}{
 					\input{Figures/tree-example1}
-				}
+				% }
 		\end{center}
 	\vspace*{-0.5cm}
-	\caption{Example of an "unfolding tree". $\delta_{ri}$ (resp. $\delta_{bi}$) denotes the reception (resp. broadcast) transition of message $m_i$ in the protocol described in \cref{fig:ex1}. Initial values which are neither tested or broadcast are omitted and written as $\quotemarks{\_}$.}\label{fig-ex-unfolding-tree}
+	\caption{Example of an "unfolding tree". $\delta_{ri}$ (resp. $\delta_{bi}$) denotes the reception (resp. broadcast) transition of message $m_i$ in the protocol described in \cref{fig:ex1}. Initial values which are neither tested or broadcast are omitted and written as $\quotemarks{\_}$.}\label{fig:ex-unfolding-tree}
 %	\vspace*{-0.5cm}
 \end{figure}
 
-
-The formal definition of "unfolding tree" is given in \cref{app:def-trees}.
-We consider trees whose root is a "boss node", as they suffice to witness "coverability"  (a "follower node" implicitely relies on its parent's ability to broadcast some messages), the root of a coverability witness local run of such a tree should cover $q_f$.
-As in the "signature protocol" case, we prove that there is an equivalence between "unfolding trees" and the coverability problem.
+A ""coverability witness"" is again an "unfolding tree" whose root covers $q_f$, with the extra condition that this root is a "boss node" (a "follower node" implicitely relies on its parent's ability to broadcast). 
 
 \begin{restatable}{proposition}{treessoundcomplete}
 	\label{prop:trees-sound-complete}
@@ -254,12 +270,25 @@ As in the "signature protocol" case, we prove that there is an equivalence betwe
 \subsubsection{Bounding the Size of the Unfolding Tree.}
 \label{sec:tree-bounds}
 
-Our aim is now to provide bounds on the "size@@tree" of the "coverability witness".  We first explain why the technique we used for "signature protocol" is no longer sufficient.
-
+Our aim is again to provide bounds on the "size@@tree" of the "coverability witness". 
 As in the "signature protocol" case, for "boss specifications", the longer the word broadcast, the better: if a word $\bossspec$ can be broadcast with a single value, then any subword of $\bossspec$ can also be broadcast. 
-However, for "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better ($\followwordspec$ should be seen as a needed ressource in order to repeat the value with message type $\followmessagespec$). 
-We cannot thus shorten a branch directly: if we want to reason on the long word attached to the nodes, our first observation on "boss nodes" (the one used in the "signature protocol" case) is that, if $\node$ is an ancestor of $\node'$, both are "boss nodes", and the specification of $\node$ is a subword of $\node'$, then the branch can be cut (as $\node$ can be replaced by $\node'$ which will play the same role as $\node$). However, the second observation made on "follower nodes" leads us to the following: if $\node$ is an ancestor of $\node'$, both are "follower nodes" with the same message type to broadcast, and the specification of $\node'$ is a subword of $\node$, then the branch can be cut (as $\node$ can be replaced by $\node'$ which will play the same role as $\node$ with smaller ressources). 
-Hence, here, we cannot bound the "size@@tree" of the "unfolding tree" from the root to the leaves because of "follower nodes", nor from the leaves to the root because of "boss nodes". 
+However, for "follower specifications", it goes in the opposite direction: for a fixed $\followmessagespec$, the shorter the requirement $\followwordspec$, the better: if one can broadcast $(\followmessagespec,w)$ after $\followwordspec$ is broadcast with value $v$, then this is also true with a larger $\followwordspec$ because of the lossiness. This leads to a generalization of Lemma~\ref{lem:no_subword_in_branch_sg}:
+
+\begin{restatable}{lemma}{lemShorteningBranches} 
+\label{lem:shortening-branches}
+	Let $\tree$ be a "coverability witness" for $(\prot, q_f)$.
+	Let $\node, \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If one of the conditions below holds, then there exists a "coverability witness" for $(\prot, q_f)$ of "size@@tree" strictly smaller than $\size{\tree}$:
+	\begin{itemize}
+	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; or
+	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$.
+	\end{itemize} 
+\end{restatable}
+
+It is fairly easy to generalize \cref{lem:towerbound_signature} to prove that one can bound the size of a node by the number of messages that it must broadcast times a primitive-recursive function $\towerfun(\size{\prot},r)$. The formal statement and the proof can be found in Appendix~\ref{app:tower-lemma} (\cref{lem:short-local-runs}). 
+% note that this time the bound is on the exact number of registers (and not the number of registers minus one). We shall refer to this lemma as the Tower Function Lemma as it bounds "local runs" length by a function $\psi(n,k)$ which is in fact a tower of exponentials of height $k$ where each floor is a polynomial in $n$.
+
+%limite du passage de nico
+However, we now cannot shorten a branch directly. One would like to apply the "Length function theorem" seperately on "boss nodes" and on "follower nodes", but while the size of a "boss node" is bound with respect to its parent's "size", the size of a "follower node" is bouded  we cannot bound the "size@@tree" of the "unfolding tree" from the root to the leaves (what we did in the "signature case") because of "follower nodes", nor from the leaves to the root because of "boss nodes". 
 
 Previously, \cref{lem:no_subword_in_branch_sg,lem:towerbound_signature} lead us to the "Length function theorem". We were able to bound the size of a node with respect to the nodes to which it must send long words of messages (in the signature protocol: from leaves to root), i.e. we could find a bound for a node $\node$ with respect to its parent's size. From what we argued above, we can not do so in the general case.
 %However, this is not possible for "follower nodes", as it goes in the opposite direction: a node now might need to send long sequence of messages to its "follower node" child, in order for this node to repeat a value. 
@@ -275,15 +304,7 @@ A new version of \cref{lem:no_subword_in_branch_sg} can be found below: \cref{le
 
 %\cref{lem:no_subword_in_branch_sg} is then replaced by the following lemma, which 
 
-\begin{restatable}{lemma}{lemShorteningBranches} 
-\label{lem:shortening-branches}
-	Let $\tree$ be a "coverability witness" for $(\prot, q_f)$.
-	Let $\node, \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If one of the conditions below holds, then there exists a "coverability witness" for $(\prot, q_f)$ of "size@@tree" smaller than $\size{\tree}$:
-	\begin{itemize}
-	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; or
-	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$.
-	\end{itemize} 
-\end{restatable}
+
 
 
 
@@ -315,9 +336,8 @@ A new version of \cref{lem:no_subword_in_branch_sg} can be found below: \cref{le
 %%	See Appendix~\ref{app:tower-lemma} for the full proof.
 %	
 %	
-%\end{proof}
-A general version of \cref{lem:towerbound_signature}~can also be found in Appendix~\ref{app:tower-lemma} (\cref{lem:short-local-runs}), note that this time the bound is on the exact number of registers (and not the number of registers minus one). We shall refer to this lemma as the Tower Function Lemma as it bounds "local runs" length by a function $\psi(n,k)$ which is in fact a tower of exponentials of height $k$ where each floor is a polynomial in $n$.
-Perhaps surprinsingly, this bound is tight: one may need a "local run" of length a tower of exponentials to reach a given "local configuration" while being allowed to receive sequences of messages of same value from a given fixed set. 
+
+% Perhaps surprinsingly, this bound is tight: one may need a "local run" of length a tower of exponentials to reach a given "local configuration" while being allowed to receive sequences of messages of same value from a given fixed set. 
 %\begin{remark}\lu{déplacer si manque de place ?}
 %	The function $\towerfun(n,k)$ defined above is actually a tower of exponentials of height $k$ where each floor is a polynomial in $n$. Perhaps surprinsingly, this bound is tight: one may need a "local run" of length a tower of exponentials to reach a given "local configuration" while being allowed to receive sequences of messages of same value from a given fixed set. 
 %\end{remark}

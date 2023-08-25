@@ -1,225 +1,22 @@
-%\newcommand{\tikzabstractconfig}[5]{% x, y, val1, val2, q, x1, y1
-%	\begin{tikzpicture}
-%		\draw (#1,#2) rectangle (1 + #1,0.5 +#2);
-%		\draw (#1,-0.5 + #2) rectangle (1 +#1 ,#2);
-%		\node[] (x1) at (0.5 + #1, 0.15 +#2) {#3};
-%		\node[] (x2) at (0.5 +#1 , 0.15- 0.5 +#2) {#4};
-%		\node [] (q) at (0.5 +#1, 0.7+#2) {#5};
-%	\end{tikzpicture}
-%}
-%
-%\newcommand{\tikzvalue}[4]{% x, y, length, val
-%	\begin{tikzpicture}
-%		\node [] (v) at (#1 + #3 + 0.3, #2 + 1.2) {$\mathbf{v}= #4$};
-%	\end{tikzpicture}
-%}
-%
-%\newcommand{\tikzspec}[4]{% x, y, length, spec
-%	\begin{tikzpicture}
-%		\node [] (sp) at (#3 /2, #2 - 0.2) {#4};
-%	\end{tikzpicture}
-%}
-%
-%\begin{tikzpicture}
-%	
-%	
-%
-%%	
-%%	\tikzabstractconfig{0}{0}{$x_1$}{$y_1$}{$q_0$}
-%%	\tikzabstractconfig{1}{0}{$x_1$}{$y_1$}{$q_1$}
-%%	\tikzabstractconfig{2}{0}{$x_1$}{$y_2$}{$q_4$}
-%%	\tikzabstractconfig{3}{0}{$x_1$}{$y_2$}{$q_6$}
-%	\node [] (sp) at (-2.4, 0.5) {Boss node $\node_1$};
-%	\node [] (sp) at (-2.4, 0) {$\bossspec = m_2 \, m_6 \, m_6 \, m_7$};
-%	\node [] (sp) at (-2.4, -0.5) {$v = x_1$};
-%
-%	\draw (-0.5,0) rectangle (0.5,0.5);
-%	\draw[fill = orange, opacity=0.4]  (-0.5,0) rectangle (0.5,0.5);
-%	\draw (-0.5,-0.5 ) rectangle (0.5 ,0);
-%	\node[] (x1) at (0, 0.15) {$x_1$};
-%	\node[] (x2) at (0 , 0.15- 0.5) {$y_1$};
-%	\node [] (q) at (0 , 0.7) {$q_0$};
-%	
-%	\draw (0.5,0) rectangle (1.5,0.5);
-%	\draw[fill = orange, opacity=0.4]  (0.5,0) rectangle (1.5,0.5);
-%	\draw (0.5,-0.5 ) rectangle (1.5 ,0);
-%	\node[] (x1) at (1, 0.15) {$x_1$};
-%	\node[] (x2) at (1 , 0.15- 0.5) {$y_1$};
-%	\node [] (q) at (1 , 0.7) {$q_1$};
-%	
-%	\draw (1.5,0) rectangle (2.5,0.5);
-%	\draw[fill = orange, opacity=0.4] (1.5,0) rectangle (2.5,0.5);
-%	\draw (1.5,-0.5 ) rectangle (2.5 ,0);
-%	\draw[fill = cyan, opacity=0.4] (1.5,-0.5 ) rectangle (2.5 ,0);
-%	\node[] (x1) at (2, 0.15) {$x_1$};
-%	\node[] (x2) at (2 , 0.15- 0.5) {$y_2$};
-%	\node [] (q) at (2 , 0.7) {$q_4$};
-%	
-%	
-%	\draw[] (2.5,0) rectangle (3.5,0.5);
-%	\draw[fill = orange, opacity=0.4] (2.5,0) rectangle (3.5,0.5);
-%	\draw (2.5,-0.5 ) rectangle (3.5 ,0);
-%	\draw[fill = cyan, opacity=0.4]  (2.5,-0.5 ) rectangle (3.5 ,0);
-%	\node[] (x1) at (3, 0.15) {$x_1$};
-%	\node[] (x2) at (3 , 0.15- 0.5) {$y_2$};
-%	\node [] (q) at (3 , 0.7) {$q_7$};
-%
-%	\draw[] (3.5,0) rectangle (4.5,0.5);
-%	\draw[fill = orange, opacity=0.4] (3.5,0) rectangle (4.5,0.5);
-%	\draw (3.5,-0.5 ) rectangle (4.5 ,0);
-%	\draw[fill = cyan, opacity=0.4]  (3.5,-0.5 ) rectangle (4.5 ,0);
-%	\node[] (x1) at (4, 0.15) {$x_1$};
-%	\node[] (x2) at (4 , 0.15- 0.5) {$y_2$};
-%	\node [] (q) at (4 , 0.7) {$q_7$};
-%	
-%    \draw (2, -0.6) -- (-1, -1.5);
-%    \draw (2, -0.6) -- (5, -1.5);
-%    
-%    
-%    
-%    \node [] (sp) at (-3.3, 0.7-2.5-0.2) {Boss node $\node_2$};
-%    \node [] (sp) at (-3.3, 0.7-2.5-0.2-0.5) {$\bossspec = m_4$};
-%    \node [] (sp) at (-3.3, 0.7-2.5-0.2-1) {$v = y_2$};
-%    
-%    \draw (-2,-2.5) rectangle (-1,-2);
-%    \draw  [fill = cyan, opacity=0.4] (-2,-3 ) rectangle (-1 ,-2.5);    
-%    \draw  (-2,-3 ) rectangle (-1 ,-2.5);
-%    \node[] (x1) at (-1.5, 0.15 - 2.5) {$x_2$};
-%    \node[] (x2) at (-1.5 , 0.15- 0.5 - 2.5) {$y_2$};
-%    \node [] (q) at (-1.5 , 0.7 - 2.5) {$q_0$};
-%    
-%    \draw (-1,-2.5) rectangle (0,-2);
-%     \draw [fill = lime, opacity=0.4] (-1,-2.5) rectangle (0,-2);
-%    \draw [fill = cyan, opacity=0.4] (-1,-3 ) rectangle (0 ,-2.5);    
-%    \draw (-1,-3 ) rectangle (0 ,-2.5);
-%    \node[] (x1) at (-0.5, 0.2 -2.5) {$x_3$};
-%    \node[] (x2) at (-0.5 , 0.15- 0.5 - 2.5) {$y_2$};
-%    \node [] (q) at (-0.5 , 0.7-2.5) {$q_5$};
-%    
-%    \draw [fill = lime, opacity=0.4] (0,-2.5) rectangle (1,-2);
-%    \draw (0,-2.5) rectangle (1,-2);
-%    \draw (0,-3 ) rectangle (1 ,-2.5);
-%    \draw[fill = cyan, opacity=0.4] (0,-3 ) rectangle (1 ,-2.5);
-%    \node[] (x1) at (0.5, 0.2 -2.5) {$x_3$};
-%    \node[] (x2) at (0.5 , 0.15- 0.5 - 2.5) {$y_2$};
-%    \node [] (q) at (0.5 , 0.7-2.5) {$q_4$};
-%    
-%    
-%    \draw (-1, -3.2) -- (-1, -3.6);
-%    
-%   
-%   \node [] (sp) at (-2.8, 0.7-4.6-0.2) {Boss node $\node_4$};
-%    \node [] (sp) at (-2.8, 0.7-4.6-0.2-0.5) {$\bossspec = m_2$};
-%   \node [] (sp) at (-2.8, 0.7-4.6-0.2-1) {$v = x_3$};
-%   
-%   
-%   \draw (-1.5,-4.6) rectangle (-0.5,-4.1);
-%   \draw [fill = lime, opacity=0.4] (-1.5,-4.6) rectangle (-0.5,-4.1);
-%   \draw (-1.5,-5.1 ) rectangle (-0.5 ,-4.6);
-%   \node[] (x1) at (-1, 0.2 -4.6) {$x_3$};
-%   \node[] (x2) at (-1 , 0.15- 0.5 - 4.6) {$y_3$};
-%   \node [] (q) at (-1 , 0.7-4.6) {$q_0$};
-%    
-%    
-%    \draw (-0.5,-4.6) rectangle (0.5,-4.1);
-%    \draw [fill = lime, opacity=0.4] (-0.5,-4.6) rectangle (0.5,-4.1);
-%    \draw (-0.5,-5.1 ) rectangle (0.5 ,-4.6);
-%    \node[] (x1) at (0, 0.2 -4.6) {$x_3$};
-%    \node[] (x2) at (0 , 0.15- 0.5 - 4.6) {$y_3$};
-%    \node [] (q) at (0 , 0.7-4.6) {$q_1$};
-%	
-%%	\draw (-3,-2) rectangle (-2,0.5 -2);
-%%	\draw (-3,-0.5 -2) rectangle (1 -3 ,-2);
-%	%\node[] (x1) at (0.5 + #1, 0.15 +#2) {#3};
-%	%\node[] (x2) at (0.5 +#1 , 0.15- 0.5 +#2
-%%	
-%%	\tikzabstractconfig{-3}{-2}{$x_1$}{$y_1$}{$q_0$} 
-%%	\tikzabstractconfig{-2}{-2}{$x_1$}{$y_1$}{$q_1$}
-%	
-%	
-%	\draw (3.5,-2.5) rectangle (4.5,-2);
-%	\draw (3.5,-3 ) rectangle (4.5 ,-2.5);
-%	\node[] (x1) at (4, 0.15 - 2.5) {$x_4$};
-%	\node[] (x2) at (4 , 0.15- 0.5 - 2.5) {$y_4$};
-%	\node [] (q) at (4 , 0.7 - 2.5) {$q_0$};
-%	
-%	\draw (4.5,-2.5) rectangle (5.5,-2);
-%	\draw[fill = orange, opacity=0.4]  (4.5,-2.5) rectangle (5.5,-2);
-%	\draw (4.5,-3 ) rectangle (5.5 ,-2.5);
-%	\node[] (x1) at (5, 0.15 - 2.5) {$x_1$};
-%	\node[] (x2) at (5 , 0.15- 0.5 - 2.5) {$y_4$};
-%	\node [] (q) at (5 , 0.7 - 2.5) {$q_5$};
-%
-%	\draw (5.5,-2.5) rectangle (6.5,-2);
-%	\draw[fill = orange, opacity=0.4] (5.5,-2.5) rectangle (6.5,-2);
-%	\draw (5.5,-3 ) rectangle (6.5 ,-2.5);
-%	\node[] (x1) at (6, 0.15 - 2.5) {$x_1$};
-%	\node[] (x2) at (6 , 0.15- 0.5 - 2.5) {$y_4$};
-%	\node [] (q) at (6 , 0.7 - 2.5) {$q_4$};
-%	
-%	\draw[fill = orange, opacity=0.4] (6.5,-2.5) rectangle (7.5,-2);
-%	\draw (6.5,-2.5) rectangle (7.5,-2);
-%	\draw (6.5,-3 ) rectangle (7.5 ,-2.5);
-%	\node[] (x1) at (7, 0.15 -2.5) {$x_1$};
-%	\node[] (x2) at (7 , 0.15- 0.5 - 2.5) {$y_4$};
-%	\node [] (q) at (7 , 0.7-2.5) {$q_4$};
-%	
-%	\node [] (sp) at (9.1, -2) {Follower node $\node_3$};
-%	\node [] (sp) at (9.1, -2.5) {$\followwordspec = m_2, \followmessagespec= m_6$};
-%	\node [] (sp) at (9.1, -3) {$v = x_1$};
-%	
-%%	\draw (7.5,-2.5) rectangle (8.5,-2);
-%%	\draw (7.5,-3 ) rectangle (8.5,-2.5);
-%%	\node[] (x1) at (8, 0.2 -2.5) {$x'_2$};
-%%	\node[] (x2) at (8 , 0.15- 0.5 - 2.5) {$y_2$};
-%%	\node [] (q) at (8 , 0.7-2.5) {$q_4$};
-%%	
-%\end{tikzpicture}
-%
-%
-%%\newcommand{\tikzabstractconfig}[5]{% x, y, val1, val2, q, x1, y1
-%%	\begin{tikzpicture}
-%%		\draw (#1,#2) rectangle (1 + #1,0.5 +#2);
-%%		\draw (#1,-0.5 + #2) rectangle (1 +#1 ,#2);
-%%		\node[] (x1) at (0.5 + #1, 0.15 +#2) {#3};
-%%		\node[] (x2) at (0.5 +#1 , 0.15- 0.5 +#2) {#4};
-%%		\node [] (q) at (0.5 +#1, 0.7+#2) {#5};
-%%	\end{tikzpicture}
-%%}
-%%
-%%\newcommand{\tikzvalue}[4]{% x, y, length, val
-%%	\begin{tikzpicture}
-%%		\node [] (v) at (#1 + #3 + 0.3, #2 + 1.2) {$\mathbf{v}= #4$};
-%%	\end{tikzpicture}
-%%}
-%%
-%%\newcommand{\tikzspec}[4]{% x, y, length, spec
-%%	\begin{tikzpicture}
-%%		\node [] (sp) at (#3 /2, #2 - 0.2) {#4};
-%%	\end{tikzpicture}
-%%}
-%
-
-
 
 
 \begin{tikzpicture} [xscale = 1, yscale = 0.6, every node/.style = {scale = 0.9}]
 	
 
 	
-	\node [font = {\footnotesize}] (sp) at (7, 0.7-0.5) {Boss node $\node_1$ ($a_1$ in $\run$)};
-	\node [font = {\footnotesize}] (sp) at (6.5, 0.7-1) {$\bossspec = \epsilon$};
-	\node [font = {\footnotesize}] (sp) at (6.5, 0.7-1.5) {$v = 1$};
+	\node [align = center, font = {\scriptsize}] (sp) at (6.8, 0.7-0.5) {Boss node $\node_1$ ($a_1$ in $\run$)};
+	\node [align =center, font = {\scriptsize}] (sp) at (6.8, 0.7-1) {$\bossspec = \epsilon$};
+	\node [align=center, font = {\scriptsize}] (sp) at (6.8, 0.7-1.5) {$v = 1$};
 	\begin{scope}[xscale = 1.2, xshift = -10]
 		\regbartworeg{-1}{0}
 		\onerowtworeg{-0.5}{0}{$q_0$}{$1$}{orange}{$\_$}{white}
-		\transtable{0.5}{0}{$\intlabel{\atrans_{b2}}$}
+		\transtable{0.5}{0}{\color{OrangeRed}$\intlabel{\atrans_{b2}}$}
 		% \node [align = center] at (0.5, 0.2) {$\rightarrow$};
 		% \node [align = center, font = {\tiny}] at (0.5,0.5) {$\extlabel{\atrans_{01}}{2}$};
 		\onerowtworeg{0.5}{0}{$q_1$}{$1$}{orange}{$\_$}{white}
-		\transtable{1.5}{0}{$\extlabel{\atrans_{r4}}{2}$}
+		\transtable{1.5}{0}{\color{ProcessBlue}$\extlabel{\atrans_{r4}}{2}$}
 		\onerowtworeg{1.5}{0}{$q_4$}{$1$}{orange}{$2$}{cyan}
-		\transtable{2.5}{0}{$\extlabel{\atrans_{r6}}{2}$}
+		\transtable{2.5}{0}{\color{Mahogany}$\extlabel{\atrans_{r6}}{2}$}
 		\onerowtworeg{2.5}{0}{$q_7$}{$1$}{orange}{$2$}{cyan}
 		\transtable{3.5}{0}{$\intlabel{\atrans_{b7}}$}
 		\onerowtworeg{3.5}{0}{$q_7$}{$1$}{orange}{$2$}{cyan}
@@ -227,61 +24,40 @@
 	\draw (2, -1.2) -- (0, -2);
 	\draw (2, -1.2) -- (4, -2);
 	
-	\begin{scope}[xshift = -5, yshift=0.5cm]
+	\begin{scope}[xshift = 0.7cm, yshift=0.5cm]
 		% \regbar{-3.5}{-3}
 		\onerowtworeg{-2}{-3.5}{$q_0$}{$\_$}{white}{$2$}{cyan}
-		\transtable{-1}{-3.5}{$\extlabel{\atrans_{r2}}{3}$}
+		\transtable{-1}{-3.5}{\color{ForestGreen}$\extlabel{\atrans_{r2}}{3}$}
 		\onerowtworeg{-1}{-3.5}{$q_5$}{$3$}{green}{$2$}{cyan}
-		\transtable{0}{-3.5}{\color{ForestGreen} $\intlabel{\atrans_{b4}}$}
+		\transtable{0}{-3.5}{\color{ProcessBlue} $\intlabel{\atrans_{b4}}$}
 		\onerowtworeg{-0}{-3.5}{$q_4$}{$3$}{green}{$2$}{cyan}
-		\node [align=center, font = {\footnotesize}] (sp) at (-3.3, -2.5-0.8) {Boss node $\node_2$ ($a_2$)};
-		\node [align = center, font = {\footnotesize}] (sp) at (-3.3,-3-0.8) {$\bossspec = {\color{ForestGreen} m_4} $};
-		\node [align = center, font = {\footnotesize}] (sp) at (-3.3, -3.5-0.8) {$v = 2$};
+		\node [align=center, font = {\scriptsize}] (sp) at (-3.1, -2.5-0.8) {Boss node $\node_2$ ($a_2$)};
+		\node [align = center, font = {\scriptsize}] (sp) at (-3.1,-3-0.8) {$\bossspec = {\color{ProcessBlue} m_4} $};
+		\node [align = center, font = {\scriptsize}] (sp) at (-3.1, -3.5-0.8) {$v = 2$};
 	\end{scope}
-	\begin{scope}[xshift = 5, yshift=0.5cm]
+	\begin{scope}[xshift = -0.2, yshift=0.5cm]
 		% \regbar{3}{-3}
 		\onerowtworeg{2}{-3.5}{$q_0$}{$\_$}{white}{$\_$}{white}
-		\transtable{3}{-3.5}{\color{BlueViolet}$\extlabel{\atrans_{r2}}{1}$}
+		\transtable{3}{-3.5}{\color{OrangeRed}$\extlabel{\atrans_{r2}}{1}$}
 		\onerowtworeg{3}{-3.5}{$q_5$}{$1$}{orange}{$\_$}{white}
 		\transtable{4}{-3.5}{$\intlabel{\atrans_{b4}}$}
 		\onerowtworeg{4}{-3.5}{$q_4$}{$1$}{orange}{$\_$}{white}
-		\transtable{5}{-3.5}{\color{ForestGreen}$\intlabel{\atrans_{b6}}$}
+		\transtable{5}{-3.5}{\color{Mahogany}$\intlabel{\atrans_{b6}}$}
 		\onerowtworeg{5}{-3.5}{$q_4$}{$1$}{orange}{$\_$}{white}
-		\node [align=center, font = {\footnotesize}] (sp) at (7.8, -2.5-0.8) {Follower node $\node_3$ ($a_2$)};
-		\node [align = center, font = {\footnotesize}] (sp) at (7.8,-3-0.8) {$\followwordspec={\color{BlueViolet}m_2}, \followmessagespec = { \color{ForestGreen}m_6} $};
-		\node [align = center, font = {\footnotesize}] (sp) at (7.8, -3.5-0.8) {$v = 1$};
+		\node [align=center, font = {\scriptsize}] (sp) at (7.3, -2.5-0.8) {Follower node $\node_3$ ($a_2$)};
+		\node [align = center, font = {\scriptsize}] (sp) at (7.3,-3-0.8) {$\followwordspec={\color{OrangeRed}m_2}, \followmessagespec = { \color{Mahogany}m_6} $};
+		\node [align = center, font = {\scriptsize}] (sp) at (7.3, -3.5-0.8) {$v = 1$};
 	\end{scope}
 	\draw (0, -2.5-1.7) -- (0, -2.5-1.7-0.7);
 %	\draw (4, -3.5-1.7) -- (4, -3.5-1.7-0.7);
-	\begin{scope}[xscale = 1.2, xshift = -15, yshift = 1.5cm]
-		% \regbar{-2.5}{-6}
+	\begin{scope}[xscale = 1.2, xshift = 0cm, yshift = 1.1cm]
+			% \regbar{-2.5}{-6}
 		\onerowtworeg{-1}{-7}{$q_0$}{$3$}{green}{$\_$}{white}
 		\transtable{0}{-7}{\color{ForestGreen}$\intlabel{\atrans_{b2}}{}$}
 		\onerowtworeg{-0}{-7}{$q_1$}{$3$}{green}{$\_$}{white}
-		\node [align=center, font = {\footnotesize}] (sp) at (-2, -3-0.8-3) {Boss node $\node_4$ ($a_1$)};
-		\node [align = center, font = {\footnotesize}] (sp) at (-2,-3.5-0.8-3) {$\bossspec = {\color{ForestGreen} m_2}$};
-		\node [align = center, font = {\footnotesize}] (sp) at (-2, -4-0.8-3) {$v = 3$};
+		\node [align=center, font = {\scriptsize}] (sp) at (-2, -3-0.8-3) {Boss node $\node_4$ ($a_1$)};
+		\node [align = center, font = {\scriptsize}] (sp) at (-2,-3.5-0.8-3) {$\bossspec = {\color{ForestGreen} m_2}$};
+		\node [align = center, font = {\scriptsize}] (sp) at (-2, -4-0.8-3) {$v = 3$};
 	\end{scope}
-%	\begin{scope}[xscale = 1.2, xshift = -19]
-%		% \regbar{3}{-6}
-%		\onerow{2.5}{-7}{$q_0$}{$5$}{white}{$\_$}{white}{$\_$}{white}
-%		\transtable{3.5}{-7}{$\extlabel{\atrans_{05}}{6}$}
-%		\onerow{3.5}{-7}{$q_5$}{$5$}{white}{$\_$}{white}{$\_$}{white}
-%		\transtable{4.5}{-7}{\color{ForestGreen}$\intlabel{\atrans_{55}}$}
-%		\onerow{4.5}{-7}{$q_5$}{$5$}{white}{$\_$}{white}{$\_$}{white}
-%		\node [align=center, font = {\footnotesize}] (sp) at (6.5, -3.5-0.8-3) {Node $\node_5$ ($a_2$)};
-%		\node [align = center, font = {\footnotesize}] (sp) at (6.5,-4-0.8-3) {$\spec = {\color{ForestGreen}\exready}$};
-%		\node [align = center, font = {\footnotesize}] (sp) at (6.5, -4.5-0.8-3) {$v = 5$};
-%	\end{scope}
-%	\draw (4, -7-1.7) -- (4, -7-1.7-0.7);
-%	
-%	% \regbar{3.5}{-9}
-%	\onerow{3}{-10.5}{$q_0$}{$6$}{white}{$\_$}{white}{$\_$}{white}
-%	\transtable{4}{-10.5}{\color{ForestGreen}$\intlabel{\atrans_{00}}$}
-%	\onerow{4}{-10.5}{$q_0$}{$6$}{white}{$\_$}{white}{$\_$}{white}
-%	\node [align=center, font = {\footnotesize}] (sp) at (6.5, -10-0.8) {Node $\node_6$ ($a_3$)};
-%	\node [align = center, font = {\footnotesize}] (sp) at (6.5,-10.5-0.8) {$\spec = {\color{ForestGreen}\exready}$};
-%	\node [align = center, font = {\footnotesize}] (sp) at (6.5, -11-0.8) {$v = 6$};
-	
 
 \end{tikzpicture}
