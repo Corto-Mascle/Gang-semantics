@@ -58,7 +58,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 
 \begin{figure}
 	\input{Figures/fig-illustration-pumping}
-	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. We represent local runs as above, where lines correspond to registers, and vertical separations are times at which a $\enregact$ operation is performed on that register. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often, say every $M$ steps (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed twice. We can then obtain a shorter run by glueing them together as in the picture. The colored rectangles in the shortened runs correspond to fresh values that we introduce to make sure that all local disequality tests succeed.}
+	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. We represent local runs as above, where lines correspond to registers, and vertical separations are times at which a $\enregact$ operation is performed on that register. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often, say every $M$ steps (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed twice. We can then obtain a shorter run by glueing them together as in the picture. The colored rectangles in the shortened runs correspond to fresh values that we introduce to avoid interleaving the prefix and suffix (which would hinder the proof).}
 	\label{fig:pumping}
 \end{figure}
 
@@ -265,31 +265,29 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 \section{Proof of Lemma~\ref{lem:bound-successor-height}}
 \label{app:bound-node-with-spec}
 
-Our aim  is now to bound the size of a node with respect to its "follower" children (and its father if it is a "boss node"). Those are the nodes representing agents that may require a large "input" from that node. We start with a technical lemma explaining that the "decompositions" witnessing the satisfaction of conditions~\ref{item:condition2_initial_value} and \ref{item:condition3_follower_node} of "unfolding trees" do not need to be larger than the sum of the sizes of the corresponding "follower" children¨.
+Our aim  is now to bound the size of a node with respect to its "follower" children (and its father if it is a "boss node"). Those are the nodes representing agents that may require a large "input" from that node. We start with a technical lemma explaining that the "decompositions" witnessing the satisfaction of conditions~\ref{item:condition2_initial_value} and \ref{item:condition3_follower_node} of "unfolding trees" do not need to be larger than the sum of the sizes of the labels of the corresponding "follower" children.
 
 \begin{lemma}
 	\label{lem:short-dec}
 	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a decomposition, and for all $i\in \nset{0}{\ell}$ let $\decsymb_i = (w_0, m_1, \ldots, w_i)$.
-	Let $w'_0, \ldots, w'_\ell$ be such that $w'_i \in \langdec{\decsymb_i}$ for all $i$.
+	Let $x_0, \ldots, x_\ell$ be such that $x_i \in \langdec{\decsymb_i}$ for all $i$.
 	
-	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that, for all $i$, $\widehat{w}_i \subword w_i$ and $w'_i \in \langdec{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$), and $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \size{w'_i}$. 
+	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that, for all $i$, $\widehat{w}_i \subword w_i$ and $x_i \in \langdec{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$), and $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \size{x_i}$. 
 \end{lemma}
 
-Note that in the lemma statement, $w'_i$ could be small regarding the decomposition $\decsymb_i$, the lemma states that we can consider decompositions smaller than the words $w'_1 \dots w'_\ell$.
 
 \begin{proof}
 	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we denote the word projection of $w$ on $M$ by $\wordproj{w}{M}$.
 	
-	For all $i$, as $w'_i \in \langdec{\decsymb_i}$, we can split $w'_i$ into $v_{i,0} \cdots v_{i,i}$ where, for all $j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
+	For all $i$, as $x_i \in \langdec{\decsymb_i}$, we can split $x_i$ into $y_{i,0} \cdots y_{i,i}$ where, for all $j$, $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
 	
-	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
-	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of length at most $\sum_{i=0}^{j} \size{\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
+	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
+	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of length at most $\sum_{i=0}^{j} \size{\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
 	
 	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$, $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
+	We obtain that for all $i$, for all $j \in \nset{0}{i}$, $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_j}} \subword \widehat{w}_j$. As by definition $x_i = y_{i,0} \cdots y_{i,i}$, we have $x_i \in \langdec{\decsymb_i}$.
 	
-	We obtain that for all $i$, $w'_i = v_{i,0} \cdots v_{i,i}$ with, for all $j \in \nset{0}{i}$, $\wordproj{v_{i,j}}{\messages\setminus\set{m_1, \ldots, m_j}} \subword \widehat{w}_j$. Hence we have $w'_i \in \langdec{\decsymb_i}$.
-	
-	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{v_{i,j}} = \sum_{i=0}^{\ell} \size{w'_i}$.
+	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{y_{i,j}} = \sum_{i=0}^{\ell} \size{x_i}$.
 \end{proof}
 
 
