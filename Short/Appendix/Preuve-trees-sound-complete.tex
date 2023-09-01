@@ -4,11 +4,13 @@
 \treessoundcomplete*
  
 We start with a few definitions. 
-First, we define the local run of an agent in a "run", which corresponds to the intuitive idea that a "local run" is used to describe the point of view of a single agent in a "run". Given a run $\run: \config_0 \step{} \config_1 \step{} \cdots \step{}\config_n$ and a agent $a$, the "local run" $\localrun$ of $a$ in $\run$ is defined by induction. The "local run" of $a$ in an empty run $\config_0$ is the empty local run $\config_0(a)$. Let $\localrun_i$ the local run of $a$ in $\config_0 \step{*} \config_i$ (prefix of length $i$ of $\run$). We define $\localrun_{i+1}$ as follows:
-\begin{itemize}
-\item if in $\config_i \step{} \config_{i+1}$, $a$ performs a "reception" with a transition $\atrans$ then, by letting $\aval$ the value of the message received, $u_{i+1}$ is $u_i$ to which a step labeled by $\step{\extlabel{\atrans}{\aval}}$ is appended,
-\item if $\config_i \step{} \config_{i+1}$ does not involve $a$, then $u_{i+1} := u_i$.
-\end{itemize}
+First, we define the local run of an agent in a "run", which is the "local run" induced by the sequence of transitions taken by that agent through the run, along with the received messages.
+
+%corresponds to the intuitive idea that a "local run" is used to describe the point of view of a single agent in a "run". Given a run $\run: \config_0 \step{} \config_1 \step{} \cdots \step{}\config_n$ and a agent $a$, the "local run" $\localrun$ of $a$ in $\run$ is defined by induction. The "local run" of $a$ in an empty run $\config_0$ is the empty local run $\config_0(a)$. Let $\localrun_i$ the local run of $a$ in $\config_0 \step{*} \config_i$ (prefix of length $i$ of $\run$). We define $\localrun_{i+1}$ as follows:
+%\begin{itemize}
+%\item if in $\config_i \step{} \config_{i+1}$, $a$ performs a "reception" with a transition $\atrans$ then, by letting $\aval$ the value of the message received, $u_{i+1}$ is $u_i$ to which a step labeled by $\step{\extlabel{\atrans}{\aval}}$ is appended,
+%\item if $\config_i \step{} \config_{i+1}$ does not involve $a$, then $u_{i+1} := u_i$.
+%\end{itemize}
 
 We make the meaning of the "specification" labels more concrete by defining the criteria for an "initial run" to satisfy a "specification".
 

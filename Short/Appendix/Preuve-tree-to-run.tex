@@ -8,24 +8,13 @@ We start by defining "partial runs" as "runs" where some broadcasts are missing:
 \begin{definition}
 	Let $\config, \config'$ two configurations. 
 	
-	An ""internal message@@global"" from $\config$ to $\config'$, denoted $\config \intmessage{m}{v} \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent broadcasts a message $(m,v)$. 
+	A ""partial step"" $\config \pstep{} \config'$ is defined if either $\config \step{} \config'$ (normal "step") or there exist $m \in \messages$, $v\in \nats$ such that for all agent $a$ either $\config(a) = \config'(a)$ or $\config(a) \extbr{\delta}{v} \config'(a)$ with $\delta$ a transition receiving "message type" $m$ (""missing broadcast"").
 	
-	An ""external message@@global"" from $\config$ to $\config'$, denoted $\config \extmessage{m}{v} \config'$ is defined when for all agents $a$, either there is a "local step" $\config(a) \extbr{m}{v} \config'(a)$ or $\config(a) = \config'(a)$.
+	A ""partial run"" is a sequence of "partial steps".
+	Note that a "local run" can be seen as a "partial run" with a single agent.A "partial run" is ""initial@@partial"" if it starts in an "initial configuration".
 	
-	A ""partial step"" $\config \pstep{} \config'$ is defined if either $\config \intmessage{m}{v} \config'$ or $\config \extmessage{m}{v} \config'$ for some $m \in \messages$, $v\in \nats$.
-	A ""partial run"" is a sequence of "partial steps" $\config_0 \pstep{} \config_1  \pstep{} \cdots \pstep{} \config_k$. We write $\config \pstep{\run} \config'$ the existence of such a "partial run" $\run$ from $\config$ to $\config'$.
-	Note that a "local run" can be seen as a "partial run" with a single agent.
 	
-	We define the $v$-""projection"" $\intro*\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external message@@global" $\config \extmessage{m}{v} \config'$ to $(m, in)$, every "internal message@@global" $\config \intmessage{m}{v} \config'$ to $(m, out)$, and everything else to $\varepsilon$.
-	
-	\AP The $v$-""input@@partial"" $\vinput{v}{\run}$ (resp. $v$-""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ such that the projection on $\messages \times \set{in}$ (resp. $\messages\times \set{out}$) of $\vproj{v}{\run}$ is $(m_0, in) \cdots (m_k, in)$ (resp. $(m_0, out)\cdots(m_k, out)$).
-	
-	\AP A "partial run" is ""initial@@partial"" if it starts in an "initial configuration".
-	
-	\AP Given a "partial run" $\run$ and a value $v \in \nats$ appearing in $\run$, $v$ is ""initial@@partial"" in $\run$ if it is "initial" for some agent in $\run$. Note that this is not always true for "partial runs", unlike for "runs", because it could be that $v$ was received in $\run$ through an "external message@@global". 
-	
-	For all configurations $\config$ over $\agents$ and $\config'$ over $\agents'$ such that $\agents \cap \agents' = \emptyset$, we write $\config \sqcup \config'$ for the configuration over $\agents \cup \agents'$ such that $\config \sqcup \config'(a)$ is $\config(a)$ if $a \in \agents$ and $\config'(a)$ if $a \in \agents'$. 
-	
+	\AP The $v$-""input@@partial"" $\vinput{v}{\run}$ (resp. $v$-""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ of "message types" corresponding to "missing broadcasts" (resp. "broadcasts") in $\run$.
 \end{definition}
 
 

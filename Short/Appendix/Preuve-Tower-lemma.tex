@@ -10,7 +10,7 @@
 %	\end{lemma}
 %	
 	
-	We wish to prove the following lemma:
+	We aim to prove the following lemma:
 	\begin{restatable}{lemma}{lemShortLocalRuns}
 		\label{lem:short-local-runs}
 		There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" with $r$ registers, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ such that $\size{u'} < \towerfun(\size{\prot},r)$ and for all value $v \in \nats$,  $\vinput{v}{u'} \subword \vinput{v}{u}$. 
