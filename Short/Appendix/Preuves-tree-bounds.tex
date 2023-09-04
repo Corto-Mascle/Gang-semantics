@@ -1,7 +1,10 @@
 \section{Proof of Lemma~\ref{lem:bound-length-at-height-h}}
 \label{app:bound-node-size-with-altitude}
 
-\lemBoundLengthHeightH*
+\begin{restatable}{lemma}{lemBoundLengthHeightH}
+	\label{lem:bound-length-at-height-h}
+	Let $\tree$ be a minimal "coverability witness" for $(\prot,q_f)$, $\altmax$ the maximal "altitude" in $\tree$. There exists a primitive recursive function $f_0$ such that any node $\node$ of $\tree$ has size bounded by $f_0(\size{\prot} + \altmax - \altitude{\node})$.
+\end{restatable}
 
 We actually prove the following, stronger statement:
 \begin{lemma}
@@ -128,8 +131,10 @@ With the bounds on the maximal and minimal altitudes, Lemma~\ref{lem:bound-lengt
 
 Finally, as we now have a bound on all nodes, we can easily bound the length of branches and the number of children of all nodes to get abound on the total "size@@tree" of the tree.
 
-\PropBoundTreeSize*
-
+\begin{restatable}{proposition}{PropBoundTreeSize}
+	\label{prop:bound-tree-size}
+	There exists a function $f$ of class $\Ffunction{\omega^{\size{\messages}+1}}$ s.t. $\size{\tree} \leq f(\size{\prot})$.
+\end{restatable}
 	% There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labeled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f(\size{\prot} + \size{w})$.
 
 \begin{proof}
