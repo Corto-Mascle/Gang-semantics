@@ -18,18 +18,21 @@
 	The halting problem asks whether there exists an initial execution ending with a configuration $(\ell_f, v_1, v_2)$ where $v_1$, $v_2$ are any values in $\nats$. This problem is well-known to be undecidable.
 	
 	
-	\begin{figure}[h]
-	\input{Figures/target-init}
-	\caption{Initialisation for the \TARGET encoding}\label{fig:target-init}
-\end{figure}
 	\begin{figure}
-		\input{Figures/cycle-knowledge}
-		\caption{Illustration of a cycle of knowledge of 4 agents. Each box represents an agent along with its register values.}\label{fig:target-cycle-knowledge}
+		\centering
+		\begin{minipage}{.5\textwidth}
+			\centering
+			\input{Figures/target-init}
+			\caption{Initialisation for the \TARGET \\encoding}
+			\label{fig:target-init}
+		\end{minipage}%
+		\begin{minipage}{.5\textwidth}
+			\centering
+			\input{Figures/cycle-knowledge}
+			\caption{Cycle of knowledge of 4 agents. Each box represents an agent along with its register values.}
+			\label{fig:target-cycle-knowledge}
+		\end{minipage}
 	\end{figure}
-	
-
-	
-	
 	
 	Fix a Minsky Machine $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$. The simulation goes as follows: 
 	\begin{itemize}
