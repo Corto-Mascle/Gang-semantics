@@ -7,7 +7,7 @@
 \end{restatable}
 
 We actually prove the following, stronger statement:
-\begin{restatable}{lemma}{lemBoundLengthHeightH}
+\begin{lemma}
 	\label{lem:bound-length-at-height-h-extended}
 	Let $\prot$ be a protocol, let $\node$ be a node of a "unfolding tree" of minimal "size@@tree" labeled by $\prot$ satisfying a "boss specification" $w$.
 	Let $\altmax$ be the maximal "altitude" in $\tree$, let $N = \size{w} + \size{\prot} +1$ and let $f_0' : n \in \nats \mapsto ((n+2)^2 \towerfun(n,n))^{n+1}$, with $\towerfun$ the function defined in Lemma~\ref{lem:short-local-runs}.
@@ -17,7 +17,7 @@ We actually prove the following, stronger statement:
 		
 		\item If $\node$ is a "follower node" then $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq f_0'(\size{\prot} + \altmax - \altitude{\node}+1)$.
 	\end{itemize} 
-\end{restatable}
+\end{lemma}
 \begin{proof}
 	The proof is by strong induction on $\altmax-\altitude{\node}$.
 

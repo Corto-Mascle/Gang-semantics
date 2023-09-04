@@ -2,17 +2,14 @@
 \section{Proofs of Section \ref{sec:cover-1BNRA}}
 \label{app:cover-one-reg}
 
-	We simplify notations as in this section we do not need to consider "local tests": with a single register every local equality test is satisfied and every local disequality test is not.
-Hence we can delete transitions with disequality tests and replace equality tests with internal transitions that have no effect (which may in turn be encoded in our model using broadcasts of dummy messages). 
-
-Furthermore, the register argument in receptions and broadcasts is always $1$, hence we remove it.
+In this section the register argument in receptions and broadcasts is always $1$, hence we remove it.
 Our new set of operations is 
 $
 Op^{\messages} = \set{\brone{\amessage}, \recone{\amessage}{\dummyact}, \recone{\amessage}{\enregact}, \recone{\amessage}{\eqtestact}, \recone{\amessage}{\diseqtestact} \mid \amessage \in \messages}.
 $
 Finally, given a "configuration" $\config$, we write $\data{\config}(a)$ for $\data{\config}(a,1)$. 
 
-Given a "run" $\run$, we write $\intro*\agentsof{\run}$ its set of agents, $\intro*\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$ the set of states appearing in $\run$ and $\intro*\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
+Given a "run" $\run$, we write $\intro*\agentsof{\run}$ for its set of agents, we define the set of states appearing in it $\intro*\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$  as well as its set of values $\intro*\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
 
 First, to simplify the proofs, we use a lemma allowing us to only consider protocols which do not contain any reception transition with action $\quotemarks{\ne}$. This is feasible as we can execute several copies of a "run" in parallel (with distinct values) so that every broadcast is made in each copy with a different value. Hence if a agent receives a message, it can always receive it with a value different from its own, making disequality tests useless. We can thus replace them with receptions with $\quotemarks{\dummyact}$. 
 

@@ -8,24 +8,13 @@ We start by defining "partial runs" as "runs" where some broadcasts are missing:
 \begin{definition}
 	Let $\config, \config'$ two configurations. 
 	
-	An ""internal message@@global"" from $\config$ to $\config'$, denoted $\config \intmessage{m}{v} \config'$, is defined when there is a "step" $\config \step{} \config'$ in which an agent broadcasts a message $(m,v)$. 
+	A ""partial step"" $\config \pstep{} \config'$ is defined if either $\config \step{} \config'$ (normal "step") or there exist $m \in \messages$, $v\in \nats$ such that for all agent $a$ either $\config(a) = \config'(a)$ or $\config(a) \extbr{\delta}{v} \config'(a)$ with $\delta$ a transition receiving "message type" $m$ (""missing broadcast"").
 	
-	An ""external message@@global"" from $\config$ to $\config'$, denoted $\config \extmessage{m}{v} \config'$ is defined when for all agents $a$, either there is a "local step" $\config(a) \extbr{m}{v} \config'(a)$ or $\config(a) = \config'(a)$.
+	A ""partial run"" is a sequence of "partial steps".
+	Note that a "local run" can be seen as a "partial run" with a single agent.A "partial run" is ""initial@@partial"" if it starts in an "initial configuration".
 	
-	A ""partial step"" $\config \pstep{} \config'$ is defined if either $\config \intmessage{m}{v} \config'$ or $\config \extmessage{m}{v} \config'$ for some $m \in \messages$, $v\in \nats$.
-	A ""partial run"" is a sequence of "partial steps" $\config_0 \pstep{} \config_1  \pstep{} \cdots \pstep{} \config_k$. We write $\config \pstep{\run} \config'$ the existence of such a "partial run" $\run$ from $\config$ to $\config'$.
-	Note that a "local run" can be seen as a "partial run" with a single agent.
 	
-	We define the $v$-""projection"" $\intro*\vproj{\aval}{\run}$ of $\run$, which is the word $(b_0, x_0) \cdots (b_\ell, x_\ell) \in (\messages \times \set{in, out})^*$ obtained from $\run$ by mapping every "external message@@global" $\config \extmessage{m}{v} \config'$ to $(m, in)$, every "internal message@@global" $\config \intmessage{m}{v} \config'$ to $(m, out)$, and everything else to $\varepsilon$.
-	
-	\AP The $v$-""input@@partial"" $\vinput{v}{\run}$ (resp. $v$-""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ such that the projection on $\messages \times \set{in}$ (resp. $\messages\times \set{out}$) of $\vproj{v}{\run}$ is $(m_0, in) \cdots (m_k, in)$ (resp. $(m_0, out)\cdots(m_k, out)$).
-	
-	\AP A "partial run" is ""initial@@partial"" if it starts in an "initial configuration".
-	
-	\AP Given a "partial run" $\run$ and a value $v \in \nats$ appearing in $\run$, $v$ is ""initial@@partial"" in $\run$ if it is "initial" for some agent in $\run$. Note that this is not always true for "partial runs", unlike for "runs", because it could be that $v$ was received in $\run$ through an "external message@@global". 
-	
-	For all configurations $\config$ over $\agents$ and $\config'$ over $\agents'$ such that $\agents \cap \agents' = \emptyset$, we write $\config \sqcup \config'$ for the configuration over $\agents \cup \agents'$ such that $\config \sqcup \config'(a)$ is $\config(a)$ if $a \in \agents$ and $\config'(a)$ if $a \in \agents'$. 
-	
+	\AP The $v$-""input@@partial"" $\vinput{v}{\run}$ (resp. $v$-""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ of "message types" corresponding to "missing broadcasts" (resp. "broadcasts") in $\run$.
 \end{definition}
 
 
@@ -53,9 +42,9 @@ We set $\run := u$, seen as a "partial run". We will use the induction hypothesi
 
 For each non-initial value $v$ of $u$, $\node$ has a "boss" child labelled by a word $bw$ such that $\vinput{v}{u} \subword bw$.
 By induction hypothesis, there is an "initial run" $\run'$ satisfying $bw$.
-We can rename values so that $bw$ is broadcast in $\run'$ with value $v$.
+We can rename values so that $bw$ is broadcast in $\run'$ with value $v$, and $\run'$ has no other shared value with $\rho$.
 
-We then extend $\run$ by adding fresh agents which execute $\run'$ without receiving anything from the previous agents. On the ohter hand, we can use the broadcasts made by the new agents to fill in the missing broadcasts over value $v$.
+We then extend $\run$ by adding fresh agents which execute $\run'$ without receiving anything from the previous agents. On the other hand, we can use the broadcasts made by the new agents to fill in the missing broadcasts over value $v$.
 
 This gives us a "run" $\run$ which no longer has any missing broadcasts on $v$, and whose behaviour on other values of $V$ is unaffected.
 
@@ -64,43 +53,33 @@ This gives us a "run" $\run$ which no longer has any missing broadcasts on $v$, 
 
 We proceed in the same way as in the previous part: the goal is now to use the "partial runs" yielded by the "follower" children to eliminate the "input@@partial" over each "non-initial@@partial" value of $u$, except maybe for $\valuelabel{\node}$, which requires a special case.
 
-\Huge TODO \normalsize
+Let $v$ be an "initial value" of $u$, and $\decsymb = (w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ the associated "decomposition" (from \ref{item:condition2_initial_value}). We can split $u$ into $u_0, \ldots, u_\ell$ with $w_i \subword \voutput{\aval}{\localrun_i}$ and $\vinput{\aval}{\localrun_i} \in \set{m_1, \dots, m_{i-1}}^*$ for all $i$. 
 
-\subsubsection{Step 3: $\valuelabel{\node}$}
+As the previous modifications of $\run$ did not alter its behavior with respect to $v$, we can also split the current $\run$ into $\run_0, \ldots, \run_\ell$ with $w_i \subword \voutput{\aval}{\run_i}$ and $\vinput{\aval}{\run_i} \in \set{m_1, \dots, m_{i-1}}^*$ for all $i$. 
 
-In this final part, we use Lemma~\ref{lem:follower-composition-output} to complete the "partial run" previously obtained so that it has enough output on $\valuelabel{\node}$ to satisfy the specification of $\node$. In fact, if $\node$ is a "follower node", the "partial run" constructed so far suffices. If $\node$ is a "boss node", we need to apply Lemma~\ref{lem:follower-composition-output}.
+By definition of an "unfolding tree", $\node$ has a "follower" child $\node_j$ for each $j$ labelled by $\followlabelmessage{\node_j} = m_j$ and $\followlabelword{\node_j} \in \langdec{\decsymb_j}$ with $\decsymb_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$. 
 
-In Section~\ref{sec:tree-to-run-step-two} we constructed an "initial partial run" $\widehat{\run}$ such that for all $v \in \nats$:
-\begin{itemize}
-	\item If $v = \valuelabel{\node}$ then $\vproj{v}{\widehat{\run}} = \vproj{v}{u}$
-	
-	\item If $v \neq \valuelabel{\node}$ then $\vinput{v}{\widehat{\run}} = \epsilon$
-\end{itemize}  
+By induction hypothesis, this means that there exists an "initial partial run" $\Tilde{\run}_j$ whose only missing broadcasts are on $v$ (we can rename values to make them match), $\vinput{v}{\Tilde{\run}} \subword \followlabelword{\node_{j}}$ and that broadcasts $\followlabelmessage{\node_{j}}$ with value $v$. We can even cut that run right after that broadcast so that it ends with it. 
 
-We have two cases: either $\mu$ is a "boss node" or a "follower node".
+We can split $\Tilde{\run}_j$ into $\Tilde{\run}_{j, 0}, \ldots, \Tilde{\run}_{j,j-1}$ so that each  $\vinput{v}{\Tilde{\run}_{j, i}} \subword \Tilde{w_i}$ where $\Tilde{w_i}$ can be obtained by adding letters from $\set{m_1, \ldots, m_j}$ to $w_i$.
 
-If $\mu$ is a "boss node" then there exists a decomposition $\decsymb=(w_0, m_1, \ldots, w_\ell)$ such that $\bosslabel{\node} \in \langdec{\decsymb}$ and $u$ can be split into $u_0, \cdots, u_\ell$ so that for all $i \in \nset{1}{\ell}$, $w_i \subword \voutput{v}{u_i}$ and $\vinput{v}{u_i} \in \set{m_0, \ldots, m_{i-1}}^*$ and $\node$ has a child $\node_i$ such that $\followlabelmessage{\mu_i} = m_i$ and $\followlabelword{\node_i} \in \langdec{\decsymb_i}$, with $\decsymb_i = (w_0, m_1, \ldots, w_{i-1})$.
+We can compose each $\run$ with $\Tilde{\run}_{j}$ by running them in parallel over disjoint sets of agents and matching each $\Tilde{\run}_{j, i}$ with $\run_i$ so that the broadcasts of $\run_i$ with value $v$ forming $w_i$ are received in $\Tilde{\run}_{j, i}$ and the only remaining missing broadcasts in that part of the run are of $m_1, \ldots, m_i$.
+We obtain a run section whose "$v$-output" still contains $w_i$ and whose "$v$-input" only contains $m_1, \ldots, m_i$. 
 
-As $\bosslabel{\node} \in \langdec{\decsymb}$, we have $\bosslabel{\node} = w'_0 \cdots w'_\ell$ where for all $i$ the projection of $w'_i$ on $\messages\setminus\set{m_1, \ldots, m_{i-1}}$ is a subword of $w_i$. 
+Finally, we can use the last operation of $\Tilde{\run}_{j, i}$, which is a broadcast of $m_j$ with value $v$, at any point during the rest of the run, to either extend the "$v$-output" of some $\run_k$ with $k \geq j$ or complete a missing broadcast.
+This construction is illustrated in Figure
+\begin{figure}
+	\input{../Figures/Fig-tree-to-run}
+	\caption{An illustration of the composition operation from the proof of Lemma~\ref{lem:tree-to-run}}.
+	\label{fig:tree-to-run}
+\end{figure}
+If $\val = \valuelabel{\node}$ then we have $\bosslabel{\node} \in \langdec{\decsymb}$, and we need to ensure that $\bosslabel{\node}$ is broadcast in $\run$ with value $\val$.
+Let $\bossspec_0, \ldots, \bossspec_\ell$ such that $\bosslabel{\node} \subword \bossspec_0\cdots\bossspec_\ell$ and for all $j$, $\bossspec_j$ can be obtained by adding letters from $\set{m_1,\ldots, m_j}$ in $w_j$.
+We apply the above composition operation to extend the output of each $\run_{i}$ so that it subsumes $\bossspec_i$ while making sure that its "input" is still only made of $m_1, \ldots, m_i$ with value $v$. 
 
-We repeat the arguments from Section~\ref{sec:tree-to-run-step-two}, but we use Lemma~\ref{lem:follower-composition-output} instead of Lemma~\ref{lem:follower-composition-completion} to obtain an "initial run" $\Tilde{\run}$ such that,
-\begin{itemize}	
-	\item $\vinput{v}{\Tilde{\run}} = \epsilon$ for all $v \in \nats$
-	
-	\item $\bosslabel{\node} \subword \voutput{\valuelabel{\node}}{\Tilde{\run}}$
-\end{itemize}
+Then, in all cases, we apply this composition operation to complete the missing broadcasts: while there is a missing broadcast of some letter $m_i$, we compose $\run$ with $\Tilde{\run}_i$ to fill it, while possibly adding some missing broadcasts of $m_1, \ldots, m_{i-1}$.
+This procedure terminates as the number of missing broadcasts of $m_\ell, m_{\ell-1}, \ldots, m_1$ decreases for the lexicographic order at each step.
 
-If $\tree$ satisfies a "boss specification" $w$  then $w \subword \bosslabel{\node} $ and thus $w \subword \voutput{\valuelabel{\node}}{\Tilde{\run}}$.
-As a result, $\Tilde{\run}$ satisfies $w$ as well.
-If $\node$ is a "follower node" then the run $\widehat{\run}$ previously constructed is such that  
+In the end we obtain a run with no missing broadcast on $v$, no missing broadcasts on values outside of $V$ and whose behavior on all other values of $V$ is unaffected. Furthermore if $v = \valuelabel{\node}$ then the $v$-output resulting run subsumes $\bosslabel{\node}$. We set $\run$ to be this new "run".
 
-\begin{itemize}	
-	\item $\vinput{v}{\Tilde{\run}} = \epsilon$ for all $v \neq \valuelabel{\node}$
-	
-	\item $\vinput{\valuelabel{\node}}{\widehat{\run}} = \voutput{\valuelabel{\node}}{\localrunlabel{\node}} \subword \followlabelword{\node}$
-	
-	\item $\voutput{\valuelabel{\node}}{\widehat{\run}} = \voutput{\valuelabel{\node}}{\localrunlabel{\node}}$ contains $\followlabelmessage{\node}$
-\end{itemize}
-
-Hence $\widehat{\run}$ satisfies the required properties.
-This concludes our induction.
+We have shown how to complete $u$ into a "partial run" satisfying the "specification" of $\node$ using the "runs" obtained from its "boss" and "follower" children. This proves the lemma by induction on the "unfolding tree" (there is no need for a base case as the construction applies even if $\node$ has no children).
