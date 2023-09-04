@@ -3,8 +3,8 @@
 
 \treessoundcomplete*
  
-We start with a few definitions. 
-First, we define the local run of an agent in a "run", which is the "local run" induced by the sequence of transitions taken by that agent through the run, along with the received messages.
+% We start with a few definitions. 
+% First, we define the local run of an agent in a "run", which is the "local run" induced by the sequence of transitions taken by that agent through the run, along with the received messages.
 
 %corresponds to the intuitive idea that a "local run" is used to describe the point of view of a single agent in a "run". Given a run $\run: \config_0 \step{} \config_1 \step{} \cdots \step{}\config_n$ and a agent $a$, the "local run" $\localrun$ of $a$ in $\run$ is defined by induction. The "local run" of $a$ in an empty run $\config_0$ is the empty local run $\config_0(a)$. Let $\localrun_i$ the local run of $a$ in $\config_0 \step{*} \config_i$ (prefix of length $i$ of $\run$). We define $\localrun_{i+1}$ as follows:
 %\begin{itemize}
@@ -28,7 +28,7 @@ For an "unfolding tree", satisfying a "specification" simply means that its root
 	\item An "unfolding tree" satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ if its root $\node$ is a "follower node" such that $\followmessagespec=\followlabelmessage{\node}$ and  $\followlabelword{\node}$ is a subword of $\followwordspec$.
 \end{itemize}
 
-Note that one can modify the system so that the \COVER problem becomes the problem of the existence of an "initial run" satisfying a "boss specification"; to do so, it suffices to add a broadcast loop on $q_f$ that broadcasts a special message type. Therefore, it suffices to prove that "initial runs" of $\prot$ and "unfolding trees" satisfy the same "boss specifications". To do so, we prove the two following implications:
+Note that \COVER redcues to the existence of an "initial run" satisfying a "boss specification": it suffices to add a loop on $q_f$ broadcasting $m_f \notin \messages$. Therefore, it suffices to prove that "initial runs" of $\prot$ and "unfolding trees" satisfy the same "boss specifications". To do so, we prove the two following implications:
 
 \begin{restatable}{lemma}{LemRunToTree}
 	\label{lem:run-to-tree}
@@ -39,6 +39,8 @@ Note that one can modify the system so that the \COVER problem becomes the probl
 	\label{lem:tree-to-run}
 	If there exists an "unfolding tree" over $\prot$ satisfying a "boss specification" $\bossspec \in \messages^*$ then there exists a finite "initial run" $\run$ of $\prot$ satisfying $\bossspec$.
 \end{restatable}
+
+% limite passage nico 
 \input{Appendix/Preuve-run-to-tree}
 
 	\input{Appendix/Preuve-tree-to-run}

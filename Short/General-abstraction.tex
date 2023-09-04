@@ -200,7 +200,7 @@ This allows to bound the "size@@sg" of every node in $\tree$ by $h'(n) = (\tower
 By minimality of $\tree$, the number of children of a node is bounded by the number of values appearing in its "local run" hence by $h'(n)$, so the total number of nodes is bounded by $h'(n)^{h(n)+1}$ and the total size of the tree by $f:n \mapsto h'(n)^{h(n)+2}$. Because $\Ffunction{\omega^{\size{\messages}+1}}$ contains all primitive-recursive functions and is closed under multiplication and exponentiation, $f$ is in $\Ffunction{\omega^{\size{\messages}+1}}$.
 \end{proof}
 
-The previous argument shows that \COVER for "signature protocols" is decidable and lies in complexity class $\Fcomplexity{\omega^{m+1}}$ for a fixed-size alphabet of size $m$ and in $\Fcomplexity{\omega^\omega}$ in general. Because the hardness from Proposition~\ref{prop:reduction-LCS} holds for "signature protocols", \COVER is in fact complete for this complexity class.
+The previous argument shows that \COVER for "signature protocols" is decidable and lies in complexity class $\Fcomplexity{\omega^\omega}$. Because the hardness from Proposition~\ref{prop:reduction-LCS} holds for "signature protocols", \COVER is in fact complete for this complexity class.
 
 We now extend this method to the general case. 
 
@@ -365,36 +365,14 @@ We can now bound the size of a node with respect to the size of its neighbors of
 \begin{restatable}{lemma}{lemBoundSuccessorHeight}
 	\label{lem:bound-successor-height}
 	Let $\node$ be a node of $\tree$ such that all neighbors of $\node$ of higher altitude have size bounded by $K$.
-	Then $\size{\node} \leq \towerfun(\size{\prot}, r) \, O(\size{\messages} r K)$. 
-\nico{abus de notation du $O()$ avec plusieurs paramètres, ça vous choque?}
-\todo{go to appendix and adapt to new, simplified statement}
-	% \begin{enumerate}				
-	% 	\item  If $\node$ is a "boss node" then $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r)\Big[ \size{\bosslabel{\node}} + \size{\messages}rK +1 \Big]$ and if in addition, $\node$ is not the root, $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$ with $\node'$ its parent
-		
-	% 	\item If $\node$ is a "follower node" then  $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r)\Big[ 1 + \size{\messages}rK \Big]$
-	% \end{enumerate}
+	Then $\size{\node} \leq \towerfun(\size{\prot}, r) \, O(\size{\messages} \, r \, K)$. 
+\nico{j'ai completement enleve la preuve en annexe}
 \end{restatable}
-
-% We can now use the previous lemma to bound the label of each node $\node$ with respect to its neighbors of higher altitude, i.e., its "follower" children and its parent if it is a "boss node". The idea is that these nodes define the number of messages that $\localrunlabel{\node}$ must output to satisfy the "unfolding tree" conditions. The function $\psi$ in the statement below is the one from the Tower Function Lemma (Lemma~\ref{lem:short-local-runs}).
-
-% \begin{restatable}{lemma}{lemBoundSuccessorHeight}
-% 	\label{lem:bound-successor-height}
-% 	Let $\prot$ be a "protocol" over $\regnum$ registers, let $\tree$ be an "unfolding tree" over $\prot$ of minimal "size@@tree" satisfying a "boss specification" $\bossspec$, let $\node$ be a node of $\tree$.
-% 	Let $K$ be such that for all "follower" children $\node_f$ of $\node$, $\size{\followlabelword{\node_f}} \leq K$.
-% 	We have the following properties:
-% 	\begin{enumerate}				
-% 		\item  If $\node$ is a "boss node" then $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r)\Big[ \size{\bosslabel{\node}} + \size{\messages}rK +1 \Big]$ and if in addition, $\node$ is not the root, $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$ with $\node'$ its parent
-%		\end{itemize}
-		
-		% \item If $\node$ is a "follower node" then  $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r)\Big[ 1 + \size{\messages}rK \Big]$
-			
-% 	\end{enumerate}
-% \end{restatable}
-
-\begin{proof}[Proof sketch]
-	$\node$ has at most $\size{\messages}$ "follower" children for each "initial value", hence at most $\size{\messages}r$ in total, each one of them requires at most $K$ messages. If $\node$ is a "follower node", then the number of messages it must broadcast is bounded by $\size{\messages} r K +1$. If $\node$ is a "boss node", then its parent % if its exists, if root then empty spec
-	has higher altitude hence $\size{\bossspec(\node)} \leq K$ and $\node$ must ouptut at most $\size{\messages} r K + K$ messages in total.
-	This gives a bound in $O(\size{\messages} r K) $ on the number of messages $\localrunlabel{\node}$ needs to broadcast. As in Lemma~\ref{lem:bounds_tree_sg}, this allows us to bound the length of $\localrunlabel{\node}$ by $\towerfun(\size{\prot},r) \, O(\size{\messages} r K)$. See Appendix~\ref{app:bound-node-with-spec} for the full proof.
+\begin{proof}
+	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children: if two "follower children" broadcast message type $m \in \messages$, then one could keep only the one that is able to broadcast it first.
+	Because there are at most $r$ "initial" values, this makes at most $\size{\messages} \, r$ "follower children" and each one of them requires at most $K$ messages. If $\node$ is a "follower node", then the number of messages it must broadcast is bounded by $\size{\messages} \, r \, K +1$. If $\node$ is a "boss node", then its parent % if its exists, if root then empty spec
+	has higher altitude hence $\size{\bossspec(\node)} \leq K$ and $\node$ must broadcast at most $\size{\messages} \, r \, K + K$ messages in total.
+	This bounds in $O(\size{\messages} \, r \, K) $ the number of messages $u$ needs to broadcast; as in Lemma~\ref{lem:bounds_tree_sg}, we bound the length of $u$ by $\towerfun(\size{\prot},r) \, O(\size{\messages}\, r \, K)$; the bound on $\size{\node}$ follows.
 \end{proof}
 
 
@@ -419,6 +397,5 @@ The bound on the "size@@tree" of the tree then follows from the observation that
 We obtain a computable bound (of the class $\Ffunction{\omega^\omega}$) on the "size@@tree" of a minimal "coverability witness", if it exists. Our decidability procedure computes that bound, enumerates all trees of "size@@tree" below the bound and checks for each of them whether it is "coverability witness". Details can be found in Appendix~\ref{app:decidability}.
 
 \decidablecover*
-\nico{on ne veut pas essayer d'avoir la classe exacte à taille d'alphabet fixé?}
 
 

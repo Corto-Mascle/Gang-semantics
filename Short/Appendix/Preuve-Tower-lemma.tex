@@ -262,33 +262,33 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 
 
 
-\section{Proof of Lemma~\ref{lem:bound-successor-height}}
-\label{app:bound-node-with-spec}
+% \section{Proof of Lemma~\ref{lem:bound-successor-height}}
+% \label{app:bound-node-with-spec}
 
-Our aim  is now to bound the size of a node with respect to its "follower" children (and its father if it is a "boss node"). Those are the nodes representing agents that may require a large "input" from that node. We start with a technical lemma explaining that the "decompositions" witnessing the satisfaction of conditions~\ref{item:condition2_initial_value} and \ref{item:condition3_follower_node} of "unfolding trees" do not need to be larger than the sum of the sizes of the labels of the corresponding "follower" children.
+% Our aim  is now to bound the size of a node with respect to its "follower" children (and its father if it is a "boss node"). Those are the nodes representing agents that may require a large "input" from that node. We start with a technical lemma explaining that the "decompositions" witnessing the satisfaction of conditions~\ref{item:condition2_initial_value} and \ref{item:condition3_follower_node} of "unfolding trees" do not need to be larger than the sum of the sizes of the labels of the corresponding "follower" children.
 
-\begin{lemma}
-	\label{lem:short-dec}
-	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a decomposition, and for all $i\in \nset{0}{\ell}$ let $\decsymb_i = (w_0, m_1, \ldots, w_i)$.
-	Let $x_0, \ldots, x_\ell$ be such that $x_i \in \langdec{\decsymb_i}$ for all $i$.
+% \begin{lemma}
+% 	\label{lem:short-dec}
+% 	Let $\decsymb = (w_0, m_1, \ldots, w_\ell)$ be a decomposition, and for all $i\in \nset{0}{\ell}$ let $\decsymb_i = (w_0, m_1, \ldots, w_i)$.
+% 	Let $x_0, \ldots, x_\ell$ be such that $x_i \in \langdec{\decsymb_i}$ for all $i$.
 	
-	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that, for all $i$, $\widehat{w}_i \subword w_i$ and $x_i \in \langdec{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$), and $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \size{x_i}$. 
-\end{lemma}
+% 	Then there exists $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ such that, for all $i$, $\widehat{w}_i \subword w_i$ and $x_i \in \langdec{\widehat{\decsymb}_i}$ (where $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$), and $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \size{x_i}$. 
+% \end{lemma}
 
 
-\begin{proof}
-	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we denote the word projection of $w$ on $M$ by $\wordproj{w}{M}$.
+% \begin{proof}
+% 	In the following proof, for $M \subseteq \messages$ a set of "message types" and $w \in \messages^*$, we denote the word projection of $w$ on $M$ by $\wordproj{w}{M}$.
 	
-	For all $i$, as $x_i \in \langdec{\decsymb_i}$, we can split $x_i$ into $y_{i,0} \cdots y_{i,i}$ where, for all $j$, $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
+% 	For all $i$, as $x_i \in \langdec{\decsymb_i}$, we can split $x_i$ into $y_{i,0} \cdots y_{i,i}$ where, for all $j$, $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$. 
 	
-	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
-	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of length at most $\sum_{i=0}^{j} \size{\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
+% 	For all $j \in \nset{0}{\ell}$, for all $i\geq j$, $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $w_j$.
+% 	Hence we can find a subword $\widehat{w}_j$ of $w_j$ of length at most $\sum_{i=0}^{j} \size{\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}}$ such that $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$ is a subword of $\widehat{w}_j$ for all $i$, by considering for each $i$ a set of positions in $w_j$ that forms $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_{j}}}$, and then setting $\widehat{w}_j$ as the word formed by the union of those sets of positions.
 	
-	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$, $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
-	We obtain that for all $i$, for all $j \in \nset{0}{i}$, $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_j}} \subword \widehat{w}_j$. As by definition $x_i = y_{i,0} \cdots y_{i,i}$, we have $x_i \in \langdec{\decsymb_i}$.
+% 	We then define $\widehat{\decsymb} = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$ and for all $i$, $\widehat{\decsymb}_i = (\widehat{w}_0, m_1, \ldots, \widehat{w}_\ell)$.
+% 	We obtain that for all $i$, for all $j \in \nset{0}{i}$, $\wordproj{y_{i,j}}{\messages\setminus\set{m_1, \ldots, m_j}} \subword \widehat{w}_j$. As by definition $x_i = y_{i,0} \cdots y_{i,i}$, we have $x_i \in \langdec{\decsymb_i}$.
 	
-	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{y_{i,j}} = \sum_{i=0}^{\ell} \size{x_i}$.
-\end{proof}
+% 	Furthermore we have $\sum_{i=0}^{\ell} \size{\widehat{w}_i} \leq \sum_{i=0}^{\ell} \sum_{j=0}^i \size{y_{i,j}} = \sum_{i=0}^{\ell} \size{x_i}$.
+% \end{proof}
 
 
 
@@ -299,86 +299,86 @@ Our aim  is now to bound the size of a node with respect to its "follower" child
 
 
 
-\lemBoundSuccessorHeight*
+% \lemBoundSuccessorHeight*
 
 
 
 
-\begin{proof}
-	Let $\node$ be a node of $\tree$.
-	Let $\Vinit$ be the set of "initial values" being broadcast or received in $\localrunlabel{\node}$. We have $\size{\Vinit}\leq r$ as there is at most one such value for each register.  
+% \begin{proof}
+% 	Let $\node$ be a node of $\tree$.
+% 	Let $\Vinit$ be the set of "initial values" being broadcast or received in $\localrunlabel{\node}$. We have $\size{\Vinit}\leq r$ as there is at most one such value for each register.  
 	
-%	For each $v \in \Vinit$, if $v \neq \valuelabel{\node}$ (resp. if $v = \valuelabel{\node}$), let $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ be a "decomposition" and $\node_{v,1}, \ldots, \node_{v, \ell_v}$ "follower" children of $\node$ such that condition~\ref{item:condition2_initial_value} (resp. \ref{item:condition4_boss_node}) is respected.
-%	
-%	We can delete all other "follower" children of $\node$ and still have a "unfolding tree" satisfying $w$ as the $\node_{v,i}$ suffice to satisfy conditions \ref{item:condition2_initial_value} and \ref{item:condition4_boss_node} and the other conditions do not depend on "follower" children.
-%	As we assumed $\tree$ to be of minimal size, $\node$ does not have "follower" children besides the $\node_{v,i}$. As $\size{\Vinit} \leq r$ and $\ell_v \leq \size{\messages}$ for all $v$ (by definition of a "decomposition", as the $(m_{v,i})_{1\leq i \leq \ell_v}$ are all distinct), $\node$ has at most $\size{\messages}r$ "follower" children.
+% %	For each $v \in \Vinit$, if $v \neq \valuelabel{\node}$ (resp. if $v = \valuelabel{\node}$), let $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ be a "decomposition" and $\node_{v,1}, \ldots, \node_{v, \ell_v}$ "follower" children of $\node$ such that condition~\ref{item:condition2_initial_value} (resp. \ref{item:condition4_boss_node}) is respected.
+% %	
+% %	We can delete all other "follower" children of $\node$ and still have a "unfolding tree" satisfying $w$ as the $\node_{v,i}$ suffice to satisfy conditions \ref{item:condition2_initial_value} and \ref{item:condition4_boss_node} and the other conditions do not depend on "follower" children.
+% %	As we assumed $\tree$ to be of minimal size, $\node$ does not have "follower" children besides the $\node_{v,i}$. As $\size{\Vinit} \leq r$ and $\ell_v \leq \size{\messages}$ for all $v$ (by definition of a "decomposition", as the $(m_{v,i})_{1\leq i \leq \ell_v}$ are all distinct), $\node$ has at most $\size{\messages}r$ "follower" children.
 	
-	Let $\node$ be a "boss node". If $\node$ is the root, then as $\tree$ satisfies $\bossspec$ we have $\bossspec \subword \bosslabel{\node}$. If $\bossspec \neq \bosslabel{\node}$, we can replace $\bosslabel{\node}$ with $\bossspec$: As $\bossspec \subword \bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $\bossspec \in \langdec{\decsymb}$, hence condition~\ref{item:condition4_boss_node} is still satisfied, and the other conditions of a "unfolding tree" are unaffected by this change.
-	Furthermore the resulting "unfolding tree" still satisfies $\bossspec$. This contradicts the minimality of $\tree$, hence we have $\bosslabel{\node} = \bossspec$.
+% 	Let $\node$ be a "boss node". If $\node$ is the root, then as $\tree$ satisfies $\bossspec$ we have $\bossspec \subword \bosslabel{\node}$. If $\bossspec \neq \bosslabel{\node}$, we can replace $\bosslabel{\node}$ with $\bossspec$: As $\bossspec \subword \bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $\bossspec \in \langdec{\decsymb}$, hence condition~\ref{item:condition4_boss_node} is still satisfied, and the other conditions of a "unfolding tree" are unaffected by this change.
+% 	Furthermore the resulting "unfolding tree" still satisfies $\bossspec$. This contradicts the minimality of $\tree$, hence we have $\bosslabel{\node} = \bossspec$.
 	
-	If $\node$ is not the root, then let $\node'$ be its parent. 
-	Let $V'$ be the set of non-initial values $v'$ of $\node'$ such that $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$.
+% 	If $\node$ is not the root, then let $\node'$ be its parent. 
+% 	Let $V'$ be the set of non-initial values $v'$ of $\node'$ such that $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$.
 	
-	We can construct a subword $\bossspec'$ of $\bosslabel{\node}$ of length at most $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}}$ such that all $\vinput{v'}{\localrunlabel{\node'}}$ are subwords of $\bossspec'$. It suffices to select for each $v'$ a set of positions in $\bosslabel{\node}$ forming $\vinput{v'}{\localrunlabel{\node'}}$, and then taking the word formed by the union of those sets of positions.
-	Observe that we necessarily have $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}}$, thus $\size{\bossspec'} \leq \size{\localrunlabel{\node'}}$.
+% 	We can construct a subword $\bossspec'$ of $\bosslabel{\node}$ of length at most $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}}$ such that all $\vinput{v'}{\localrunlabel{\node'}}$ are subwords of $\bossspec'$. It suffices to select for each $v'$ a set of positions in $\bosslabel{\node}$ forming $\vinput{v'}{\localrunlabel{\node'}}$, and then taking the word formed by the union of those sets of positions.
+% 	Observe that we necessarily have $\sum_{v' \in V'} \size{\vinput{v'}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}}$, thus $\size{\bossspec'} \leq \size{\localrunlabel{\node'}}$.
 	
-	Like in the previous case, as $\bossspec'$ is a subword of $\bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $\bossspec' \in \langdec{\decsymb}$. As a result, condition~\ref{item:condition4_boss_node} is still satisfied after switching the label $\bosslabel{\node}$ to $\bossspec'$. Furthermore, by definition of $V'$ and $\bossspec'$, for all non-initial value $v'$ in $\localrunlabel{\node'}$, if $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$ then  $\vinput{v'}{\localrunlabel{\node'}} \subword \bossspec'$, hence condition~\ref{item:condition1_non_initial_value} is still satisfied as well. Other conditions are unaffected by this change.
+% 	Like in the previous case, as $\bossspec'$ is a subword of $\bosslabel{\node}$, for all "decomposition" $\decsymb$, if $\bosslabel{\node} \in \langdec{\decsymb}$ then $\bossspec' \in \langdec{\decsymb}$. As a result, condition~\ref{item:condition4_boss_node} is still satisfied after switching the label $\bosslabel{\node}$ to $\bossspec'$. Furthermore, by definition of $V'$ and $\bossspec'$, for all non-initial value $v'$ in $\localrunlabel{\node'}$, if $\vinput{v'}{\localrunlabel{\node'}} \subword \bosslabel{\node}$ then  $\vinput{v'}{\localrunlabel{\node'}} \subword \bossspec'$, hence condition~\ref{item:condition1_non_initial_value} is still satisfied as well. Other conditions are unaffected by this change.
 	
-	Hence if $\size{\bosslabel{\node}} > \size{\localrunlabel{\node'}}$ we can obtain a "unfolding tree" smaller than $\tree$ and satisfying $w$, contradicting the minimality of $\tree$. As a result, $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$.
+% 	Hence if $\size{\bosslabel{\node}} > \size{\localrunlabel{\node'}}$ we can obtain a "unfolding tree" smaller than $\tree$ and satisfying $w$, contradicting the minimality of $\tree$. As a result, $\size{\bosslabel{\node}} \leq \size{\localrunlabel{\node'}}$.
 	
-	We have shown the first point of property 1. For the second one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "unfolding tree" conditions and then bound the length of $\localrunlabel{\node}$ using Lemma~\ref{lem:short-local-runs}.
+% 	We have shown the first point of property 1. For the second one, we isolate the broadcasts of $\localrunlabel{\node}$ that are necessary to satisfy the "unfolding tree" conditions and then bound the length of $\localrunlabel{\node}$ using Lemma~\ref{lem:short-local-runs}.
 	
-	Let $u = \localrunlabel{\node}$, let $v$ be an initial value of $u$. If $v = \valuelabel{\node}$ then by condition~\ref{item:condition4_boss_node} there exist a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_{v,1}, \ldots, \node_{v,\ell_v}$ such that
-	\begin{itemize}
-		\item $\bosslabel{\node} \in \langdec{\decsymb_v}$
-		\item $u$ can be split into $u_{v,0}, \ldots, u_{v,\ell_v}$ so that for all $i$, $w_{v,i} \subword \voutput{v}{u_{v,i}}$ and $\vinput{v}{u_{v,i}} \in \set{m_{v,1}, \ldots, m_{v,i-1}}^*$
+% 	Let $u = \localrunlabel{\node}$, let $v$ be an initial value of $u$. If $v = \valuelabel{\node}$ then by condition~\ref{item:condition4_boss_node} there exist a "decomposition" $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$ and "follower" children $\node_{v,1}, \ldots, \node_{v,\ell_v}$ such that
+% 	\begin{itemize}
+% 		\item $\bosslabel{\node} \in \langdec{\decsymb_v}$
+% 		\item $u$ can be split into $u_{v,0}, \ldots, u_{v,\ell_v}$ so that for all $i$, $w_{v,i} \subword \voutput{v}{u_{v,i}}$ and $\vinput{v}{u_{v,i}} \in \set{m_{v,1}, \ldots, m_{v,i-1}}^*$
 		
-		\item for all $i$, $\followlabelword{\node_{v,i}} \in \langdec{\decsymb_{v,i}}$, with $\decsymb_{v,i}= (w_{v,0}, m_{v,1}, \ldots, w_{v,i-1})$, and $\followlabelmessage{\node_{v,i}} = m_{v,i}$.
-	\end{itemize}
+% 		\item for all $i$, $\followlabelword{\node_{v,i}} \in \langdec{\decsymb_{v,i}}$, with $\decsymb_{v,i}= (w_{v,0}, m_{v,1}, \ldots, w_{v,i-1})$, and $\followlabelmessage{\node_{v,i}} = m_{v,i}$.
+% 	\end{itemize}
 	
-	Similarly, if $v \neq \valuelabel{\node}$, we set $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$, "follower" children $\node_{v,1}, \ldots, \node_{v, \ell_v}$ and $u_{v,0}, \ldots, u_{v,\ell_v}$ such that condition~\ref{item:condition2_initial_value} is satisfied.
+% 	Similarly, if $v \neq \valuelabel{\node}$, we set $\decsymb_v = (w_{v,0}, m_{v,1}, \ldots, w_{v,\ell_v})$, "follower" children $\node_{v,1}, \ldots, \node_{v, \ell_v}$ and $u_{v,0}, \ldots, u_{v,\ell_v}$ such that condition~\ref{item:condition2_initial_value} is satisfied.
 	
-	By Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_{v,i}}}$ if $v \neq \valuelabel{\node}$, and $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \size{\bosslabel{\node}} + \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_{v,i}}}$ if $v = \valuelabel{\node}$.
+% 	By Lemma~\ref{lem:short-dec}, we can assume that $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_{v,i}}}$ if $v \neq \valuelabel{\node}$, and $\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \size{\bosslabel{\node}} + \sum_{i=0}^{\ell_v} \size{\followlabelword{\node_{v,i}}}$ if $v = \valuelabel{\node}$.
 	
-	For all $v\in \Vinit$, we define $J_v$ as a set of positions in $\localrun$ corresponding to the broadcasts of the letters of all the $w_{v,i}$. Formally, let $w_v = w_{v,0} \cdots w_{v,\ell_v}$, $J_v$ is a set of indices $j_{v,1} < j_{v,2} < \ldots < j_{v,N_v}$ such that: 
-	\begin{itemize}
-		\item $N_v = \size{w_v}$
+% 	For all $v\in \Vinit$, we define $J_v$ as a set of positions in $\localrun$ corresponding to the broadcasts of the letters of all the $w_{v,i}$. Formally, let $w_v = w_{v,0} \cdots w_{v,\ell_v}$, $J_v$ is a set of indices $j_{v,1} < j_{v,2} < \ldots < j_{v,N_v}$ such that: 
+% 	\begin{itemize}
+% 		\item $N_v = \size{w_v}$
 		
-		\item for all $a \in [1,N_v]$, the $j_{v,a}$th step of $u$ is a broadcast of the $a$th letter of $w_v$ with value $v$.
+% 		\item for all $a \in [1,N_v]$, the $j_{v,a}$th step of $u$ is a broadcast of the $a$th letter of $w_v$ with value $v$.
 		
-		\item for all index $j'$, if the $j'$th step in $u$ is a reception step of $m_{v, i}$ then $w_{v,0} \cdots w_{v,i-1}$ has already been broadcast, i.e., $w_{v,0} \cdots w_{v,i-1}$ is a prefix of the sequence of message types broadcast at positions in $J_v \cap [1, j']$.
-	\end{itemize}
+% 		\item for all index $j'$, if the $j'$th step in $u$ is a reception step of $m_{v, i}$ then $w_{v,0} \cdots w_{v,i-1}$ has already been broadcast, i.e., $w_{v,0} \cdots w_{v,i-1}$ is a prefix of the sequence of message types broadcast at positions in $J_v \cap [1, j']$.
+% 	\end{itemize}
 
-	We have, by definition, $\size{J_v} \leq \sum_{i=0}^{\ell_v} \size{w_{v,i}}$ for all $v$.
-	Let $J$ be the union of all $J_v$, we have $\size{J} \leq \sum_{\val \in \Vinit}\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \size{\bosslabel{\node}} +  \sum_{\val \in \Vinit}\sum_{i=0}^{\ell_v} \size{\followlabelword{\node_{v,i}}}  \leq \size{\bosslabel{\node}}+ \size{\messages}rK$. The last inequality is obtained by observing that $u$ has at most $r$ initial values (one per register), $\ell_v \leq \size{M}$ for all $v$ by definition of a "decomposition" (as all $(m_{v,i})_{1\leq i \leq \ell_v}$ are distinct), and $\size{\followlabelword{\node_{v,i}}} \leq K$ for all $v,i$ by definition of $K$.
+% 	We have, by definition, $\size{J_v} \leq \sum_{i=0}^{\ell_v} \size{w_{v,i}}$ for all $v$.
+% 	Let $J$ be the union of all $J_v$, we have $\size{J} \leq \sum_{\val \in \Vinit}\sum_{i=0}^{\ell_v} \size{w_{v,i}} \leq \size{\bosslabel{\node}} +  \sum_{\val \in \Vinit}\sum_{i=0}^{\ell_v} \size{\followlabelword{\node_{v,i}}}  \leq \size{\bosslabel{\node}}+ \size{\messages}rK$. The last inequality is obtained by observing that $u$ has at most $r$ initial values (one per register), $\ell_v \leq \size{M}$ for all $v$ by definition of a "decomposition" (as all $(m_{v,i})_{1\leq i \leq \ell_v}$ are distinct), and $\size{\followlabelword{\node_{v,i}}} \leq K$ for all $v,i$ by definition of $K$.
 	
-	We now use Lemma~\ref{lem:short-local-runs} repeatedly. Let $j_1< \ldots < j_N$ be the indices of $J$, in increasing order. For all $a \in [1,N]$, let $(q_a, \nu_a)$ (resp. $(q'_a, \nu'_a))$) be the local configuration right after (resp. before) the $j_a$th step of $u$, and let $u_a$ be the section of $u$ from $(q_{a-1}, \nu_{a-1})$ (with $(q_0, \nu_0)$ the initial configuration of $u$) to $(q'_a, \nu'_a)$.
+% 	We now use Lemma~\ref{lem:short-local-runs} repeatedly. Let $j_1< \ldots < j_N$ be the indices of $J$, in increasing order. For all $a \in [1,N]$, let $(q_a, \nu_a)$ (resp. $(q'_a, \nu'_a))$) be the local configuration right after (resp. before) the $j_a$th step of $u$, and let $u_a$ be the section of $u$ from $(q_{a-1}, \nu_{a-1})$ (with $(q_0, \nu_0)$ the initial configuration of $u$) to $(q'_a, \nu'_a)$.
 	
-	For each $a$, we are going to define a local run $u'_a : (q_{a-1}, \nu_{a-1}) \step{*} (q'_a, \nu'_a)$ and a finite set of values $V_a$.
-	We do this in increasing order: let $V_0$ be the set of values appearing in $u$ and for each $a$, let $u'_a$ be the "local run" obtained by applying Lemma~\ref{lem:short-local-runs} to $u_a$ with $V=V_{a-1}$. Let $V_a$ be $V_{a-1}$ to which we added all values appearing in $u'_{a}$.
+% 	For each $a$, we are going to define a local run $u'_a : (q_{a-1}, \nu_{a-1}) \step{*} (q'_a, \nu'_a)$ and a finite set of values $V_a$.
+% 	We do this in increasing order: let $V_0$ be the set of values appearing in $u$ and for each $a$, let $u'_a$ be the "local run" obtained by applying Lemma~\ref{lem:short-local-runs} to $u_a$ with $V=V_{a-1}$. Let $V_a$ be $V_{a-1}$ to which we added all values appearing in $u'_{a}$.
 	
-	We obtain, for each $a$, a local run $u'_a : (q_{a-1}, \nu_{a-1}) \step{*} (q'_a, \nu'_a)$ of length at most $\towerfun(\size{\prot}-r+r, r) = \towerfun(\size{\prot}, r)$ such that 
-	\begin{enumerate}
-		\item for all $\aval' \in \nats \setminus V_{a-1}$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$,
-		\item for all $\aval \in V_{a-1}$, $\vinput{\aval}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$. 
-	\end{enumerate}
-Let $u'$ be the "local run" obtained by replacing all $u_a$ with $u'_a$. Using the bounds on $\size{J}$ and on $\size{u'_a}$ for each $a$, we obtain that $\size{u'} \leq (\towerfun(\size{\prot}, r) +1) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large]$.
+% 	We obtain, for each $a$, a local run $u'_a : (q_{a-1}, \nu_{a-1}) \step{*} (q'_a, \nu'_a)$ of length at most $\towerfun(\size{\prot}-r+r, r) = \towerfun(\size{\prot}, r)$ such that 
+% 	\begin{enumerate}
+% 		\item for all $\aval' \in \nats \setminus V_{a-1}$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$,
+% 		\item for all $\aval \in V_{a-1}$, $\vinput{\aval}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$. 
+% 	\end{enumerate}
+% Let $u'$ be the "local run" obtained by replacing all $u_a$ with $u'_a$. Using the bounds on $\size{J}$ and on $\size{u'_a}$ for each $a$, we obtain that $\size{u'} \leq (\towerfun(\size{\prot}, r) +1) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large]$.
 
-We replace the "local run" label of $\node$ with $u'$. 
+% We replace the "local run" label of $\node$ with $u'$. 
 
 
-It is now left to prove that the resulting tree is indeed an unfolding tree.
-	For all $v \in \Vinit$ of $u'$ (which are the same as for $u$), as $v \in V_0$ and as $(V_a)$ is an increasing sequence, $v \in V_a$ for all $a$. As a consequence, $\vinput{\aval}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$ for all $a$. As $J$ contains $J_v$, we can conclude that $u'$ matches "decomposition" $\decsymb_v$ in the same way as $u$, hence conditions~\ref{item:condition2_initial_value} and~\ref{item:condition4_boss_node} are still satisfied.
+% It is now left to prove that the resulting tree is indeed an unfolding tree.
+% 	For all $v \in \Vinit$ of $u'$ (which are the same as for $u$), as $v \in V_0$ and as $(V_a)$ is an increasing sequence, $v \in V_a$ for all $a$. As a consequence, $\vinput{\aval}{\localrun'_a}$ is a subword of $\vinput{\aval}{\localrun_a}$ for all $a$. As $J$ contains $J_v$, we can conclude that $u'$ matches "decomposition" $\decsymb_v$ in the same way as $u$, hence conditions~\ref{item:condition2_initial_value} and~\ref{item:condition4_boss_node} are still satisfied.
 	
-	For  all non-initial value $v'$ of $u'$, if $v'$ appears in $u$ then the $\vinput{\aval'}{\localrun'_a}$ is a subword of $\vinput{\aval'}{\localrun_a}$ for all $a$, hence $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval'}{\localrun}$. Hence we can use the same "boss" child of $\node$ to witness the satisfaction of condition~\ref{item:condition1_non_initial_value} for $v$.
+% 	For  all non-initial value $v'$ of $u'$, if $v'$ appears in $u$ then the $\vinput{\aval'}{\localrun'_a}$ is a subword of $\vinput{\aval'}{\localrun_a}$ for all $a$, hence $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval'}{\localrun}$. Hence we can use the same "boss" child of $\node$ to witness the satisfaction of condition~\ref{item:condition1_non_initial_value} for $v$.
 	
-	If $v'$ does not appear in $u$ then let $a$ be the first index such that $v'$ appears in $u'_a$. Then we have $v' \in V_b$ for all $b \geq a$, hence $\vinput{v'}{u'_b} = \epsilon$ for all $b\neq a$. Furthermore, there exists $v$ such that $\vinput{v'}{u'_a} \subword \vinput{v}{u_a}$, hence $\vinput{v'}{u'} \subword \vinput{v}{u}$. Hence we can use the "boss" child of $\node$ previously witnessing the satisfaction of condition~\ref{item:condition1_non_initial_value} for $v$ to witness the satisfaction of condition~\ref{item:condition1_non_initial_value} for $v'$.
+% 	If $v'$ does not appear in $u$ then let $a$ be the first index such that $v'$ appears in $u'_a$. Then we have $v' \in V_b$ for all $b \geq a$, hence $\vinput{v'}{u'_b} = \epsilon$ for all $b\neq a$. Furthermore, there exists $v$ such that $\vinput{v'}{u'_a} \subword \vinput{v}{u_a}$, hence $\vinput{v'}{u'} \subword \vinput{v}{u}$. Hence we can use the "boss" child of $\node$ previously witnessing the satisfaction of condition~\ref{item:condition1_non_initial_value} for $v$ to witness the satisfaction of condition~\ref{item:condition1_non_initial_value} for $v'$.
 	
-	As a consequence, all conditions of an "unfolding tree" are still satisfied. 
-	By minimality of $\tree$, we must have $\size{u} \leq \size{u'} \leq\towerfun(\size{\prot}, r) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large+1]$. We have shown the first point of the lemma.
+% 	As a consequence, all conditions of an "unfolding tree" are still satisfied. 
+% 	By minimality of $\tree$, we must have $\size{u} \leq \size{u'} \leq\towerfun(\size{\prot}, r) \Large[\size{\bosslabel{\node}}+ \size{\messages}rK\Large+1]$. We have shown the first point of the lemma.
 	
-	Now let $\node$ be a "follower node", by condition~\ref{item:condition3_follower_node} we have $\vinput{\valuelabel{\node}}{\localrunlabel{\node}} = \followlabelword{\node}$ and thus $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}}$.
+% 	Now let $\node$ be a "follower node", by condition~\ref{item:condition3_follower_node} we have $\vinput{\valuelabel{\node}}{\localrunlabel{\node}} = \followlabelword{\node}$ and thus $\size{\followlabelword{\node}} \leq \size{\localrunlabel{\node}}$.
 	
-	The proof of the second point is analogous to the one for "boss nodes": we identify the necessary broadcasts in the "local run" and reduce the "local runs" in-between them using Lemma~\ref{lem:short-local-runs}. The only difference is that instead of broadcasting the letters of its boss label, $\node$ only has to broadcast the message $(\followlabelmessage{\node}, \valuelabel{\node})$ in addition to the messages required by its "follower" children, hence the $\size{\bosslabel{\node}}$ term is replaced by $1$ in the inequality.
-\end{proof}
+% 	The proof of the second point is analogous to the one for "boss nodes": we identify the necessary broadcasts in the "local run" and reduce the "local runs" in-between them using Lemma~\ref{lem:short-local-runs}. The only difference is that instead of broadcasting the letters of its boss label, $\node$ only has to broadcast the message $(\followlabelmessage{\node}, \valuelabel{\node})$ in addition to the messages required by its "follower" children, hence the $\size{\bosslabel{\node}}$ term is replaced by $1$ in the inequality.
+% \end{proof}
 
