@@ -7,7 +7,7 @@ Our new set of operations is
 \[
 Op^{\messages} = \set{\brone{\amessage}, \recone{\amessage}{\dummyact}, \recone{\amessage}{\enregact}, \recone{\amessage}{\eqtestact}, \recone{\amessage}{\diseqtestact} \mid \amessage \in \messages}.
 \]
-Finally, given a "configuration" $\config$, we write $\data{\config}(a)$ for $\data{\config}(a,1)$. 
+Also, given a "configuration" $\config$, we write $\data{\config}(a)$ for $\data{\config}(a,1)$. 
 
 Given a "run" $\run$, we write $\intro*\agentsof{\run}$ for its set of agents, we define the set of states appearing in it $\intro*\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$  as well as its set of values $\intro*\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
 
@@ -158,8 +158,7 @@ First of all we observe that if there is an "abstract run" covering a state then
 \end{proof}
 \fi
 
-It remains to prove that our abstraction is sound and complete. We start with some intuition.
-
+It remains to prove that our abstraction is sound and complete. 
 To prove the completeness, we take a concrete "run" $\run$ in our model and any value $v$ appearing in the reached configuration. We prove that there exists an "abstract run" leading to the abstract configuration $(\statesin{\run}, \gangof{v}{\run})$. 
 %Note that $\statesin{\run}$ is the set of all states appearing in $\run$ and $\gangof{v}{\run} = (\boss, \clique)$ is the gang of agents with value $v$ at the end of $\run$, i.e., if the agent starting with value $v$ has still the same value, $\boss$ denotes its state, and otherwise $\boss = \bot$, and $\clique$ is the set of states on which there is an agent with value $v$ at the end of $\run$.
 
@@ -168,9 +167,9 @@ Then, it is left to show that for all concrete "run" $\run$ and for all value $v
 
 %The base case is handled by the first property we proved. For the induction case, we consider a prefix "run" $\run'$ of $\run$ that stops just before all $\covset(\run)$ is covered, and we take $v_{\mathbf{br}}$ the value of the broadcast in following step, that covers the rest of $\covset(\run)$. By induction hypothesis and our first property, we prove that $\aconfiginit \step{\ast} (\statesin{\run'}, q_0, \emptyset) \step{\ast} (\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'})$. By going one step forward and finding the fitting case in the abstract semantics, we prove that $(\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'}) \step{} (\statesin{\run}, \gang)$ for some $\gang$. Finally,  $\aconfiginit \step{\ast} (\statesin{\run}, q_0, \emptyset)$ by the "gang reset" step of the abstract semantics. Putting everything together and applying the first property, we finally get: $\aconfiginit \step{\ast} \absproj{v}{\run}$.
 
-It is left to prove that our abstraction is sound, which we will do by considering an "abstract run" $\aconfiginit \step{\ast} \aconfig = (S, \boss, \clique)$and constructing a concrete "run" $\run : \config_0 \step{\ast} \config $ such that $\config$ covers all states in $S$, there exists a special agent on state $b$ with value $v$ and for each state $q$ in $\clique$, there is (at least) one agent on $q$ with register value $v$. We do this by induction on the abstract run, following the abstract steps with an exponential amount of agents to make sure that we never run out of them.
+It is left to prove that our abstraction is sound, which we will do by considering an "abstract run" $\aconfiginit \step{\ast} \aconfig = (S, \boss, \clique)$ and constructing a concrete "run" $\run : \config_0 \step{\ast} \config $ such that $\config$ covers all states in $S$, there exists a special agent on state $b$ with value $v$ and for each state $q$ in $\clique$, there is (at least) one agent on $q$ with register value $v$. We do this by induction on the abstract run, following the abstract steps with an exponential amount of agents to make sure that we never run out of them.
 
-As we proved our abstraction to be sound and complete, by Lemma~\ref{lem:short-run}, we can guess an "abstract run" of at most $(|Q| + 2)^3$ steps leading to an "abstract configuration" in which $q_f$ appears. As a result, we obtain an \NP-algorithm for \COVER in 1BNRA.
+%As we proved our abstraction to be sound and complete, by Lemma~\ref{lem:short-run}, we can guess an "abstract run" of at most $(|Q| + 2)^3$ steps leading to an "abstract configuration" in which $q_f$ appears. As a result, we obtain an \NP-algorithm for \COVER in 1BNRA.
 
 
 \subsubsection{Completeness}
@@ -373,20 +372,7 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 \end{proposition}
 
 \begin{proof}
-	The right-to-left direction is given by Lemma~\ref{cor:soundness}.
-	For the left-to-right direction, let $\run$ be an "initial run" ending in a configuration $\config$ covering $q_f$. Let $v \in \nats$ be such that $\config$ has some agents with value $v$ in state $q_f$.
-	
-	We construct a suitable "abstract run" as follows: by Lemma~\ref{lem:abstraction_complete} there exists an "abstract run" from some $\sigma_0 \in \aconfiginitset$ to an abstract configuration $\absproj{v}{\run} = (S, b, K')$ for some $S,b,K$ such that $q_f \in S$ and $q_f \in \set{b} \cup K$.
-	%	
-	%	As $\config, v$ covers $q_f$, either $q_f = b$ or $q_f \neq b$ and there exists an agent with state $q_f$ and value $v$ in $\config$. 	
-	%	By definition of the abstraction $\absproj{v}{\run}$, we have $q_f \in K$ if $b=\noboss$ and $q_f = b$ otherwise, proving the proposition.
-	
-	%	For the left-to-right direction, let $\run$ be a run ending in a configuration $\config$ satisfying $K$. Let $v \in \nats$ be such that $\config$ has some agents with value $v$ in every state of $K$.
-	%	
-	%	We construct a suitable "abstract run" as follows: by Lemma~\ref{lem:abstraction_complete} there exists an abstract run from some $\sigma_0 \in \aconfiginitset$ to an abstract configuration $\absproj{v}{\run} = (S, b, K')$.
-	%	
-	%	As $\config, v$ satisfies $K$, for all $s \in K$ either $s = b$ or $s \neq b$ and there exists an agent with state $s$ and value $v$ in $\config$. 	
-	%	By definition of the abstraction $\absproj{v}{\run}$, we have $K \subseteq K'$ if $b=\noboss$ and $K \subseteq K' \cup \set{b}$ otherwise, proving the proposition.
+	The right-to-left direction is given by Lemma~\ref{cor:soundness} and left-to-right direction by Lemma~\ref{lem:abstraction_complete}.
 \end{proof}
 
 
@@ -415,19 +401,14 @@ Consider the "protocol" displayed in Figure~\ref{fig:np-hard}.
 Our alphabet of messages is the set of literals $\set{x_i, \neg x_i \mid 1 \leq i \leq n}$.
 Each agent may either receive a message, and repeat it forever or it may broadcast one of $x_i, \neg x_i$ for each $i$ and then try to receive a message one of $\ell_j^1, \ell_j^2, \ell_j^3$ for each $j$, with its own register value.
 
-Suppose $\query$ is satisfiable, let $\nu$ be a satisfying assignment, then we set $\agents = \set{a, a_1, \ldots, a_n}$ as our set of agents. First for each $i$ we make $a$ broadcast $x_i$ if $\nu(x_i)= \top$ and $\neg x_i$ otherwise, this broadcast shall be received only by agent $a_i$. Agent $a_i$ will store $a$'s register value.
-Then for each $j$ we select some $\ell_j^p$ satisfied by $\nu$. There exists $i$ such that $a_i$ is in state $\ell_j^p$. It broadcasts $\ell_j^p$ along with the initial register value of $a$, allowing $a$ to go to the next state.
-
-As a result, there is a "run" in which agent $a$ reaches $m'$.
+If $\query$ is satisfied by some assignment $\nu$, then we construct a run where an agent $a$ broadcasts the satisfied literals while going from $0$ to $N$ and other agents receive the messages and go to the corresponding states in the lower part of the protocol while storing the register value of $a$.
+Then for each $j$ we select some $\ell_j^p$ satisfied by $\nu$. There exists $i$ such that there is an agent in state $\ell_j^p$, which broadcasts $\ell_j^p$ along with the initial register value of $a$, allowing $a$ to go to the next state.
+As a result, there is a "run" in which an agent $a$ reaches $m'$.
 
 Now suppose there is a "run" $\run$ over some set of agents $\agents$ such that some agent $a \in \agents$ is in state $m'$ in the final configuration.
 For each $i$, $a$ has broadcast either $x_i$ or $\neg x_i$, but not both.
 Let $\nu$ be the valuation assigning $\top$ to $x_i$ if and only if $a$ has broadcast it.
-The register of $a$ cannot have changed its value throughout the "run". 
-For each $j$ it has received one of $\ell_j^1, \ell_j^2, \ell_j^3$ along with its own initial register value (which we call $r$). Let $p_j$ be such that $a$ has received $\ell_j^{p_j}$.
-Hence for all $j$ there exists an agent $a_j \in \agents$ such that at some point in the "run" the register value of $a_j$ is $r$ and $a_j$ broadcasts $\ell_j^{p_j}$.
-This agent $a_j$ must be in state $\ell_j^{p_j}$ after receiving the broadcast $\brone{\ell_j^{p_j}}$ from $a$ (as all agents start with different register values).
-Hence $\ell_j^{p_j}$ is satisfied by $\nu$. 
+For each $j$ $a$ has received one of $\ell_j^1, \ell_j^2, \ell_j^3$ along with its own initial register value (which we call $r$). For this to happen, $a$ must have broadcast this literal before, hence it is satisfied by $\nu$.
 
 As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus satisfies $\query$. This concludes our reduction.
 \end{proof}
@@ -440,7 +421,7 @@ As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus sati
 
 \begin{proof}
 	The lower bound is given by Proposition~\ref{prop:np-hard-query-cover}.
-	For the upper bound, say we are given a "protocol" $\prot = (Q, \messages, \Delta, q_0, \regnum)$ and a state $q_f$. We have to verify that there exists a reachable configuration $\config_f$ convering $q_f$. By Proposition~\ref{prop:sound-and-complete}, it is the case if and only if there is an "abstract run" to an "abstract configuration" $(S,b, K)$ with $q_f \in S$.
+	For the upper bound, say we are given a "protocol" $\prot = (Q, \messages, \Delta, q_0, \regnum)$ and a state $q_f$. By Proposition~\ref{prop:sound-and-complete}, there is a reachable configuration covering $q_f$ if and only if there is an "abstract run" to an "abstract configuration" $(S,b, K)$ with $q_f \in S$.
 	Furthermore, by Lemma~\ref{lem:short-run} if there is such an "abstract run" then there is one with at most $(\size{Q}+2)^3$ steps. 
 	Thus we can simply guess such an "abstract run" and verify it in polynomial time.
 	As a result, the "cover problem" is in \NP. 

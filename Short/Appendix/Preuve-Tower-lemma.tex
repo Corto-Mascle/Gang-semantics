@@ -58,7 +58,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 
 \begin{figure}
 	\input{Figures/fig-illustration-pumping}
-	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. We represent local runs as above, where lines correspond to registers, and vertical separations are times at which a $\enregact$ operation is performed on that register. If one register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often, say every $M$ steps (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed twice. We can then obtain a shorter run by glueing them together as in the picture. The colored rectangles in the shortened runs correspond to fresh values that we introduce to avoid interleaving the prefix and suffix (which would hinder the proof).}
+	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. We represent local runs as above, where lines correspond to registers, and vertical separations are times at which a $\enregact$ operation is performed on that register. If a register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often, say every $M$ steps (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed twice. We can then obtain a shorter run by glueing them together as in the picture. The rectangles with new colors in the shortened runs correspond to fresh values that we introduce to avoid interleaving the prefix and suffix (which would hinder the proof).}
 	\label{fig:pumping}
 \end{figure}
 
@@ -144,50 +144,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	\end{itemize}
 	
 	\noindent \textbf{$\locallabel$ is an "internal step"} \\
-	The only problematic case is when $\locallabel =: \loc{i}{i'}{\diseqtestact}$ with $i,i' \in \nset{1}{\regnum}$ (we have no local equality tests thanks to Proposition~\ref{prop:loc-eq-test-elimination}). We have to prove that $\localdata(i) \ne \localdata(i')$. 
-	Because the "local test" is satisfied in $\localrun_a$ and $\localrun_b$, we have $\localdata_a(i) \ne \localdata_a(i')$ and $\localdata_b(i) \ne \localdata_b(i')$.
-	
-	If $i \notin I$ and $i' \notin I$ (none are "active registers") then  $\localdata(i) = \localdata_a(i) \ne \localdata_a(i') = \localdata(i')$.
-	
-	If $i \in I$ and $i' \notin I$, then $\localdata(i') = \localdata_a(i') = \localdata_b(i')$ and:
-	\begin{itemize}
-		\item if $l+1<e_i$ then $\localdata(i) = \localdata_a(i) \ne \localdata_a(i')$,
-		\item if $e_i \leq l+1 < f_i$ then $\localdata(i) = \phi(\localdata_a(i))$ and either
-		\begin{itemize}
-			\item $\localdata_a(i) \in \Vinit$ hence $\localdata(i) = \phi(\localdata_a(i)) = \localdata_a(i) \neq \localdata_a(i')$
-			
-			\item $\localdata(i') \notin \Vinit$ therefore $\phi(\localdata_a(i)) \notin V$ and, as $\localdata(i') = \localdata_a(i') \in V$,  $\localdata(i) \ne \localdata(i')$
-		\end{itemize}
-		\item if $f_i \leq l+1$ then $\localdata(i) = \localdata_b(i) \ne \localdata_b(i')$.
-	\end{itemize}
-	We treat the case $i \notin I$ and $i' \in I$ symmetrically.
-	
-	If $i \in I$ and $i' \in I$, recall that $e_i \leq M < f_{i'}$ and $e_{i'} \leq M < f_i$ thus $e_i < f_{i'}$ and $e_{i'}< f_i$. We again make a case disjunction on the value of $l+1$:
-	\begin{itemize}
-		\item $l+1<e_i$ and $l+1 <e_{i'}$: $\localdata(i)= \localdata_a(i)$, $\localdata(i')= \localdata_a(i')$ and $\localdata_a(i) \ne \localdata_a(i')$. 
-		
-		\item $e_i \leq l+1 < f_i$, $l+1<e_{i'}$: $\localdata(i) = \phi(\localdata_a(i))$ and either
-		\begin{itemize}
-			\item $\localdata_a(i) \in \Vinit$, hence $\localdata(i) = \phi(\localdata_a(i)) = \localdata_a(i) \neq  \localdata_a(i') = \localdata(i')$, or
-			
-			\item $\localdata_a(i) \notin \Vinit$, hence $\phi(\localdata_a(i)) \notin V$, and $\localdata(i') = \localdata_a(i') \in V$ therefore $\localdata(i') \ne \localdata(i)$.
-		\end{itemize}
-		
-		\item $e_{i'} \leq l+1 < f_{i'}$, $l+1<e_{i}$: symmetric to the previous case.
-		
-		\item $e_i \leq l+1 < f_i$, $e_{i'} \leq l+1 < f_{i'}$: $\localdata(i) = \phi(\localdata_a(i))$, $\localdata(i') = \phi(\localdata_a(i'))$; however $\localdata_a(i) \ne \localdata_a(i')$ and $\phi$ is injective hence $\localdata(i') \ne \localdata(i)$.
-		
-		\item $e_i \leq l+1 < f_i$, $f_{i'} \leq l+1$: $\localdata(i') = \localdata_b(i') \in V$, $\localdata(i) = \phi(\localdata_a(i))$  and either
-		\begin{itemize}
-			\item $\localdata_a(i) \in \Vinit$, in which case $\localdata_a(i) = \localdata_b(i)$ because $\theta_{i_a} = \theta_{i_b}$ ($\localrun_a$ and $\localrun_b$ coincide on values in $\Vinit$) hence $\localdata(i) = \phi(\localdata_a(i)) = \phi(\localdata_b(i)) = \localdata_b(i) \neq  \localdata_b(i') = \localdata(i')$, or
-			\item $\localdata_a(i) \notin \Vinit$, hence $\phi(\localdata_a(i)) \notin V$, and $\localdata(i') = \localdata_b(i') \in V$ therefore $\localdata(i') \ne \localdata(i)$.
-		\end{itemize}
-		
-		
-		\item $f_i \leq l+1$, $e_{i'} \leq l+1 < f_{i'}$: symmetric to the previous case.
-		
-		\item $f_i \leq l+1$, $f_{i'} \leq l+1$: $\localdata(i)= \localdata_b(i)$, $\localdata(i)= \localdata_b(i)$ and $\localdata_b(i) \ne \localdata_b(i')$. 
-	\end{itemize}
+	This case is immediate as "broadcast" transitions can always be executed.
 	
 	This proves that $\locallabel$ is valid from $(q,\localdata)$ which concludes the induction. 
 	We have proven that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$; moreover $\atrace$ is of length $2M$ and there are at least $2M+1$ steps between $(q_1,\localdata_1)$ and $(q_4, \localdata_4)$ in $\localrun$. Therefore, replacing this part of $\localrun$ with $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ yields a "local run" $\localrun': (q_i, \localdata_i) \step{*} (q_f,\localdata_f)$ with strictly less steps that $\localrun$. 
