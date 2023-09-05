@@ -10,9 +10,9 @@ There are arbitrarily many agents. When an agent broadcasts a message, each othe
 	\[
 	 \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq \regnum}\]
 	Label $\brsymb$ stands for ""broadcasts"" and $\recsymb$ for ""receptions"".
-	Given a reception $\rec{\amessage}{i}{\anact}$, $\anact$ is its ""action"". 
+	Given a reception $\rec{\amessage}{i}{\anact}$, $\anact$ is its \emph{action}. 
 The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
-$\quotemarks{\eqtestact}$ is an ""equality test"", $\quotemarks{\diseqtestact}$ is a ""disequality test"", $\quotemarks{\enregact}$ is a ""store action"" and $\quotemarks{\dummyact}$ is a ""dummy action"" with no effect.
+$\quotemarks{\eqtestact}$ is an \emph{equality test}, $\quotemarks{\diseqtestact}$ is a \emph{disequality test}, $\quotemarks{\enregact}$ is a \emph{store action} and $\quotemarks{\dummyact}$ is a \emph{dummy action} with no effect.
 The ""size"" of $\prot$ is $\size{\prot} := \size{Q} + \size{\messages} + \size{\transitions} + r$.
 
 \end{definition}
@@ -97,7 +97,7 @@ In our model, agents may only send one register's value per message. Indeed, \ci
 	In order to reach $q_f$, an agent must perform a sequence of transitions in which it receives the "configurations" of $k$ agents and checks that they satisfy the query.
 \end{remark}
 
-\AP We finally introduce \reintro{signature BNRA}, an interesting restriction to our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"". Said otherwise, the first register acts as a permanent identifier with which agents sign every message; under this restriction, a message is simply a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will later see that this restriction has the same complexity as the general case but makes the decidability procedure simpler. 
+\AP We finally introduce \intro{signature BNRA}, an interesting restriction to our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"". Said otherwise, the first register acts as a permanent identifier with which agents sign every message; under this restriction, a message is simply a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will later see that this restriction has the same complexity as the general case but makes the decidability procedure simpler. 
 
 \begin{definition}[signature protocols]
 A ""signature protocol"" with $\regnum$ registers is a "protocol" $\prot = (Q, \messages, \transitions, q_0)$ where register $1$ appears only in "broadcasts" in $\transitions$ and registers $i \geq 2$ appear only in "receptions" in $\transitions$. 

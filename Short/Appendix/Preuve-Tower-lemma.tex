@@ -24,7 +24,7 @@
 	\end{restatable}
 	
 	We start by defining the notion of "trace". 
-	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The ""trace"" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. 
+	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The "trace" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. 
 	
 	
 
@@ -108,7 +108,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	
 	For every active register $i \in I$, let $e_i \in \nset{1}{2M}$ denote the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$ and $f_i \in \nset{1}{2M}$ the index of the last $\quotemarks{\enregact}$ on register $i$ in $s$. By hypothesis, because $s$ is of length $2M$, it contains at least two $\quotemarks{\enregact}$ on register $i$, one in the first half and one in the second half, hence $e_i \leq M < M +1 \leq f_i$. 
 	
-	For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast" or a "local test", we define the $j$-th "local step" of $\atrace$ as $\intlabel{\delta_j}$. 
+	For every $j \in \nset{1}{2M}$, let $\delta_j$ denote the $j$-th transition of $s$. First, if  $\delta_j$ is a "broadcast", we define the $j$-th "local step" of $\atrace$ as $\intlabel{\delta_j}$. 
 	Suppose now that $\delta_j$ is a "reception" of the form $\rec{\amessage}{i}{\anact}$. The $j$-th "local step" of $\localrun_a$ (resp. $\localrun_b$) has underlying transition $\delta_j$ hence is a "reception step" of the form $\extlabel{\delta_j}{\aval_a}$ for some $\aval_a \in V$ (resp. $\extlabel{\delta_j}{\aval_b}$ for some $\aval_b \in V$).
 	Because $V$ is finite and $\Vinit \subseteq V$, there exists an injective function $\phi: V \rightarrow \nats$ such that for all $v \in \Vinit$, $\phi(v) = v$ and for all $v \notin \Vinit$, $\phi(v) \notin V$.
 	We define the $j$-th "local step" of $\atrace$ to be $\extlabel{\delta_j}{\aval}$ where:
