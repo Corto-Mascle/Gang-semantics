@@ -157,10 +157,4 @@ Schnoebelen, P.: Verifying lossy channel systems has nonprimitive recursive
   \doi{10.1016/S0020-0190(01)00337-4},
   \url{https://doi.org/10.1016/S0020-0190(01)00337-4}
 
-\bibitem{Segoufin06}
-Segoufin, L.: Automata and logics for words and trees over an infinite
-  alphabet. In: Computer Science Logic, {CSL} 2006. Lecture Notes in Computer
-  Science, vol.~4207, pp. 41--57. Springer (2006). \doi{10.1007/11874683\_3},
-  \url{https://doi.org/10.1007/11874683\_3}
-
 \end{thebibliography}
