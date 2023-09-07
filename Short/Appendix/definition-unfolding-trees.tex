@@ -16,11 +16,11 @@ We are now ready to formally define "unfolding trees" in the general case.
 	\AP An ""unfolding tree"" $\tree$ over $\prot$ is
 	a finite tree where nodes $\node$ have three labels:
 	\begin{itemize}
-		\item a "local run" of $\prot$, written $\intro*\localrunlabel{\node}$, starting in the initial state with distinct register values;
+		\item a "local run" of $\prot$, written $\reintro*\localrunlabel{\node}$, starting in the initial state with distinct register values;
 		
-		\item a value in $\nats$, written $\intro*\valuelabel{\node}$;
+		\item a value in $\nats$, written $\reintro*\valuelabel{\node}$;
 		
-		\item a ""specification"" $\intro*\speclabel{\node}$, which is either a word $\intro*\bosslabel{\node} \in \messages^*$ ("boss specification") or a pair $(\intro*\followlabelword{\node}, \intro*\followlabelmessage{\node}) \in \messages^* \times \messages$ ("follower specification"). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
+		\item a \reintro{specification} $\reintro*\speclabel{\node}$, which is either a word $\intro*\bosslabel{\node} \in \messages^*$ ("boss specification") or a pair $(\intro*\followlabelword{\node}, \intro*\followlabelmessage{\node}) \in \messages^* \times \messages$ ("follower specification"). In the first case we say that the node is a ""boss node"", otherwise it is a ""follower node"".
 	\end{itemize} 
 	Moreover, all nodes $\node$ must satisfy the four following conditions:
 	\begin{enumerate}[label= (\roman*), ref=(\roman*)]
