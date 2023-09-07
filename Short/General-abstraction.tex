@@ -376,12 +376,13 @@ We can now bound the size of a node with respect to the size of its neighbors of
 \nico{j'ai completement enleve la preuve en annexe}
 \end{restatable}
 \begin{proof}
-	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children: if two "follower children" broadcast message type $m \in \messages$, then one could keep only the one that is able to broadcast it first.
-	Because there are at most $r$ "initial" values, this makes at most $\size{\messages} \, r$ "follower children" and each one of them requires at most $K$ messages. If $\node$ is a "follower node", then the number of messages it must broadcast is bounded by $\size{\messages} \, r \, K +1$. If $\node$ is a "boss node", then its parent % if its exists, if root then empty spec
+	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children: if two "follower" children broadcast message type $m \in \messages$, then one could keep only the one that is able to broadcast it first.
+	Because there are at most $r$ "initial" values, this makes at most $\size{\messages} \, r$ "follower" children and each one of them requires at most $K$ messages. If $\node$ is a "follower node", then the number of messages it must broadcast is bounded by $\size{\messages} \, r \, K +1$. If $\node$ is a "boss node", then its parent % if its exists, if root then empty spec
 	has higher altitude hence $\size{\bossspec(\node)} \leq K$ and $\node$ must broadcast at most $\size{\messages} \, r \, K + K$ messages in total.
 	This bounds in $O(\size{\messages} \, r \, K) $ the number of messages $u$ needs to broadcast; as in Lemma~\ref{lem:bounds_tree_sg}, we bound the length of $u$ by $\towerfun(\size{\prot},r) \, O(\size{\messages}\, r \, K)$; the bound on $\size{\node}$ follows.
 \end{proof}
 
+\cortoin{Je trouve cette preuve beaucoup trop vague.}
 
 By inductively implying the previous result, we obtain the existence of a primitive-recursive function $f_0$ so that, given a node $\node$ in $\tree$, $\size{\node} \leq f_0(\altmax - \altitude{\node})$ (see Appendix~\ref{app:bound-node-size-with-altitude} for the proof).
 
