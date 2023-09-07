@@ -257,13 +257,14 @@
 \newcommand{\lstate}{l}
 \newcommand{\ltrans}{d}
 \newcommand{\ltransitions}{D}
-\newcommand{\startstate}[1]{\mathbf{start}(#1)}
-\newcommand{\transstateone}[1]{\mathbf{tr}_1(#1)}
-\newcommand{\transstatetwo}[1]{\mathbf{tr}_2(#1)}
-\newcommand{\finstate}[1]{\mathbf{end}(#1)} %final states of protocol for encoding of LCS, argument is corresponding state of the LCS
+\newcommand{\startstate}[1]{\mathbf{s}(#1)}
+\newcommand{\transstateone}[1]{\mathbf{t}(#1)}
+\newcommand{\transstatetwo}[1]{\mathbf{u}(#1)}
+\newcommand{\finstate}[1]{\mathbf{f}(#1)} %final states of protocol for encoding of LCS, argument is corresponding state of the LCS
 \newcommand{\waitstate}{\mathbf{wait}}
 \newcommand{\predfun}{\mathbf{pred}}
-
+\newcommand{\popact}[1]{\mathsf{pop}(#1)}
+\newcommand{\pushact}[1]{\mathsf{push}(#1)}
 %a trace
 \newcommand{\atrace}{\mathsf{tr}}
 
