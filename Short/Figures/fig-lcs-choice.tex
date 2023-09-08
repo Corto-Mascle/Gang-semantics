@@ -1,0 +1,22 @@
+\begin{tikzpicture}[node distance=2cm,auto, xscale = 2]
+	\tikzset{every node/.style = {font = {\scriptsize}}}
+	\node[state,initial, initial text = ] (0) at (0,0) {$q_0$};
+	\node[state] at (0,1) (root) {\textsf{root}};
+	\node[state] at (0,-1) (link) {\textsf{link}};
+	\node[state] at (1,1) (root1) {}; 	
+	\node[state] at (2,1) (root2) {};
+	\node[state] at (3,1) (root3) {$\finstate{\lstate_0}$};
+	\node[state] at (1.5,-1) (link1) {};
+	\node[state] at (3,-1) (wait){$\waitstate$};
+	
+
+	\path[->] 	
+		(0) edge (root)
+		(0) edge (link)
+		(root) edge node[above] {$\br{\mathsf{init}}{1}$} (root1)
+		(root1) edge node[above] {$\br{\mathsf{\lstate_s}}{1}$} (root2)
+		(root2) edge node[above] {$\br{\mathsf{\#}}{1}$} (root3)
+		(link) edge node[below] {$\rec{\mathsf{init}}{2}{\enregact}$} (link1)
+		(link1) edge node[below]{$\br{\mathsf{init}}{1}$} (wait)
+	;
+\end{tikzpicture}

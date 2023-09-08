@@ -1,0 +1,36 @@
+\begin{tikzpicture}[node distance=2cm,auto]
+	\tikzset{every node/.style = {font = {\scriptsize}}}
+	\node[state] at (-0.5,1) (wait){$\waitstate$};
+	\node[state, inner sep = 0pt] at (2,1) (l1) {$\startstate{\lstate_1}$};
+	\node[state] at (4,2.5) (tr1) {$\transstateone{\ltrans}$};
+	\node[state, inner sep = 0pt] at (6.5,2.5) (tr2) {$\transstatetwo{\ltrans}$};
+	\node[state] at (6.5,4) (reba) {};
+	\node[state] at (6.5,1) (rebb) {};
+	\node[state] at (9,2.5) (endrec) {};
+	\node[state, inner sep = 0pt] at (11,2.5) (endbr) {$\finstate{\lstate_2}$};
+	\node[state, inner sep = 0pt] at (4, -0.5) (tr1prime) {$\transstateone{\ltrans'}$};
+	\node[state] at (4,1) (rebaprime) {};
+	\node[state] at (4, -2) (rebbprime) {};
+	\node[state, inner sep = 0pt] at (6.5, -0.5) (tr2prime) {$\transstatetwo{\ltrans'}$};
+	\node[state] at (9,-0.5) (endrecprime) {};
+	\node[state, inner sep = 0pt] at (11,-0.5) (endbrprime) {$\finstate{\lstate_3}$};
+	
+	\path[->] 	
+	(wait) edge node[sloped] {$\rec{\mathsf{\lstate_1}}{2}{\eqtestact}$} (l1)
+	(l1) edge node[above, sloped] {$\br{\mathsf{\lstate_2}}{1}$} (tr1)
+	(tr1) edge node[above] {$\rec{\mathsf{a}}{2}{\eqtestact}$} (tr2)
+	(tr2) edge[bend left = 10] node[left] {$\rec{\mathsf{a}}{2}{\eqtestact}$} (reba)
+	(reba) edge[bend left = 10] node[right] {$\br{\mathsf{a}}{1}$} (tr2)
+	(tr2) edge[bend right = 10] node[left] {$\rec{\mathsf{b}}{2}{\eqtestact}$} (rebb)
+	(rebb) edge[bend right = 10] node[right] {$\br{\mathsf{b}}{1}$} (tr2)
+	(tr2) edge node[above] {$\rec{\mathsf{\#}}{2}{\eqtestact}$} (endrec)
+	(endrec) edge node[above] {$\br{\#}{1}$} (endbr)
+	(rebaprime) edge[bend left = 10] node[right] {$\br{\mathsf{a}}{1}$} (tr1prime)
+	(tr1prime) edge[bend left = 10] node[left] {$\rec{\mathsf{a}}{2}{\eqtestact}$} (rebaprime)
+	(tr1prime) edge[bend right = 10] node[left] {$\rec{\mathsf{b}}{2}{\eqtestact}$} (rebbprime)
+	(rebbprime) edge[bend right = 10] node[right] {$\br{\mathsf{b}}{1}$} (tr1prime)
+	(tr2prime) edge node[above] {$\rec{\mathsf{\#}}{2}{\eqtestact}$} (endrecprime)
+	(endrecprime) edge node[above] {$\br{\#}{1}$} (endbrprime)
+	(l1) edge[bend right = 40] node[left] {$\br{\mathsf{\lstate_3}}{1}$} (tr1prime)
+	(tr1prime) edge node[below] {$\br{\mathsf{a}}{1}$} (tr2prime); 
+\end{tikzpicture}
