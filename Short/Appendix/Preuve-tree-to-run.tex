@@ -4,62 +4,61 @@
 %\LemTreeToRun*
 \begin{restatable}{lemma}{LemTreeToRun}
 	\label{lem:tree-to-run}
-	If there exists an "unfolding tree" over $\prot$ satisfying a "boss specification" $\bossspec \in \messages^*$ then there exists a finite "initial run" $\run$ of $\prot$ satisfying $\bossspec$.
+	If there exists an "unfolding tree" over $\prot$ satisfying a "boss specification" $\bossspec \in \messages^*$ then there exists an "initial run" $\run$ of $\prot$ satisfying $\bossspec$.
 \end{restatable}
 
-We start by defining "partial runs" as "runs" where some broadcasts are missing: We allow processes to receive messages that were not broadcast by anyone. We will construct inductively "partial runs" from the tree, that we will then compose to obtain complete "runs", by executing them in parallel matching missing broadcasts in a partial run with the broadcast of the other.
+We start by defining "partial runs", which "runs" where some receptions are not matched by broadcasts. Intuitively, this will allow us to build "partial runs" from "unfolding trees" whose root is a "follower node", which implicitely relies on its parent for some broadcasts. We will therefore construct inductively "partial runs" from nodes of the tree; we will obtain complete "runs" by matching reception and broadcasts of different "partial runs".
 
 \begin{definition}
 	Let $\config, \config'$ two configurations. 
 	
-	A ""partial step"" $\config \pstep{} \config'$ is defined if either $\config \step{} \config'$ (normal "step") or there exist $m \in \messages$, $v\in \nats$ such that for all agent $a$ either $\config(a) = \config'(a)$ or $\config(a) \extbr{\delta}{v} \config'(a)$ with $\delta$ a transition receiving "message type" $m$ (""missing broadcast"").
+	A ""partial step"" $\config \pstep{} \config'$ is defined if either $\config \step{} \config'$ (normal "step") or there exist $m \in \messages$, $v\in \nats$ such that for all agent $a$ either $\config(a) = \config'(a)$ or $\config(a) \extbr{\delta}{v} \config'(a)$ with $\delta$ a transition receiving "message type" $m$ (""unmatched reception"").
 	
-	A ""partial run"" is a sequence of "partial steps".
-	Note that a "local run" can be seen as a "partial run" with a single agent.A "partial run" is ""initial@@partial"" if it starts in an "initial configuration".
-	
-	
-	\AP The $v$-""input@@partial"" $\vinput{v}{\run}$ (resp. $v$-""output@@partial"" $\voutput{v}{\run}$) of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ of "message types" corresponding to "missing broadcasts" (resp. "broadcasts") in $\run$.
+	\AP A ""partial run"" is a sequence of "partial steps".
+	Note that a "local run" can be seen as a "partial run" with a single agent. A "partial run" is ""initial@@partial"" if it starts in an "initial configuration".
+	\AP The $v$-""input@@partial"" $\vinput{v}{\run}$ of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ of "message types" corresponding to "unmatched receptions" with value $v$ in $\run$.
 \end{definition}
 
 
-We are now ready to prove Lemma~\ref{lem:tree-to-run}.
+We will prove the following, more general version of Lemma~\ref{lem:tree-to-run}:
 
-\LemTreeToRun*
-
-We actually prove a stronger statement by induction on the "unfolding tree".
-The induction property is as follows. For every "unfolding tree" $\tree$:
+\begin{lemma}
+\label{lem:tree-to-run-technical}
+For every "unfolding tree" $\tree$:
 \begin{itemize}
-	\item if $\tree$ satisfies a "boss specification" $w \in \messages^*$, then there exists an "initial run" $\run$ satisfying $w$.
-	\item if $\tree$ satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ then there exist an "initial partial run" $\run$ and a value $v$ such that $\Input{\run} \in (\messages\times \set{v})^*$, $\vinput{v}{\run} \subword \followwordspec$, and $\voutput{v}{\run}$ contains $\followmessagespec$.
+	\item if $\tree$ satisfies a "boss specification" $\bossspec \in \messages^*$, then there exists an "initial run" $\run$ satisfying $\bossspec$,
+	\item if $\tree$ satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ then there exist an "initial partial run" $\run$ and a value $v$ such that:
+	\begin{itemize}
+	\item all "unmatched receptions" in $\run$ are with value $v$,
+	\item $\vinput{v}{\run} \subword \followwordspec$, 
+	\item $\voutput{v}{\run}$ contains $\followmessagespec$.
+	\end{itemize}
 \end{itemize}
+\end{lemma}
 
+We prove it by induction on the "size" of the "unfolding tree".
 Let $\tree$ be a "unfolding tree", let $\node$ be its root.
-
-We see $u := \localrunlabel{\node}$ as a "partial run" with a single agent. Recall that by definition of an "unfolding tree", $u$ starts with distinct values in all its registers, hence it is an "initial partial run".
-We are going to compose $u$ with some runs given by the children of $\node$ to construct a run satisfying the properties above.
-Let $V$ be the set of values appearing in $u$ and $V_{init}$ be the set of "initial@@partial" values of $u$.
-
-We set $\run := u$, seen as a "partial run". We will use the induction hypothesis on the children of $\node$ to obtain partial runs with which we will complete $\run$.
+Let $u := \localrunlabel{\node}$ as a "partial run" with a single agent. Recall that by definition of an "unfolding tree", $u$ starts with distinct values in all its registers, hence it is an "initial partial run".
+We will combine $u$ with runs given by children of $\node$ to construct a run $\run$ satisfying the deisred property.
+Let $V$ be the set of values appearing in $u$ and $V_{init} \subseteq V$ be the set of "initial@@partial" values of $u$.
 
 \subsubsection{Step 1: "Non-initial@@partial" Values}
 \label{sec:tree-to-run-step-one}
 
-For each non-initial value $v$ of $u$, $\node$ has a "boss" child labelled by a word $bw$ such that $\vinput{v}{u} \subword bw$.
-By induction hypothesis, there is an "initial run" $\run'$ satisfying $bw$.
-We can rename values so that $bw$ is broadcast in $\run'$ with value $v$, and $\run'$ has no other shared value with $\rho$.
-
-We then extend $\run$ by adding fresh agents which execute $\run'$ without receiving anything from the previous agents. On the other hand, we can use the broadcasts made by the new agents to fill in the missing broadcasts over value $v$.
-
-This gives us a "run" $\run$ which no longer has any missing broadcasts on $v$, and whose behaviour on other values of $V$ is unaffected.
+For each non-initial value $v \ne \valuelabel{\node}$ of $u$, $\node$ has a "boss" child of specification $w$ such that $\vinput{v}{u} \subword w$.
+By induction hypothesis, there is an "initial run" $\run'$ satisfying $bw$. Up to renaming agents, assume that $\run$ and $\run'$ have disjoint agents.
+We rename values in $\run'$ so that $w$ is broadcast in $\run'$ with value $v$, and $\run'$ has no other shared value with $\run$. 
+We use the broadcasts made by $\run'$ to match the "unmatched receptions" with value $v$ in $\run$: this gives us a partial "run" $\run$ with no "unmatched reception" with value $v$ and whose behaviour on other values of $V$ is the same as before.
 
 \subsubsection{Step 2: "Initial@@partial" Values}
 \label{sec:tree-to-run-step-two}
 
-We proceed in the same way as in the previous part: the goal is now to use the "partial runs" yielded by the "follower" children to eliminate the "input@@partial" over each "non-initial@@partial" value of $u$, except maybe for $\valuelabel{\node}$, which requires a special case.
+% We proceed in the same way as in the previous part: the goal is now to use the "partial runs" yielded by the "follower" children to eliminate the "input@@partial" over each "non-initial@@partial" value of $u$, except maybe for $\valuelabel{\node}$, which requires a special case.
 
-Let $v$ be an "initial value" of $u$, and $\decsymb = (w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ the associated "decomposition" (from \ref{item:condition2_initial_value}). We can split $u$ into $u_0, \ldots, u_\ell$ with $w_i \subword \voutput{\aval}{\localrun_i}$ and $\vinput{\aval}{\localrun_i} \in \set{m_1, \dots, m_{i-1}}^*$ for all $i$. 
+Let $v$ be an "initial value" of $u$, and $\decsymb = \\(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ the "decomposition" from condition \ref{item:condition2_initial_value}. 
+Because the behavior of $\run$ with respect to $v$ was not modified by previous steps, it is equal to the one of $u$, hence we can split $\run$ into $\run_0, \ldots, \run_\ell$ with $w_i \subword \voutput{\aval}{\run_i}$ and $\vinput{\aval}{\run_i} \in \set{m_1, \dots, m_{i-1}}^*$ for all $i$. 
 
-As the previous modifications of $\run$ did not alter its behavior with respect to $v$, we can also split the current $\run$ into $\run_0, \ldots, \run_\ell$ with $w_i \subword \voutput{\aval}{\run_i}$ and $\vinput{\aval}{\run_i} \in \set{m_1, \dots, m_{i-1}}^*$ for all $i$. 
+%limite nico
 
 By definition of an "unfolding tree", $\node$ has a "follower" child $\node_j$ for each $j$ labelled by $\followlabelmessage{\node_j} = m_j$ and $\followlabelword{\node_j} \in \langdec{\decsymb_j}$ with $\decsymb_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$. 
 
