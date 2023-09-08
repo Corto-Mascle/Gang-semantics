@@ -28,7 +28,7 @@ For an "unfolding tree", satisfying a "specification" simply means that its root
 	\item An "unfolding tree" satisfies a "follower specification" $(\followwordspec, \followmessagespec)$ if its root $\node$ is a "follower node" such that $\followmessagespec=\followlabelmessage{\node}$ and  $\followlabelword{\node}$ is a subword of $\followwordspec$.
 \end{itemize}
 
-Note that \COVER redcues to the existence of an "initial run" satisfying a "boss specification": it suffices to add a loop on $q_f$ broadcasting $m_f \notin \messages$. Therefore, it suffices to prove that "initial runs" of $\prot$ and "unfolding trees" satisfy the same "boss specifications". We prove the two directions in the two following sections: we construct an "unfolding tree" from a "run" in  Section~\ref{app:run-to-tree} and a "run" from an "unfolding tree" in Section~\ref{app:tree-to-run}.
+Note that \COVER reduces to the existence of an "initial run" satisfying a "boss specification": it suffices to consider $\messages' := \messages \cup \set{m_f}$ with $m_f \notin \messages$ and to add a loop on $q_f$ broadcasting $m_f$. Therefore, it suffices to prove that "initial runs" of $\prot$ and "unfolding trees" satisfy the same "boss specifications". We prove the two directions in the two following sections: we construct an "unfolding tree" from a "run" in  Section~\ref{app:run-to-tree} and a "run" from an "unfolding tree" in Section~\ref{app:tree-to-run}.
 
 %\begin{restatable}{lemma}{LemRunToTree}
 %	\label{lem:run-to-tree}
