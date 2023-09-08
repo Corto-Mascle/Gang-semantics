@@ -1,7 +1,11 @@
-\subsection{Proof of Lemma~\ref{lem:tree-to-run}}
+\subsection{Construction of an "initial run" from an "unfolding tree"}
 \label{app:tree-to-run}
 
-\LemTreeToRun*
+%\LemTreeToRun*
+\begin{restatable}{lemma}{LemTreeToRun}
+	\label{lem:tree-to-run}
+	If there exists an "unfolding tree" over $\prot$ satisfying a "boss specification" $\bossspec \in \messages^*$ then there exists a finite "initial run" $\run$ of $\prot$ satisfying $\bossspec$.
+\end{restatable}
 
 We start by defining "partial runs" as "runs" where some broadcasts are missing: We allow processes to receive messages that were not broadcast by anyone. We will construct inductively "partial runs" from the tree, that we will then compose to obtain complete "runs", by executing them in parallel matching missing broadcasts in a partial run with the broadcast of the other.
 
