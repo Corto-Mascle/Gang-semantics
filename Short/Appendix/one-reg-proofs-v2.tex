@@ -56,7 +56,8 @@ We now define our abstraction. We formalize the definition of a "gang":
 \begin{definition}
 	Let $(Q,\transitions, q_0)$ be a protocol.
 	
-	A \intro{gang} is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. The element $\boss$ is the ""boss@gang"" and the set $\clique$ is the \reintro{clique} of the "gang". 
+	A ""gang"" is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. 
+	The element $\boss$ is the \reintro{boss} and the set $\clique$ is the \intro{clique} of the "gang". 
 	
 	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \valsof{\run}$. The "gang" of value $\aval$ in $\run$, written $\intro*\gangof{\aval}{\run}$, is the "gang" $(\intro*\bossof{\aval}{\run}, \intro*\cliqueof{\aval}{\run})$ such that, 
 	\begin{itemize}
@@ -75,7 +76,7 @@ We define "abstract runs" as follows:
 	\label{def:abstract-configuration}
 	An ""abstract configuration"" over $\agents$ is a tuple of $2^Q \times \gangset$ where $\gangset$ designates the set of all "gangs". We write $\aconfigs{\agents}$ the set of "abstract configurations" over $\agents$ and $\allaconfigs := \bigcup_{\agents \subseteq \nats \text{ finite }}\aconfigs{\agents}$ the set of all "abstract configurations". 
 	
-	Given a set of states $S \subseteq Q$, a "message type" $m$ and a set of "actions" $A$, we define $\cliquesucc{S}{m}{A} = \set{s' \in Q \mid \exists s \in S, a\in A, (s, \recone{m}{a}, s') \in \Delta}$.
+	Given a set of states $S \subseteq Q$, a "message type" $m$ and a set of operations $O$, we define $\cliquesucc{S}{m}{A} = \set{s' \in Q \mid \exists s \in S, a\in O, (s, \recone{m}{a}, s') \in \Delta}$.
 	
 	Given two "abstract configurations" $\aconfig = (\covset, \boss, \clique)$ and $\aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denoted $\aconfig \step{} \aconfig'$, when $\clique' \subseteq \covset'$, $\boss' \in \covset' \cup \set{\noboss}$ and one of the following cases is satisfied.
 	\begin{enumerate}
@@ -119,7 +120,7 @@ We define "abstract runs" as follows:
 	As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfiginit$ is the initial configuration and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Similarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
 \end{definition}
 
-The gang reset will help us to do the following, if one wants to check if one state is reachable, one should check the presence of an "abstract run" leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new "boss@@gang" but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a state in $S$).
+The gang reset will help us to do the following, if one wants to check if one state is reachable, one should check the presence of an "abstract run" leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new "boss" but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a state in $S$).
 
 First of all we observe that if there is an "abstract run" covering a state then there is a short one.
 
@@ -132,7 +133,7 @@ First of all we observe that if there is an "abstract run" covering a state then
 \ifproofs
 \begin{proof}
 	Note that $\covset$ may never decrease along an "abstract run" and that $\clique$ may only decrease at "gang resets".
-	We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the "boss@@gang" may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the run with no "reset" has at most $(|Q|+2)(|Q|+1)$ steps, yielding the bound. 
+	We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the "boss" may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the run with no "reset" has at most $(|Q|+2)(|Q|+1)$ steps, yielding the bound. 
 \end{proof}
 \fi
 
@@ -230,7 +231,7 @@ We may now prove completeness of the abstraction.
 	
 	By induction hypothesis, there exist $S_{j}$ such that $\aconfiginit \step{*} (S_{j}, q_0, \emptyset)$ and $C_j \subseteq S_{j}$. Furthermore, as $\statesin{\run_p} \subseteq C_j$, by Lemma~\ref{lem:proof_completeness_covset_constant} there exists $\clique_j$ such that $\aconfiginit \step{*} (S_{j}, \bossof{\aval}{\run_p}, \clique_j)$ and $\cliqueof{\aval}{\run_p} \subseteq \clique_j$.
 	
-	If $q \in \clique_j$ then applying a "gang reset" suffices. If not, we mimic step $s$ with a step in the abstract semantics, as in Lemma~\ref{lem:proof_completeness_covset_constant} so that $q$ is added to the clique, then apply a gang reset to reach $(S_{i+1}, q_0, \emptyset)$ with $C_{i+1} = S_i \cup \set{q} \subseteq S_{i+1}$. 
+	If $q \in \clique_j$ then applying a "gang reset" suffices. If not, we mimic step $s$ with a step in the abstract semantics, as in Lemma~\ref{lem:proof_completeness_covset_constant} so that $q$ is added to the "clique", then apply a gang reset to reach $(S_{i+1}, q_0, \emptyset)$ with $C_{i+1} = S_i \cup \set{q} \subseteq S_{i+1}$. 
 	
 	This concludes our induction.
 	
