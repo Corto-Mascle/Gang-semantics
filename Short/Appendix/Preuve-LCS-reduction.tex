@@ -40,7 +40,7 @@
 	% 	\item If $\ltrans= (\lstate, u,!, \lstate')$ is a "push" then there is, for every $x \in \Sigma$, a loop on $\transstateone{\ltrans}$ labeled with sequence of actions $\rec{\mathsf{x}}{2}{\eqtestact}, \br{\mathsf{x}}{1}$. There also is a sequence of transitions from $\transstateone{\ltrans}$ to $\transstatetwo{\ltrans}$ labeled by $\br{\mathsf{u_1}}{1}, \br{\mathsf{u_2}}{1}, \dots, \br{\mathsf{u_k}}{1}$ where $u = u_1 \cdot u_2 \cdots u_k$. From $\transstatetwo{\ltrans}$, there is  a sequence of transitions going to $\finstate{\lstate'}$ labeled by $\rec{\mathsf{\#}}{2}{\eqtestact}, \br{\mathsf{\#}}{1}$.
 	% \end{itemize}
 
-	\begin{figure}
+	\begin{figure}[h]
 	\begin{subfigure}[b]{0.99\textwidth}
 	\centering
 	\input{Figures/fig-lcs-choice}

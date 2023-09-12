@@ -56,7 +56,7 @@ We actually prove a slightly more general version of the lemma, to reduce the no
 
 Intuitively, the set $V$ represents values that are already used somewhere and therefore cannot be used as fresh values, and $\Vinit$ represents values that other values should not copy because their behavior is special (this will later correspond to initial values of the run). However, because this lemma is meant to be applied to several parts of a run, we have to state it for any value for $V$ and $\Vinit$.  
 
-\begin{figure}
+\begin{figure}[h]
 	\input{Figures/fig-illustration-pumping}
 	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. We represent local runs as above, where lines correspond to registers, and vertical separations are times at which a $\enregact$ operation is performed on that register. If a register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often, say every $M$ steps (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed twice. We can then obtain a shorter run by glueing them together as in the picture. The rectangles with new colors in the shortened runs correspond to fresh values that we introduce to avoid interleaving the prefix and suffix (which would hinder the proof).}
 	\label{fig:pumping}
