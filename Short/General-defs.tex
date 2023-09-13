@@ -87,7 +87,8 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 \end{example}
 
 \begin{remark}
-	In \cite{DelzannoST13}, the author consider the \AP ""query problem"" problem where the run must reach a "configuration" satisfying some ``queries''. Because one can exponentially reduce this problem to \COVER, our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the "query problem". In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
+	In \cite{DelzannoST13}, the author consider the \AP \emph{query problem} where we look for a run reaching a "configuration" satisfying some ``queries''.	
+	Because one can exponentially reduce this problem to \COVER, our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the query problem. In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
 
 	% In \cite{DelzannoST13}, the authors considered ``queries'', which are conjunctions of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{\mathsf{reg}_j(\var{z}) = \mathsf{reg}_{j'}(\var{z}')}$, $\quotemarks{\mathsf{reg}_j(\var{z}) \neq \mathsf{reg}_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$, $q\in Q$ and $j,j' \in \nset{1}{r}$. A "configuration" satisfies a query if we can assign an agent to each variable so that all conjuncts are satisfied.
 	% This problem reduces to \COVER.
@@ -102,7 +103,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 
 \AP We finally introduce \intro{signature BNRA}, an interesting restriction to our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"". Said otherwise, the first register acts as a permanent identifier with which agents sign every message; under this restriction, a message is simply a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will later see that it falls into the same complexity class as the general case but makes the decidability procedure simpler. 
 
-\begin{definition}[signature protocols]
+\begin{definition}[Signature protocols]
 A ""signature protocol"" with $\regnum$ registers is a "protocol" $\prot = (Q, \messages, \transitions, q_0)$ where register $1$ appears only in "broadcasts" in $\transitions$ and registers $i \geq 2$ appear only in "receptions" in $\transitions$. 
 \end{definition}
 
@@ -119,7 +120,7 @@ We highlight that our main result is the decidability of the problem. We show th
 
 For our decidability result, we rely on the theory of well quasi-orders in the context of subword ordering.
 Let $\Sigma$ be a finite alphabet, $w_1, w_2 \in \Sigma^*$, $w_1$ is a ""subword"" of $w_2$, denoted $w_1 \intro*\subword w_2$, when $w_1$ can be obtained from $w_2$ by erasing some letters. 
-A sequence of words $w_0, w_1, \ldots$ is ""good"" if there exist $i<j$ such that $w_i \subword w_j$, and ""bad"" otherwise. Higman's lemma \cite{Higman52} states that every "bad" sequence of words over a finite alphabet is finite.
+A sequence of words $w_0, w_1, \ldots$ is \emph{good} if there exist $i<j$ such that $w_i \subword w_j$, and ""bad"" otherwise. Higman's lemma \cite{Higman52} states that every "bad" sequence of words over a finite alphabet is finite.
 In order to bound the length of a "bad" sequence, one must bound the growth of the sequence of words. 
 We will use the following result, known as the Length function theorem \cite{SchmitzS2011upperHigman}:
 

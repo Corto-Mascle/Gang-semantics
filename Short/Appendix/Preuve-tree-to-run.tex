@@ -16,7 +16,7 @@ We start by defining "partial runs", which "runs" where some receptions are not 
 	
 	\AP A ""partial run"" is a sequence of "partial steps".
 	Note that a "local run" can be seen as a "partial run" with a single agent. A "partial run" is ""initial@@partial"" if it starts in an "initial configuration".
-	\AP The $v$-""input@@partial"" $\vinput{v}{\run}$ of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ of "message types" corresponding to "unmatched receptions" with value $v$ in $\run$.
+	The \reintro{$v$-input} $\reintro*\vinput{v}{\run}$ of a "partial run" $\run$ is the sequence $m_0 \cdots m_k$ of "message types" corresponding to "unmatched receptions" with value $v$ in $\run$. Its \reintro{$v$-output} $\reintro*\voutput{v}{\run}$ is the sequence of "message types" corresponding to "broadcasts" with value $v$ in $\run$.
 \end{definition}
 
 
@@ -42,7 +42,7 @@ Let $u := \localrunlabel{\node}$ as a "partial run" with a single agent. Recall 
 We will combine $u$ with runs given by children of $\node$ to construct a run $\run$ satisfying the deisred property.
 Let $V$ be the set of values appearing in $u$ and $V_{init} \subseteq V$ be the set of "initial@@partial" values of $u$.
 
-\subsubsection{Step 1: "Non-initial@@partial" Values}
+\subsubsection{Step 1: "Non-initial Values"}
 \label{sec:tree-to-run-step-one}
 
 For each non-initial value $v \ne \valuelabel{\node}$ of $u$, $\node$ has a "boss" child of specification $w$ such that $\vinput{v}{u} \subword w$.
@@ -50,7 +50,7 @@ By induction hypothesis, there is an "initial run" $\run'$ satisfying $bw$. Up t
 We rename values in $\run'$ so that $w$ is broadcast in $\run'$ with value $v$, and $\run'$ has no other shared value with $\run$. 
 We use the broadcasts made by $\run'$ to match the "unmatched receptions" with value $v$ in $\run$: this gives us a partial "run" $\run$ with no "unmatched reception" with value $v$ and whose behaviour on other values of $V$ is the same as before.
 
-\subsubsection{Step 2: "Initial@@partial" Values}
+\subsubsection{Step 2: "Initial Values"}
 \label{sec:tree-to-run-step-two}
 
 % We proceed in the same way as in the previous part: the goal is now to use the "partial runs" yielded by the "follower" children to eliminate the "input@@partial" over each "non-initial@@partial" value of $u$, except maybe for $\valuelabel{\node}$, which requires a special case.
@@ -67,9 +67,9 @@ We build our new run by induction on $j$. At induction step $j$, we prove that w
 The initialization of our induction simply consists in taking $\run_0$, which has no "unmatched reception" with value $v$. For the induction step, we combine several copies of $\Tilde{\run}_{j+1}$ with $\run'$ so that all "unmatched broadcasts" with value $(m_{j+1},v)$ in $\run$ as now matched in $\run'$. To do so, we may have to duplicate parts of $\run'$ so that "unmatched receptions" in $\Tilde{\run}_{j+1}$ with message $(m_i,v)$ where $i \leq j$ are matched using a copy of $\Tilde{\run}_i$. \nico{en cours}
 
 We can compose each $\run$ with $\Tilde{\run}_{j}$ by running them in parallel over disjoint sets of agents and matching each $\Tilde{\run}_{j, i}$ with $\run_i$ so that the broadcasts of $\run_i$ with value $v$ forming $w_i$ are received in $\Tilde{\run}_{j, i}$ and the only remaining missing broadcasts in that part of the run are of $m_1, \ldots, m_i$.
-We obtain a run section whose "$v$-output" still contains $w_i$ and whose "$v$-input" only contains $m_1, \ldots, m_i$. 
+We obtain a run section whose $v$-"output" still contains $w_i$ and whose "$v$-input" only contains $m_1, \ldots, m_i$. 
 
-Finally, we can use the last operation of $\Tilde{\run}_{j, i}$, which is a broadcast of $m_j$ with value $v$, at any point during the rest of the run, to either extend the "$v$-output" of some $\run_k$ with $k \geq j$ or complete a missing broadcast.
+Finally, we can use the last operation of $\Tilde{\run}_{j, i}$, which is a broadcast of $m_j$ with value $v$, at any point during the rest of the run, to either extend the $v$-"output" of some $\run_k$ with $k \geq j$ or complete a missing broadcast.
 % This construction is illustrated in Figure
 % \begin{figure}
 % 	\input{../Figures/Fig-tree-to-run}
@@ -78,11 +78,11 @@ Finally, we can use the last operation of $\Tilde{\run}_{j, i}$, which is a broa
 % \end{figure}
 If $\val = \valuelabel{\node}$ then we have $\bosslabel{\node} \in \langdec{\decsymb}$, and we need to ensure that $\bosslabel{\node}$ is broadcast in $\run$ with value $\val$.
 Let $\bossspec_0, \ldots, \bossspec_\ell$ such that $\bosslabel{\node} \subword \bossspec_0\cdots\bossspec_\ell$ and for all $j$, $\bossspec_j$ can be obtained by adding letters from $\set{m_1,\ldots, m_j}$ in $w_j$.
-We apply the above composition operation to extend the output of each $\run_{i}$ so that it subsumes $\bossspec_i$ while making sure that its "input" is still only made of $m_1, \ldots, m_i$ with value $v$. 
+We apply the above composition operation to extend the output of each $\run_{i}$ so that it subsumes $\bossspec_i$ while making sure that its "$\aval$-input" is still only made of $m_1, \ldots, m_i$ with value $v$. 
 
 Then, in all cases, we apply this composition operation to complete the missing broadcasts: while there is a missing broadcast of some letter $m_i$, we compose $\run$ with $\Tilde{\run}_i$ to fill it, while possibly adding some missing broadcasts of $m_1, \ldots, m_{i-1}$.
 This procedure terminates as the number of missing broadcasts of $m_\ell, m_{\ell-1}, \ldots, m_1$ decreases for the lexicographic order at each step.
 
-In the end we obtain a run with no missing broadcast on $v$, no missing broadcasts on values outside of $V$ and whose behavior on all other values of $V$ is unaffected. Furthermore if $v = \valuelabel{\node}$ then the $v$-output resulting run subsumes $\bosslabel{\node}$. We set $\run$ to be this new "run".
+In the end we obtain a run with no missing broadcast on $v$, no missing broadcasts on values outside of $V$ and whose behavior on all other values of $V$ is unaffected. Furthermore if $v = \valuelabel{\node}$ then the $v$-"output" resulting run subsumes $\bosslabel{\node}$. We set $\run$ to be this new "run".
 
 We have shown how to complete $u$ into a "partial run" satisfying the "specification" of $\node$ using the "runs" obtained from its "boss" and "follower" children. This proves the lemma by induction on the "unfolding tree" (there is no need for a base case as the construction applies even if $\node$ has no children).

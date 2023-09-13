@@ -2,8 +2,6 @@
 \section{Proofs of Section \ref{sec:cover-1BNRA}}
 \label{app:cover-one-reg}
 
-\cortoin{Careful! 2 files, select the best one}
-
 In this section the register argument in receptions and broadcasts is always $1$, hence we remove it.
 Our new set of operations is 
 \[
@@ -53,74 +51,54 @@ We start with a basic observation that adding agents to a configuration cannot d
 
 \subsection{Abstraction}
 
-We now define our abstraction. We formalize the definition of a "gang":
+We now define our abstraction. We formalize the definitions of "boss" and "clique":
 
 \begin{definition}
 	Let $(Q,\transitions, q_0)$ be a protocol.
 	
-	A \intro{gang} is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. The element $\boss$ is the ""boss@gang"" and the set $\clique$ is the \reintro{clique} of the "gang". 
+	A ""gang"" is a pair $\gang = (\boss, \clique) \in (Q \cup \set{\noboss}) \times \powerset{Q}$. 
+	The element $\boss$ is the \reintro{boss} and the set $\clique$ is the \intro{clique} of the "gang". 
 	
-	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \valsof{\run}$. The "gang" of value $\aval$ in $\run$, written $\intro*\gangof{\aval}{\run}$, is the "gang" $(\boss, \clique)$ such that, 
+	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \valsof{\run}$. The "gang" of value $\aval$ in $\run$, written $\intro*\gangof{\aval}{\run}$, is the "gang" $(\intro*\bossof{\aval}{\run}, \intro*\cliqueof{\aval}{\run})$ such that, 
 	\begin{itemize}
 		\item if there exists $a_0 \in \agentsof{\run}$ such that, 
 		for every 
 		$i \in \nset{0}{k}$, 
-		$\data{\config_i}(a_0) = \aval$ then $\boss := \st{\config_k}(a_0)$, otherwise $\boss := \noboss$, 
-		\item  $\clique := \set{q \in Q \mid \exists i \leq k, \exists a \in \agents\setminus \set{a_0}, \config_i(a) = (q,\aval)}$
+		$\data{\config_i}(a_0) = \aval$ then $\bossof{\aval}{\run} := \st{\config_k}(a_0)$, otherwise $\bossof{\aval}{\run} := \noboss$, 
+		\item  $\cliqueof{\aval}{\run} := \set{q \in Q \mid \exists i \leq k, \exists a \in \agents\setminus \set{a_0}, \config_i(a) = (q,\aval)}$
 	\end{itemize}
 \end{definition} 
 
 
 We define "abstract runs" as follows:
- 
+
 \begin{definition}
 	\label{def:abstract-configuration}
 	An ""abstract configuration"" over $\agents$ is a tuple of $2^Q \times \gangset$ where $\gangset$ designates the set of all "gangs". We write $\aconfigs{\agents}$ the set of "abstract configurations" over $\agents$ and $\allaconfigs := \bigcup_{\agents \subseteq \nats \text{ finite }}\aconfigs{\agents}$ the set of all "abstract configurations". 
 	
+	Given a set of states $S \subseteq Q$, a "message type" $m$ and a set of operations $O$, we define $\cliquesucc{S}{m}{A} = \set{s' \in Q \mid \exists s \in S, a\in O, (s, \recone{m}{a}, s') \in \Delta}$.
+	
 	Given two "abstract configurations" $\aconfig = (\covset, \boss, \clique)$ and $\aconfig' = (\covset', \boss', \clique')$, there is an ""abstract step"" from $\aconfig$ to $\aconfig'$, denoted $\aconfig \step{} \aconfig'$, when $\clique' \subseteq \covset'$, $\boss' \in \covset' \cup \set{\noboss}$ and one of the following cases is satisfied.
 	\begin{enumerate}
-		\item \emph{""Broadcast from clique"":}
-		\begin{enumerate}[label = (\arabic*)]
-			\item\label{item:broadcast_from_clique_broadcast} There exist $\amessage \in \messages$ and $\statebr \in \clique, \statebr' \in \clique'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
+		\item \emph{""Broadcast from clique"":} There exists $(\statebr, \brone{m}, \statebr') \in \transitions$ such that:
+		\begin{enumerate}[label = (\arabic*)] 
 			
 			\item\label{item:broadcast_from_clique_boss} Either $\boss = \boss'$ or there exists $(\boss, \recone{\amessage}{\anact}, \boss') \in \transitions$ for some action $\anact$.
 			
-			\item\label{item:broadcast_from_clique_clique}$(\clique \cup \set{\statebr'}) \subseteq \clique'$ and, for all $q' \in \clique' \setminus (\clique \cup \set{\statebr'})$, there exists $q$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where:
-			\begin{itemize}
-				\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
-				\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
-			\end{itemize}
-			
-			\item\label{item:broadcast_from_clique_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where:
-			\begin{itemize}
-				\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
-				\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
-			\end{itemize}
+			\item\label{item:broadcast_from_clique_clique}$ \clique' = \clique \cup \set{\statebr'}\cup \cliquesucc{\clique}{m}{\set{\eqtestact, \dummyact, \enregact}} \cup \cliquesucc{\covset}{m}{\set{\enregact}}$.
 		\end{enumerate}
 		
-		\item \emph{""Broadcast from boss"":}
+		\item \emph{""Broadcast from boss"":} there exists $\amessage \in \messages$ such that $(\boss, \brone{m}, \boss') \in \transitions$
 		\begin{enumerate}[label = (\arabic*)]
-			\item \label{item:broadcast_from_boss_broadcast} there exists $\amessage \in \messages$ such that $(\boss, \brone{m}, \boss') \in \transitions$
+		
+			\item\label{item:broadcast_from_boss_boss} $\boss, \boss' \ne \noboss$ (technically implied by the existence of $(\boss, \brone{m}, \boss')$ but written here to match other cases)
 			
-			\item\label{item:broadcast_from_boss_boss} $\boss, \boss' \ne \noboss$ (technically implied by \ref{item:broadcast_from_boss_broadcast} but written here to match other cases)
-			
-			\item\label{item:broadcast_from_boss_clique} 	$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where:
-			\begin{itemize}
-				\item $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ and $q \in \clique$, or
-				\item $\anact= \quotemarks{\enregact}$ and $q \in \covset$.
-			\end{itemize}
-			
-			\item\label{item:broadcast_from_boss_covset} $\covset \cup \set{\boss'} \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\boss'})$, there exists $q$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where:
-			\begin{itemize}
-				\item  $\anact = \quotemarks{\eqtestact}$ and $q \in \clique$, or
-				\item $\anact = \quotemarks{\enregact}$ or $\quotemarks{\dummyact}$ and $q \in \covset$.
-			\end{itemize}
+			\item\label{item:broadcast_from_boss_clique} $\clique'= \clique \cup \cliquesucc{\clique}{m}{\set{\eqtestact, \dummyact, \enregact}} \cup \cliquesucc{\covset}{m}{\set{\enregact}}$.
 		\end{enumerate}
 		
 		
-		\item \emph{""External broadcast"":}
+		\item \emph{""External broadcast"":} There exists $(\statebr, \brone{m}, \statebr') \in \transitions$ such that
 		\begin{enumerate}[label = (\arabic*)]
-			\item\label{item:external_broadcast_broadcast} There exists $\amessage \in \messages$ and $\statebr \in \covset, \statebr' \in \covset'$ s.t. $(\statebr, \brone{m}, \statebr') \in \transitions$. 
 			
 			\item\label{item:external_broadcast_boss}Either $\boss = \boss'$ or:
 			\begin{itemize} 
@@ -128,11 +106,10 @@ We define "abstract runs" as follows:
 				\item $\boss' = \noboss$ and there exists $(\boss, \recone{\amessage}{\enregact}, \boss') \in \transitions$.
 			\end{itemize}
 			
-			\item\label{item:external_broadcast_clique}$\clique \subseteq \clique'$ and, for all $q' \in \clique' \setminus \clique$, there exists $q \in \clique$ s.t. $(q, \recone{\amessage}{\dummyact}, q') \in \transitions$.
+			\item\label{item:external_broadcast_clique} $\clique'= \clique \cup \cliquesucc{\clique}{m}{\set{\dummyact}}$.
 			
-			\item\label{item:external_broadcast_covset}$(\covset \cup \set{\statebr'}) \subseteq \covset'$ and, for all $q' \in \covset' \setminus (\covset \cup \set{\statebr'})$, there exists $q \in \covset$ s.t. $(q, \recone{\amessage}{\anact}, q') \in \transitions$ where $\anact = \quotemarks{\enregact}$ or $\anact = \quotemarks{\dummyact}$.
 		\end{enumerate}
-		\item \emph{""Gang reset"":} $S' = S$, $\clique' = \emptyset$ and $\boss'= q_0$
+		\item \emph{""Gang reset"":} $\covset' = \covset \cup \clique \cup \set{\boss}$, $\clique' = \emptyset$ and $\boss'= q_0$
 	\end{enumerate}
 	
 	
@@ -143,7 +120,7 @@ We define "abstract runs" as follows:
 	As in the concrete case, an ""abstract run"" is a sequence $\arun = \aconfig_0, \dots, \aconfig_k$ such that $\aconfiginit$ is the initial configuration and, for all $i$, $\aconfig_i \step{} \aconfig_{i+1}$. We denote such a run $\aconfig_0 \step{*} \aconfig_k$. Similarly, we denote by $\aconfig \step{*} \aconfig'$ the existence of a sequence of steps from $\aconfig$ to $\aconfig'$.
 \end{definition}
 
-The gang reset will help us to do the following, if one wants to check if one state is reachable, one should check the presence of an "abstract run" leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new "boss@@gang" but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a state in $S$).
+The gang reset will help us to do the following, if one wants to check if one state is reachable, one should check the presence of an "abstract run" leading to an abstract configuration in which the state appears. Once it is done, the reachable state is added to $S$, and we can  now check something else, for example, if we want to check the reachability of another state. This way, it can do a "gang reset" step in order to restart with some new "boss" but it keeps in mind the states it knows to be reachable, so it can use it later on (for instance, if it needs to receive a message from a state in $S$).
 
 First of all we observe that if there is an "abstract run" covering a state then there is a short one.
 
@@ -156,7 +133,7 @@ First of all we observe that if there is an "abstract run" covering a state then
 \ifproofs
 \begin{proof}
 	Note that $\covset$ may never decrease along an "abstract run" and that $\clique$ may only decrease at "gang resets".
-	We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the "boss@@gang" may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the run with no "reset" has at most $(|Q|+2)(|Q|+1)$ steps, yielding the bound. 
+	We can hence enforce in the abstract semantics that, at least every $|Q|+2$ steps without "reset", either $\covset$ or $\clique$ has increased. Indeed, otherwise the configuration has looped as the "boss" may only take $|Q| +1$ values. We may also enforce that $\covset$ has strictly increased between two "resets", as otherwise one may remove anything that happened between the two "resets". Therefore, there are at most $|Q|-1$ "gang resets" in total, and each portion of the run with no "reset" has at most $(|Q|+2)(|Q|+1)$ steps, yielding the bound. 
 \end{proof}
 \fi
 
@@ -164,8 +141,8 @@ It remains to prove that our abstraction is sound and complete.
 To prove the completeness, we take a concrete "run" $\run$ in our model and any value $v$ appearing in the reached configuration. We prove that there exists an "abstract run" leading to the abstract configuration $(\statesin{\run}, \gangof{v}{\run})$. 
 %Note that $\statesin{\run}$ is the set of all states appearing in $\run$ and $\gangof{v}{\run} = (\boss, \clique)$ is the gang of agents with value $v$ at the end of $\run$, i.e., if the agent starting with value $v$ has still the same value, $\boss$ denotes its state, and otherwise $\boss = \bot$, and $\clique$ is the set of states on which there is an agent with value $v$ at the end of $\run$.
 
-To construct the "abstract run", we will first show that, for all concrete "run" $\run$ and for all value $v$, $(\statesin{\run}, q_0, \emptyset) \step{\ast}(\statesin{\run}, \gangof{v}{\run})$. To do this, it suffices to follow step by step how agents with value $v$ evolve and find the fitting "abstract step" to follow agents associated with value $v$. 
-Then, it is left to show that for all concrete "run" $\run$ and for all value $v$, $\aconfiginit \step{\ast} (\statesin{\run}, q_0, \emptyset)$. We shall prove this by induction on the size of $\statesin{\run}$. 
+To construct the "abstract run", we will first show that, for all concrete "run" $\run$, for all $S$ such that $\statesin{\run} \subseteq S$ and for all value $v$, $(S, q_0, \emptyset) \step{\ast}(S, \bossof{\aval}{\run}, K)$ with $\cliqueof{\aval}{\run}\subseteq K$. To do this, it suffices to follow step by step how agents with value $v$ evolve and find the fitting "abstract step" to follow agents associated with value $v$. 
+Then, it is left to show that for all concrete "run" $\run$ and for all value $v$, $\aconfiginit \step{\ast} (S, q_0, \emptyset)$ with $\statesin{\run} \subseteq S$. We shall prove this by induction on the size of $\statesin{\run}$. 
 
 %The base case is handled by the first property we proved. For the induction case, we consider a prefix "run" $\run'$ of $\run$ that stops just before all $\covset(\run)$ is covered, and we take $v_{\mathbf{br}}$ the value of the broadcast in following step, that covers the rest of $\covset(\run)$. By induction hypothesis and our first property, we prove that $\aconfiginit \step{\ast} (\statesin{\run'}, q_0, \emptyset) \step{\ast} (\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'})$. By going one step forward and finding the fitting case in the abstract semantics, we prove that $(\statesin{\run'}, \gangof{v_{\mathbf{br}}}{\run'}) \step{} (\statesin{\run}, \gang)$ for some $\gang$. Finally,  $\aconfiginit \step{\ast} (\statesin{\run}, q_0, \emptyset)$ by the "gang reset" step of the abstract semantics. Putting everything together and applying the first property, we finally get: $\aconfiginit \step{\ast} \absproj{v}{\run}$.
 
@@ -198,18 +175,20 @@ The following remark formalizes the intuition that, because the only way to take
 
 \begin{lemma}
 	\label{lem:proof_completeness_covset_constant}
-	For all "initial runs" $\run: \config_0 \step{*} \config$ and $\aval \in \valsof{\run}$, $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. 
+	For all "initial runs" $\run: \config_0 \step{*} \config$, $S \subseteq Q$ and $\aval \in \valsof{\run}$, if $\statesin{\run} \subseteq S$ then there exists $\clique$ such that $(S, q_0, \emptyset) \step{*} (S,\bossof{\aval}{\run}, \clique)$ and $\cliqueof{\aval}{\run} \subseteq \clique$. 
 \end{lemma}
 
 \begin{proof}
-	Let $\covset := \statesin{\run}$ and $\agents = \agentsof{\run}$.	
-	Thanks to Remark~\ref{rem:run_no_new_register_values},  $\aval$ appears in $\config_0$; let $a_0$ be the (unique) agent such that $\data{\config_0}(a_0) = \aval$. We write $\run : \config_0 \step{} \config_1 \step{} \dots \step{} \config_k = \config$. For every $i \leq k$, let $\run_i : \config_0 \step{*} \config_i$ be the prefix of $\run$ of length $i$, and write $\aconfig^i := (\covset, \gangof{\aval}{\run_i})$. Note that $\gangof{\aval}{\run_0} = (q_0, \emptyset)$ hence $\aconfig^0 = (\covset, q_0, \emptyset)$. Also, we write $(\covset, \boss_i, \clique_i) := \aconfig^i$.
+	Let $\agents = \agentsof{\run}$.	
+	Thanks to Remark~\ref{rem:run_no_new_register_values},  $\aval$ appears in $\config_0$; let $a_0$ be the unique agent such that $\data{\config_0}(a_0) = \aval$. We write $\run : \config_0 \step{} \config_1 \step{} \dots \step{} \config_k = \config$. For every $i \leq k$, let $\run_i : \config_0 \step{*} \config_i$ be the prefix of $\run$ of length $i$. We set $\aconfig^0 = (\covset, q_0, \emptyset)$.
 	
-	We prove by induction on $i$ that $\aconfig^0 \step{*} \aconfig^i$.
-	The statement is trivially true for $i =0$. 
+	We construct by induction on $i$ a sequence of "abstract configurations" $\aconfig^i = (\covset, \boss_i, \clique_i)$ such that $\aconfig^0 \step{*} \aconfig^i$ and $\cliqueof{\aval}{\run_i} \subseteq \clique_i$.
+	The statement is trivially true for $i=0$. 
 	
-	Suppose now that $(\covset, \emptyset, \noboss) \step{*} \aconfig^i$. 
-	If suffices to prove that $\aconfig^i \step{} \aconfig^{i+1}$. First of all we clearly have, by definition, $K_{i+1} \subseteq S$ and $\boss_{i+1}\in S\cup\set{\noboss}$. We consider the last step of $\run_{i+1}$, which is referred to under the name $s_{i+1}$ in what follows; $s_{i+1}: \config_i \step{} \config_{i+1}$. Let $\agentbr$ the agent making the broadcast transition in $s_{i+1}$ and $A_{\recsymb}$ the set of agents receiving this broadcast in $s_{i+1}$. Let $(\statebr, \brone{\amessage}, \statebr') \in \transitions$ denote the transition taken by $\agentbr$ in $s_{i+1}$.
+	Suppose now that $(\covset, q_0, \emptyset) \step{*} \aconfig^i$. 
+	If suffices to prove that $\aconfig^i \step{} \aconfig^{i+1}$. 
+%	First of all we clearly have, as $\statesin{\run} \subseteq S$, $K_{i+1} \subseteq S$ and $\boss_{i+1}\in S\cup\set{\noboss}$. 
+	We consider the last step of $\run_{i+1}$, which is referred to under the name $s_{i+1}$ in what follows; $s_{i+1}: \config_i \step{} \config_{i+1}$. Let $\agentbr$ the agent making the broadcast transition in $s_{i+1}$ and $A_{\recsymb}$ the set of agents receiving this broadcast in $s_{i+1}$. Let $(\statebr, \brone{\amessage}, \statebr') \in \transitions$ denote the transition taken by $\agentbr$ in $s_{i+1}$.
 	
 	We now make the following case distinction to determine the type of the abstract step $\aconfig^i \step{} \aconfig^{i+1}$:
 	\begin{enumerate}
@@ -221,46 +200,42 @@ The following remark formalizes the intuition that, because the only way to take
 	
 	Let $\agentboss$ the agent such that $\data{\config_0}(\agentboss) = \aval$. In case~\ref{proof_completeness:case_broadcast_boss}, $\agentboss = \agentbr$; in the other two cases, $\agentboss \ne \agentbr$. 
 	
-	We now prove the other conditions:
+	It is easy to check that in all cases, the "gang" given by applying the abstract semantics covers $\gangof{\aval}{\run_{i+1}}$:
+	
+	
 	\begin{enumerate}[label = (\arabic*)]
-		\item In case~\ref{proof_completeness:case_broadcast_clique}, since $\agentbr$ has value $\aval$ in $\config_i$ and $\config_{i+1}$ but not in every $\config_j$ for $j \leq i$, we directly have $\statebr \in \clique_i$ and $\statebr' \in \clique_{i+1}$. In case~\ref{proof_completeness:case_broadcast_boss}, it suffices to note that $\boss_i = \st{\config}(\agentbr)$ and $\boss_{i+1} = \st{\config_{i+1}}(\agentbr)$. In case~\ref{proof_completeness:case_external_broadcast}, it suffices to note that $\statebr, \statebr' \in \covset$ as both states appear in $\run$.
 		
 		\item In case~\ref{proof_completeness:case_broadcast_boss}, this condition is automatically satisfied. In the other two cases, we look at what $\agentboss$ does in $s_{i+1}$. If it remains idle then we have $\boss_i = \boss_{i+1}$. Otherwise it takes a reception transition as $\agentbr \ne \agentboss$. In case~\ref{proof_completeness:case_broadcast_clique} the condition is then satisfied.
-		In case~\ref{proof_completeness:case_external_broadcast}, this reception may not have action $\quotemarks{\eqtestact}$ as the broadcast is from an agent with register value that is not $\aval$ ($\data{\config_i}(\agentbr) \ne \aval$ by hypothesis). For the same reason, if this reception has action $\quotemarks{\enregact}$ then $\boss_{i+1}= \noboss$. If this reception has action $\quotemarks{\dummyact}$ and $\boss_i \ne \noboss$ then $\boss_{i+1} \ne \noboss$ as $\agentboss$ keeps value $\aval$.
+		In case~\ref{proof_completeness:case_external_broadcast}, this reception cannot have action $\quotemarks{\eqtestact}$ as the broadcast is from an agent with register value that is not $\aval$ ($\data{\config_i}(\agentbr) \ne \aval$ by hypothesis). For the same reason, if this reception has action $\quotemarks{\enregact}$ then $\boss_{i+1}= \noboss$. If this reception has action $\quotemarks{\dummyact}$ and $\boss_i \ne \noboss$ then $\boss_{i+1} \ne \noboss$ as $\agentboss$ keeps value $\aval$.
 		
-		\item We have $\clique_i \subseteq \clique_{i+1}$ because $\run_{i}$ is a prefix of $\run_{i+1}$; also, in case~\ref{proof_completeness:case_broadcast_clique}, $\statebr' \in \clique_{i+1}$ because of $\agentbr$. Let $q' \in \clique_{i+1} \setminus \clique_i$ with, in case~\ref{proof_completeness:case_broadcast_clique}, $q' \ne \statebr'$. There must exist  an agent $a$ that takes a reception transition $(q, \rec{\amessage}{\anact}{q'}$ in $s_{i+1}$ and has value $\aval$ in $\config_{i+1}$, with $q\in \covset$ as it appears in $\run$. In cases~\ref{proof_completeness:case_broadcast_clique} and \ref{proof_completeness:case_broadcast_boss}, the broadcast has value $\aval$ hence if $\anact = \quotemarks{\eqtestact}$ or $\quotemarks{\dummyact}$ then $a$ has value $\aval$ in $\config_i$ and $q \in \clique_i$. In case~\ref{proof_completeness:case_external_broadcast}, the broadcast has value $\ne \aval$ hence $a$ may have value $\aval$ in $\config_{i+1}$ only when $\anact = \quotemarks{\dummyact}$ and $a$ had value $\aval$ in $\config_i$, which implies $q \in \clique_i$. 
-		
-		\item It suffices to note that the first components of $\aconfig^i$ and $\aconfig^{i+1}$ are equal to $\covset$ and $\statebr' \in \covset$, and $\boss_{i+1} \in \covset \cup \set{\bot}$. 
+		\item In all cases $K_{i+1}$ is defined by adding to $K_i$ all states reachable with value $\aval$ from it by receiving the broadcast message $m$ from a state of $K_i$ with value $\aval$ or from a state of $S$ with value $v' \neq v$ (plus $\statebr'$ in case~\ref{proof_completeness:case_broadcast_clique}). As $\cliqueof{\aval}{\run_i} \subseteq K_i$, necessarily  $\cliqueof{\aval}{\run_{i+1}} \subseteq K_{i+1}$
 	\end{enumerate}
 	
-	Overall, we have proven that $\aconfig^i \step{} \aconfig^{i+1}$, which concludes the induction step. Applying the result with $i = k$ proves Lemma~\ref{lem:proof_completeness_covset_constant}. 
+	We have proven that $\aconfig^i \step{} \aconfig^{i+1}$, which concludes the induction step. Applying the result with $i = k$ proves Lemma~\ref{lem:proof_completeness_covset_constant}. 
 \end{proof}
 
 We may now prove completeness of the abstraction. 
 
 \begin{lemma}
 	\label{lem:abstraction_complete}
-	If $\run$ is an "initial run" and $\aval \in \valsof{\run}$, then $\aconfiginit \step{*} \absproj{\aval}{\run}$. 
+	If $\run$ is an "initial run" and $\aval \in \valsof{\run}$, then there exist $S, \clique$ such that $\aconfiginit \step{*} (S, \bossof{\aval}{\run}, \clique)$ and $\statesin{\run} \subseteq S$ and $\cliqueof{\aval}{\run} \subseteq \clique$. 
 \end{lemma}
 
 \begin{proof}
 	Let $\run$ an "initial run".
-	We proceed by induction on the size of the set $\statesin{\run}$. 
-	First, if $\statesin{\run}$ is of size $1$ then $\statesin{\run} = \set{q_0}$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} directly gives $\aconfiginit = (\set{q_0}, q_0, \noboss) \step{*} \absproj{\aval}{\run}$.
+	We construct by induction an increasing sequence of sets $C_0, \ldots, C_m$ such that $C_m = \statesin{\run}$ and for all $i$, $C_i \subseteq \statesin{\run}$, $q_0 \in C_i$, and there exists $S_i$ such that $\aconfiginit \step{*} (S_i, q_0, \emptyset)$ and $C_i \subseteq S_i$. 
 	
+	First, we set $C_0 = \set{q_0}$ and the property is verified as $\aconfiginit \step{*} (\set{q_0}, q_0, \emptyset)$.
 	
-	Suppose now that the statement is true for any $\run$ such that $\statesin{\run}$ is of size $k$, and suppose that we have a "run" $\run$ such that $\statesin{\run}$ is of size $k+1$. Let $\aval \in \valsof{\run}$. Let $\run_p: \config_0 \step{*}\config_p$ the longest suffix of $\run$ such that $\statesin{\run} \ne \statesin{\run_p}$. By induction hypothesis, we know that for all $\aval \in \valsof{\run}$, $\aconfiginit \step{*} \absproj{\aval}{\run_p}$. Write $s$ the step immediatly after $\run_p$ in $\run$. By maximality of $\run_p$, $\run_p$ covers all states in $\statesin{\run} \setminus \statesin{\run_p}$. 
+	Now suppose we constructed $C_0, \ldots, C_j$. If $C_j = \statesin{\run}$ we can stop. Otherwise let $\run_p: \config_0 \step{*}\config_p$ the longest suffix of $\run$ such that  $\statesin{\run_p} \subseteq C_j$. Write $s$ the step immediately after $\run_p$ in $\run$. By maximality of $\run_p$, $\run_p \cdot s$ covers some state $q$ that is not in $C_j$. Let $a$ be an agent that is in $q$ after step $s$, let $\aval$ be its value at that point. We set $C_{i+1} = C_i \cup \set{q}$.
 	
-	Write $\agentbr$ the agent broadcasting in $s$, $(\statebr, \brone{\amessage}, \statebr')$ the corresponding transition and $\aval$ the broadcast value. By induction hypothesis applied to $\run_p$ and $\aval$, $\aconfiginit \step{*} \absproj{\aval}{\run_p}$. Applying Lemma~\ref{lem:proof_completeness_covset_constant} on $\run$ and $\aval$ gives that $(\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$. Therefore, it remains to prove that $\absproj{\aval}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset)$. It suffices to prove that there exist $\boss, \clique$ such that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$, a "gang reset" allowing us to then reach $(\statesin{\run}, q_0, \emptyset)$. In other words, we prove that, from $\absproj{\avalbr}{\run_p}$, one may cover all states in $\statesin{\run}$ in just one abstract step.
+	By induction hypothesis, there exist $S_{j}$ such that $\aconfiginit \step{*} (S_{j}, q_0, \emptyset)$ and $C_j \subseteq S_{j}$. Furthermore, as $\statesin{\run_p} \subseteq C_j$, by Lemma~\ref{lem:proof_completeness_covset_constant} there exists $\clique_j$ such that $\aconfiginit \step{*} (S_{j}, \bossof{\aval}{\run_p}, \clique_j)$ and $\cliqueof{\aval}{\run_p} \subseteq \clique_j$.
 	
-	We aim at proving that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$ for well-chosen $\boss$ and $\clique$.
-	Just like in the proof of Lemma~\ref{lem:proof_completeness_covset_constant}, we make a case disjunction to prove that the broadcast in $s$ may be mimicked in the abstraction from $\absproj{\avalbr}{\run_p}$. The type obtained is either a "broadcast from clique" or a "broadcast from boss", because by hypothesis the agent broadcasting has value $\avalbr$ and therefore its state before the broadcast is either the boss or in the clique in $\absproj{\avalbr}{\run_p}$. 
+	If $q \in \clique_j$ then applying a "gang reset" suffices. If not, we mimic step $s$ with a step in the abstract semantics, as in Lemma~\ref{lem:proof_completeness_covset_constant} so that $q$ is added to the "clique", then apply a gang reset to reach $(S_{i+1}, q_0, \emptyset)$ with $C_{i+1} = S_i \cup \set{q} \subseteq S_{i+1}$. 
 	
-	Because we may choose $\boss$ and $\clique$ freely, the only challenging condition is \ref{item:broadcast_from_clique_covset}.
-	Let $q' \in \statesin{\run} \setminus \statesin{\run_p}$, $q' \ne \statebr'$. 
-	There exists an agent $a$ that takes a reception transition $(q,\recone{m}{\anact},q')$ in $s$. 
-	If $\anact = \quotemarks{\eqtestact}$, then agent $a$ has value $\avalbr$ at the end of $\run_p$ hence $q$ is in the clique of $\absproj{\avalbr}{\run_p}$ and condition \ref{item:broadcast_from_clique_covset} is satisfied. Otherwise, one has $q \in \statesin{\run_p}$ and condition \ref{item:broadcast_from_clique_covset} is satisfied.
-	In the end, there exist $\boss$, $\clique$ such that $\absproj{\avalbr}{\run_p} \step{} (\statesin{\run}, \boss,\clique)$. By a "gang reset", this implies that $\absproj{\avalbr}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset)$; we have proven that $\aconfiginit \step{*}\absproj{\avalbr}{\run_p} \step{*} (\statesin{\run}, q_0, \emptyset) \step{*} \absproj{\aval}{\run}$ which concludes the proof. 
+	This concludes our induction.
+	
+	In the end, there exist $S_m$ such that $\aconfiginit \step{*} (S_{m}, q_0, \emptyset)$ and $\statesin{\run} \subseteq S_{j}$. Lemma~\ref{lem:proof_completeness_covset_constant} allows us to conclude the proof.¨
 \end{proof}
 
 
@@ -304,10 +279,8 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 	\textbf{Case 1: } If $\sigma_i \to \sigma_{i+1}$ is a \emph{broadcast $d = (q, \brone{m}, q')$ from the clique} with $q \in K_i$, then we make all agents $a \in \agents_{i,q}^{d}$ (which all have value $v_i$) execute that transition one by one.
 	None of those broadcasts are received by any other agent, except for the last one:
 	If $b \neq b'$ then there is a transition $(b, \recone{m}{\alpha}, b')$ and we make $a_i$ execute it upon receiving the broadcast. We then set $a_{i+1} = a_i$.
-	For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \recone{m}{\alpha}, k')$ such that either $\alpha$ is $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
+	For all $k' \in K_{i+1} \setminus (K_i \cup \set{q'})$ there exists a transition $d'=(k, \recone{m}{\alpha}, k')$ such that either $\alpha$ is $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
 	In both cases we make all agents of $\agents_{i,k}^{d'}$ take that transition.
-	
-	For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition $d'=(s,\recone{m}{\alpha},s')$. If $\alpha = \quotemarks{=}$ we then make all agents of $\agents_{i,s}^{d'}$ follow that transition. Otherwise it means that $s \in K_i$, hence this transition is possible as they all have value $v_i$.
 	
 	We set $v_{i+1} = v_i$.
 	\\
@@ -317,8 +290,6 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 	
 	For all $k' \in K_{i+1} \setminus K_i $ there exists a transition $d'=(k, \recone{m}{\alpha}, k')$ such that $\alpha$ is either $\eqtestact$ or $*$ and $k \in K_i$ or $\alpha$ is $\enregact$ and $k\in S$.
 	In both cases we make all agents of $\agents_k^{d'}$ take that transition.
-	
-	For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1} \cup \set{b_{i+1}})$ there exists a transition $d'=(s,\recone{m}{\alpha},s')$ (the operation cannot be $\enregact$ or $\eqtestact$ as otherwise $s$ would be in $K_{i+1}$). We then make all agents of $\agents_s^{d'}$ follow that transition. 
 	
 	By definition of an "abstract run", we must have $b_i \in S_i$.
 	Hence we can make all agents of $\agents_{i,s}^{d}$ execute $d$, with no agent receiving the corresponding broadcasts.
@@ -331,8 +302,6 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 	
 	For all $k' \in K_{i+1} \setminus K_i$ there exists a transition $d'=(k, \recone{m}{*}, k')$ with $k \in K_i$. We make all agents of $\agents_k^{d'}$ take that transition.
 	
-	For all $s' \in S_{i+1} \setminus (S_i \cup K_{i+1})$ there exists a transition $d'=(s,\recone{m}{\alpha},s')$ with $\alpha \in \set{*, \enregact}$. We then make all agents of $\agents_s^{d'}$ follow that transition. 
-	
 	We set $v_{i+1} = v_i$.
 	\\
 	
@@ -344,14 +313,7 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 	\begin{itemize}
 		\item If $b_{i+1} \neq \noboss$ then $a_{i+1}$ is an agent of value $v_{i+1}$.
 		
-		\item For all $k \in K_{i}$, the agents of $\agents_{i,k}^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $k$ and value $v_{i+1}$ in $\config_{i+1}$.
-		
-		\item If the step is not a gang reset, then $v_{i+1} = v_i$ and for all $k' \in K_{i+1} \setminus K_i$, there exists $d \in \Delta$ from some $k$ to $k'$ such that all agents of $\agents_{i,k}^d$ take that transition. Furthermore, if $d$ is of the form $(k,\recone{m}{\enregact},k')$ then the broadcasting agent has value $v_i$, thus all those agents keep value $v_i = v_{i+1}$. 
-		%	As $\size{\agents_{i,k}^d}\geq M^{n-i-1}$, there are at least that many agents with value $v_{i+1} = v_i$ in $k'$.
-		
-		\item For all $s \in S_{i}$, the agents of $\agents_{i,s}^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $s$ in $\config_{i+1}$.
-		
-		\item If the step is not a gang reset, for all $s' \in S_{i+1} \setminus (S_i \cup \set{b_{i+1}})$, there exists $d \in \Delta$ from some $s \in S_i$ to $s'$ such that all agents of $\agents_{i,s}^d$ take that transition.
+		\item If the step is not a gang reset, then $v_{i+1} = v_i$ and for all $k' \in K_{i+1} \setminus K_i$, there exists $d \in \Delta$ from some $k$ to $k'$ such that all agents of $\agents_{i,k}^d$ take that transition. Furthermore, if $d$ is of the form $(k,\recone{m}{\enregact},k')$ then the broadcasting agent has value $v_i$, thus all those agents keep value $v_i = v_{i+1}$. For all $k \in K_{i}$, the agents of $\agents_{i,k}^\epsilon$ do not move between configurations $\config_{i}$ and $\config_{i+1}$, hence they have state $k$ and value $v_{i+1}$ in $\config_{i+1}$.
 		
 		\item If the step is a gang reset, the conditions of the lemma hold trivially.
 	\end{itemize}
@@ -361,7 +323,7 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 \end{proof}
 
 
-	We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$ by setting $i = n$.
+We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$ by setting $i = n$.
 %	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
 
 \subsection{Conclusion}
@@ -397,22 +359,22 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 \end{proposition}
 
 \begin{proof}
-Let $x_1, \ldots, x_n$ be variables and $\query = \bigwedge_{j=1}^m C_j$ with, for all $j$, $C_j = \ell_j^1 \lor \ell_j^2 \lor \ell_j^3$ and $\ell_j^1, \ell_j^2, \ell_j^3 \in \set{x_i, \neg x_i \mid 1 \leq i \leq n}$. 
-
-Consider the "protocol" displayed in Figure~\ref{fig:np-hard}.
-Our alphabet of messages is the set of literals $\set{x_i, \neg x_i \mid 1 \leq i \leq n}$.
-Each agent may either receive a message, and repeat it forever or it may broadcast one of $x_i, \neg x_i$ for each $i$ and then try to receive a message one of $\ell_j^1, \ell_j^2, \ell_j^3$ for each $j$, with its own register value.
-
-If $\query$ is satisfied by some assignment $\nu$, then we construct a run where an agent $a$ broadcasts the satisfied literals while going from $0$ to $N$ and other agents receive the messages and go to the corresponding states in the lower part of the protocol while storing the register value of $a$.
-Then for each $j$ we select some $\ell_j^p$ satisfied by $\nu$. There exists $i$ such that there is an agent in state $\ell_j^p$, which broadcasts $\ell_j^p$ along with the initial register value of $a$, allowing $a$ to go to the next state.
-As a result, there is a "run" in which an agent $a$ reaches $m'$.
-
-Now suppose there is a "run" $\run$ over some set of agents $\agents$ such that some agent $a \in \agents$ is in state $m'$ in the final configuration.
-For each $i$, $a$ has broadcast either $x_i$ or $\neg x_i$, but not both.
-Let $\nu$ be the valuation assigning $\top$ to $x_i$ if and only if $a$ has broadcast it.
-For each $j$ $a$ has received one of $\ell_j^1, \ell_j^2, \ell_j^3$ along with its own initial register value (which we call $r$). For this to happen, $a$ must have broadcast this literal before, hence it is satisfied by $\nu$.
-
-As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus satisfies $\query$. This concludes our reduction.
+	Let $x_1, \ldots, x_n$ be variables and $\query = \bigwedge_{j=1}^m C_j$ with, for all $j$, $C_j = \ell_j^1 \lor \ell_j^2 \lor \ell_j^3$ and $\ell_j^1, \ell_j^2, \ell_j^3 \in \set{x_i, \neg x_i \mid 1 \leq i \leq n}$. 
+	
+	Consider the "protocol" displayed in Figure~\ref{fig:np-hard}.
+	Our alphabet of messages is the set of literals $\set{x_i, \neg x_i \mid 1 \leq i \leq n}$.
+	Each agent may either receive a message, and repeat it forever or it may broadcast one of $x_i, \neg x_i$ for each $i$ and then try to receive a message one of $\ell_j^1, \ell_j^2, \ell_j^3$ for each $j$, with its own register value.
+	
+	If $\query$ is satisfied by some assignment $\nu$, then we construct a run where an agent $a$ broadcasts the satisfied literals while going from $0$ to $N$ and other agents receive the messages and go to the corresponding states in the lower part of the protocol while storing the register value of $a$.
+	Then for each $j$ we select some $\ell_j^p$ satisfied by $\nu$. There exists $i$ such that there is an agent in state $\ell_j^p$, which broadcasts $\ell_j^p$ along with the initial register value of $a$, allowing $a$ to go to the next state.
+	As a result, there is a "run" in which an agent $a$ reaches $m'$.
+	
+	Now suppose there is a "run" $\run$ over some set of agents $\agents$ such that some agent $a \in \agents$ is in state $m'$ in the final configuration.
+	For each $i$, $a$ has broadcast either $x_i$ or $\neg x_i$, but not both.
+	Let $\nu$ be the valuation assigning $\top$ to $x_i$ if and only if $a$ has broadcast it.
+	For each $j$ $a$ has received one of $\ell_j^1, \ell_j^2, \ell_j^3$ along with its own initial register value (which we call $r$). For this to happen, $a$ must have broadcast this literal before, hence it is satisfied by $\nu$.
+	
+	As a result, $\nu$ satisfies a literal of each clause of $\query$, and thus satisfies $\query$. This concludes our reduction.
 \end{proof}
 
 %\end{proof}
