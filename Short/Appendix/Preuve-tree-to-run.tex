@@ -55,27 +55,27 @@ We use the broadcasts made by $\run'$ to match the "unmatched receptions" with v
 
 % We proceed in the same way as in the previous part: the goal is now to use the "partial runs" yielded by the "follower" children to eliminate the "input@@partial" over each "non-initial@@partial" value of $u$, except maybe for $\valuelabel{\node}$, which requires a special case.
 
-Let $v$ be an "initial value" of $u$, and $\decsymb = \\(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ the "decomposition" from condition \ref{item:condition2_initial_value}. 
+Let $v$ be an "initial value" of $u$, and $\decsymb = \\(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ the "decomposition" from condition \ref{item:condition2_initial_value}. We have that, for all $j \in \nset{1}{\ell}$, $\node$ has a "follower" child $\node_j$ labelled by $\followlabelmessage{\node_j} = m_j$ and $\followlabelword{\node_j} \in \langdec{\decsymb_j}$ with $\decsymb_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$. 
+
 Because the behavior of $\run$ with respect to $v$ was not modified by previous steps, it is equal to the one of $u$, hence we can split $\run$ into $\run_0, \ldots, \run_\ell$ with $w_i \subword \voutput{\aval}{\run_i}$ and $\vinput{\aval}{\run_i} \in \set{m_1, \dots, m_{i-1}}^*$ for all $i$. 
+By induction hypothesis applied to $\node_j$, for all $j$, there exists an "initial partial run" $\Tilde{\run}_j$ whose only "unmatched receptions" are on $v$, $\vinput{v}{\Tilde{\run}} \subword \followlabelword{\node_{j}}$ and such that $\tilde{\run}_j$ broadcasts $(m_j,v)$ in its last step. Again, we can rename agents and values so that the sets of agents of $\run$ and the $\run_j$ are all disjoint and the only shared value is $v$. 
 
-%limite nico
+We can split $\Tilde{\run}_j$ into $\Tilde{\run}_{j, 0}, \ldots, \Tilde{\run}_{j,j-1}$ so that  $\vinput{v}{\Tilde{\run}_{j, i}} \subword \Tilde{w_{j,i}}$ where $\Tilde{w_{j,i}}$ can be obtained by adding letters from $\set{m_1, \ldots, m_j}$ to $w_i$.
 
-By definition of an "unfolding tree", $\node$ has a "follower" child $\node_j$ for each $j$ labelled by $\followlabelmessage{\node_j} = m_j$ and $\followlabelword{\node_j} \in \langdec{\decsymb_j}$ with $\decsymb_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$. 
+We build our new run by induction on $j$. At induction step $j$, we prove that we can combine $\Tilde{\run}_1$ to $\Tilde{\run}_j$ with $\run_0 \cdot \ldots \cdot \run_j$ so that the obtained run $\run'$ has no "unmatched receptions" on value $v$, the same "unmatched receptions" as $\run$ for other values, and that $\run'$ has a broadcast of every $(m_i,v)$ with $i \leq j$. Moreover, this broadcast comes from an agent who has $v$ as non-initial value hence can be duplicated so that we can consider that we have an unlimited supply of messages $(m_i,v)$, $i \leq j$. 
 
-By induction hypothesis, this means that there exists an "initial partial run" $\Tilde{\run}_j$ whose only missing broadcasts are on $v$ (we can rename values to make them match), $\vinput{v}{\Tilde{\run}} \subword \followlabelword{\node_{j}}$ and that broadcasts $\followlabelmessage{\node_{j}}$ with value $v$. We can even cut that run right after that broadcast so that it ends with it. 
-
-We can split $\Tilde{\run}_j$ into $\Tilde{\run}_{j, 0}, \ldots, \Tilde{\run}_{j,j-1}$ so that each  $\vinput{v}{\Tilde{\run}_{j, i}} \subword \Tilde{w_i}$ where $\Tilde{w_i}$ can be obtained by adding letters from $\set{m_1, \ldots, m_j}$ to $w_i$.
+The initialization of our induction simply consists in taking $\run_0$, which has no "unmatched reception" with value $v$. For the induction step, we combine several copies of $\Tilde{\run}_{j+1}$ with $\run'$ so that all "unmatched broadcasts" with value $(m_{j+1},v)$ in $\run$ as now matched in $\run'$. To do so, we may have to duplicate parts of $\run'$ so that "unmatched receptions" in $\Tilde{\run}_{j+1}$ with message $(m_i,v)$ where $i \leq j$ are matched using a copy of $\Tilde{\run}_i$. \nico{en cours}
 
 We can compose each $\run$ with $\Tilde{\run}_{j}$ by running them in parallel over disjoint sets of agents and matching each $\Tilde{\run}_{j, i}$ with $\run_i$ so that the broadcasts of $\run_i$ with value $v$ forming $w_i$ are received in $\Tilde{\run}_{j, i}$ and the only remaining missing broadcasts in that part of the run are of $m_1, \ldots, m_i$.
 We obtain a run section whose $v$-"output" still contains $w_i$ and whose "$v$-input" only contains $m_1, \ldots, m_i$. 
 
 Finally, we can use the last operation of $\Tilde{\run}_{j, i}$, which is a broadcast of $m_j$ with value $v$, at any point during the rest of the run, to either extend the $v$-"output" of some $\run_k$ with $k \geq j$ or complete a missing broadcast.
-This construction is illustrated in Figure
-\begin{figure}
-	\input{../Figures/Fig-tree-to-run}
-	\caption{An illustration of the composition operation from the proof of Lemma~\ref{lem:tree-to-run}}.
-	\label{fig:tree-to-run}
-\end{figure}
+% This construction is illustrated in Figure
+% \begin{figure}
+% 	\input{../Figures/Fig-tree-to-run}
+% 	\caption{An illustration of the composition operation from the proof of Lemma~\ref{lem:tree-to-run}}.
+% 	\label{fig:tree-to-run}
+% \end{figure}
 If $\val = \valuelabel{\node}$ then we have $\bosslabel{\node} \in \langdec{\decsymb}$, and we need to ensure that $\bosslabel{\node}$ is broadcast in $\run$ with value $\val$.
 Let $\bossspec_0, \ldots, \bossspec_\ell$ such that $\bosslabel{\node} \subword \bossspec_0\cdots\bossspec_\ell$ and for all $j$, $\bossspec_j$ can be obtained by adding letters from $\set{m_1,\ldots, m_j}$ in $w_j$.
 We apply the above composition operation to extend the output of each $\run_{i}$ so that it subsumes $\bossspec_i$ while making sure that its "$\aval$-input" is still only made of $m_1, \ldots, m_i$ with value $v$. 
