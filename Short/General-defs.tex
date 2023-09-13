@@ -88,7 +88,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 
 \begin{remark}
 	In \cite{DelzannoST13}, the author consider the \AP \emph{query problem} where we look for a run reaching a "configuration" satisfying some ``queries''.	
-	Because one can exponentially reduce this problem to \COVER, our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the query problem. In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
+	In fact, one can exponentially reduce this problem to \COVER, our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the query problem. In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
 
 	% In \cite{DelzannoST13}, the authors considered ``queries'', which are conjunctions of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{\mathsf{reg}_j(\var{z}) = \mathsf{reg}_{j'}(\var{z}')}$, $\quotemarks{\mathsf{reg}_j(\var{z}) \neq \mathsf{reg}_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$, $q\in Q$ and $j,j' \in \nset{1}{r}$. A "configuration" satisfies a query if we can assign an agent to each variable so that all conjuncts are satisfied.
 	% This problem reduces to \COVER.
@@ -98,7 +98,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 	
 	% In the case of one register, we even have a polynomial-time reduction. To do so, we extend the "protocol" so that any agent can share its local "configuration" in a single broadcast (going to some sink state).
 	% In order to reach $q_f$, an agent must perform a sequence of transitions in which it receives the "configurations" of $k$ agents and checks that they satisfy the query.
-	\nico{grosse reduction en taille, car je ne pense pas que ca intéresse beaucoup les gens}
+%	\nico{grosse reduction en taille, car je ne pense pas que ca intéresse beaucoup les gens}
 \end{remark}
 
 \AP We finally introduce \intro{signature BNRA}, an interesting restriction to our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"". Said otherwise, the first register acts as a permanent identifier with which agents sign every message; under this restriction, a message is simply a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will later see that it falls into the same complexity class as the general case but makes the decidability procedure simpler. 
@@ -155,9 +155,9 @@ Each agent starts by receiving a foreign identifier and storing it in its second
 
 %The proof is in Appendix~\ref{app:reduction-lcs}.
 
-\begin{remark}
-	This can be adapted to show that repeat-\COVER (is there an infinite run covering $q_f$ infinitely often?) is undecidable for BNRA, as it is for "LCS"~\cite{AbdullaJ1996undec}. 	
-\corto{Delete remark?} %remark now holds in two lines
+%\begin{remark}
+%	This can be adapted to show that repeat-\COVER (is there an infinite run covering $q_f$ infinitely often?) is undecidable for BNRA, as it is for "LCS"~\cite{AbdullaJ1996undec}. 	
+%\corto{Delete remark?} %remark now holds in two lines
 % This highlights the fact that the abstraction presented below relies on the fact that we only have to consider finite runs for coverability.
-\end{remark}
+%\end{remark}
 
