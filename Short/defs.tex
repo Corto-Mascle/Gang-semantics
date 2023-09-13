@@ -17,7 +17,7 @@ In the section, we study the restriction of \COVER to "protocols" with one regis
 	Let $\run = \config_0 \step{} \config_1 \step{} \cdots \step{} \config_k$ be a "run" and $\aval \in \valsof{\run}$. The gang of value $\aval$ in $\run$ is the gang $(\boss, \clique)$ such that:
 	\begin{itemize}
 		\item if there exists $a_0$ an agent which has value $v$ in $\config_0$ and keeps it in all $\config_i$ then $\boss$ is its state in $\config_k$, otherwise $\boss := \noboss$, 
-		\item  $\clique$ is the set of states $q$ such that there is an agent in $q$ with value $v$ in some $\config_i$.
+		\item  $\clique$ is the set of states containing an agent with value $v$ in some $\config_i$.
 	\end{itemize}
 	
   

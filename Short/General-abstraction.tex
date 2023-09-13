@@ -119,6 +119,8 @@ Observe that the equality tests pass because $a_1$ stores $a_2$'s identifier in 
 	\label{fig:ex-unfolding-tree-signature}
 \end{figure}
 
+\cortoin{Arranger figure}
+
 \begin{lemma}
 \label{lem:coverability_witness_sg}
 Given a "signature protocol" $\prot$ with a state $q_f$, $(\prot,q_f)$ is a positive instance of \COVER if and only if there exists an "unfolding tree@@sg" whose root node's local run covers $q_f$. We call such an "unfolding tree@@sg" a ""coverability witness@@sg"".
@@ -136,7 +138,7 @@ Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{
 \end{proof}
 
 
-	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure. 
+	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure.
 	 Observe that the "unfolding tree" $\tree$  is a "coverability witness" for $q_4$. However, one can find a smaller "coverability witness". 
 	Indeed, in the right branch of $\tree$, $\node_5$ and $\node_6$ have the same "specification@@sg", therefore $\node_5$ can be deleted and replaced with $\node_6$. In fact, we would have also been able to shorten the tree if we only had $\speclabel{\node_5} \subword \speclabel{\node_6}$; we will use this argument to bound the size of the smallest "coverability witness".   
 
@@ -253,14 +255,15 @@ A ""coverability witness"" is again an "unfolding tree" whose root covers $q_f$,
 
 \begin{restatable}{proposition}{treessoundcomplete}
 	\label{prop:trees-sound-complete}
-	An instance of $\COVER$ $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
+	An instance of \COVER $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
 \end{restatable}
 \begin{proof}[Proof sketch]
 	% As in Lemma~\ref{lem:coverability_witness_sg}, we translate an "unfolding tree" into a "run" and \emph{vice-versa}. 
 	We translate an "unfolding tree" into a "run" similarly to the proof of Lemma~\ref{lem:coverability_witness_sg}. A new technicality is that, if the root of the tree is a "follower node" $\node$ of specification $(\followwordspec, \followmessagespec)$, then we actually obtain a "partial run", \emph{i.e.}, a "run" except that the receptions from $\followwordspec$ are not matched by broadcasts in the "run". These receptions will then be matched with broadcasts from the parent of $\node$.
 	The translation from "run" to tree is also quite similar to the one of Lemma~\ref{lem:coverability_witness_sg}. The new case is when in the last step of $\run$, agent $a$ covers $q_f$ with a "reception" $(m,v)$ broadcast by an agent $a'$ for which value $v$ is "non-initial". 
 	In this case, the induction hypothesis on $a'$ gives us an "unfolding tree" $\tree'$ whose root is a "follower node". We again attach $\tree'$ below the root $\node$ of the "unfolding tree" $\tree$ obtained by applying the induction hypothesis on $a$ in suffix "run" of length $\size{\run}-1$ and appending the last step. 
-	It then suffices to prove that the reception $\followwordspec$ in the "follower specification" at the root of $\tree'$ is matched by broadcasts at $\node$ (and by children of $\node$, as in Example~\ref{ex:decomposition}). See Appendix~\ref{app:trees-sound-complete} for the full proof. 
+	It then suffices to prove that the reception $\followwordspec$ in the "follower specification" at the root of $\tree'$ is matched by broadcasts at $\node$ (and by children of $\node$, as in Example~\ref{ex:decomposition}). See Appendix~\ref{app:trees-sound-complete} for the full proof.
+	\corto{A relire} 
 	% % The translation from "run" to tree works by induction on the length of the "run". We first define in a natural way what it means for a "run" to satisfy a "specification". We consider a "run" $\run$ and isolate a well-chosen agent $a$, whose "local run" witnesses that the "specification" is satisfied. We call the induction hypothesis with the "specifications" expressing what $a$ needs to receive from other agents. Each such "specification" is satisfied by a strict prefix of $\run$ (the only exception being if $a$ satisfies a "boss specification" with value $v$ and the last step of $\run$ is a broadcast with $v$ by another agent; in this case, we use the induction hypothesis on $\run$ but with a follower specification, hence the induction is well-founded).
 	% We construct an "unfolding tree" by labeling the root with the "specification" and the "local run" of $a$, and attaching below it the subtrees obtained by induction hypothesis.
 	% The translation from tree to "run" consists in an induction on the tree. A key concept is the one of "partial run", which extends the notion of "local run" to a subset of agents: in a "partial run", some receptions called \emph{external} are not matched by a broadcast. This is meant to represent the behavior of a subtree of the "unfolding tree": if the root of an "unfolding tree" is a "follower node" with "specification" $(\followwordspec, \followmessagespec)$ then the corresponding "partial run" receives an external sequence $\followwordspec$. The inductive step applies the induction hypothesis to the children of the "root" to obtain partial runs and merges them with the "local run" of the root by branching broadcasts to the right external receptions. 
@@ -374,6 +377,7 @@ We can now bound the size of a node with respect to the size of its neighbors of
 	\label{lem:bound-successor-height}
 	Let $\node$ be a node of $\tree$ such that all neighbors of $\node$ of higher altitude have size bounded by $K$.
 	Then $\size{\node} \leq \towerfun(\size{\prot}, r) \, O(\size{\messages} \, r \, K)$. 
+\corto{enlever O}
 \end{restatable}
 \begin{proof}
 	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children, by definition of a "decomposition".

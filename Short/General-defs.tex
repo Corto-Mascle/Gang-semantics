@@ -53,7 +53,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 	\tuple{(q_0, (1,2)), (q_0,(3,4))} \step{} \tuple{(q_1, (1,2)), (q_5,(1,4))} \step{} 
 	\tuple{(q_4, (1,4)), (q_4,(1,4))} \\ \step{} \tuple{(q_7, (1,4)), (q_4,(1,4))} \step{} \tuple{(q_7, (1,4)), (q_7,(1,4))}
 	\end{multline*}
-	Here, the broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_4,4)$ by $a_2$, $(m_6,1)$ by $a_1$ and $(m_7,1)$ by $a_1$ and they are all received by the other agent. 
+	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_4,4)$ by $a_2$, $(m_6,1)$ by $a_1$ and $(m_7,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
 \end{example}
 
 \begin{figure}[t]
