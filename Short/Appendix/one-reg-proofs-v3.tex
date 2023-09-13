@@ -183,7 +183,7 @@ Then, it is left to show that for all concrete "run" $\run$ and for all value $v
 	%	First of all we clearly have, as $\statesin{\run} \subseteq S$, $K_{i+1} \subseteq S$ and $\boss_{i+1}\in S\cup\set{\noboss}$. 
 	We consider the last step of $\run_{i+1}$, which is referred to under the name $s_{i+1}$ in what follows; $s_{i+1}: \config_i \step{} \config_{i+1}$. Let $\agentbr$ the agent making the broadcast transition in $s_{i+1}$ and $A_{\recsymb}$ the set of agents receiving this broadcast in $s_{i+1}$. Let $(\statebr, \brone{\amessage}, \statebr') \in \transitions$ denote the transition taken by $\agentbr$ in $s_{i+1}$.
 	
-	We now make the following case distinction to determine the type of the abstract step $\aconfig^i \step{} \aconfig^{i+1}$:
+	We now make the following case distinction to determine the type of the "abstract step" $\aconfig^i \step{} \aconfig^{i+1}$:
 	\begin{enumerate}
 		\item\label{proof_completeness:case_broadcast_clique} if $\data{\config_{i}}(\agentbr) = \aval$ but there exists $j<i$ such that $\data{\config_{j}}(\agentbr) \ne \aval$ then it is a "broadcast from clique",
 		\item\label{proof_completeness:case_broadcast_boss} if, for all $j \leq i$, $\data{\config_j}(\agentbr) = \aval$ then it is a "broadcast from boss",

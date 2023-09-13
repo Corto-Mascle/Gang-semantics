@@ -48,13 +48,12 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 
 \begin{example}\label{ex:example-1}
 	Figure \ref{fig:ex1} shows a "protocol" with 2 registers. 
-	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run", where $x_1,y_1,x_2,y_2$ are distinct natural integers:
+	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run":
 	\begin{multline*}
-	\tuple{(q_0, (x_1,y_1)), (q_0,(x_2,y_2))} \step{} \tuple{(q_1, (x_1,y_1)), (q_5,(x_1,y_2))} \step{} 
-	\tuple{(q_4, (x_1,y_2)),\\ (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_4,(x_1,y_2))} \step{} \tuple{(q_7, (x_1,y_2)), (q_7,(x_1,y_2))}
+	\tuple{(q_0, (1,2)), (q_0,(3,4))} \step{} \tuple{(q_1, (1,2)), (q_5,(1,4))} \step{} 
+	\tuple{(q_4, (1,4)), (q_4,(1,4))} \\ \step{} \tuple{(q_7, (1,4)), (q_4,(1,4))} \step{} \tuple{(q_7, (1,4)), (q_7,(1,4))}
 	\end{multline*}
-\nico{replace variables for values by actual integers?}
-	The broadcast messages are, in this order: $(m_2,x_1)$ by $a_1$, $(m_4,y_2)$ by $a_2$, $(m_6,x_1)$ by $a_1$ and $(m_7,x_1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
+	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_4,4)$ by $a_2$, $(m_6,1)$ by $a_1$ and $(m_7,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
 \end{example}
 
 \begin{figure}[t]
@@ -62,7 +61,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 	\resizebox*{!}{3.2cm}{
 		\input{Figures/fig-ex1}
 	}
-	\vspace{-0.4cm}
+	\vspace{-0.2cm}
 	\caption{Example of a "protocol".}\label{fig:ex1}
 \end{figure}
 	
@@ -88,17 +87,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 
 \begin{remark}
 	In \cite{DelzannoST13}, the author consider the \AP \emph{query problem} where we look for a run reaching a "configuration" satisfying some ``queries''.	
-	Because one can exponentially reduce this problem to \COVER, our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the query problem. In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
-
-	% In \cite{DelzannoST13}, the authors considered ``queries'', which are conjunctions of formulas of the form $\quotemarks{q(\var{z})}$, $\quotemarks{\mathsf{reg}_j(\var{z}) = \mathsf{reg}_{j'}(\var{z}')}$, $\quotemarks{\mathsf{reg}_j(\var{z}) \neq \mathsf{reg}_{j'}(\var{z}')}$, with $\var{z}, \var{z}'$ taken in a set of variables $\varset$, $q\in Q$ and $j,j' \in \nset{1}{r}$. A "configuration" satisfies a query if we can assign an agent to each variable so that all conjuncts are satisfied.
-	% This problem reduces to \COVER.
-	% Given a "protocol" $\prot$ with $r$ registers and a query $\query$ with $k$ variables, we can construct a "protocol" $\prot'$ with $O(\size{\prot}^k + \size{\query})$ states and $kr$ registers that allows each agent to simulate $k$ agents of the previous system.
-	% There is an "initial run" of the first BNRA satisfying $\query$ if and only if there is one of the second in which one agent simulates the $k$ agents satisfying $\query$; in order to cover $q_f$, this agent must check locally that $\query$ is satisfied by the $k$ agents it encodes.
-	% This reduction is exponential; note however that complexity class ($\Fcomplexity{\omega^{\omega}}$) is stable by exponential reductions.
-	
-	% In the case of one register, we even have a polynomial-time reduction. To do so, we extend the "protocol" so that any agent can share its local "configuration" in a single broadcast (going to some sink state).
-	% In order to reach $q_f$, an agent must perform a sequence of transitions in which it receives the "configurations" of $k$ agents and checks that they satisfy the query.
-	\nico{grosse reduction en taille, car je ne pense pas que ca intéresse beaucoup les gens}
+	In fact, one can exponentially reduce this problem to \COVER, our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the query problem. In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
 \end{remark}
 
 \AP We finally introduce \intro{signature BNRA}, an interesting restriction to our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"". Said otherwise, the first register acts as a permanent identifier with which agents sign every message; under this restriction, a message is simply a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will later see that it falls into the same complexity class as the general case but makes the decidability procedure simpler. 
@@ -155,9 +144,4 @@ Each agent starts by receiving a foreign identifier and storing it in its second
 
 %The proof is in Appendix~\ref{app:reduction-lcs}.
 
-\begin{remark}
-	This can be adapted to show that repeat-\COVER (is there an infinite run covering $q_f$ infinitely often?) is undecidable for BNRA, as it is for "LCS"~\cite{AbdullaJ1996undec}. 	
-\corto{Delete remark?} %remark now holds in two lines
-% This highlights the fact that the abstraction presented below relies on the fact that we only have to consider finite runs for coverability.
-\end{remark}
 

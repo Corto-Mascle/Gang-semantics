@@ -119,9 +119,11 @@ Observe that the equality tests pass because $a_1$ stores $a_2$'s identifier in 
 	\label{fig:ex-unfolding-tree-signature}
 \end{figure}
 
+%We say that an "unfolding tree" $\tau$ ""covers@ut"" a state $q_f$ if the "local run" labeling its root goes through $q_f$. 
+
 \begin{lemma}
 \label{lem:coverability_witness_sg}
-Given a "signature protocol" $\prot$ with a state $q_f$, $(\prot,q_f)$ is a positive instance of \COVER if and only if there exists an "unfolding tree@@sg" whose root node's local run covers $q_f$. We call such an "unfolding tree@@sg" a ""coverability witness@@sg"".
+Given a "signature protocol" $\prot$ and a state $q_f$, $q_f$ is coverable in $\prot$ if and only if there exists an "unfolding tree@@sg" whose root is labelled by a "local run" visiting $q_f$. We call such an "unfolding tree@@sg" a ""coverability witness@@sg"".
 \end{lemma}
 \begin{proof}
 Given a "run" $\run$, agent $a$ \emph{satisfies a "specification@@sg"} $w \in \messages^*$ in $\run$ if the sequence of "message types" broadcast by $a$ admits $w$ as "subword".% if such an agent $a$ exists, we say that $\run$ satisfies "specification@@sg" $w$.   
@@ -136,30 +138,30 @@ Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{
 \end{proof}
 
 
-	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure. \nico{c'est un peu faux car la procédure ci-dessus pourrait dupliquer $\node_2$ et $\node_3$: grave ou pas grave?}\lu{pour moi pas grave }
+	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure.
 	 Observe that the "unfolding tree" $\tree$  is a "coverability witness" for $q_4$. However, one can find a smaller "coverability witness". 
 	Indeed, in the right branch of $\tree$, $\node_5$ and $\node_6$ have the same "specification@@sg", therefore $\node_5$ can be deleted and replaced with $\node_6$. In fact, we would have also been able to shorten the tree if we only had $\speclabel{\node_5} \subword \speclabel{\node_6}$; we will use this argument to bound the size of the smallest "coverability witness".   
 
 \subsubsection{Bounding the Size of the Unfolding Tree}
 In all the following, we fix a positive instance $(\prot,q_f)$ of \COVER with $r+1$ registers (\emph{i.e.}, $r$ registers used for reception) and a  "coverability witness" $\tree$ of minimal size.
-The following observation will be useful towards bounding the length of branches of $\tree$:
+The following observation will be useful towards bounding the length of branches of a coverability witness:
 
 \begin{lemma}
 \label{lem:no_subword_in_branch_sg}
-For every $\node, \node'$ nodes of $\tree$ such that $\node$ is a strict ancestor of $\node'$, we cannot have $\speclabel{\node} \subword \speclabel{\node'}$. \todo{look for a nice way to write 'not subword'}
+If a "coverability witness" $\tau$ for $(\prot, q_f)$ of minimal size has two nodes $\node, \node'$ with $\node$ a strict ancestor of $\node'$ then  $\speclabel{\node}$ cannot be a subword of $\speclabel{\node'}$. 
 \end{lemma}
 \begin{proof}
-Otherwise, replacing the subtree rooted in $\node$ with the one rooted in $\node'$ contradicts minimality of $\tree$.
+Otherwise, replacing the subtree rooted in $\node$ with the one rooted in $\node'$ would yield a  contradicts minimality of $\tree$.
 \end{proof}
 
 With the previous lemma, we would now like to use the "Length function theorem" to bound the size of $\tree$. However, to do that, we first need a bound on the "size@@treesg" of a node with respect to its parent's "size@@treesg". The following lemma essentially states that the local run of a node may be bounded by a primitive recursive function with respect to the "size@@sg" of its "specification@@sg".
 
 \begin{lemma}
 \label{lem:towerbound_signature}
-There exists a primitive recursive function $\towerfun(n,r)$ such that, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ such that $\size{u'} < \towerfun(\size{\prot},r)$ and for all value $v' \in \nats$, there exists $v \in \nats$ such that  $\vinput{v'}{u'} \subword \vinput{v}{u}$. 
+There exists a primitive recursive function $\towerfun$ such that, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ with $\size{u'} <~\towerfun(\size{\prot},r)$ and for all value $v' \in \nats$, there exists $v \in \nats$ such that  $\vinput{v'}{u'} \subword \vinput{v}{u}$. 
 \end{lemma}
 \begin{proof}
-We define $\towerfun(n,k)$ by $\towerfun(n,0) = n+1$ and $\towerfun(n,k+1) = \towerfun(n,k) \cdot ({\size{\transitions}}^{\towerfun(n,k)}+1)$. Observe that $\towerfun(n,k)$ is a tower of exponentials of height $k$, which is primitive-recursive although non-elementary. Register $i \geq 2$ is ""active@@sg"" in $u$ if $u$ has some $\quotemarks{\enregact}$ action on register $i$. Let $u$ a "local run", $k$ the number of "active@@sg" registers in $\localrun$, $n := \size{\prot}$ and $M := \towerfun(n,k)$.
+Let $\towerfun(n,0) = n+1$ and $\towerfun(n,k+1) = \towerfun(n,k) \cdot ({\size{\transitions}}^{\towerfun(n,k)}+1)$ for all $k$. Observe that $\towerfun(n,k)$ is a tower of exponentials of height $k$, which is primitive-recursive although non-elementary. Register $i \geq 2$ is ""active@@sg"" in $u$ if $u$ has some $\quotemarks{\enregact}$ action on register $i$. Let $u$ a "local run", $k$ the number of "active@@sg" registers in $\localrun$, $n := \size{\prot}$ and $M := \towerfun(n,k)$.
 We prove by induction on the number $k$ of "active@@sg" registers in $u$  that if $\size{u} >\towerfun(n,k)$ then $u$ can be shortened. 
  
 
@@ -189,7 +191,7 @@ For \ref{item:bound_node_2_sg}, we observe that, by minimality of $\tree$, $\siz
 
 \begin{proposition}
 \label{prop:bounded_witness_sg}
-There exists a function $h$ of class $\Ffunction{w^{\size{\messages}+1}}$ s.t. $\size{\tree} \leq h(\size{\prot})$. \nico{ecrire explicitement qu'elle ne dépend ni de $\tree$ ni de $\prot$?}
+There exists a function $h$ of class $\Ffunction{w^{\size{\messages}+1}}$ s.t. $\size{\tree} \leq h(\size{\prot})$. 
 \end{proposition}
 \begin{proof}
 Let $n := \size{\prot}$, let $r+1$ the number of registers in $\prot$. 
@@ -213,24 +215,26 @@ We now extend this method to the general case.
 
 \subsection{Generalizing Unfolding Trees}
 \label{sec:unfolding-trees-general}
-In the general case, a new phenomenon appears: an agent may broadcast a value that it did not have initially but that it received and stored. In particular, an agent starting with value $v$ could broadcast $v$ then require someone else to make a broadcast with value $v$ as well. For example, in the run described in \cref{ex:example-1}, the first agent needs to receive message $(m_6, x_1)$ to reach $q_7$.
+In the general case, a new phenomenon appears: an agent may broadcast a value that it did not have initially but that it received and stored. In particular, an agent starting with value $v$ could broadcast $v$ then require someone else to make a broadcast with value $v$ as well. For example, in the run described in \cref{ex:example-1}, the first agent needs to receive message $(m_6, x_1)$ to reach $q_7$.\corto{adapt to ex 1}
 
- We now have two types of specifications. \emph{"Boss specifications"} describe the task of broadcasting with its own initial value; this is the "specification@@sg" we had in "signature protocols" and, as before, it consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. \emph{"Follower specifications"} describe the task of broadcasting with a non-initial value received previously. More precisely, a "follower specification" is a contract consisting of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$ asking to broadcast a message $(\followmessagespec,v)$ under the condition of previously receiving word $\followwordspec$ with value $v$.
+ We now have two types of specifications. \emph{"Boss specifications"} describe the task of broadcasting with its own initial value; this is the "specification@@sg" we had in "signature protocols" and, as before, it consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. \emph{"Follower specifications"} describe the task of broadcasting with a non-initial value received previously. More precisely, a "follower specification" is a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$ asking to broadcast a message $(\followmessagespec,v)$ under the condition of previously receiving the sequence of "message types" $\followwordspec$ with value $v$.
 
 % As before, a "boss specification" consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. A "follower specification" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that one must be able to broadcast $\followmessagespec$ with value $v$ after receiving the sequence $\followwordspec$ with value $v$. 
 
-We start with the following observation: if agent $a$ that did not have $v$ initially broadcasts some message $(m,v)$, then afterwards we can consider to have an unlimited supply of messages $(m,v)$ by cloning $a$ using a "copycat" argument. 
+We start with the following observation: if agent $a$ that did not have $v$ initially broadcasts some message $(m,v)$, then afterwards we can assume that we have an unlimited supply of messages $(m,v)$ by cloning $a$ using a "copycat" argument. 
 
 \begin{example}
+
 \label{ex:decomposition}
 Assume that we have three agent $a_1,a_2$ and $a_3$ and let $v$ a value initially in $a_1$. Consider an execution where the following happens with value $v$: $a_1$ broadcasts $\textsf{a} \cdot \textsf{b}$, then $a_2$ broadcasts $\textsf{c}$, then $a_1$ broadcasts $\textsf{a}^3$ then $a_3$ broadcasts $\textsf{b}$. The "follower specification" corresponding to $a_2$'s task must be of the form $(w, \textsf{c})$ where $w \subword \textsf{a} \cdot \textsf{b}$. However, $a_3$'s "follower specification" may be of the form $(w \cdot w', \textsf{c})$ where $w \subword \textsf{a} \cdot \textsf{b}$ and $w' \in \set{\textsf{a},\textsf{c}}^*$ is a subword of $\textsf{a}^3$ enriched with as many $\textsf{c}$ as desired, because $a_2$ may be cloned at will (an arbitrary number of agents can mimcik $a_2$'s execution with disjoints set of agents until the frist reception on $v$ $a_2$ performs, all new agents then perform the same reception and go on with their execution on a similar fashion until broadcasting $\textsf{c}$). For example, one could have $w= \textsf{b} $ and $w' = \textsf{c} \cdot \textsf{a} \cdot \textsf{c}^4 \cdot \textsf{a} \cdot \textsf{c}^2$. This idea is formalized in the appendix with the notion of "decomposition"; in this case, the previous condition becomes: $w \cdot w'$ \emph{"admits decomposition"} $(\textsf{a} \cdot \textsf{b}, \textsf{c}, \textsf{a}^3)$.   
+
 \end{example}
 % Therefore, if one later needs an agent to broadcast $(m',v)$ then this agent is allowed  hence from a finite set of message types which can be sent with value $v$, there is an infinite set of possible $\followwordspec$ to chose: if a message $(m, v)$ is sent from the agent with initial value $v$ then the "copycat principle" does not apply, however, if $(m, v)$ is sent from an agent without $v$ as initial value, message type $m$ can appear as many times as one wants in $\followwordspec$ once it has been sent once. 
 %For instance, in the protocol described in \cref{fig:ex1}, message ($m_6, )
 
 In our new "unfolding trees", a node is either a "boss node" or a "follower node", depending on its type of specification. 
 A "follower node" $\node$ with "follower specification" $(\followwordspec, \followmessagespec)$ is allowed to receive sequence of messages $\followwordspec$ with value $\valuelabel{\node}$ (which must be "non-initial") without it being broadcast by its children. 
-Other conditions are similar to the the ones for "signature protocols": if $\node$ is a node and $v \ne \valuelabel{\node}$ a "non-initial" value received in its "local run", $\node$ must have a "boss" child broadcasting this word. Moreover, for each $(m,v)$ received where $v$ is an "initial value" of the "local run", $\node$ must have a "follower" child that is able to broadcast the message after receiving previous messages with value $v$; the formal statement is more technical because it takes into account the observation of Example~\ref{ex:decomposition}. 
+Other conditions are similar to the ones for "signature protocols": if $\node$ is a node and $v \ne \valuelabel{\node}$ a "non-initial" value received in its "local run", $\node$ must have a "boss" child broadcasting this word. Moreover, for each $(m,v)$ received where $v$ is an "initial value" of the "local run", $\node$ must have a "follower" child that is able to broadcast the message after receiving previous messages with value $v$; the formal statement is more technical because it takes into account the observation of Example~\ref{ex:decomposition}. 
 The formal definition of "unfolding tree" is given in \cref{app:def-trees}.
 
 
@@ -253,15 +257,15 @@ A ""coverability witness"" is again an "unfolding tree" whose root covers $q_f$,
 
 \begin{restatable}{proposition}{treessoundcomplete}
 	\label{prop:trees-sound-complete}
-	An instance of $\COVER$ $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
+	An instance of \COVER $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
 \end{restatable}
 \begin{proof}[Proof sketch]
 	% As in Lemma~\ref{lem:coverability_witness_sg}, we translate an "unfolding tree" into a "run" and \emph{vice-versa}. 
-	\nico{peut etre reduit plus en enlevant des details techniques, voire completement enlevé}
 	We translate an "unfolding tree" into a "run" similarly to the proof of Lemma~\ref{lem:coverability_witness_sg}. A new technicality is that, if the root of the tree is a "follower node" $\node$ of specification $(\followwordspec, \followmessagespec)$, then we actually obtain a "partial run", \emph{i.e.}, a "run" except that the receptions from $\followwordspec$ are not matched by broadcasts in the "run". These receptions will then be matched with broadcasts from the parent of $\node$.
 	The translation from "run" to tree is also quite similar to the one of Lemma~\ref{lem:coverability_witness_sg}. The new case is when in the last step of $\run$, agent $a$ covers $q_f$ with a "reception" $(m,v)$ broadcast by an agent $a'$ for which value $v$ is "non-initial". 
 	In this case, the induction hypothesis on $a'$ gives us an "unfolding tree" $\tree'$ whose root is a "follower node". We again attach $\tree'$ below the root $\node$ of the "unfolding tree" $\tree$ obtained by applying the induction hypothesis on $a$ in suffix "run" of length $\size{\run}-1$ and appending the last step. 
-	It then suffices to prove that the reception $\followwordspec$ in the "follower specification" at the root of $\tree'$ is matched by broadcasts at $\node$ (and by children of $\node$, as in Example~\ref{ex:decomposition}). See Appendix~\ref{app:trees-sound-complete} for the full proof. 
+	It then suffices to prove that the reception $\followwordspec$ in the "follower specification" at the root of $\tree'$ is matched by broadcasts at $\node$ (and by children of $\node$, as in Example~\ref{ex:decomposition}). See Appendix~\ref{app:trees-sound-complete} for the full proof.
+	\corto{A relire} 
 	% % The translation from "run" to tree works by induction on the length of the "run". We first define in a natural way what it means for a "run" to satisfy a "specification". We consider a "run" $\run$ and isolate a well-chosen agent $a$, whose "local run" witnesses that the "specification" is satisfied. We call the induction hypothesis with the "specifications" expressing what $a$ needs to receive from other agents. Each such "specification" is satisfied by a strict prefix of $\run$ (the only exception being if $a$ satisfies a "boss specification" with value $v$ and the last step of $\run$ is a broadcast with $v$ by another agent; in this case, we use the induction hypothesis on $\run$ but with a follower specification, hence the induction is well-founded).
 	% We construct an "unfolding tree" by labeling the root with the "specification" and the "local run" of $a$, and attaching below it the subtrees obtained by induction hypothesis.
 	% The translation from tree to "run" consists in an induction on the tree. A key concept is the one of "partial run", which extends the notion of "local run" to a subset of agents: in a "partial run", some receptions called \emph{external} are not matched by a broadcast. This is meant to represent the behavior of a subtree of the "unfolding tree": if the root of an "unfolding tree" is a "follower node" with "specification" $(\followwordspec, \followmessagespec)$ then the corresponding "partial run" receives an external sequence $\followwordspec$. The inductive step applies the induction hypothesis to the children of the "root" to obtain partial runs and merges them with the "local run" of the root by branching broadcasts to the right external receptions. 
@@ -375,7 +379,7 @@ We can now bound the size of a node with respect to the size of its neighbors of
 	\label{lem:bound-successor-height}
 	Let $\node$ be a node of $\tree$ such that all neighbors of $\node$ of higher altitude have size bounded by $K$.
 	Then $\size{\node} \leq \towerfun(\size{\prot}, r) \, O(\size{\messages} \, r \, K)$. 
-\nico{j'ai completement enleve la preuve en annexe}
+\corto{enlever O}
 \end{restatable}
 \begin{proof}
 	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children, by definition of a "decomposition".

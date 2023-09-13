@@ -1,5 +1,4 @@
 \section{Introduction}
-
 We consider Broadcast Networks of Register Automata (BNRA), a model for networks of agents communicating by broadcasts. These systems are composed of an arbitrarily large number of agents whose behavior is specified with a finite automaton equipped with a finite set of private registers. The registers of the agents contain values from an infinite set (represented by natural numbers). Initially, agents have distinct values in their registers: one can think of these values as identifiers. An agent may send messages made of a symbol from a finite alphabet along with the value of one of its registers. No assumption is made on the evolution of the communication graph, i.e., when an agent broadcasts a message, any subset of the other agents may receive it; this is meant to model unreliable systems with unexpected crashes and disconnections. Upon reception of a message, an agent may store the received value in one of its registers or test it for equality with one of its own values. 
 This allows an agent, for instance, to check the origin of received messages: to do so, the broadcasting agent signs messages with its identifier, and the receiving agent stores this identifier then checks that all incoming messages have this value. This also allows an agent to obtain acknowledgement that its message was received by someone, by broadcasting with its identifier and waiting for a response with that same identifier.
 
@@ -24,7 +23,7 @@ and the associated high complexities obtained from bounds on ``bad sequences'' i
 
 \paragraph*{Overview}
 We start with the model definition and some preliminary results in Section~\ref{sec:preliminaries}. As our decidability proof is quite technical, we start by proving decidability of the coverability problem in a subcase called \emph{signature protocols} Section~\ref{sec:cover-decidability}.
-We then rely on the intuitions built in that subcase to generalise the proof to all protocols in Section~\ref{sec:cover-general-case}. We also show the undecidability of the Target \corto{keep?}problem.
+We then rely on the intuitions built in that subcase to generalise the proof to all protocols in Section~\ref{sec:cover-general-case}. We also show the undecidability of the Target problem.
 Finally, we prove the \NP-completeness of the coverability problem with one register per agent in Section~\ref{sec:cover-1BNRA}.
 Due to space constraints, most proofs are postponed to the appendix.
 

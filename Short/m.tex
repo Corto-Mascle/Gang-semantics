@@ -60,15 +60,18 @@ IRISA, Universit\'e de Rennes}
 		
 	% 	\keywords{Parameterized verification \and Well quasi-orders \and Distributed systems }
 	% \end{abstract}
-	
+%	
+%Reconfigurable broadcast networks (RBN) are a well-studied model of distributed systems with arbitrarily many agents communicating by (unreliable) broadcast. In this talk we will study a version of RBN where agents have local registers. Register values are initially all distinct and may therefore be thought of as identifiers.
+%When an agent broadcasts a message, it appends to it the value stored in one of its registers. Upon reception, an agent can store the received value or test this value for equality with one of its own registers.
+%We consider the coverability problem (whether some state q may be reached by at least one agent) for this model. We establish that this problem is decidable, by reasoning about parallelism and transition systems with registers to be able to leverage well quasi-order theory.
+%
+
 
 	\begin{abstract}
-	We consider the parameterized verification of arbitrarily large networks of agents which communicate by broadcasting and receiving messages. In this model, the broadcast topology is reconfigurable so that a sent message can be received by any set of agents. In addition, agents have local registers whose values are initially distinct and may therefore be thought of as identifiers.
-	When an agent broadcasts a message, it appends to the message the value stored in one of its registers. Upon reception, an agent can store the received value or test this value for equality with one of its own registers. 
-
-	We consider the coverability problem, where one asks whether a given state of the system may be reached by at least one agent. We establish that this problem is decidable; however, it is as hard as coverability in lossy channel systems, which is non-primitive recursive. 
-	This model lies at the frontier of decidability as other classical problems on this model are undecidable; this is in particular true for the target problem where all agents must synchronize on a given state. 
-	By contrast, we show that the coverability problem is \NP-complete when each agent has only one register.
+	We consider the parameterized verification of networks of agents which communicate through (unreliable) broadcasts. In this model, agents have local registers whose values are initially distinct and may therefore be thought of as identifiers.
+	When an agent broadcasts a message, it appends to the message the value stored in one of its registers. Upon reception, an agent can store the received value or test it for equality against one of its own registers. 
+	We consider the coverability problem, where one asks whether a given state of the system may be reached by at least one agent. We establish that this problem is decidable, although non-primitive recursive. We contrast this with the undecidability of the closely related target problem where all agents must synchronize on a given state. 
+	On the other hand, we show that the coverability problem is \NP-complete when each agent has only one register.
 	
 	\keywords{Parameterized verification \and Well quasi-orders \and Distributed systems }
 	 
@@ -88,11 +91,10 @@ IRISA, Universit\'e de Rennes}
 %\input{Figures/zoom-on-tree}
 	\section{Conclusion}
 	We have established the decidability and $\Fcomplexity{\omega^\omega}$-completeness of the coverability problem for BNRA, as well as the \NP-completeness of the problem for 1-BNRA.
-	One may want to enrich the transition systems of our protocols, for instance to pushdown automata. While this adds little difficulty in the general case (it suffices to extend Lemma~\ref{lem:short-local-runs} to pushdown protocols using a classical cut-hill argument), the case of one register may be trickier.
-	Another open problem is the complexity of the target problem with one register. While we can show that this is a decidable problem, its exact complexity is unclear. 
+	One may want to enrich the transition systems of our protocols, for instance with a stack. While this adds little difficulty in the general case (it suffices to extend Lemma~\ref{lem:short-local-runs} to pushdown protocols using a classical cut-hill argument), the case of one register may be trickier.
 	Finally, one may want to extend this model with inequality tests, as in classical related models such as data nets.
 	
-	\paragraph*{Acknowledgements.} We are grateful to Arnaud Sangnier for encouraging us to work on BNRA, for the discussions about his work in \cite{DelzannoST13} and in general for his valuable advice. We also thank Philippe Schnoebelen for the interesting discussion and Sylvain Schmitz for the exchange on complexity class $\Fcomplexity{\omega^{\omega}}$ and related topics.   
+	\paragraph*{Acknowledgements.} We are grateful to Arnaud Sangnier for encouraging us to work on BNRA, for the discussions about his work in \cite{DelzannoST13} and for his valuable advice. We also thank Philippe Schnoebelen for the interesting discussion and Sylvain Schmitz for the exchange on complexity class $\Fcomplexity{\omega^{\omega}}$ and related topics.   
 	\bibliography{biblio}
 	
 	\newpage
