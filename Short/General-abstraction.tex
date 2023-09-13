@@ -119,6 +119,8 @@ Observe that the equality tests pass because $a_1$ stores $a_2$'s identifier in 
 	\label{fig:ex-unfolding-tree-signature}
 \end{figure}
 
+\cortoin{Arranger figure}
+
 \begin{lemma}
 \label{lem:coverability_witness_sg}
 Given a "signature protocol" $\prot$ with a state $q_f$, $(\prot,q_f)$ is a positive instance of \COVER if and only if there exists an "unfolding tree@@sg" whose root node's local run covers $q_f$. We call such an "unfolding tree@@sg" a ""coverability witness@@sg"".
@@ -136,7 +138,7 @@ Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{
 \end{proof}
 
 
-	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure. \nico{c'est un peu faux car la procédure ci-dessus pourrait dupliquer $\node_2$ et $\node_3$: grave ou pas grave?}\lu{pour moi pas grave }
+	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure.
 	 Observe that the "unfolding tree" $\tree$  is a "coverability witness" for $q_4$. However, one can find a smaller "coverability witness". 
 	Indeed, in the right branch of $\tree$, $\node_5$ and $\node_6$ have the same "specification@@sg", therefore $\node_5$ can be deleted and replaced with $\node_6$. In fact, we would have also been able to shorten the tree if we only had $\speclabel{\node_5} \subword \speclabel{\node_6}$; we will use this argument to bound the size of the smallest "coverability witness".   
 
@@ -253,7 +255,7 @@ A ""coverability witness"" is again an "unfolding tree" whose root covers $q_f$,
 
 \begin{restatable}{proposition}{treessoundcomplete}
 	\label{prop:trees-sound-complete}
-	An instance of $\COVER$ $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
+	An instance of \COVER $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
 \end{restatable}
 \begin{proof}[Proof sketch]
 	% As in Lemma~\ref{lem:coverability_witness_sg}, we translate an "unfolding tree" into a "run" and \emph{vice-versa}. 
