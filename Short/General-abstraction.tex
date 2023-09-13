@@ -136,7 +136,7 @@ Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{
 \end{proof}
 
 
-	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure. \nico{c'est un peu faux car la procédure ci-dessus pourrait dupliquer $\node_2$ et $\node_3$: grave ou pas grave?}\lu{pour moi pas grave }
+	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure. 
 	 Observe that the "unfolding tree" $\tree$  is a "coverability witness" for $q_4$. However, one can find a smaller "coverability witness". 
 	Indeed, in the right branch of $\tree$, $\node_5$ and $\node_6$ have the same "specification@@sg", therefore $\node_5$ can be deleted and replaced with $\node_6$. In fact, we would have also been able to shorten the tree if we only had $\speclabel{\node_5} \subword \speclabel{\node_6}$; we will use this argument to bound the size of the smallest "coverability witness".   
 
@@ -189,7 +189,7 @@ For \ref{item:bound_node_2_sg}, we observe that, by minimality of $\tree$, $\siz
 
 \begin{proposition}
 \label{prop:bounded_witness_sg}
-There exists a function $h$ of class $\Ffunction{w^{\size{\messages}+1}}$ s.t. $\size{\tree} \leq h(\size{\prot})$. \nico{ecrire explicitement qu'elle ne dépend ni de $\tree$ ni de $\prot$?}
+There exists a function $h$ of class $\Ffunction{w^{\size{\messages}+1}}$ s.t. $\size{\tree} \leq h(\size{\prot})$. 
 \end{proposition}
 \begin{proof}
 Let $n := \size{\prot}$, let $r+1$ the number of registers in $\prot$. 
@@ -222,7 +222,7 @@ In the general case, a new phenomenon appears: an agent may broadcast a value th
 We start with the following observation: if agent $a$ that did not have $v$ initially broadcasts some message $(m,v)$, then afterwards we can consider to have an unlimited supply of messages $(m,v)$ by cloning $a$ using a "copycat" argument. 
 
 \begin{example}
-\label{ex:decomposition}
+\label{ex:decomposition} 
 Assume that we have three agent $a_1,a_2$ and $a_3$ and let $v$ a value initially in $a_1$. Consider an execution where the following happens with value $v$: $a_1$ broadcasts $\textsf{a} \cdot \textsf{b}$, then $a_2$ broadcasts $\textsf{c}$, then $a_1$ broadcasts $\textsf{a}^3$ then $a_3$ broadcasts $\textsf{b}$. The "follower specification" corresponding to $a_2$'s task must be of the form $(w, \textsf{c})$ where $w \subword \textsf{a} \cdot \textsf{b}$. However, $a_3$'s "follower specification" may be of the form $(w \cdot w', \textsf{c})$ where $w \subword \textsf{a} \cdot \textsf{b}$ and $w' \in \set{\textsf{a},\textsf{c}}^*$ is a subword of $\textsf{a}^3$ enriched with as many $\textsf{c}$ as desired, because $a_2$ may be cloned at will. For example, one could have $w= \textsf{b} $ and $w' = \textsf{c} \cdot \textsf{a} \cdot \textsf{c}^4 \cdot \textsf{a} \cdot \textsf{c}^2$. This idea is formalized in the appendix with the notion of "decomposition"; in this case, the previous condition becomes: $w \cdot w'$ \emph{"admits decomposition"} $(\textsf{a} \cdot \textsf{b}, \textsf{c}, \textsf{a}^3)$.   
 \end{example}
 % Therefore, if one later needs an agent to broadcast $(m',v)$ then this agent is allowed  hence from a finite set of message types which can be sent with value $v$, there is an infinite set of possible $\followwordspec$ to chose: if a message $(m, v)$ is sent from the agent with initial value $v$ then the "copycat principle" does not apply, however, if $(m, v)$ is sent from an agent without $v$ as initial value, message type $m$ can appear as many times as one wants in $\followwordspec$ once it has been sent once. 
@@ -257,7 +257,6 @@ A ""coverability witness"" is again an "unfolding tree" whose root covers $q_f$,
 \end{restatable}
 \begin{proof}[Proof sketch]
 	% As in Lemma~\ref{lem:coverability_witness_sg}, we translate an "unfolding tree" into a "run" and \emph{vice-versa}. 
-	\nico{peut etre reduit plus en enlevant des details techniques, voire completement enlevé}
 	We translate an "unfolding tree" into a "run" similarly to the proof of Lemma~\ref{lem:coverability_witness_sg}. A new technicality is that, if the root of the tree is a "follower node" $\node$ of specification $(\followwordspec, \followmessagespec)$, then we actually obtain a "partial run", \emph{i.e.}, a "run" except that the receptions from $\followwordspec$ are not matched by broadcasts in the "run". These receptions will then be matched with broadcasts from the parent of $\node$.
 	The translation from "run" to tree is also quite similar to the one of Lemma~\ref{lem:coverability_witness_sg}. The new case is when in the last step of $\run$, agent $a$ covers $q_f$ with a "reception" $(m,v)$ broadcast by an agent $a'$ for which value $v$ is "non-initial". 
 	In this case, the induction hypothesis on $a'$ gives us an "unfolding tree" $\tree'$ whose root is a "follower node". We again attach $\tree'$ below the root $\node$ of the "unfolding tree" $\tree$ obtained by applying the induction hypothesis on $a$ in suffix "run" of length $\size{\run}-1$ and appending the last step. 
@@ -375,7 +374,6 @@ We can now bound the size of a node with respect to the size of its neighbors of
 	\label{lem:bound-successor-height}
 	Let $\node$ be a node of $\tree$ such that all neighbors of $\node$ of higher altitude have size bounded by $K$.
 	Then $\size{\node} \leq \towerfun(\size{\prot}, r) \, O(\size{\messages} \, r \, K)$. 
-\nico{j'ai completement enleve la preuve en annexe}
 \end{restatable}
 \begin{proof}
 	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children, by definition of a "decomposition".
