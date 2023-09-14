@@ -5,6 +5,41 @@
 	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
 	%	distance=.7cm,accepting where =right]
 	
+	\node[state,initial left, minimum width=0.1pt] (0) at (0,0) {$q_0$};
+	\node[state] [right = of 0, yshift = 25] (1) {$q_1$};
+	\node[state] [right =  of 1, yshift = -25] (4) {$q_3$};
+	\node[state] [right = of 0, yshift = -25] (5) {$q_2$};
+	\node[state] [right = of 4] (7) {$q_4$};
+	\node[state] [below = 0.7 of 5] (5b) {$q_5$};
+	
+	%	\path[->, bend left=10] 	
+	%	(0) edge node[above, xshift=-10] {$\br{init}{1}$} (x)
+	%	;
+	%	\path[->, bend right=10] 	
+	%	(0) edge node[below, xshift=-10] {$\rec{init}{2}{\enregact}$} (y)
+	%	;
+	\path[->] 	
+	(0) edge [color= purple, bend left = 5]  node [above, xshift = -5] {\small$\br{m_1}{1}$} (1)
+	edge [bend right = 5]  node [below, xshift = 12] {\small$\br{m_2}{1}$} (1)
+	edge node [below, xshift = -12] {\small$\rec{m_2}{1}{\enregact}$} (5)
+	(1) edge node  [right,yshift = 10, xshift = -15 ] {\small$\rec{m_3}{2}{\enregact}$} (4)
+	(5) edge node [below, xshift = 10, yshift = -8]  {\small$\br{m_3}{2}$} (4)
+	(4)  edge [out=330,in=290,looseness=4] node {\small$\br{m_4}{1}$} (4)
+	(4) edge [bend right = 0] node [above]{$\small \rec{m_4}{1}{=}$} (7)
+	(7)  edge [color = blue, out=60,in=120,looseness=4] node[above] {\small$\br{m_4}{1}$} (7)
+	(5) edge [color = purple] node {\small$\rec{m_1}{1}{=}$} (5b)
+	;
+	
+\end{tikzpicture}
+
+
+\begin{tikzpicture}[xscale=0.5,AUT style,node distance=2cm,auto,>= triangle
+	45]
+	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+	distance=.7cm]
+	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+	%	distance=.7cm,accepting where =right]
+	
 	\node[state,initial above, minimum width=0.1pt] (0) at (0,0) {$q_0$};
 	\node[state] [left = 2.2 of 0] (1) {$q_1$};
 	\node[state] [right = 2 of 0] (2) {$q_2$};

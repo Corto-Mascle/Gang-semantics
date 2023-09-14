@@ -48,6 +48,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 \end{remark}
 
 \begin{example}\label{ex:example-1}
+	\textit{
 	Figure \ref{fig:ex1} shows a "protocol" with 2 registers. 
 	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run":\vspace{-0.2cm}
 	\begin{multline*}
@@ -55,6 +56,16 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 	\tuple{(q_4, (1,4)), (q_4,(1,4))} \\ \step{} \tuple{(q_7, (1,4)), (q_4,(1,4))} \step{} \tuple{(q_7, (1,4)), (q_7,(1,4))}
 	\end{multline*}
 	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_4,4)$ by $a_2$, $(m_6,1)$ by $a_1$ and $(m_7,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
+}
+
+
+	Figure \ref{fig:ex1} shows a "protocol" with 2 registers. 
+	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run":\vspace{-0.2cm}
+	\begin{multline*}
+		\tuple{(q_0, (1,2)), (q_0,(3,4))} \step{} \tuple{(q_1, (1,2)), (q_2,(1,4))} \step{} 
+		\tuple{(q_3, (1,4)), (q_3,(1,4))} \\ \step{} \tuple{(q_4, (1,4)), (q_3,(1,4))} \step{} \tuple{(q_4, (1,4)), (q_4,(1,4))}
+	\end{multline*}
+	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_3,4)$ by $a_2$, $(m_4,1)$ by $a_1$ and $(m_4,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
 \end{example}
 
 \begin{figure}[t]
@@ -83,7 +94,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 \end{definition}
 
 \begin{example}\label{example-2}
-	Let $\prot$ the "protocol" of Figure~\ref{fig:ex1}. As proven in Example~\ref{ex:example-1}, $(\prot,q_7)$ is a positive instance of \COVER. However, it is a negative instance of \TARGET: there must be an agent staying on $q_4$ to broadcast $m_6$. Meanwhile, $(\prot,q_1)$ is a positive instance of \TARGET: all agents can broadcast $m_1$ to get to $q_1$. Also, $(\prot, q_3)$ is a negative instance of \COVER: we would need one agent on $q_2$ and one on $q_5$ with the same value in their first registers, hence we need a broadcast $(m_1,v)$ and a broadcast $(m_2,v)$ for some $v$. The two messages need to be sent by the agent having $v$ as initial value, but this agent cannot send both messages.
+	Let $\prot$ the "protocol" of Figure~\ref{fig:ex1}. As proven in Example~\ref{ex:example-1}, $(\prot,q_4)$ is a positive instance of \COVER~and a positive instance of \TARGET. However, if we remove the blue edge, it shall no longer be a positive instance of \TARGET: there must be an agent staying on $q_3$ to broadcast $m_4$. Also, $(\prot, q_5)$ is a negative instance of \COVER: we would need one agent on $q_2$ and one on $q_0$ with the same value $v$ in their first registers. Value $v$ is stored by agent on $q_2$ from a message $(m_1,v)$. The two messages need to be sent by the agent having $v$ as initial value, but this agent cannot send both messages.
 \end{example}
 
 \begin{remark}

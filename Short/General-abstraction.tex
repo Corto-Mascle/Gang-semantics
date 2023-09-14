@@ -223,7 +223,7 @@ We now extend this method to the general case.
 
 \subsection{Generalizing Unfolding Trees}
 \label{sec:unfolding-trees-general}
-In the general case, a new phenomenon appears: an agent may broadcast a value that it did not have initially but that it received and stored. In particular, an agent starting with value $v$ could broadcast $v$ then require someone else to make a broadcast with value $v$ as well. For example, in the run described in \cref{ex:example-1}, the first agent needs to receive message $(m_6, x_1)$ to reach $q_7$.\corto{adapt to ex 1}
+In the general case, a new phenomenon appears: an agent may broadcast a value that it did not have initially but that it received and stored. In particular, an agent starting with value $v$ could broadcast $v$ then require someone else to make a broadcast with value $v$ as well. For example, in the run described in \cref{ex:example-1}, the first agent needs to receive message $(m_4, 1)$ to reach $q_4$.
 
  We now have two types of specifications. \emph{"Boss specifications"} describe the task of broadcasting with its own initial value; this is the "specification@@sg" we had in "signature protocols" and, as before, it consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. \emph{"Follower specifications"} describe the task of broadcasting with a non-initial value received previously. More precisely, a "follower specification" is a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$ asking to broadcast a message $(\followmessagespec,v)$ under the condition of previously receiving the sequence of "message types" $\followwordspec$ with value $v$.
 
