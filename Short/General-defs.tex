@@ -48,15 +48,15 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 \end{remark}
 
 \begin{example}\label{ex:example-1}
-	\textit{
-	Figure \ref{fig:ex1} shows a "protocol" with 2 registers. 
-	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run":\vspace{-0.2cm}
-	\begin{multline*}
-	\tuple{(q_0, (1,2)), (q_0,(3,4))} \step{} \tuple{(q_1, (1,2)), (q_5,(1,4))} \step{} 
-	\tuple{(q_4, (1,4)), (q_4,(1,4))} \\ \step{} \tuple{(q_7, (1,4)), (q_4,(1,4))} \step{} \tuple{(q_7, (1,4)), (q_7,(1,4))}
-	\end{multline*}
-	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_4,4)$ by $a_2$, $(m_6,1)$ by $a_1$ and $(m_7,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
-}
+%	\textit{
+%	Figure \ref{fig:ex1} shows a "protocol" with 2 registers. 
+%	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run":\vspace{-0.2cm}
+%	\begin{multline*}
+%	\tuple{(q_0, (1,2)), (q_0,(3,4))} \step{} \tuple{(q_1, (1,2)), (q_5,(1,4))} \step{} 
+%	\tuple{(q_4, (1,4)), (q_4,(1,4))} \\ \step{} \tuple{(q_7, (1,4)), (q_4,(1,4))} \step{} \tuple{(q_7, (1,4)), (q_7,(1,4))}
+%	\end{multline*}
+%	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_4,4)$ by $a_2$, $(m_6,1)$ by $a_1$ and $(m_7,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
+%}
 
 
 	Figure \ref{fig:ex1} shows a "protocol" with 2 registers. 

@@ -31,45 +31,45 @@
 	;
 	
 \end{tikzpicture}
-
-
-\begin{tikzpicture}[xscale=0.5,AUT style,node distance=2cm,auto,>= triangle
-	45]
-	\tikzstyle{initial}= [initial by arrow,initial text=,initial
-	distance=.7cm]
-	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
-	%	distance=.7cm,accepting where =right]
-	
-	\node[state,initial above, minimum width=0.1pt] (0) at (0,0) {$q_0$};
-	\node[state] [left = 2.2 of 0] (1) {$q_1$};
-	\node[state] [right = 2 of 0] (2) {$q_2$};
-	\node[state] [right = 2 of 2] (3) {$q_3$};
-	\node[state] [below =1.2 of 1] (4) {$q_4$};
-	\node[state] [below = 1.2 of 0] (5) {$q_5$};
-	\node[state] [right = 2 of 5] (6) {$q_6$};
-	\node[state] [left = of 4] (7) {$q_7$};
-	
-%	\path[->, bend left=10] 	
-%	(0) edge node[above, xshift=-10] {$\br{init}{1}$} (x)
+%
+%
+%\begin{tikzpicture}[xscale=0.5,AUT style,node distance=2cm,auto,>= triangle
+%	45]
+%	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+%	distance=.7cm]
+%	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+%	%	distance=.7cm,accepting where =right]
+%	
+%	\node[state,initial above, minimum width=0.1pt] (0) at (0,0) {$q_0$};
+%	\node[state] [left = 2.2 of 0] (1) {$q_1$};
+%	\node[state] [right = 2 of 0] (2) {$q_2$};
+%	\node[state] [right = 2 of 2] (3) {$q_3$};
+%	\node[state] [below =1.2 of 1] (4) {$q_4$};
+%	\node[state] [below = 1.2 of 0] (5) {$q_5$};
+%	\node[state] [right = 2 of 5] (6) {$q_6$};
+%	\node[state] [left = of 4] (7) {$q_7$};
+%	
+%%	\path[->, bend left=10] 	
+%%	(0) edge node[above, xshift=-10] {$\br{init}{1}$} (x)
+%%	;
+%%	\path[->, bend right=10] 	
+%%	(0) edge node[below, xshift=-10] {$\rec{init}{2}{\enregact}$} (y)
+%%	;
+%	\path[->] 	
+%		(0) edge [bend right = 10]  node [above] {\small$\br{m_1}{1}$} (1)
+%			   edge [bend left = 10]  node [below] {\small$\br{m_2}{1}$} (1)
+%			   edge node {\small $\rec{m_1}{1}{\enregact}$} (2)
+%			   edge node {\small$\rec{m_2}{1}{\enregact}$} (5)
+%		(1) edge [out=140,in=170,looseness=8] node [above]{\small$\br{m_3}{1}$} (1)
+%			  edge node  [left,yshift = 5] {\small$\rec{m_4}{2}{\enregact}$} (4)
+%		(2) edge node {\small$\rec{m_5}{1}{\eqtestact}$} (3)
+%		(5) edge node  {\small$\br{m_4}{2}$} (4)
+%			  edge node {\small$\rec{m_3}{1}{\diseqtestact}$} (6)
+%		(5)  edge [out=330,in=290,looseness=4] node {\small$\br{m_5}{1}$} (5)
+%		(4)  edge [out=330,in=290,looseness=4] node {\small$\br{m_6}{1}$} (4)
+%		(4) edge [bend right = 0] node [above]{$\small \rec{m_6}{1}{=}$} (7)
+%			   edge  [bend left = 10] node {$\small \rec{m_7}{1}{=}$} (7)
+%		(7)  edge [out=60,in=120,looseness=4] node[above] {\small$\br{m_7}{1}$} (7)
 %	;
-%	\path[->, bend right=10] 	
-%	(0) edge node[below, xshift=-10] {$\rec{init}{2}{\enregact}$} (y)
-%	;
-	\path[->] 	
-		(0) edge [bend right = 10]  node [above] {\small$\br{m_1}{1}$} (1)
-			   edge [bend left = 10]  node [below] {\small$\br{m_2}{1}$} (1)
-			   edge node {\small $\rec{m_1}{1}{\enregact}$} (2)
-			   edge node {\small$\rec{m_2}{1}{\enregact}$} (5)
-		(1) edge [out=140,in=170,looseness=8] node [above]{\small$\br{m_3}{1}$} (1)
-			  edge node  [left,yshift = 5] {\small$\rec{m_4}{2}{\enregact}$} (4)
-		(2) edge node {\small$\rec{m_5}{1}{\eqtestact}$} (3)
-		(5) edge node  {\small$\br{m_4}{2}$} (4)
-			  edge node {\small$\rec{m_3}{1}{\diseqtestact}$} (6)
-		(5)  edge [out=330,in=290,looseness=4] node {\small$\br{m_5}{1}$} (5)
-		(4)  edge [out=330,in=290,looseness=4] node {\small$\br{m_6}{1}$} (4)
-		(4) edge [bend right = 0] node [above]{$\small \rec{m_6}{1}{=}$} (7)
-			   edge  [bend left = 10] node {$\small \rec{m_7}{1}{=}$} (7)
-		(7)  edge [out=60,in=120,looseness=4] node[above] {\small$\br{m_7}{1}$} (7)
-	;
-	
-\end{tikzpicture}
+%	
+%\end{tikzpicture}
