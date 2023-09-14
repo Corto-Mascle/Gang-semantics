@@ -8,7 +8,7 @@ In this paper we establish the decidability of the "coverability problem". We ev
 We further establish that this problem lies at the frontier of decidability by showing undecidability of the target problem (where one asks whether there is a reachable configuration in which all agents are in a given state); we contrast these results with the \NP-completeness of the coverability problem when each agent has only one register. 
 
 \paragraph*{Related work} 
-Broadcast protocols are a widely studied class of systems in which processes are represented by nodes of a graph and can send messages to their neighbors. There are however many choices to make when designing a model for those systems: how individual processes are represented, whether the communication graph is fixed or can change, the type of messages they can send... 
+Broadcast protocols are a widely studied class of systems in which processes are represented by nodes of a graph and can send messages to their neighbors. There are however many choices to make when designing such a model: how individual processes are represented, whether the communication graph is fixed or can change, the type of messages... 
 A model where messages range over a finite alphabet was presented in~\cite{emerson1998model}, over a fully connected communication graph. It was rapidly shown that many basic parameterized problems are undecidable over that model~\cite{EsparzaFM1999verification}; similar negative results were found for Ad Hoc Networks where the communication graph is fixed but arbitrary \cite{DelzannoSZ2010Adhoc}. This lead the community to consider Reconfigurable Broadcast Networks (RBN) where each broadcast can be received by an arbitrary subset of agents~\cite{DelzannoSZ2010Adhoc}.
 
 Parameterized verification problems over RBN have been the subject of extensive study in recent years~\cite{DelzannoSTZ12, Balasubramanian18, BalasubramanianGW22, DBLP:journals/computing/ChiniMS22}. The drawback of RBN being their weak expressivity (as agents are indistinguishable), in~\cite{DelzannoST13}, RBN were extended to BNRA, the model studied in this article, by the addition of registers allowing processes to exchange identifiers. 
@@ -22,9 +22,9 @@ and the associated high complexities obtained from bounds on ``bad sequences'' i
 % As a matter of fact, LCS are derived from distributed models with processes communicating through pairwise channels, which are a rich field of study on their own~\cite{Aiswarya2015model,Aiswarya2020networks}.
 
 \paragraph*{Overview}
-We start with the model definition and some preliminary results in Section~\ref{sec:preliminaries}. As our decidability proof is quite technical, we start by proving decidability of the coverability problem in a subcase called \emph{signature protocols} Section~\ref{sec:cover-decidability}.
-We then rely on the intuitions built in that subcase to generalise the proof to all protocols in Section~\ref{sec:cover-general-case}. We also show the undecidability of the Target problem.
-Finally, we prove the \NP-completeness of the coverability problem with one register per agent in Section~\ref{sec:cover-1BNRA}.
+We start with the model definition and some preliminary results in Section~\ref{sec:preliminaries}. As our decidability proof is quite technical, we start by proving decidability of the coverability problem in a subcase called \emph{signature protocols} in Section~\ref{sec:cover-decidability}.
+We then rely on the intuitions built in that subcase to generalise the proof to all protocols in Section~\ref{sec:cover-general-case}. We also show the undecidability of the closely-related Target problem.
+Finally, we prove the \NP-completeness of the coverability problem for protocols with one register in Section~\ref{sec:cover-1BNRA}.
 Due to space constraints, most proofs are postponed to the appendix.
 
 %

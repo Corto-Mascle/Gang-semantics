@@ -10,20 +10,21 @@ There are arbitrarily many agents. When an agent broadcasts a message, each othe
 	\[
 	 \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq \regnum}\]
 	Label $\brsymb$ stands for ""broadcasts"" and $\recsymb$ for ""receptions"".
-	Given a reception $\rec{\amessage}{i}{\anact}$, $\anact$ is its \emph{action}. 
+	In a reception $\rec{\amessage}{i}{\anact}$, $\anact$ is its \emph{action}. 
 The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
 $\quotemarks{\eqtestact}$ is an \emph{equality test}, $\quotemarks{\diseqtestact}$ is a \emph{disequality test}, $\quotemarks{\enregact}$ is a \emph{store action} and $\quotemarks{\dummyact}$ is a \emph{dummy action} with no effect.
 The ""size"" of $\prot$ is $\size{\prot} := \size{Q} + \size{\messages} + \size{\transitions} + r$.
 
 \end{definition}
 
-We now define the semantics of those systems. Essentially, we have a finite set of agents with $r$ registers each; all registers initially contain distinct values. A step is either an agent performing a local action or an agent broadcasting a message received by some other agents.
+We now define the semantics of those systems. Essentially, we have a finite set of agents with $r$ registers each; all registers initially contain distinct values. A step consists of an agent broadcasting a message received by some other agents.
 
 \begin{definition}[Semantics]
-	Let $(Q,\messages, \transitions, q_0)$ be a "protocol" with $\regnum$ registers, and $\agents \subseteq \nats$ a finite non-empty set of ""agents"".
-	A ""configuration"" over a set of agents $\agents$ is a function $\config : \agents \to Q \times \nats^{\regnum}$ mapping each agent to a state and register values. 
+	Let $(Q,\messages, \transitions, q_0)$ be a "protocol" with $\regnum$ registers, and $\agents$ a finite non-empty set of ""agents"".
+	A ""configuration"" over $\agents$ is a function $\config : \agents \to Q \times \nats^{\regnum}$ mapping each agent to a state and register values. 
 	We write $\st{\config}$ for the state component of $\config$ and $\data{\config}$ for its register component.
-	An \intro{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and $\data{\config}(a, i) \neq \data{\config}(a', i')$ for all $(a,i) \neq (a', i')$.
+	
+	\AP An \intro{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and $\data{\config}(a, i) \neq \data{\config}(a', i')$ for all $(a,i) \neq (a', i')$.
 	
 	% Given a "configuration" $\config \in \allconfigs$, we denote by $\agentsof{\config}$ the set of agents of $\config$.	
 	\AP Given a finite set of agents $\agents$ and two "configurations" $\config, \config'$ over $\agents$, a ""step"" $\config \step{} \config'$ is defined when there exist $\amessage \in \messages$, $a_0 \in \agents$ and $i \in \nset{1}{r}$ such that \linebreak $(\st{\config}(a_0),\br{\amessage}{i}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and, for all $a \ne a_0$, either $\config'(a) = \config(a)$ or there exists $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a)) \in \transitions$
@@ -48,7 +49,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 
 \begin{example}\label{ex:example-1}
 	Figure \ref{fig:ex1} shows a "protocol" with 2 registers. 
-	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run":
+	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run":\vspace{-0.2cm}
 	\begin{multline*}
 	\tuple{(q_0, (1,2)), (q_0,(3,4))} \step{} \tuple{(q_1, (1,2)), (q_5,(1,4))} \step{} 
 	\tuple{(q_4, (1,4)), (q_4,(1,4))} \\ \step{} \tuple{(q_7, (1,4)), (q_4,(1,4))} \step{} \tuple{(q_7, (1,4)), (q_7,(1,4))}
@@ -61,7 +62,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 	\resizebox*{!}{3.2cm}{
 		\input{Figures/fig-ex1}
 	}
-	\vspace{-0.2cm}
+%	\vspace{-0.2cm}
 	\caption{Example of a "protocol".}\label{fig:ex1}
 \end{figure}
 	
@@ -90,7 +91,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 	In fact, one can exponentially reduce this problem to \COVER, our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the query problem. In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
 \end{remark}
 
-\AP We finally introduce \intro{signature BNRA}, an interesting restriction to our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"". Said otherwise, the first register acts as a permanent identifier with which agents sign every message; under this restriction, a message is simply a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will later see that it falls into the same complexity class as the general case but makes the decidability procedure simpler. 
+\AP We finally introduce \intro{signature BNRA}, an interesting restriction of our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"". Said otherwise, the first register acts as a permanent identifier with which agents sign every message; under this restriction, a message is simply a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will see that it falls into the same complexity class as the general case but makes the decidability procedure simpler. 
 
 \begin{definition}[Signature protocols]
 A ""signature protocol"" with $\regnum$ registers is a "protocol" $\prot = (Q, \messages, \transitions, q_0)$ where register $1$ appears only in "broadcasts" in $\transitions$ and registers $i \geq 2$ appear only in "receptions" in $\transitions$. 
@@ -109,13 +110,13 @@ We highlight that our main result is the decidability of the problem. We show th
 
 For our decidability result, we rely on the theory of well quasi-orders in the context of subword ordering.
 Let $\Sigma$ be a finite alphabet, $w_1, w_2 \in \Sigma^*$, $w_1$ is a ""subword"" of $w_2$, denoted $w_1 \intro*\subword w_2$, when $w_1$ can be obtained from $w_2$ by erasing some letters. 
-A sequence of words $w_0, w_1, \ldots$ is \emph{good} if there exist $i<j$ such that $w_i \subword w_j$, and ""bad"" otherwise. Higman's lemma \cite{Higman52} states that every "bad" sequence of words over a finite alphabet is finite.
-In order to bound the length of a "bad" sequence, one must bound the growth of the sequence of words. 
+A sequence of words $w_0, w_1, \ldots$ is \emph{good} if there exist $i<j$ such that $w_i \subword w_j$, and ""bad"" otherwise. Higman's lemma \cite{Higman52} states that every "bad" sequence of words over a finite alphabet is finite, but there is no uniform bound.
+In order to bound the length of all "bad" sequences, one must bound the growth of the sequence of words. 
 We will use the following result, known as the Length function theorem \cite{SchmitzS2011upperHigman}:
 
 \begin{theorem}[""Length function theorem"" \cite{SchmitzS2011upperHigman}]
 	\label{thm:lengthfcttheorem}
-	Let $\Sigma$ a finite alphabet, $g : \nats \to \nats$ a primitive recursive function.
+	Let $\Sigma$ a finite alphabet and $g : \nats \to \nats$ a primitive recursive function.
 	There exists a function $f \in \Ffunction{\omega^{\size{\Sigma} - 1}}$ such that, for all $n \in \nats$, every "bad" sequence $w_1, w_2, \ldots$ such that $\size{w_i} \leq g^{(i)}(n)$ for all $i$ has at most $f(n)$ terms. 
 \end{theorem}
 

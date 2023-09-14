@@ -10,9 +10,10 @@ In this section, we establish the \NP-completeness of the restriction of \COVER 
 	
 	Following those observations, we define an abstract semantics with abstract configurations of the form $(S, b, K)$ with $S, K \subseteq Q$ and $b \in Q \cup \set{\bot}$. The first component $S$ is a set of states that we know we can cover (hence we can assume that there are arbitrarily many agents in all those states).
 	We start with $S = \set{q_0}$ and try to increase it. To do so, we use the two other components (the \emph{gang}) to keep track of the set of agents sharing a value $v$: $b$ (the \emph{boss}) is the state of the agent which had that value at the start, $K$ (the \emph{clique}) is the set of states covered by other agents with that value. As mentionned above, we may assume that every state of $K$ is filled with as many agents with value $v$ as we need. 
-	We will thus define abstract steps which allow to simulate steps of the gang we are following. When they cover states outside of $S$, we may add those to $S$ and reset $b$ to $q_0$ and $K$  to $\emptyset$, to then start following another value.
+	We will thus define abstract steps which allow to simulate steps of the agents with the value we are following. When they cover states outside of $S$, we may add those to $S$ and reset $b$ to $q_0$ and $K$  to $\emptyset$, to then start following another value.
+	We can bound the length of relevant abstract runs, and thus use them as witnesses for our \NP upper bound.
 	
-	Say there is a run covering some state outside of $S$, and let $v$ be the value of one of the first agents to get out of $S$. We can then keep track of that value in the abstract semantics. 
+%	Say there is a run covering some state outside of $S$, and let $v$ be the value of one of the first agents to get out of $S$. We can then keep track of that value in the abstract semantics. 
 	
 %	Agent $a$ is unique and called \emph{boss}, agents like $a'$ are clonable and called \emph{followers}. For value $v$, the only relevant information is the state of the boss, \emph{i.e.}, the state of the agent $a$ that had $v$ initially (this agent cannot be cloned), and the \emph{clique}, \emph{i.e.}, the set of states reached by other agents with that value $v$. 
 %

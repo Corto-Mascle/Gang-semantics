@@ -11,7 +11,7 @@ Also, given a "configuration" $\config$, we write $\data{\config}(a)$ for $\data
 
 Given a "run" $\run$, we write $\intro*\agentsof{\run}$ for its set of agents, we define the set of states appearing in it $\intro*\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$  as well as its set of values $\intro*\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
 
-First, to simplify the proofs, we use a lemma allowing us to only consider protocols which do not contain any reception transition with action $\quotemarks{\ne}$. This is feasible as we can execute several copies of a "run" in parallel (with distinct values) so that every broadcast is made in each copy with a different value. Hence if a agent receives a message, it can always receive it with a value different from its own, making disequality tests useless. We can thus replace them with receptions with $\quotemarks{\dummyact}$. 
+First, to simplify the proofs, we eliminate reception transitions with action $\quotemarks{\ne}$. This is feasible as we can execute several copies of a "run" in parallel (with distinct values) so that every broadcast is made in each copy with a different value. Hence if a agent receives a message, it can always receive it with a value different from its own, making disequality tests useless. We can thus replace them with receptions with $\quotemarks{\dummyact}$. 
 
 
 
@@ -176,7 +176,7 @@ Then, it is left to show that for all concrete "run" $\run$ and for all value $v
 	As $\aval$ appears in $\run$, it must appear in $\config_0$; let $a_0$ be the unique agent such that $\data{\config_0}(a_0) = \aval$. We write $\run : \config_0 \step{} \config_1 \step{} \dots \step{} \config_k = \config$. For every $i \leq k$, let $\run_i : \config_0 \step{*} \config_i$ be the prefix of $\run$ of length $i$. We set $\aconfig^0 = (\covset, q_0, \emptyset)$.
 	
 	We construct by induction on $i$ a sequence of "abstract configurations" $\aconfig^i = (\covset, \boss_i, \clique_i)$ such that $\aconfig^0 \step{*} \aconfig^i$ and $\cliqueof{\aval}{\run_i} \subseteq \clique_i$.
-	The statement is trivially true for $i=0$. 
+	The statement is clear for $i=0$. 
 	
 	Suppose now that $(\covset, q_0, \emptyset) \step{*} \aconfig^i$. 
 	If suffices to prove that $\aconfig^i \step{} \aconfig^{i+1}$. 
@@ -217,7 +217,6 @@ We may now prove completeness of the abstraction. Intuitively, we start with $S=
 \begin{proof}
 	Let $\run$ an "initial run".
 	We construct by induction an increasing sequence of sets $C_0, \ldots, C_m$ such that $C_m = \statesin{\run}$ and for all $i$, $C_i \subseteq \statesin{\run}$, $q_0 \in C_i$, and there exists $S_i$ such that $\aconfiginit \step{*} (S_i, q_0, \emptyset)$ and $C_i \subseteq S_i$. 
-	
 	First, we set $C_0 = \set{q_0}$ and the property is verified as $\aconfiginit \step{*} (\set{q_0}, q_0, \emptyset)$.
 	
 	Now suppose we constructed $C_0, \ldots, C_j$. If $C_j = \statesin{\run}$ we can stop. Otherwise let $\run_p: \config_0 \step{*}\config_p$ the longest suffix of $\run$ such that  $\statesin{\run_p} \subseteq C_j$. Write $s$ the step immediately after $\run_p$ in $\run$. By maximality of $\run_p$, $\run_p \cdot s$ covers some state $q$ that is not in $C_j$. Let $a$ be an agent that is in $q$ after step $s$, let $\aval$ be its value at that point. We set $C_{i+1} = C_i \cup \set{q}$.
@@ -313,7 +312,7 @@ We in fact prove the following stronger lemma, which directly implies Lemma~\ref
 \end{proof}
 
 
-We simply apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$ by setting $i = n$.
+To obtain Lemma~\ref{cor:soundness}, we apply Lemma~\ref{lem:correctness-construction} to an "abstract run" $\sigma_0 \to \cdots \sigma_n = \sigma$ from $\sigma_0$ to $\sigma$ by setting $i = n$.
 %	We obtain (by setting $i = n$) that there exists a value $v_n$ in the final configuration of the constructed run, for all $s \in K$, there is an agent with value $v_n$ in state $s$. Furthermore, if $b \neq \noboss$, then there is an agent in state $b$ with value $v_n$.  
 
 \subsection{Conclusion}
