@@ -35,20 +35,18 @@ For every "unfolding tree" $\tree$:
 	\end{itemize}
 \end{itemize}
 \end{lemma}
-
+\begin{proof}
 We prove it by induction on the "size" of the "unfolding tree".
-Let $\tree$ be a "unfolding tree", let $\node$ be its root.
-Let $u := \localrunlabel{\node}$ as a "partial run" with a single agent. Recall that by definition of an "unfolding tree", $u$ starts with distinct values in all its registers, hence it is an "initial partial run".
-We will combine $u$ with runs given by children of $\node$ to construct a run $\run$ satisfying the deisred property.
-Let $V$ be the set of values appearing in $u$ and $V_{init} \subseteq V$ be the set of "initial@@partial" values of $u$.
+Let $\tree$ be a "unfolding tree", $\node$ its root, $u := \localrunlabel{\node}$ and $V$ the set of values appearing in $u$. 
+We will combine $u$ with runs given by children of $\node$ to construct $\run$ satisfying the desired property.
 
 \subsubsection{Step 1: "Non-initial Values"}
 \label{sec:tree-to-run-step-one}
 
 For each non-initial value $v \ne \valuelabel{\node}$ of $u$, $\node$ has a "boss" child of specification $w$ such that $\vinput{v}{u} \subword w$.
-By induction hypothesis, there is an "initial run" $\run'$ satisfying $bw$. Up to renaming agents, assume that $\run$ and $\run'$ have disjoint agents.
+By induction hypothesis, there is an "initial run" $\run'$ satisfying "boss specification" $w$. Up to renaming agents, assume that $\run$ and $\run'$ have disjoint agents.
 We rename values in $\run'$ so that $w$ is broadcast in $\run'$ with value $v$, and $\run'$ has no other shared value with $\run$. 
-We use the broadcasts made by $\run'$ to match the "unmatched receptions" with value $v$ in $\run$: this gives us a partial "run" $\run$ with no "unmatched reception" with value $v$ and whose behaviour on other values of $V$ is the same as before.
+We use the broadcasts made by $\run'$ to match the "unmatched receptions" with value $v$ in $\run$: this gives us a new partial "run" $\run$ with no "unmatched reception" with value $v$ and whose behaviour on other values of $V$ is the same as before.
 
 \subsubsection{Step 2: "Initial Values"}
 \label{sec:tree-to-run-step-two}
@@ -57,32 +55,37 @@ We use the broadcasts made by $\run'$ to match the "unmatched receptions" with v
 
 Let $v$ be an "initial value" of $u$, and $\decsymb = \\(w_0, m_1, w_1, \ldots, m_\ell, w_\ell)$ the "decomposition" from condition \ref{item:condition2_initial_value}. We have that, for all $j \in \nset{1}{\ell}$, $\node$ has a "follower" child $\node_j$ labelled by $\followlabelmessage{\node_j} = m_j$ and $\followlabelword{\node_j} \in \langdec{\decsymb_j}$ with $\decsymb_j = (w_0, m_1, w_1, \ldots, m_{j-1}, w_{j-1})$. 
 
-Because the behavior of $\run$ with respect to $v$ was not modified by previous steps, it is equal to the one of $u$, hence we can split $\run$ into $\run_0, \ldots, \run_\ell$ with $w_i \subword \voutput{\aval}{\run_i}$ and $\vinput{\aval}{\run_i} \in \set{m_1, \dots, m_{i-1}}^*$ for all $i$. 
-By induction hypothesis applied to $\node_j$, for all $j$, there exists an "initial partial run" $\Tilde{\run}_j$ whose only "unmatched receptions" are on $v$, $\vinput{v}{\Tilde{\run}} \subword \followlabelword{\node_{j}}$ and such that $\tilde{\run}_j$ broadcasts $(m_j,v)$ in its last step. Again, we can rename agents and values so that the sets of agents of $\run$ and the $\run_j$ are all disjoint and the only shared value is $v$. 
+The behavior of $\run$ with respect to $v$ is equal to the one of $u$, hence we can split $\run$ into $\run_0, \ldots, \run_\ell$ with $w_i \subword \voutput{\aval}{\run_i}$ and $\vinput{\aval}{\run_i} \in \set{m_1, \dots, m_{i}}^*$ for all $i$. 
+By induction hypothesis applied to $\node_j$, for all $j$, there exists an "initial partial run" $\Tilde{\run}_j$ whose only "unmatched receptions" are on $v$, $\vinput{v}{\Tilde{\run_j}} \subword \followlabelword{\node_{j}}$ and such that $\Tilde{\run}_j$ broadcasts $(m_j,v)$ in its last step. Again, we rename agents and values so that the sets of agents of $\run$ and of every $\Tilde{\run_j}$ are all disjoint and the only shared value between any of these runs is $v$. 
 
-We can split $\Tilde{\run}_j$ into $\Tilde{\run}_{j, 0}, \ldots, \Tilde{\run}_{j,j-1}$ so that  $\vinput{v}{\Tilde{\run}_{j, i}} \subword \Tilde{w_{j,i}}$ where $\Tilde{w_{j,i}}$ can be obtained by adding letters from $\set{m_1, \ldots, m_j}$ to $w_i$.
+% We can split $\Tilde{\run}_j$ into $\Tilde{\run}_{j, 0}, \ldots, \Tilde{\run}_{j,j-1}$ so that  $\vinput{v}{\Tilde{\run}_{j, i}} \subword \Tilde{w_{j,i}}$ where $\Tilde{w_{j,i}}$ can be obtained by adding letters from $\set{m_1, \ldots, m_j}$ to $w_i$.
 
-We build our new run by induction on $j$. At induction step $j$, we prove that we can combine $\Tilde{\run}_1$ to $\Tilde{\run}_j$ with $\run_0 \cdot \ldots \cdot \run_j$ so that the obtained run $\run'$ has no "unmatched receptions" on value $v$, the same "unmatched receptions" as $\run$ for other values, and that $\run'$ has a broadcast of every $(m_i,v)$ with $i \leq j$. Moreover, this broadcast comes from an agent who has $v$ as non-initial value hence can be duplicated so that we can consider that we have an unlimited supply of messages $(m_i,v)$, $i \leq j$. 
+We build our new partial run by induction on $j$. At induction step $j$, we prove that we can combine $\Tilde{\run}_1$ to $\Tilde{\run}_j$ with $\run_0$ to $\run_j$ into $\run_j'$ which has no "unmatched receptions" on value $v$ and has the same behavior as $\run$ on values in $V \setminus \set{v}$. Moreover, $\run_j'$ has a broadcast of every $(m_i,v)$ with $i \leq j$ and this broadcast comes from an agent for which $v$ is non-initial. 
 
-The initialization of our induction simply consists in taking $\run_0$, which has no "unmatched reception" with value $v$. For the induction step, we combine several copies of $\Tilde{\run}_{j+1}$ with $\run'$ so that all "unmatched receptions" with value $(m_{j+1},v)$ in $\run$ as now matched in $\run'$. To do so, we may have to duplicate parts of $\run'$ so that "unmatched receptions" in $\Tilde{\run}_{j+1}$ with message $(m_i,v)$ where $i \leq j$ are matched using a copy of $\Tilde{\run}_i$. \nico{en cours}
+The initialization of our induction simply consists in taking $\run_0$, which has no "unmatched reception" with value $v$. For the induction step, we observe that for every $i \leq j$, there is in $\run_j'$ a broadcast of $(m_i,v)$ by some agent $a_i$ (which originally appeared in $\Tilde{\run_i}$) for which $v$ is non-initial, so that we can consider that we have an unlimited supply of messages $(m_i,v)$ by duplicating this agent. 
+To build $\run_{j+1}'$, we first append $\Tilde{\run}_{j+1}$ at the end of $\run_j'$; because $\vinput{v}{\Tilde{\run_{j+1}}} \in \langdec{\decsymb_{j+1}}$, all "unmatched receptions" in $\Tilde{\run_{j+1}}$ can be matched with broadcasts already in $\run_j'$ (duplicating some agents $a_i$ if needed). Observe that $\Tilde{\run_{j+1}}$ has a broadcast  $(m_{j+1},v)$ by some agent $a_{j+1}$ for which $v$ is non-initial. We then append $\run_{j+1}$ at the end of the obtained $\run_{j+1}'$: all its "unmatched receptions" on value $v$ are of the form $(m_i,v)$ with $i \leq j+1$ so they can be matched by duplicating $a_i$. This conclude the construction of $\run_{j+1}'$. In particular, $\run_{\ell}'$ has no "unmatched reception" on $v$ and behaves the same as $\run$ for values in $V \setminus \set{v}$, this concludes step $2$.
 
-We can compose each $\run$ with $\Tilde{\run}_{j}$ by running them in parallel over disjoint sets of agents and matching each $\Tilde{\run}_{j, i}$ with $\run_i$ so that the broadcasts of $\run_i$ with value $v$ forming $w_i$ are received in $\Tilde{\run}_{j, i}$ and the only remaining missing broadcasts in that part of the run are of $m_1, \ldots, m_i$.
-We obtain a run section whose $v$-"output" still contains $w_i$ and whose "$v$-input" only contains $m_1, \ldots, m_i$. 
+% We can compose each $\run$ with $\Tilde{\run}_{j}$ by running them in parallel over disjoint sets of agents and matching each $\Tilde{\run}_{j, i}$ with $\run_i$ so that the broadcasts of $\run_i$ with value $v$ forming $w_i$ are received in $\Tilde{\run}_{j, i}$ and the only remaining missing broadcasts in that part of the run are of $m_1, \ldots, m_i$.
+% We obtain a run section whose $v$-"output" still contains $w_i$ and whose "$v$-input" only contains $m_1, \ldots, m_i$. 
 
-Finally, we can use the last operation of $\Tilde{\run}_{j, i}$, which is a broadcast of $m_j$ with value $v$, at any point during the rest of the run, to either extend the $v$-"output" of some $\run_k$ with $k \geq j$ or complete a missing broadcast.
+% Finally, we can use the last operation of $\Tilde{\run}_{j, i}$, which is a broadcast of $m_j$ with value $v$, at any point during the rest of the run, to either extend the $v$-"output" of some $\run_k$ with $k \geq j$ or complete a missing broadcast.
 % This construction is illustrated in Figure
 % \begin{figure}
 % 	\input{../Figures/Fig-tree-to-run}
 % 	\caption{An illustration of the composition operation from the proof of Lemma~\ref{lem:tree-to-run}}.
 % 	\label{fig:tree-to-run}
 % \end{figure}
-If $\val = \valuelabel{\node}$ then we have $\bosslabel{\node} \in \langdec{\decsymb}$, and we need to ensure that $\bosslabel{\node}$ is broadcast in $\run$ with value $\val$.
-Let $\bossspec_0, \ldots, \bossspec_\ell$ such that $\bosslabel{\node} \subword \bossspec_0\cdots\bossspec_\ell$ and for all $j$, $\bossspec_j$ can be obtained by adding letters from $\set{m_1,\ldots, m_j}$ in $w_j$.
-We apply the above composition operation to extend the output of each $\run_{i}$ so that it subsumes $\bossspec_i$ while making sure that its "$\aval$-input" is still only made of $m_1, \ldots, m_i$ with value $v$. 
+% If $\val = \valuelabel{\node}$ then we have $\bosslabel{\node} \in \langdec{\decsymb}$, and we need to ensure that $\bosslabel{\node}$ is broadcast in $\run$ with value $\val$.
+% Let $\bossspec_0, \ldots, \bossspec_\ell$ such that $\bosslabel{\node} \subword \bossspec_0\cdots\bossspec_\ell$ and for all $j$, $\bossspec_j$ can be obtained by adding letters from $\set{m_1,\ldots, m_j}$ in $w_j$.
+% We apply the above composition operation to extend the output of each $\run_{i}$ so that it subsumes $\bossspec_i$ while making sure that its "$\aval$-input" is still only made of $m_1, \ldots, m_i$ with value $v$. 
 
-Then, in all cases, we apply this composition operation to complete the missing broadcasts: while there is a missing broadcast of some letter $m_i$, we compose $\run$ with $\Tilde{\run}_i$ to fill it, while possibly adding some missing broadcasts of $m_1, \ldots, m_{i-1}$.
-This procedure terminates as the number of missing broadcasts of $m_\ell, m_{\ell-1}, \ldots, m_1$ decreases for the lexicographic order at each step.
-
-In the end we obtain a run with no missing broadcast on $v$, no missing broadcasts on values outside of $V$ and whose behavior on all other values of $V$ is unaffected. Furthermore if $v = \valuelabel{\node}$ then the $v$-"output" resulting run subsumes $\bosslabel{\node}$. We set $\run$ to be this new "run".
-
-We have shown how to complete $u$ into a "partial run" satisfying the "specification" of $\node$ using the "runs" obtained from its "boss" and "follower" children. This proves the lemma by induction on the "unfolding tree" (there is no need for a base case as the construction applies even if $\node$ has no children).
+% Then, in all cases, we apply this composition operation to complete the missing broadcasts: while there is a missing broadcast of some letter $m_i$, we compose $\run$ with $\Tilde{\run}_i$ to fill it, while possibly adding some missing broadcasts of $m_1, \ldots, m_{i-1}$.
+% This procedure terminates as the number of missing broadcasts of $m_\ell, m_{\ell-1}, \ldots, m_1$ decreases for the lexicographic order at each step.
+ 
+\subsubsection{Concluding the procedure}
+We distinguish two cases depending on the type of "specification" of $\node$.
+\begin{itemize}
+\item If $\node$ is a "boss node" of "boss specification" $\bossspec$, we apply steps $1$ and $2$ to every value in $V$, which can be done because $\valuelabel{\node}$ is initial in $\localrun$. We then obtain an "initial run" $\run$ with no "unmatched receptions" satisfying "boss specification" $\bossspec$ for value $\valuelabel{\node}$.
+\item if $\node$ is a "follower node", we apply steps $1$ and $2$ to every value in $V \setminus \set{\valuelabel{\node}}$ to obtain a "partial run" $\run$ with no "unmatched reception" on values different from $\valuelabel{\node}$. Moreover, because the behavior of $\run$ with respect to $\valuelabel{\node}$ is the one of $\localrun$, we have that $\vinput{\valuelabel{\node}}{\run} \subword \followwordspec$ and $\voutput{\valuelabel{\node}}{\run}$ contains $\followmessagespec$, concluding the proof. 
+\end{itemize}
+\end{proof}

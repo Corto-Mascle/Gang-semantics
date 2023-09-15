@@ -1,30 +1,15 @@
-\section{Proof of the Tower Function Lemma}
+\section{Generalization of Lemma~\ref{lem:towerbound_signature}}
 \label{app:tower-lemma}
-%	We will in fact prove a stronger lemma:
-%	\begin{lemma}
-%			There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers, for every "local run" $\localrun_0: (q_0, \localdata_0) \step{*} (q_f, \localdata_f)$ in $\prot$, for every section $\localrun : (q, \localdata) \step{*} (q, \localdata')$ of $\localrun_0$,  for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun''} \leq \towerfun(\size{\prot},r)$ and:
-%			\begin{enumerate}
-%					\item for all $\aval' \in \nats \setminus V$, there exists $\aval$ a "non-initial" value of $\localrun_0$ such that $\vinput{\aval'}{\localrun'}\subword \vinput{\aval}{\localrun}$,
-%					\item for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$. 
-%				\end{enumerate}
-%	\end{lemma}
-%	
-	
-	We aim to prove the following lemma:
+		
+	The generalization of Lemma~\ref{lem:towerbound_signature} is the following: 
 	\begin{restatable}{lemma}{lemShortLocalRuns}
 		\label{lem:short-local-runs}
 		There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" with $r$ registers, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ such that $\size{u'} < \towerfun(\size{\prot},r)$ and for all value $v \in \nats$,  $\vinput{v}{u'} \subword \vinput{v}{u}$. 
-		%	\\
-		%	
-		%	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers, for every "local run" $\localrun_0: (q_0, \localdata_0) \step{*} (q_f, \localdata_f)$ in $\prot$, for every section $\localrun : (q, \localdata) \step{*} (q, \localdata')$ of $\localrun_0$,  for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun''} \leq \towerfun(\size{\prot},r)$ and:
-		%	\begin{enumerate}
-			%		\item for all $\aval' \in \nats \setminus V$, there exists $\aval$ a "non-initial" value of $\localrun_0$ such that $\vinput{\aval'}{\localrun'}\subword \vinput{\aval}{\localrun}$,
-			%		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$. 
-			%	\end{enumerate}
 	\end{restatable}
+	The function $\towerfun$ is actually not the same as in Lemma~\ref{lem:towerbound_signature} although it is also a tower of exponentials.
 	
 	We start by defining the notion of "trace". 
-	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The "trace" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ to express that there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. 
+	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The "trace" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ when there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. 
 	
 	
 
@@ -44,7 +29,7 @@
 
 %\lemShortLocalRuns*
 
-We actually prove a slightly more general version of the lemma, to reduce the notations in the proof. The previous lemma can be obtained simply by applying the following one with $W$ the set of "initial" values of $\localrun_0$ (and noticing that $W$ then contains $r$ values).
+We actually prove a more general version of the lemma. The previous lemma can be obtained simply by applying the following one with $W$ the set of "initial" values of $\localrun_0$ ($W$ then contains $r$ values).
 
 \begin{lemma}
 	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun'} \leq \towerfun(\size{\prot} -r + \size{\Vinit},r)$ and:
@@ -54,11 +39,11 @@ We actually prove a slightly more general version of the lemma, to reduce the no
 	\end{enumerate}
 \end{lemma}
 
-Intuitively, the set $V$ represents values that are already used somewhere and therefore cannot be used as fresh values, and $\Vinit$ represents values that other values should not copy because their behavior is special (this will later correspond to initial values of the run). However, because this lemma is meant to be applied to several parts of a run, we have to state it for any value for $V$ and $\Vinit$.  
+Intuitively, the set $V$ represents values that are already used and therefore cannot be used as fresh values, and $\Vinit$ represents values that should not be copied (\emph{e.g.}, initial values of the run). However, stating the lemma only with $\Vinit$ equal to the initial values in $u$ would not allow us to apply the Lemma on $u$ an infix "local run" of a larger "local run" $u'$, because the initial values in $u$ would not correspond to the ones in $u'$. This is why we state the lemma for every $W \subseteq V$.  
 
 \begin{figure}[h]
 	\input{Figures/fig-illustration-pumping}
-	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. We represent local runs as above, where lines correspond to registers, and vertical separations are times at which a $\enregact$ operation is performed on that register. If a register $i$ keeps the same value for a long enough time (on the left), we apply the induction hypothesis to shorten the projection of the run on the other registers. As the value of $i$ does not change, the resulting run is still valid. If all registers change values often, say every $M$ steps (on the right), then if the run is long enough we can find two identical sequences of transitions during which all values are renewed twice. We can then obtain a shorter run by glueing them together as in the picture. The rectangles with new colors in the shortened runs correspond to fresh values that we introduce to avoid interleaving the prefix and suffix (which would hinder the proof).}
+	\caption{Illustration of the proof of Lemma~\ref{lem:short-local-runs}. $s \in \transitions^{2M}$ corresponds to the repeating sequence of transitions of length $2M$. Register $4$ contains value $v \in W$. Because both sides have the same $\Theta$, they coincide on values in $W$ such as $v$; only values that are not in $W$ are replaced by fresh values, hence $v$ is kept in the shortened local run.}
 	\label{fig:pumping}
 \end{figure}
 
@@ -73,7 +58,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	Let $n:=\size{\prot} -r + \size{\Vinit}$.
 	Let a "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" with $\length{\localrun} > \towerfun(n,k)$ and let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$. We claim that $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ active registers such that $\length{\localrun'} < \length{\localrun}$ and:
 	\begin{itemize}
-		\item for all $\aval' \in \nats$, there exists $\aval \in \nats \setminus W$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
+		\item for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus W$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
 		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$. 
 	\end{itemize}
 	
@@ -82,8 +67,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(\size{\prot} -r + \size{\Vinit},k+1)$. 
 	
 	
-	First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of length $\towerfun(n,k)+1$ with only $k$ active registers, then it suffices to apply the induction hypothesis on $u_i$ (and $V$, $W$).
-	
+	First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of length $\towerfun(n,k)+1$ with only $k$ active registers, then it suffices to apply the induction hypothesis on $u_i$.
 	Suppose now that there exists no such infix "local run".
 	Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n,k){+}1$, we have $\towerfun(n,k+1) = 2M [((n+1)^2)^{2M}+1]$. 
 	In any sequence of $M$ "local steps" in a row in $\localrun$, 
@@ -105,7 +89,7 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	There exist two infix "local runs" $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have the same sequences of transitions, which we call $s$, and of receptions of values from $\Vinit$, which we call $\Theta$.
 	
 	Although $\localrun_a$ and $\localrun_b$ have the same sequence of transitions, their "traces" may differ because their "reception steps" may have different values.
-	We build a "trace" $\atrace$ such that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ where the underlying sequence of transitions of $\atrace$ is $s$ and the receptions of values of $\Vinit$ matches $\Theta$.
+	We build a "trace" $\atrace$ such that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ where the underlying sequence of transitions of $\atrace$ is $s$ and the receptions of values of $\Vinit$ match $\Theta$.
 	
 	For every active register $i \in I$, let $e_i \in \nset{1}{2M}$ denote the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$ and $f_i \in \nset{1}{2M}$ the index of the last $\quotemarks{\enregact}$ on register $i$ in $s$. By hypothesis, because $s$ is of length $2M$, it contains at least two $\quotemarks{\enregact}$ on register $i$, one in the first half and one in the second half, hence $e_i \leq M < M +1 \leq f_i$. 
 	
@@ -126,16 +110,13 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	First, for every active register $i$, the last $\quotemarks{\enregact}$ step on register $i$ has value $\localdata_4(i)$ in $\atrace$ (as we are in the case $f_i \leq j$). Hence if every "local step" is valid then the final "local configuration" is $(q_4, \localdata_4)$.
 	For every $l \in \nset{0}{2M}$, let $\atrace_l$ denote the prefix of $\atrace$ of length $l$.
 	We prove by induction on $l$ that $\atrace_l$ is valid from $(q_1, \localdata_1)$. It is trivially true for $l =0$. Assume that we have $(q_1, \localdata_1) \step{\atrace_l} (q, \localdata)$ and let $\locallabel$ such that $\atrace_l \cdot \locallabel = \atrace_{l+1}$. Let $\atrans$ the underlying transition of $\locallabel$.
-	First, $q$ is the initial state of $\atrans$ because $\locallabel$ is valid at step $l+1$ of $\localrun_a$ (and $\localrun_b$). Hence if $\atrans$ is a "broadcast" then $\locallabel$ is valid from $(q,\localdata)$.
-	
-	For every register $i$, let $\localdata_a(i), \localdata_b(i)$ the content of register $i$ after the $l$-th step in $\localrun_a$ and $\localrun_b$ respectively.
-	
-	\noindent \textbf{$\locallabel$ is a "reception step"} \\
-	If $\locallabel$ is a "reception step" of the form $\extlabel{\atrans}{\aval}$, then $\atrans$ has action $\rec{\amessage}{i}{\anact}$. Let $\aval_a$, $\aval_b$ the value of the corresponding "reception step" in $\localrun_a$ and $\localrun_b$ respectively. If $i \notin I$ then $\alpha$ is either $\quotemarks{\dummyact}$ or a test, which is valid as  $\localdata(i) = \localdata_a(i) = \localdata_b(i)$.
-	
-	The only problematic cases are when $i \in I$ and either $\anact = \quotemarks{\diseqtestact}$ or $\anact = \quotemarks{\eqtestact}$. 
-	
-	In this case, we prove that $\binrel{\aval}{\anact}{\localdata(i)}$ with $\anact \in \set{\quotemarks{\eqtestact}, \quotemarks{\diseqtestact}}$. First, because the corresponding step is valid in $\localrun_a$ and $\localrun_b$, we have $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ and $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. We distinguish cases depending on the value of $l+1$:
+	First, $q$ is the initial state of $\atrans$ because $\locallabel$ is valid at step $l+1$ of $\localrun_a$ (and $\localrun_b$). Hence if $\atrans$ is a "broadcast" then $\locallabel$ is valid from $(q,\localdata)$. Suppose now that $\locallabel$ is a "reception step"; let $\atrans =: \rec{m}{i}{\alpha}$.
+	Let $\aval_a$, $\aval_b$ be the value of $\locallabel$ in $\localrun_a$ and $\localrun_b$ respectively.
+
+	Let $\localdata_a, \localdata_b$ be the content of registers after the $l$-th step in $\localrun_a$ and $\localrun_b$ respectively. 
+	 If $i \notin I$ then $\alpha$ is either $\quotemarks{\dummyact}$ or a test, which is valid as  $\localdata(i) = \localdata_a(i) = \localdata_b(i)$ (value of register $i$ does not change in $u$).	
+	Suppose now that $i \in I$, the only problematic test is the one of tests, \emph{i.e.}, $\anact \in \set{\quotemarks{\diseqtestact},\quotemarks{\eqtestact}}$. 
+	In this case, we prove that $\binrel{\aval}{\anact}{\localdata(i)}$. First, because the corresponding step is valid in $\localrun_a$ and $\localrun_b$, we have $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ and $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. We distinguish cases depending on the value of $l+1$:
 	\begin{itemize}
 		\item $l+1<e_i$: $\localdata(i)= \localdata_a(i)$, $\aval = \aval_a$ and $\binrel{\localdata_a(i)}{\anact}{\aval_a}$. 
 		\item $e_i \leq l+1 < f_i$: We have $\aval = \phi(\aval_a)$. 
@@ -143,9 +124,6 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 		$\binrel{\phi(\localdata_a(i))}{\anact}{\phi(\aval_a)}$.
 		\item$f_i \leq l+1$: $\localdata(i)= \localdata_b(i)$ and $\aval = \aval_b$, and because the "internal step" is valid in $\localrun_b$ we have $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. 
 	\end{itemize}
-	
-	\noindent \textbf{$\locallabel$ is an "internal step"} \\
-	This case is immediate as "broadcast" transitions can always be executed.
 	
 	This proves that $\locallabel$ is valid from $(q,\localdata)$ which concludes the induction. 
 	We have proven that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$; moreover $\atrace$ is of length $2M$ and there are at least $2M+1$ steps between $(q_1,\localdata_1)$ and $(q_4, \localdata_4)$ in $\localrun$. Therefore, replacing this part of $\localrun$ with $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ yields a "local run" $\localrun': (q_i, \localdata_i) \step{*} (q_f,\localdata_f)$ with strictly less steps that $\localrun$. 
@@ -155,16 +133,15 @@ Intuitively, the set $V$ represents values that are already used somewhere and t
 	
 	Let $(q_m, \localdata_m)$ the "local configuration" after $M$ steps of $\atrace$ from $(q_1, \localdata_1)$; write $\localrun_1$ the local run from $(q_1,\localdata_1)$ to $(q_m, \localdata_m)$ corresponding to the first $M$ steps of $\atrace$ in $\localrun'$, and $\localrun_2$ the "local run" from $(q_m, \localdata_m)$ to $(q_4, \localdata_4)$ corresponding to the last $M$ steps of $\atrace$ in $\localrun'$.  
 	
-	We now prove the desired properties on $\localrun_{1}$.
-	
-	Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\atrace$, the "reception steps" in the first $M$ steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the last $M$ steps. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval \in V$ and values of $V$ satisfy conditions \ref{item:shorterrun_oldvalues}. 
+	Let $\aval \in V$. We claim that $\vinput{\aval}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in the construction of $\atrace$, the "reception steps" in the first $M$ steps were those of $\localrun_a$ except that some values were replaced with fresh values in $\nats \setminus V$, and similarly with $\localrun_b$ and the last $M$ steps. Overall, this proves that $\vinput{\aval}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$ for every $\aval \in V$ and values of $V$ satisfy condition  \ref{item:shorterrun_oldvalues}. 
 	
 	Let $\aval' \in \nats \setminus V$; $\aval'$ does not appear in $\localrun$. Either $\aval'$ does not appear in $\localrun'$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. As $\phi$ is injective and $\phi(\Vinit) = \Vinit$ and $\aval'\notin \Vinit$, $\aval \notin \Vinit$. 
 	But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "reception steps" with value $\phi(\aval)$ correspond to "reception steps" in $\localrun_a$ with value $\aval$, and similarly for $\localrun_2$ and $\localrun_b$. This proves condition \ref{item:shorterrun_anyvalue} for every $\aval' \in \nats \setminus V$.
 	Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues} and that is strictly shorter that $\localrun$, which proves the "shortening property".
 	
-	We build a "local run" of length less that $\towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup W$ where $W$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
+	We build a "local run" of length less that $\towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup X$ where $X$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
 	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot}-r + \size{\Vinit},\regnum)$, which concludes the proof of the lemma. 
+	\nico{la longueur et la technicité de cette preuve me désespèrent (et risquent aussi de désespérer les reviewers zélés) mais je ne vois pas trop ce qu'on peut y faire}
 \end{proof}
 
 %We now prove the following, stronger version of Lemma~\ref{lem:short-run-for-output}.

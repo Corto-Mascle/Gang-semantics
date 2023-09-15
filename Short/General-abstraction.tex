@@ -289,7 +289,7 @@ Our aim is again to bound the "size@@tree" of a minimal "coverability witness". 
 
 \begin{restatable}{lemma}{lemShorteningBranches} 
 \label{lem:shortening-branches}
-	Let $\node, \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If any of the below holds, then $\tree$ can be shortened  (contradicting its minimality):
+	Let $\node \ne \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If any of the below holds, then $\tree$ can be shortened  (contradicting its minimality):
 	\begin{itemize}
 	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; 
 	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$.
@@ -384,18 +384,17 @@ We can now bound the size of a node with respect to the size of its neighbors of
 \begin{restatable}{lemma}{lemBoundSuccessorHeight}
 	\label{lem:bound-successor-height}
 	Let $\node$ be a node of $\tree$ such that all neighbors of $\node$ of higher altitude have size bounded by $K$.
-	Then $\size{\node} \leq \towerfun(\size{\prot}, r) \, O(\size{\messages} \, r \, K)$. 
-\corto{enlever O}
+	Then $\size{\node} \leq \towerfun(\size{\prot}, r) \, (\size{\messages} \, r \, K + K + 1)$. 
 \end{restatable}
 \begin{proof}
 	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children, by definition of a "decomposition".
 	Because there are at most $r$ "initial" values, this makes at most $\size{\messages} \, r$ "follower" children and each one of them requires at most $K$ messages. If $\node$ is a "follower node" or the root, then the number of messages it must broadcast is then bounded by $\size{\messages} \, r \, K +1$. If $\node$ is a "boss node" and not the root, then its parent % if its exists, if root then empty spec
 	has higher altitude hence $\size{\bossspec(\node)} \leq K$ and $\node$ must broadcast at most $\size{\messages} \, r \, K + K$ messages in total.
-	This bounds in $O(\size{\messages} \, r \, K) $ the number of messages $u$ needs to broadcast; as in Lemma~\ref{lem:bounds_tree_sg}, we bound the length of $u$ by $\towerfun(\size{\prot},r) \, O(\size{\messages}\, r \, K)$; the bound on $\size{\node}$ follows.
+	This bounds by $\size{\messages} \, r \, K + K +1$ the number of messages $u$ needs to broadcast; as in Lemma~\ref{lem:bounds_tree_sg}, we bound the length of $u$ by $\towerfun(\size{\prot},r) \, (\size{\messages}\, r \, K + K + 1)$; the bound on $\size{\node}$ follows.
 \end{proof}
 
-
-By inductively implying the previous result, we obtain the existence of a primitive-recursive function $f_0$ so that, given a node $\node$ in $\tree$, $\size{\node} \leq f_0(\altmax - \altitude{\node})$ (see Appendix~\ref{app:bound-node-size-with-altitude} for the proof).
+The rest of the proof is sketched here and detailed in Appendix~\ref{app:proofs_bounds}. 
+By inductively implying the previous result, we obtain the existence of a primitive-recursive function $f_0$ so that, given a node $\node$ in $\tree$, $\size{\node} \leq f_0(\altmax - \altitude{\node})$ where $\altmax$ denotes the maximal altitude in $\tree$ (Lemma~\ref{lem:bound-length-at-height-h}).
 
 We now bound $\altmax$. Consider a branch of $\tree$ with a node reaching $\altmax$; for every $j \in \nset{1}{\altmax}$, let $\node_{j}$ the first node of the branch reaching altitude $j$ (Figure~\ref{fig:max-height-bound} in the appendix); all such nodes are "follower nodes". Sequence $\node_{\altmax}, \dots, \node_2, \node_1$ is so that the $i$th term is at altitude $\altmax-i$ hence its size is bounded by $f_0(i)$. With the observation of Lemma~\ref{lem:shortening-branches}, we apply the "Length function theorem" to bound $\altmax$ (Lemma~\ref{lem:bound-max-height} in the appendix).
 
