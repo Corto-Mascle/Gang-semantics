@@ -65,7 +65,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 		\tuple{(q_0, (1,2)), (q_0,(3,4))} \step{} \tuple{(q_1, (1,2)), (q_2,(1,4))} \step{} 
 		\tuple{(q_3, (1,4)), (q_3,(1,4))} \\ \step{} \tuple{(q_4, (1,4)), (q_3,(1,4))} \step{} \tuple{(q_4, (1,4)), (q_4,(1,4))}
 	\end{multline*}
-	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_3,4)$ by $a_2$, $(m_4,1)$ by $a_1$ and $(m_4,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
+	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_3,4)$ by $a_2$, $(m_4,1)$ by $a_2$ and $(m_4,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
 \end{example}
 
 \begin{figure}[t]
@@ -94,7 +94,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 \end{definition}
 
 \begin{example}\label{example-2}
-	Let $\prot$ the "protocol" of Figure~\ref{fig:ex1}. As proven in Example~\ref{ex:example-1}, $(\prot,q_4)$ is a positive instance of \COVER~and a positive instance of \TARGET. However, if we remove the blue edge, it shall no longer be a positive instance of \TARGET: there must be an agent staying on $q_3$ to broadcast $m_4$. Also, $(\prot, q_5)$ is a negative instance of \COVER: we would need one agent on $q_2$ and one on $q_0$ with the same value $v$ in their first registers. Value $v$ is stored by agent on $q_2$ from a message $(m_1,v)$. The two messages need to be sent by the agent having $v$ as initial value, but this agent cannot send both messages.
+	Let $\prot$ the "protocol" of Figure~\ref{fig:ex1}. As proven in Example~\ref{ex:example-1}, $(\prot,q_4)$ is a positive instance of \COVER~and \TARGET. However, if we remove the blue edge of the protocol, it shall no longer be a positive instance of \TARGET: there must be an agent staying on $q_3$ to broadcast $m_4$. Also, $(\prot, q_5)$ is a negative instance of \COVER: we would need one agent on $q_2$ and one on $q_0$ with the same value $v$ in their first registers. Value $v$ is stored by agent on $q_2$ from a message $(m_1,v)$. The two messages $(m_1, v)$ and $(m_2, v)$ need to be sent by the agent having $v$ as initial value, but this agent cannot send both messages.
 \end{example}
 
 \begin{remark}
