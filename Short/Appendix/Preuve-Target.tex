@@ -4,72 +4,47 @@
 \propTargetUndecidable*
 
 \begin{proof}
-	We present a reduction from the halting problem for Minsky machines to the "target reachability problem" for BNRA.
+	We present a reduction from the halting problem for Minsky machines to \COVER for "signature BNRA".
 	
-	A Minsky Machine is a tuple $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$ where $\Loc$ is a finite set of locations, $\Cpt = \{\cpt_1, \cpt_2\}$ is a set of two counters, $\Delta \subseteq \Loc \times (\{\dec{\cpt}\}_{\cpt \in \Cpt} \cup \{\inc{\cpt}\}_{\cpt \in \Cpt} \cup \{\testz{\cpt}\}_{\cpt \in \Cpt} ) \times \Loc$ is a finite set of transitions, $\ell_0 \in \Loc$ is an initial location, and $\ell_f \in \Loc$ is a final location. A \emph{configuration} of a Minsky machine is a tuple $(\ell, v_1, v_2) \in \Loc \times \nats \times \nats$ where $v_1$ (resp. $v_2$) stands for the value of the counter $\cpt_1$ (resp. $\cpt_2$). 
-	For two configurations $(\ell, v_1, v_2)$ and  $(\ell', v'_1, v'_2)$, we write $(\ell, v_1, v_2) \stepMM{} (\ell', v'_1, v'_2)$ if one of the following condition holds for some $\delta \in \Delta$:
+	A Minsky Machine is a tuple $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$ where $\Loc$ is a finite set of locations, $\Cpt = \{\cpt_1, \cpt_2\}$ is a set of two counters, $\Delta \subseteq \Loc \times \set{\dec{\cpt},\inc{\cpt},\testz{\cpt} \mid \cpt \in \Cpt} \times \Loc$ is a finite set of transitions, $\ell_0 \in \Loc$ is an initial location and $\ell_f \in \Loc$ is a final location. A \emph{configuration} of a Minsky machine is a tuple $(\ell, v_1, v_2) \in \Loc \times \nats \times \nats$ where $v_1$ (resp. $v_2$) stands for the value of the counter $\cpt_1$ (resp. $\cpt_2$). 
+	We write $(\ell, v_1, v_2) \stepMM{} (\ell', v'_1, v'_2)$ if there is $\delta \in \Delta$ such that:
 	\begin{itemize}
 		\item $\delta = (\ell, \inc{\cpt_i}, \ell')$ and $v'_i = v_i+1$, $v_{3-i} = v'_{3-i}$;
 		\item $\delta = (\ell, \dec{\cpt_i}, \ell')$ and $v'_i = v_i-1$, $v_{3-i} = v'_{3-i}$;
 		\item $\delta = (\ell, \testz{\cpt_i}, \ell')$ and $v'_i = v_i = 0$, $v_{3-i} = v'_{3-i}$.
 	\end{itemize}
 	%	We will note $\stepMM{}$ for $\bigcup_{\delta \in \Delta} \stepMM{\delta}$. 
-	An execution of the machine is a sequence $(\ell_1, v_1^1, v_2^1) \stepMM{} (\ell_2, v_1^2, v_2^2) \stepMM{} \dots \stepMM{} (\ell_k, v_1^k, v_2^k)$. 
-	The halting problem asks whether state $\ell_f$ is reachable. This problem is well-known to be undecidable.
+	An execution of the machine is a sequence $(\ell_1, v_1^{(1)}, v_2^{(1)}) \stepMM{} (\ell_2, v_1^{(2)}, v_2^{(2)}) \stepMM{} \dots \stepMM{} (\ell_k, v_1^{(k)}, v_2^{(k)})$. 
+	The halting problem asks whether $\ell_f$ is coverable. This problem is well-known to be undecidable \cite{minsky}.
 	
 	
 	\begin{figure}
-		\centering
-		\begin{minipage}{.5\textwidth}
+		% \centering
+		% \begin{minipage}{.5\textwidth}
 			\centering
+			\resizebox{.99\linewidth}{!}{
 			\input{Figures/target-init}
-			\caption{Initialisation for the \TARGET \\encoding}
+			}
+			\caption{Partial depiction of the protocol built in Proposition~\ref{prop:target-undec}. Only one transition, which is $(\ell_0, \delta, \ell_1)$, is represented in the $\prot_{\mathsf{loc}}$ part above; similarly, only one increment and one decrement transitions are depicted in the $\prot_{\mathsf{count}}$ part below. The rebroadcast loops rebroadcast all transitions acting on $\cpt_2$ and all acknowledgements; the one on $(\cpt_1,0)$ also rebroadcasts all transitions with $\dec{\cpt_1}$ and with zero-tests, and the one on $(\cpt_1,1)$ rebroadcasts all transitions with $\inc{\cpt_1}$.}
 			\label{fig:target-init}
-		\end{minipage}%
-		\begin{minipage}{.5\textwidth}
-			\centering
-			\input{Figures/cycle-knowledge}
-			\caption{Cycle of knowledge of 4 agents. Each box represents an agent along with its register values.}
-			\label{fig:target-cycle-knowledge}
-		\end{minipage}
+		% \end{minipage}%
+		% \begin{minipage}{.5\textwidth}
+		% 	\centering
+		% 	\input{Figures/cycle-knowledge}
+		% 	\caption{Cycle of knowledge of 4 agents. Each box represents an agent along with its register values.}
+		% 	\label{fig:target-cycle-knowledge}
+		% \end{minipage}
 	\end{figure}
 	
-	Fix a Minsky Machine $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$. The simulation goes as follows: 
-	\begin{itemize}
-		\item each agent has two registers: one with its identity, which is "broadcast-only", and another in which it will store the value of a \emph{predecessor} agent. To do so, in an initialization phase, each agent does one of the following things: (i) it starts by broadcasting its first register value and then waits to receive a value and stores it in its second register, (ii) it waits first for a value to store in its second register and then broadcasts its first register value. This initialization part is displayed in \cref{fig:target-init}. Note that, after the initialization phase (once all agents reached $q_1$ and $q_2$, which eventually happens as otherwise they would not all reach $q_f$), there is necessarily a \emph{cycle of knowledge} in the reached configuration. A cycle of knowledge in a configuration $\config$ is a subset of agents $\{a_1, \dots a_k\}$ such that for all $1 \leq i < j \leq k$, $\data{\config}(a_i)(1) \ne \data{\config}(a_j)(1)$, for all $2 \leq i \leq k$, $\data{\config}(a_i)(2) = \data{\config}(a_{i-1})(1)$ and $\data{\config}(a_1)(2) = \data{\config}(a_{k})(1)$ (see \cref{fig:target-cycle-knowledge}). Indeed, consider the function which associates to each agent $a$, an agent $a'$ such that $\data{\config}(a)(2) = \data{\config}(a')(1)$. This function is total as $\gamma$ is such that all agents reached states $q_1$ or $q_2$. By the pigeonhole principle, there exists a cycle of knowledge.
-		
-		From then on, an agent will broadcast only its first register value (along with some messages) and shall only receive messages sent with its second register value. In other words, every reception transition after the initialisation phase is of the form $\rec{m}{2}{=}$ for some $m \in \messages$ and every broadcast transition after the initialisation  phase is of the form $\br{m}{1}$ for some $m \in \messages$;
-		
-		\item The agents which made the first choice (i) during the initialization phase will simulate a machine execution. We shall name this type of agents \emph{leader} agents.  
-		The other agents will simulate counter values, each agent chooses one of the two counters $\cpt_i$ to simulate, and will from then on travel between two states $(\cpt_i, 0)$ and $(\cpt_i, 1)$.
-		
-		\item After initialization, leader agents are in location $\ell_0$ and other agents are all on one of the states $(\cpt_i, 0)$.
-		
-		A leader simulates the Minsky machine by broadcasting,  with its identifier, a sequence of transitions $\delta_0, \ldots, \delta_n$ that match a path in the machine $\ell_0 \step{\delta_0} \ell_1  \cdots \step{\delta_n} \ell_n$. 
-		
-		After each broadcast of a $\delta_i$, it waits for a message from its predecessor, either $\delta_i$ itself if it is a test or $\overline{\delta_i}$ if it is an increment or decrement ($\overline{\delta_i}$ is an acknowledgement  that $\delta_i$ was executed).
-		Once it reaches a final location, it broadcasts a message  $\mathbf{end}$, waits to receive the same message from its predecessor, and then enters a special state $q_f$ and stops.
-		
-		When a non-leader agent receives a message $\delta$ from its predecessor, if it is an operation it can apply then it does so and broadcasts an acknowledgement $\overline{\delta}$ (for instance if it is an increment $\mathtt{inc_1}$ and it is in state $(\cpt_1, 0)$ it goes to $(\cpt_1, 1)$). 
-		If it is a test $\testz{\cpt_i}$ and it is in state $(\cpt_i, 1)$ then it stops and broadcasts nothing.
-		If it is $\mathbf{end}$ then it forwards it, goes to state $q_f$ and stops.
-		In all other cases it simply forwards the message with its identifier.
-	\end{itemize}
+	Fix a Minsky Machine $M= (\Loc, \Delta, \Cpt, \ell_0, \ell_f)$. We build a "signature protocol" $\prot$ with a state $q_f$ such that $(\prot, q_f)$ is a positive instance of \TARGET if and only if $\ell_f$ is coverable in $M$. 
+	The protocol is represented in Figure~\ref{fig:target-init}. 
+	As in Proposition~\ref{prop:reduction-LCS}, in some initial phase, an agent will pick a predecessor and only listen to this predecessor afterwards. We call \emph{cycle} a sequence of agents $a_1, a_2, \ldots, a_n = a_1$ where agent $a_i$ is the predecessor of $a_{i+1}$ for all $i <n$.
+	Agents in $\prot_{\mathsf{loc}}$ simulate the machine itself while agents in $\prot_{\mathsf{count}}$ simulate counter values. The messages circulating in a cycle contain either a transition $\delta \in \Delta$ or an acknowledgement $\overline{\delta}$ with $\delta \in \Delta$. 
+	An agent $a$ in $\prot_{\mathsf{count}}$ will first pick which counter $\cpt_i$ it simulates, going to state $(\cpt_i,0)$. If $a$ is in ($\cpt_i,0)$ and receives $\delta$ corresponding to an increment of $\cpt_i$, it goes to $(\cpt_i,1)$ and broadcast an acknowledgement $\overline{\delta}$, and conversely for decrements. If $\delta$ is a zero-test $\testz{\cpt_i}$ and $a$ is on state $(\cpt_i,1)$ then it stops, making the whole cycle fail. Other messages are rebroadcast as such. 
 
-If the Minsky machine has an accepting run, then we can reach a configuration with all agents in $q_f$: let $M$ be the maximal values of a counter in the accepting run, it suffices to make agents form a single cycle of knowledge with $2M+1$ agents with one leader and $M$ non-leaders for each counter.
-One step of the run is simulated by making the leader choose and broadcast the corresponding transition, then making all members of the cycle receive the message from their predecessor and send one to their successor according to the rules described above. It is easy to show that after the leader receives its nth acknowledgement, the number of agents in state $(\cpt_i, 1)$ is exactly the value of the counter $\cpt_i$ after the nth step of the Minsky machine execution.
-Therefore, as all 0-tests are successful in the run, when the leader broadcasts one over counter $\cpt_i$, all agents of that counter are in state $(\cpt_i, 0)$, hence the message is passed around the cycle and comes back to the leader.
-We made the cycle large enough so that before any increment of $\cpt_i$, there is an agent in state $(\cpt_i, 0)$ which can apply it and send the acknowledgement.
+	An agent $a$ in $\prot_{\mathsf{loc}}$ will start in state $\mathsf{loc}(\ell_0)$. When in state $\mathsf{loc}(\ell)$, it picks and broadcasts a transition $\delta = (\ell, \anact, \ell') \in \Delta$, waits for the acknowledgement $\overline{\delta}$ and goes to $\mathsf{loc}(\ell')$. In the case where $\delta$ is a zero-test, we have $\overline{\delta} = \delta$: there is no need for a distinct acknowledgement because there is no action to perform (if the test fails then no message is transmitted). When in $\mathsf{loc}(\ell_f)$, $a$ broadcasts a special message $\mathsf{end}$ that propagates in the cycle and makes everyone go to $q_f$. 
+	
+	It is quite easy to see that, if $\ell_f$ can be covered in $M$, one can build a run of $\prot$ where all agents end in $q_f$. Let $N$ the highest counter value in the execution of $M$ covering $q_f$. The run of $\prot$ first puts all its agents in the same cycle; exactly one agent $a_\mathsf{lead}$ goes in $\prot_{\mathsf{loc}}$ and $2N$ agents go in $\prot_{\mathsf{count}}$; half of these simulate $\cpt_1$ and half $\cpt_2$, so that the largest counter value is never exceeded. It then suffices to faithfully simulate the execution of $M$ so that $a_\mathsf{lead}$ reaches $\mathsf{loc}(\ell_f)$ and broadcasts $\mathsf{end}$, allowing every agent in $\prot_{\mathsf{count}}$ to get to $q_f$; this propagation stops at the next agent in $\prot_{\mathsf{loc}}$. 
 
-Eventually, the leader reaches $\ell_f$, sends $\mathbf{end}$, which goes around the cycle and comes back to the leader, leaving all agents in state $q_f$.
-
-For the other direction, suppose there is a run of the BNRA with at least one agent, and such that at the end all agents are in $q_f$.
-As each agent must have executed the initialization phase to reach $q_f$, they all have a predecessor. As there are finitely many agents, there is necessarily a cycle of knowledge that is formed. We focus on one cycle of knowledge (any of them is suitable to simulate the machine). Let $a_1, \cdots, a_k$ be the agents of that cycle, $a_i$ being the predecessor of $a_{i+1}$ for all $i \in [1,k-1]$ and $a_k$ being the predecessor of $a_1$. Note that there is at least one leader in the cycle of knowledge, otherwise, no agent sent its value first and the cycle cannot be created. Hence we can assume $a_1$ to be a leader.
-
-An important observation is that in order to reach $q_f$, each agent must send and receive the same number of messages. Furthermore, each agent only receives messages from their predecessor. This means that if we write, for all $i$, $s_i$ and $r_i$ for the number of messages sent and received by $a_i$ during the run, we have $r_1 = s_1 \geq r_2 = s_2 \geq \cdots \geq r_k = s_k \geq r_1$. Hence all $s_i$ and $r_i$ are equal, and in particular every agent of the cycle receives all broadcasts from its predecessor.
-
-In order to reach $q_f$, each leader must receive a sequence of messages matching the acknowledgements of the messages it sent. As all agents of the cycle send and receive the same number of messages, all leaders must follow the same sequence of transitions and receive all the acknowledgements. In particular all 0-tests must succeed, as otherwise the next leader in the cycle would receive less messages than the previous one has sent.
-
-We consider the sequence of transitions $\delta_1, \ldots, \delta_k$ of the Minsky machine described by the sequence of messages sent by $a_1$. Let $a_j$ be the next leader on the cycle (possibly $a_1$ itself if it is the only one). A straightforward induction shows that after $a_1$ receives its nth acknowledgement, the number of agents in state $(\cpt_i, 1)$ in $\set{a_2, \ldots, a_{j-1}}$ is exactly the counter value  of the Minsky machine after applying $\delta_1, \ldots, \delta_n$ (which can be applied as we argued that all 0-tests were successful).
-As $a_1$ reaches $q_f$, the sequence of transitions $\delta_1, \ldots, \delta_k$ must end in $\ell_f$, and is a valid execution of the Minsky machine. This concludes our reduction.
+	For the converse implication, suppose that we have a run $\run$ of $\prot$ where all agents end in $q_f$. There must be a cycle of agents $a_1, \dots, a_n$ in this run. There may have several agents in $\prot_{\mathsf{loc}}$; however, they must all broadcast exactly the same sequence of transitions, otherwise one of them would lack an acknowledgement and would not get to $q_f$. This in particular guarantees that no message is lost in the cycle. Let $a$ be the agent that first reaches $\mathsf{loc}(\ell_f)$ and $a'$ the first agent in $\prot_{\mathsf{loc}}$ after $a$ in the cycle; there are only agents in $\prot_{\mathsf{count}}$ between $a$ and $a'$ in the cycle, we call these agents \emph{intermediate agents}. The intermediate agents faithfully encode the two counters and all decrements and zero-tests pass, otherwise $a'$ would lack an acknowledgement. Therefore, the sequence of transitions of $a$ defines an execution of $M$ that covers $\ell_f$, which concludes the proof.  
 \end{proof}
