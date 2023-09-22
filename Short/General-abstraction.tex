@@ -42,8 +42,15 @@ As a preliminary, we start by defining a notion of "local run" meant to represen
 \subsection{Unfolding Trees}
 \label{sec:unfolding_tree_signature}
 
-We first prove decidability of \COVER for "signature BNRA". Note that, in "signature protocols", the initial values of "reception-only" registers are not relevant as they can never be shared with other agents. When an agent receives a message, it can compare the value of the message only with the ones of previously received messages, \emph{i.e.}, check whether the sender is the same. Therefore, we describe what an agent $a$ needs from other agents as a set of "specifications@@sg" which are words of $\messages^*$. 
-A ""specification@@sg"" $m_1 \cdots m_k \in \messages^*$ is accomplished by an agent if it broadcasts message types $m_1, \dots, m_k$ in this order. 
+We first prove decidability of \COVER for "signature BNRA". Note that, in "signature protocols", the initial values of "reception-only" registers are not relevant as they can never be shared with other agents. From this, we deduce the following informal observation:
+\begin{observation}
+\label{obs:sg_reception} 
+When some agent $a$ receives a message, it can compare the value of the message only with the ones of previously received messages, \emph{i.e.}, check whether the sender is the same.
+\end{observation}
+
+Our aim is to understand what agent $a$ needs from other agents in order to perform some "local run" $u$ but in an actual "run". For this, $a$ needs to have its receptions matched with broadcasts. Because of Observation\ref{obs:sg_reception}, what matters is not the actual values of the receptions in $u$ but which ones are equal to which.  Therefore, for a given value $v$ received in $u$, if $m_1 \dots m_k \in \messages^*$ denotes the message types received in $u$ with value $v$, what $a$ needs is that some other agent $a'$ broadcasts all messages types from $m_1$ to $m_k$ in this order.   \nico{modif ici, a relire}
+Therefore, we describe what an agent needs from other agents as a set of "specifications@@sg" which are words of $\messages^*$. 
+% A ""specification@@sg"" $m_1 \cdots m_k \in \messages^*$ is accomplished by an agent if it broadcasts message types $m_1, \dots, m_k$ in this order. 
 To represent runs, we consider "unfolding trees@@signature" that represent such specifications, dependencies between them and how they are carried out. 
 Because of copycat arguments, we will in fact be able to clone agents so that each agent only accomplishes one task, hence the tree structure.
 An "unfolding tree@@sg" is an abstraction of a "run" into a tree where each node is assigned a "local run" and the "specification@@sg" that it carries out. 
