@@ -134,14 +134,14 @@ We will use the following result, known as the Length function theorem \cite{Sch
 
 
 
-\subsection{Link with LCS}
+\subsection{A Complexity Lower Bound for COVER Using LCS}
 
 ""Lossy channel systems"" ("LCS") are systems where finite-state processes communicate by sending messages from a finite alphabet through lossy FIFO channels. Unlike in the non-lossy case \cite{BZ83}, reachability of a state is decidable for "lossy channel systems" \cite{AbdullaJ1996verif}, but has non-primitive recursive complexity \cite{Schnoebelen2002verifying} and is in fact $\Fcomplexity{\omega^{\omega}}$-complete \cite{ChambartS08ordinal}. 
-By simulating LCS using BNRA, we obtain our $\Fcomplexity{\omega^{\omega}}$ lower bound for \COVER:
+By simulating LCS using BNRA, we obtain our $\Fcomplexity{\omega^{\omega}}$ lower bound for the "coverability problem":
 
 \begin{restatable}{proposition}{propReductionLCS}
 	\label{prop:reduction-LCS}
-	The "coverability problem" for "signature BNRA" is $\Fcomplexity{\omega^\omega}$-hard.
+	\COVER for "signature BNRA" is $\Fcomplexity{\omega^\omega}$-hard.
 \end{restatable}
 \begin{proof}[Proof sketch]
 Given an "LCS" $\los$, we build a "signature protocol" $\prot$ with two registers. 
