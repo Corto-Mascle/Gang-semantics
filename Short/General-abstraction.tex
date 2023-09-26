@@ -69,7 +69,7 @@ a finite tree where nodes $\node$ have three labels:
 Moreover, all nodes $\node$ in $\tree$ must satisfy the three following conditions:
 \begin{enumerate}[label= (\roman*), ref=(\roman*)]
 	\item \label{item:condition1_initial_value_sg} Initial values of $\localrunlabel{\node}$ are never received in $\localrunlabel{\node}$,
-	\item \label{item:condition3_boss_node_sg} $\speclabel{\node} \subword \voutput{\valuelabel{\node}}{\localrunlabel{\node}}$, \emph{(recall that $\subword$ denotes the subword relation)} \nico{rappel subword?}
+	\item \label{item:condition3_boss_node_sg} $\speclabel{\node} \subword \voutput{\valuelabel{\node}}{\localrunlabel{\node}}$, \emph{(recall that $\subword$ denotes the "subword" relation)}
 	\item \label{item:condition2_non_initial_value_sg} For each value $\aval$ received in $\localrunlabel{\node}$, $\node$ has a child $\node'$ s.t. $\vinput{\aval}{\localrunlabel{\node}} \subword \speclabel{\node'}$.
 \end{enumerate}
 

@@ -60,7 +60,7 @@ First, if $\node$ has altitude $\altmax$, then it has no "follower child", hence
 \begin{proof}
 	Let $\altmax$ be the maximal altitude of a node in $\tree$. Consider a branch of $\tree$ reaching altitude $\altmax$; for every $j \in \nset{1}{\altmax}$, let $\node_j$ the first node of this branch to reach altitude $j$. For every $j \geq 1$, $\node_j$ is a "follower nodes" as otherwise its predecessor in the branch would have altitude greater than $j$ hence the branch must have crossed altitude $j$ before.
 	
-	We will bound $\altmax$ using the "Length Function Theorem". For simplicity, we will encode the $\followmessagespec$ part using a fresh character added to our alphabet. This is why we obtain a function in $\Ffunction{w^{\size{\messages}}}$ and not $\Ffunction{w^{\size{\messages}-1}}$; in fact, one could obtain the latter bound using Theorem 5.3. of~\cite{SchmitzS2011upperHigman}, but the proof would be more involved.
+	We will bound $\altmax$ using the "Length function theorem". For simplicity, we will encode the $\followmessagespec$ part using a fresh character added to our alphabet. This is why we obtain a function in $\Ffunction{w^{\size{\messages}}}$ and not $\Ffunction{w^{\size{\messages}-1}}$; in fact, one could obtain the latter bound using Theorem 5.3. of~\cite{SchmitzS2011upperHigman}, but the proof would be more involved.
 
 	Let $\# \notin \messages$ be a fresh letter. For all $i \in \nset{1}{\altmax}$ let $\node'_i = \node_{\altmax - i+1}$ and $w_i = \followlabelword{\node'_{i}} \cdot \# \cdot \followlabelmessage{\node'_{i}} \in (\messages \cup \set{\#})^*$.
 	
