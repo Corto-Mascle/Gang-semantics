@@ -83,7 +83,7 @@ Intuitively, the set $V$ represents values that are already used and therefore c
 	\end{cases}
 	\]
 
-	For every $i \in \nset{0}{(n+1)^{2M}}$\lu{pourquoi ce n'est pas $(n+1)^{4M}$?}, we write $s_i$ the sequence $\delta_{2  M \cdot i+1}, \delta_{2  M \cdot i+2}, \cdots, \delta_{2 M \cdot i+2M}$ and $\Theta_i$ the sequence $\theta_{2  M \cdot i}, \theta_{2 M \cdot i+1}, \cdots, \theta_{2 M \cdot i+2M}$.
+	For every $i \in \nset{0}{(n+1)^{4M}}$, we write $s_i$ the sequence $\delta_{2  M \cdot i+1}, \delta_{2  M \cdot i+2}, \cdots, \delta_{2 M \cdot i+2M}$ and $\Theta_i$ the sequence $\theta_{2  M \cdot i}, \theta_{2 M \cdot i+1}, \cdots, \theta_{2 M \cdot i+2M}$.
 	There are $|\transitions|^{2M}$ possible sequences for $s_i$ and $[\size{\Vinit} +1]^{2M}$ possible sequences for $\Theta_i$.
 	By the pigeonhole principle there exist two indices $i_a, i_b$ such that the sequences $s_{i_a}$ and $s_{i_b}$ are equal and also the sequences $\Theta_{i_a}$ and $\Theta_{i_b}$ are equal (as $|\transitions| (\size{\Vinit}+1) \leq (n+1)^2$ because $n=\size{\prot} -r + \size{\Vinit}$). 
 	There exist two infix "local runs" $\localrun_a: (q_1, \localdata_1) \step{*} (q_2, \localdata_2)$, $\localrun_b: (q_3, \localdata_3) \step{*} (q_4, \localdata_4)$ in $\localrun$ such that $(q_2,\localdata_2)$ appears strictly before $(q_3,\localdata_3)$ in $\localrun$ and $\localrun_a$ and $\localrun_b$ both have the same sequences of transitions, which we call $s$, and of receptions of values from $\Vinit$, which we call $\Theta$.

@@ -126,10 +126,10 @@ Figure~\ref{fig:ex-unfolding-tree-signature} provides an unfolding tree derived 
 	\centering
 	\input{Figures/tree-example-sign}
 	\vspace{-0.5cm}
-	\caption{Example of an unfolding tree derived from $\run$. Grids correspond to "local runs", a row of a grid is a "local configuration". $\atrans_{ij}$ denotes the transition between state $q_i$ and state $q_j$, for example $\atrans_{01} = (q_0, \rec{\exready}{2}{\enregact}, q_1)$. Initial values of "reception-only" registers are irrevelant and written as $\quotemarks{\_}$. Colors of step labels correspond to message types.}
+	\caption{Example of an unfolding tree derived from $\run$. Grids correspond to "local runs", a row of a grid is a "local configuration". $\atrans_{jk}$ denotes the transition between state $q_j$ and state $q_k$, for example $\atrans_{01} = (q_0, \rec{\exready}{2}{\enregact}, q_1)$. Therefore, $\extlabel{\atrans_{jk}}{i}$ exists only if $\atrans$  Initial values of "reception-only" registers are irrevelant and written as $\quotemarks{\_}$. Colors of step labels correspond to message types.}
 	\label{fig:ex-unfolding-tree-signature}
 \end{figure}
-
+\nico{todo caption}
 %We say that an "unfolding tree" $\tau$ ""covers@ut"" a state $q_f$ if the "local run" labeling its root goes through $q_f$. 
 
 \begin{lemma}
