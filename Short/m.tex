@@ -68,10 +68,11 @@ IRISA, Universit\'e de Rennes}
 
 
 	\begin{abstract}
-	We consider the parameterized verification of networks of agents which communicate through (unreliable) broadcasts. In this model, agents have local registers whose values are initially distinct and may therefore be thought of as identifiers.
-	When an agent broadcasts a message, it appends to the message the value stored in one of its registers. Upon reception, an agent can store the received value or test it for equality against one of its own registers. 
+	We consider the parameterized verification of networks of agents which communicate through (unreliable) broadcasts. In this model, agents have local registers whose values are unordered and initially distinct and may therefore be thought of as identifiers.
+	When an agent broadcasts a message, it appends to the message the value stored in one of its registers. 
+	Upon reception, an agent can store the received value or test it for equality against one of its own registers. 
 	We consider the coverability problem, where one asks whether a given state of the system may be reached by at least one agent. We establish that this problem is decidable, although non-primitive recursive. We contrast this with the undecidability of the closely related target problem where all agents must synchronize on a given state. 
-	On the other hand, we show that the coverability problem is \NP-complete when each agent has only one register.
+	On the other hand, we show that the coverability problem is \NP-complete when each agent only has one register.
 	
 	\keywords{Parameterized verification \and Well quasi-orders \and Distributed systems }
 	 

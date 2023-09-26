@@ -43,12 +43,15 @@
 
 %theorems
 \declaretheorem[name=Fact]{fact}
+\declaretheorem[name=Observation]{observation}
 \makeatletter
 \let\c@proposition\c@theorem
 \let\c@corollary\c@theorem
 \let\c@lemma\c@theorem
 \let\c@definition\c@theorem
 \let\c@example\c@theorem
+\let\c@fact\c@theorem
+\let\c@observation\c@theorem
 \makeatother
 
 
@@ -226,7 +229,7 @@
 \newcommand{\Cpt}{\ensuremath{\mathtt{X}}}
 \newcommand{\dec}[1]{\ensuremath{\mathtt{#1}-}}
 \newcommand{\inc}[1]{\ensuremath{\mathtt{#1}+}}
-\newcommand{\testz}[1]{\ensuremath{\mathtt{#1}=0}}
+\newcommand{\testz}[1]{\ensuremath{\mathtt{#1}=0?}}
 \newcommand{\stepMM}[1]{\xrightarrow{#1}}
 \newcommand{\altitude}[1]{\mathbf{alt}(#1)}
 \newcommand{\altmax}{\mathbf{altmax}}
@@ -327,6 +330,13 @@
 	\node[] (reg2) at (#1 +0.5 ,#2 + 0.25 -1) {#6};
 %	\node[] (reg3) at (#1 +0.5 ,#2 + 0.25 -1.5) {#8};
 }
+
+%skulls are cool
+\usepackage{skull}
+\usetikzlibrary{backgrounds}
+
+%cref
+\creflabelformat{listlem}{#2\thethm.#1#3}
 
 %quotes in math mode
 \DeclareMathSymbol{\mlq}{\mathord}{operators}{``}
