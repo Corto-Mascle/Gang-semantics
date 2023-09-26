@@ -9,7 +9,9 @@ In this section, we prove that we can obtain a computable bound, in complexity c
 \end{restatable}
 \begin{proof}
 Let $f_0: k \mapsto (\towerfun(k,k) (k^2 +2))^{k+1}$. Also, let $N := \size{\prot}$.
-First, if $\node$ has altitude $\altmax$, then it has no "follower child", hence applying Lemma~\ref{lem:bound-successor-height} with $K=0$ bounds $\size{\node}$ by $\towerfun(\size{\prot},r) \leq \towerfun(N,N) \leq f_0(N)$. Let $\node$ be a node, and suppose that the statement is true for altitudes greater than $\altitude{\node}$. Let $d = \altmax - \altitude{\node}$, $d\geq 1$. Applying Lemma~\ref{lem:bound-successor-height} with $K := f_0(N + d - 1)$ gives: 
+First, if $\node$ has altitude $\altmax$, then it has no "follower child", hence applying Lemma~\ref{lem:bound-successor-height} with $K=0$ bounds $\size{\node}$ by $\towerfun(\size{\prot},r) \leq \towerfun(N,N) \leq f_0(N)$. Let $\node$ be a node, and suppose that the statement is true for altitudes greater than $\altitude{\node}$. ~
+
+Let $d =~\altmax - ~\altitude{\node}$, $d\geq 1$. Applying Lemma~\ref{lem:bound-successor-height} with $K := f_0(N + d - 1)$ gives: 
 \begin{align*}
 \size{\node} \leq \towerfun(N,N) (N^2 K + K + 1) \leq & \towerfun(N+d,N+d) f_0(N+d-1) ((N+d)^2 +2)   \\ \leq & f_0(N+d) 
 \end{align*}
