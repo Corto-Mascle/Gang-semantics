@@ -117,7 +117,7 @@ Figure~\ref{fig:ex-unfolding-tree-signature} provides an unfolding tree derived 
 	We explain why this tree is an "unfolding tree@@sg". Condition \ref{item:condition1_initial_value_sg} is trivially satisfied. 
 	Condition \ref{item:condition3_boss_node_sg} holds at every node because the local run of each node exactly broadcasts the "specification@@sg" of the node. Condition  \ref{item:condition2_non_initial_value_sg} is satisfied at $\node_1$: $\vinput{2}{\localrunlabel{\node_1}}= \exready \cdot \exgotwo = \speclabel{\node_2}$ and $\vinput{3}{\localrunlabel{\node_1}}= \exready \cdot \exgothree = \speclabel{\node_3}$.
 	It is also satisfied at $\node_2$, $\node_3$ and $\node_5$ because their local runs only receive $\exready$ and they each have a child with "specification@@sg" $\exready$. 
-	It is trivially satisfied at $\node_4$ and $\node_6$ as their "local runs" have no reception. \corto{shorten?} 
+	It is trivially satisfied at $\node_4$ and $\node_6$ as their "local runs" have no reception. \corto{shorten?} \nico{plutôt non je dirais}
 	% Values received in $\localrunlabel{\node_1}$ are $x_2$ and $x_3$, hence from condition \ref{item:condition2_non_initial_value_sg}, node $\node_1$ has two children $\node_2$ and $\node_3$. Note that $\vinput{x_2}{\localrunlabel{\node_2}} = \vinput{x_3}{\localrunlabel{\node_3}} = \epsilon$\lu{si on modifie la condition, on peut enlever cette phrase}. As $\spec(\node_1) = \epsilon$, condition \ref{item:condition3_boss_node_sg} is trivially true for $\node_1$. Note that nodes $\node_2$ and $\node_3$ don't receive any message on their respective local runs and so condition \ref{item:condition2_non_initial_value_sg} is trivially true. Furthermore, $\voutput{x_2}{\localrunlabel{\node_2}} = hello \cdot ack = \spec(\node_2)$ and $\voutput{x_3}{\localrunlabel{\node_3}} = hey \cdot ack = \spec(\node_3)$
 \end{example}
 
@@ -126,10 +126,10 @@ Figure~\ref{fig:ex-unfolding-tree-signature} provides an unfolding tree derived 
 	\centering
 	\input{Figures/tree-example-sign}
 	\vspace{-0.5cm}
-	\caption{Example of an unfolding tree derived from $\run$. Grids correspond to "local runs", a row of a grid is a "local configuration". $\atrans_{jk}$ denotes the transition between state $q_j$ and state $q_k$, for example $\atrans_{01} = (q_0, \rec{\exready}{2}{\enregact}, q_1)$. Therefore, $\extlabel{\atrans_{jk}}{i}$ exists only if $\atrans$  Initial values of "reception-only" registers are irrevelant and written as $\quotemarks{\_}$. Colors of step labels correspond to message types.}
+	\caption{Example of an unfolding tree derived from $\run$. Grids correspond to "local runs", a row of a grid is a "local configuration". Transition $\atrans_{ij}$ is the transition between state $q_i$ and state $q_j$, for example $\atrans_{01} = (q_0, \rec{\exready}{2}{\enregact}, q_1)$. If $\atrans$ is a reception of $m\in \messages$, $\extlabel{\atrans}{v}$ corresponds to receiving message $(m,v)$; if $\atrans$ is a broadcast of $m \in \messages$, $\intlabel{\atrans}$ corresponds to broadcasting of $(m,\mathsf{id})$ where $\mathsf{id}$ is the value in the first register of the agent. Initial values of "reception-only" registers are irrevelant and written as $\quotemarks{\_}$. Colors correspond to message types.}
 	\label{fig:ex-unfolding-tree-signature}
 \end{figure}
-\nico{todo caption}
+	\todo{relire cette légende}
 %We say that an "unfolding tree" $\tau$ ""covers@ut"" a state $q_f$ if the "local run" labeling its root goes through $q_f$. 
 
 \begin{lemma}
