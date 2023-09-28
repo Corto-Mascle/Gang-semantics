@@ -9,7 +9,7 @@ Op^{\messages} = \set{\brone{\amessage}, \recone{\amessage}{\dummyact}, \recone{
 \]
 Also, given a "configuration" $\config$, we write $\data{\config}(a)$ for $\data{\config}(a,1)$. 
 
-Given a "run" $\run$, we write $\intro*\agentsof{\run}$ for its set of agents, we define the set of states appearing in it $\intro*\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$  as well as its set of values $\intro*\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
+Given a "run" $\run$, we write $\intro*\agentsof{\run}$ for its set of agents, and we define the set of states appearing in it $\intro*\statesin{\run}:= \set{q \in Q \mid \exists i, \exists a, \st{\config_i}(a) = q}$  as well as its set of values $\intro*\valsof{\run} := \set{\aval \in \nats \mid \exists i,j, a, \data{\config_i}(a,j) = \aval}$.  
 
 First, to simplify the proofs, we eliminate reception transitions with action $\quotemarks{\ne}$. This is feasible as we can execute several copies of a "run" in parallel (with distinct values) so that every broadcast is made in each copy with a different value. Hence if a agent receives a message, it can always receive it with a value different from its own, making disequality tests useless. We can thus replace them with receptions with $\quotemarks{\dummyact}$. 
 
@@ -19,7 +19,7 @@ First, to simplify the proofs, we eliminate reception transitions with action $\
 \subsection{Removing Disequality Tests}
 \label{sec:one-diseq-tests}
 
-We start with a basic observation that adding agents to a configuration cannot decrease the set of reachable configurations.
+We start by formalising the intuition that a configuration contains more agents than another one up to renaming.
 
 
 \begin{definition}
