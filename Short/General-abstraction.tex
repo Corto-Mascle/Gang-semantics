@@ -182,12 +182,18 @@ Let $\towerfun(n,0) = n+1$ and $\towerfun(n,k+1) = \towerfun(n,k) \cdot ({\size{
 We prove by induction on the number $k$ of "active@@sg" registers in $u$  that if $\size{u} >\towerfun(n,k)$ then $u$ can be shortened. 
  
 
-If $k=0$, any state repetition can be removed. Suppose that $\size{u} > \towerfun(n,k+1)$ and that the set $I \subseteq \nats$ of "active@@sg" registers of $u$ is such that $\size{I} = k+1$. If there exists an infix run of $u$ of length $M$ with only $k$ "active@@sg" registers, we shorten $u$ using the induction hypothesis. Otherwise, every sequence of $M$ steps in $u$ has a $\quotemarks{\enregact}$ on every register of $I$. Because there are $\size{\transitions}^M$ such sequences and $\size{\localrun} > M \cdot (\size{\transitions}^M +1)$, one sequence $s \in \transitions^M$ appears twice (disjointly) in $\localrun$: in infix run $u_1$ first, then in infix run $u_2$. We shorten $u$ by removing all steps between $u_1$ and $u_2$ and merging $u_1$ and $u_2$. However, $u_1$ and $u_2$ may differ in terms of values received. To merge them, for each $i \in I$, let $j$ the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$; we replace in $u_1$, from step $j$ onwards, the values of all receptions involving $i$ by the corresponding value $v$ in $u_2$. 
+If $k=0$, any state repetition can be removed. Suppose that $\size{u} > \towerfun(n,k+1)$ and that the set $I \subseteq \nats$ of "active@@sg" registers of $u$ is such that $\size{I} = k+1$. If there exists an infix run of $u$ of length $M$ with only $k$ "active@@sg" registers, we shorten $u$ using the induction hypothesis. Otherwise, every sequence of $M$ steps in $u$ has a $\quotemarks{\enregact}$ on every register of $I$. Because there are $\size{\transitions}^M$ such sequences and $\size{\localrun} > M \cdot (\size{\transitions}^M +1)$, one sequence $s \in \transitions^M$ appears twice (disjointly) in $\localrun$: in infix run $u_1$ first, then in infix run $u_2$. We shorten $u$ by removing all steps between $u_1$ and $u_2$ and merging $u_1$ and $u_2$ (see \cref{fig:proof-pumping-signed}). However, $u_1$ and $u_2$ may differ in terms of values received. To merge them, for each $i \in I$, let $j$ the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$; we replace in $u_1$, from step $j$ onwards, the values of all receptions involving $i$ by the corresponding value $v$ in $u_2$. 
  This guarantees that all equality and disequality tests still pass. However, it could be that, by letting $u'$ the obtained run, we do not have $\vinput{v}{u'} \subword \vinput{v}{u}$ because $v$ appears in $u_1$ on register $i' \ne i$; we circumvent this problem by replacing all appearances of $v$ in $u'$ involving register $i$ by a fresh value $v'$. We then have $\vinput{v'}{u'} \subword \vinput{v}{u}$ and $\vinput{v}{u'} \subword \vinput{v}{u}$. Moreover, $u'$ is shorter than $u$; we conclude by iterating this shortening procedure.
 \end{proof}
 
 % \luin{if we have some place left, fig to explain proof of above lemma?}
 %peu probable qu'on ait la place :(
+\begin{figure}
+	\resizebox*{!}{4.5cm}{
+	\input{Figures/fig-illustration-signed-pumping}
+	}
+	\caption{Illustration of the proof of \cref{lem:towerbound_signature}: $s \in \transitions^{M}$ corresponds to the repeating sequence of transitions of length $M$. We make sure that we shorten the run so the new $\quotemarks{\enregact}$ actions are made on fresh values. If it was not the case on $u_2$ (here for example value $v$ is not fresh as it appeared before in the run), we introduce a new value never seen before (here value $v'$).}\label{fig:proof-pumping-signed}
+\end{figure}
 
 
 
