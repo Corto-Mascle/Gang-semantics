@@ -1,0 +1,4 @@
+\beamer@sectionintoc {1}{Basic model}{3}{0}{1}
+\beamer@sectionintoc {2}{With registers (BNRA)}{13}{0}{2}
+\beamer@sectionintoc {3}{Well quasi-orders}{28}{0}{3}
+\beamer@sectionintoc {4}{Decidability proof}{50}{0}{4}

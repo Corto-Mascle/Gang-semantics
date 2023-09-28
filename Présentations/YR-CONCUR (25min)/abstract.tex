@@ -1,0 +1,154 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheorem{theorem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows, arrows.meta,calc,automata,fit,shapes,positioning}
+\tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append,every state/.style={minimum size=20,inner sep=2}}}
+
+
+\bibliographystyle{plainurl}
+%\usepackage[notion, quotation, silent]{knowledge}
+%remove silent to have knowledge warnings
+%\input{kl}
+
+
+\newcommand{\nats}{\mathbb{N}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\GH}{\mathcal{GH}}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\size}[1]{|#1|}
+\newcommand{\messages}{\mathcal{M}}
+\newcommand{\br}{\mathbf{br}}
+\newcommand{\rec}{\mathbf{rec}}
+\newcommand{\reg}{\hspace{-0.5mm}\square}
+
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem*{metaproblem}{Meta Problem}
+\newtheorem{realproblem}[theorem]{Problem}
+\newtheorem{invariant}{Invariant}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+
+\title{Reconfigurable broadcast networks with registers}
+\author{Lucie Guillou, Corto Mascle, Nicolas Waldburger}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	
+%	\section{Introduction} 
+	\begin{abstract}
+			In reconfigurable broadcast networks, first introduced in \cite{DelzannoSZ2010Adhoc}, each node of the network (or ``agent'') is modeled with a finite-state automaton. Transitions of the automaton execute either an internal action, the broadcast, or the reception of a message taken from a finite alphabet. When an agent broadcasts a message, it is received by all its neighbors, and its set of neighbors evolve in an uncontrollable fashion during the execution (unlike in broadcast networks \cite{BZ83} in which the set of neighbors remains the same throughout the execution). The network is parameterized by the number of processes. Reconfigurable broadcast networks have been widely studied in the past years~\cite{Balasubramanian18, BalasubramanianGW22}, and it is well known that the coverability problem (which asks: given a special state, can we reach a configuration in which one process is in this special state?) is in \textsc{Ptime}.
+		
+		One weakness is that agents are not identified, for this reasons in \cite{DelzannoST13}, a new model was introduced, extending reconfigurable broadcast networks with local registers containing values from an \emph{infinite} alphabet (which can be seen as a set of identifiers). This fits in a family of models with arbitrarily many identified agents~\cite{AbdullaAKR14}. Along with a message, agents can now also send one of their register's value. Upon reception, they can now store or compare the received value attached with the message. We study the coverability problem on this extended model.
+	\end{abstract}
+
+	
+	
+	\begin{definition}
+		A \emph{protocol} with $r$ registers is a tuple $\mathcal{P} = (Q, \Sigma, \Delta, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\Sigma$ a finite set of message types  and $\Delta \subseteq Q \times \mathsf{Op} \times Q$ a finite set of transitions, with a set of operations:\vspace{-0.3cm} \[\mathsf{Op} = \set{\mathbf{br}(m,i), \mathbf{rec}(m,i, \ast), \mathbf{rec}(m,i, \downarrow), \mathbf{rec}(m,i, =),\mathbf{rec}(m,i, \neq) \mid m \in \Sigma, 1 \leq i \leq r}\vspace{-0.3cm}\]
+		Label $\mathbf{br}$ stands for broadcasts and $\mathbf{rec}$ for receptions.
+		
+	\end{definition}
+	
+		
+		A \emph{configuration} is defined as a function $\gamma : \mathbb{A} \to Q \times \nats^{r}$ mapping \emph{agents} from a finite set of agents $\mathbb{A}$ to a state and register values. It is \emph{initial} if all $a \in \mathbb{A}$ are in the initial state $q_0$ and all have distinct values (which should be thought of as identifiers) in their registers. 
+			
+		A \emph{step} of computation is defined when some agent $a$ makes a broadcast $\mathbf{br}(m,i)$ with a message type $m$ and the content of its $i$th register. Each other agent can then either:
+		 do nothing (we assume unreliable communication, so the set of agents receiving a message is arbitrary), or  receive the message with a transition $\mathbf{rec}(m, i, \alpha)$, and:\vspace{-0.3cm}
+				\begin{itemize}
+					\item store the value in its $i$th register if $\alpha = `\downarrow'$,
+					\item check that the value is equal (resp. not equal) to the one in its $i$th register if $\alpha = `='$ (resp. $`\neq'$),
+					\item ignore the value if $\alpha=`*'$.
+				\end{itemize}
+%			\end{itemize}\vspace{-0.3cm}
+	
+	\begin{figure}[h]
+		\centering
+		\begin{minipage}{.47\textwidth}
+		\centering
+		\input{Figures/Predecessor-protocol}
+		\caption{An agent may check that a series of messages have the same value ($\sim$come from the same person).}
+		\label{fig:pred}
+		\end{minipage}%
+		\hfill
+		\begin{minipage}{.47\textwidth}
+		\centering
+		\input{Figures/Successor-protocol}
+		\label{fig:suc}
+		\caption{An agent may confirm reception of a sequence of messages by broadcasting back a message with the sender's identifier.}
+		\end{minipage}
+	\end{figure}
+	
+	
+	The coverability problem asks, given a protocol and a state $q_f$, if there exists a sequence of steps from an initial configuration to a configuration in which at least one agent is in $q_f$. We established the following result.
+	
+	\begin{theorem}
+		The coverability problem is decidable, with non-primitive recursive complexity.
+	\end{theorem}
+
+%\paragraph{Decidablity.}
+The decidability proof uses an abstraction of runs called ``unfolding trees'', with nodes labelled by local runs. The children of a node with a local run $u$ represent the local runs of agents broadcasting the necessary messages to execute $u$.
+We establish a pumping lemma stating that if an agent can send a sequence of $k$ messages, they only require a local run of length bounded by a function of $\size{\mathcal{P}}$ and $k$.
+By applying reduction rules and leveraging well quasi-orders, we can reduce the size of the abstraction and solve the coverability problem. 
+
+However, this comes at a high (non-primitive recursive) computational cost. We show the inevitability of this cost by encoding Lossy Channel Systems, a well-studied model of communicating automata with unreliable channels, into our model (this reduction only uses protocols with two registers).
+Since LCS state reachability has known high complexity lower bounds, these bounds also apply to our problem.
+%The reduction from LCS state reachability to reconfigurable broadcast networks with registers is in \textsc{Ptime}~and yields protocols with two registers.
+	
+%	\begin{theorem}
+%		There is a PTIME reduction from LCS state reachability to reconfigurable broadcast networks with registers.
+%	\end{theorem}
+%	There is a PTIME reduction from LCS state reachability to reconfigurable broadcast networks with registers.
+	
+	We also study protocols with one register, which turn out to be much simpler: an agent cannot simultaneously store its original identifier and the one of another agent. Intuitively, an agent that stores a received value loses its identity and can copied arbitrarily many times.
+	This allows us to solve coverability through a different abstraction. We show that abstract runs can be made short, yielding an NP upper bound.
+	
+	\begin{theorem}
+		The coverability problem is NP-complete for reconfigurable broadcast networks with one register per agent.
+	\end{theorem}
+	
+%	\textbf{To simplify, we assume that agents only broadcast with their original identifiers}
+%	
+%	\begin{definition}
+%		(Informal def) Tree unfolding -> Figure ! (only boss nodes)
+%		Nodes = local runs
+%		Children = sources of messages received
+%	\end{definition} 
+%	
+%	\begin{lemma}
+%		There exists a run covering $q_f$ if and only if there exists a finite tree unfolding whose root covers $q_f$
+%	\end{lemma}
+%	
+%	We want to bound the size of a tree unfolding.
+%	
+%	\begin{remark}
+%		If a descendant broadcasts more than an ancestor, we can shorten the tree.
+%	\end{remark}
+%	
+%	WQO theory tells us that the subword ordering is a wqo and thus that we can bound the size of a tree branch if we can bound its nth node by a function of $n$.
+%	
+%	\begin{lemma}
+%		Local bound + figure
+%	\end{lemma}
+%	
+%	We get the result, but the general case is harder
+%	
+%	(Decidability comes from Cover + Parameterized +  Unreliable broadcasts => Copycat. Target is undecidable)
+	
+	\bibliography{biblio}
+\end{document}

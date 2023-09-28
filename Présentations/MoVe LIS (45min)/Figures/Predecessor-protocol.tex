@@ -1,0 +1,30 @@
+\begin{tikzpicture}[xscale=0.5,node distance=2.1cm,auto, AUT style,>= triangle
+	45]
+	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+	distance=.7cm, initial above]
+	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+	%	distance=.7cm,accepting where =right]
+	
+	\node[state, initial, minimum width=0.1pt] (0) at (0,0) {};
+	\node[state] [below of=0] (y) {};
+	\node[state] [right of=0, xshift=50] (z) {};
+	
+	
+	%	\path[->, bend left=10] 	
+	%	(y) edge node[above] {$\mathbf{br}(b)$} (x)
+	%	;
+	
+	\path[->, loop above] (z) edge node[below right] {$\rec(a, =\reg_2)$} (z);
+	
+	\path[->] 	
+	(0) edge node[left] {$\mathbf{rec}(a, \downarrow \reg_2)$} (y)
+	;
+	
+	
+	
+	\path[->, bend right=10] 	
+	(y) edge node[below right] {$\mathbf{rec}(b, = \reg_2)$} (z)
+	(z) edge node[above] {$\mathbf{rec}(c, = \reg_2)$} (0)
+	;
+	
+\end{tikzpicture}

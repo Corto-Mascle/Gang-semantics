@@ -1,0 +1,35 @@
+\begin{tikzpicture}[node distance=2.1cm,auto,>= triangle
+	45]
+	\tikzstyle{initial}= [initial by arrow,initial text=,initial
+	distance=.7cm, initial above]
+	%	\tikzstyle{accepting}= [accepting by arrow,accepting text=,accepting
+	%	distance=.7cm,accepting where =right]
+	
+	\node[state,initial, minimum width=0.1pt] (0) at (0,0) {};
+	\node[state] [left of=0, xshift=-50] (x) {};
+	\node[state] [below of=0] (y) {};
+	\node[state] [right of=0, xshift=50] (z) {};
+
+%	\onslide<2>{\duck[scale=0.2, xshift=-550pt];
+%	\duck[scale=0.2, xshift=-550pt, yshift=-50pt];
+%	\duck[scale=0.2, xshift=-600pt, yshift=-25pt];}
+	
+	
+   \path[->, bend left=20] (x) edge node[above] {$\mathbf{rec}(b)$} (0);
+	
+	
+	\path[->, bend left=10] 	
+	(y) edge node[above] {$\mathbf{br}(b)$} (x)
+	(0) edge node[above] {$\mathbf{br}(a)$} (x)
+	;
+	
+	\path[->] 	
+	(0) edge node[left] {$\mathbf{rec}(a)$} (y)
+	;
+	
+	
+	\path[->, bend right=10] 	
+	(y) edge node[below right] {$\mathbf{rec}(b)$} (z)
+	(z) edge node[above] {$\mathbf{br}(c)$} (0)
+	;
+\end{tikzpicture}

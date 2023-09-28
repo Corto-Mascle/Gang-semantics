@@ -1,0 +1,8 @@
+\beamer@sectionintoc {1}{Broadcast networks}{4}{0}{1}
+\beamer@subsectionintoc {1}{1}{Basic model}{4}{0}{1}
+\beamer@subsectionintoc {1}{2}{With registers (BNRA)}{13}{0}{1}
+\beamer@sectionintoc {2}{Signature BNRA}{28}{0}{2}
+\beamer@subsectionintoc {2}{1}{Well quasi-orders}{31}{0}{2}
+\beamer@subsectionintoc {2}{2}{Decidability proof}{52}{0}{2}
+\beamer@sectionintoc {3}{General BNRA}{85}{0}{3}
+\beamer@sectionintoc {4}{Complexity bounds}{91}{0}{4}
