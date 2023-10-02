@@ -33,7 +33,7 @@ As a preliminary, we start by defining a notion of "local run" meant to represen
 
 	%Said otherwise, $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$ when an agent in $(q,\localdata)$ may perform $\atrans$ upon receiving a message of type $\amessage$ and of value $\aval$.
 	\AP A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either a "reception step" or an "internal step". 
-	\AP A ""local run"" $\localrun$ is a sequence of "local steps" denoted $(q_0, \nu_0) \step{*} (q, \nu)$. Its "size@@local run" $\size{\localrun}$ is its number of steps. %where $\nu_0$ has distinct values.
+	\AP A ""local run"" $\localrun$ is a sequence of "local steps" denoted $(q_0, \nu_0) \step{*} (q, \nu)$. Its ""size@@localrun"" $\size{\localrun}$ is its number of steps. %where $\nu_0$ has distinct values.
 	A value $\aval \in \nats$ appearing in $\localrun$ is ""initial"" if it appears in $\nu_0$ and ""non-initial"" otherwise. 
 %	The ""input"" of $\localrun$, written $\intro*\Input{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages received in $\localrun$; its ""output"", written $\intro*\Output{\localrun} \in (\messages \times \nats)^*$, is the sequence of messages broadcast in $\localrun$. 
 	% The $\aval$-input $\vinput{\aval}{\localrun}$ (resp. $\val$-output $\voutput{\aval}{\localrun}$) is the sequence containing message types of "reception steps" (resp. broadcast steps) of $\localrun$ with value $\val$. 
@@ -48,12 +48,12 @@ We first prove decidability of \COVER for "signature BNRA". Note that, in "signa
 In "signature BNRA", when some agent receives a message, it can compare the value of the message only with the ones of previously received messages, \emph{i.e.}, check whether the sender is the same.
 \end{observation}
 
-If we want to turn a "local run" $u$ of an agent $a$ into an actual "run", we must match $a$'s receptions with broadcasts. Because of Observation~\ref{obs:sg_reception}, what matters is not the actual values of the receptions in $u$ but which ones are equal to which.  Therefore, for a value $v$ received in $u$, if $m_1 \dots m_k \in \messages^*$ are the message types received in $u$ with value $v$ in this order, we need another agent $a'$ to broadcast all messages types from $m_1$ to $m_k$.  
-Therefore, we describe what an agent needs from other agents as a set of \emph{"specifications@@sg"} which are words of $\messages^*$. 
+If we want to turn a "local run" $u$ of an agent $a$ into an actual "run", we must match $a$'s receptions with broadcasts. Because of Observation~\ref{obs:sg_reception}, what matters is not the actual values of the receptions in $u$ but which ones are equal to which.  Therefore, for a value $v$ received in $u$, if $m_1 \dots m_k \in \messages^*$ are the message types received in $u$ with value $v$ in this order, it means that to execute $u$, $a$ need another agent $a'$ to broadcast messages types $m_1$ to $m_k$, all with the same value.  
+We describe what an agent needs from other agents as a set of \emph{"specifications@@sg"} which are words of $\messages^*$. 
 % A ""specification@@sg"" $m_1 \cdots m_k \in \messages^*$ is accomplished by an agent if it broadcasts message types $m_1, \dots, m_k$ in this order. 
 
 To represent runs, we consider "unfolding trees@@signature" that abstract runs by representing such specifications, dependencies between them and how they are carried out. In this tree, each node is assigned a "local run" and the "specification@@sg" that it carries out. 
-Because of copycat arguments, we will in fact be able to clone agents so that each agent only accomplishes one task, hence the tree structure.
+Because of copycat arguments, we will in fact be able to duplicate agents so that each agent only accomplishes one task, hence the tree structure.
 
 \begin{definition}
 \label{def:unfolding_tree_signature}
@@ -117,7 +117,8 @@ Figure~\ref{fig:ex-unfolding-tree-signature} provides an unfolding tree derived 
 	We explain why this tree is an "unfolding tree@@sg". Condition \ref{item:condition1_initial_value_sg} is trivially satisfied. 
 	Condition \ref{item:condition3_boss_node_sg} holds at every node because the local run of each node exactly broadcasts the "specification@@sg" of the node. Condition  \ref{item:condition2_non_initial_value_sg} is satisfied at $\node_1$: $\vinput{2}{\localrunlabel{\node_1}}= \exready \cdot \exgotwo = \speclabel{\node_2}$ and $\vinput{3}{\localrunlabel{\node_1}}= \exready \cdot \exgothree = \speclabel{\node_3}$.
 	It is also satisfied at $\node_2$, $\node_3$ and $\node_5$ because their local runs only receive $\exready$ and they each have a child with "specification@@sg" $\exready$. 
-	It is trivially satisfied at $\node_4$ and $\node_6$ as their "local runs" have no reception. \corto{shorten?} \nico{plutôt non je dirais}
+	It is trivially satisfied at $\node_4$ and $\node_6$ as their "local runs" have no reception. 
+%	\corto{shorten?} \nico{plutôt non je dirais}
 	% Values received in $\localrunlabel{\node_1}$ are $x_2$ and $x_3$, hence from condition \ref{item:condition2_non_initial_value_sg}, node $\node_1$ has two children $\node_2$ and $\node_3$. Note that $\vinput{x_2}{\localrunlabel{\node_2}} = \vinput{x_3}{\localrunlabel{\node_3}} = \epsilon$\lu{si on modifie la condition, on peut enlever cette phrase}. As $\spec(\node_1) = \epsilon$, condition \ref{item:condition3_boss_node_sg} is trivially true for $\node_1$. Note that nodes $\node_2$ and $\node_3$ don't receive any message on their respective local runs and so condition \ref{item:condition2_non_initial_value_sg} is trivially true. Furthermore, $\voutput{x_2}{\localrunlabel{\node_2}} = hello \cdot ack = \spec(\node_2)$ and $\voutput{x_3}{\localrunlabel{\node_3}} = hey \cdot ack = \spec(\node_3)$
 \end{example}
 
@@ -126,10 +127,10 @@ Figure~\ref{fig:ex-unfolding-tree-signature} provides an unfolding tree derived 
 	\centering
 	\input{Figures/tree-example-sign}
 	\vspace{-0.5cm}
-	\caption{Example of an unfolding tree derived from $\run$. Grids correspond to "local runs", a row of a grid is a "local configuration". Transition $\atrans_{ij}$ is the transition between state $q_i$ and state $q_j$, for example $\atrans_{01} = (q_0, \rec{\exready}{2}{\enregact}, q_1)$. If $\atrans$ is a reception of $m\in \messages$, $\extlabel{\atrans}{v}$ corresponds to receiving message $(m,v)$; if $\atrans$ is a broadcast of $m \in \messages$, $\intlabel{\atrans}$ corresponds to broadcasting of $(m,\mathsf{id})$ where $\mathsf{id}$ is the value in the first register of the agent. Initial values of "reception-only" registers are irrevelant and written as $\quotemarks{\_}$. Colors correspond to message types.}
+	\caption{Example of an unfolding tree derived from $\run$. Grids correspond to "local runs", a column of a grid is a "local configuration". Transition $\atrans_{ij}$ is the transition between state $q_i$ and state $q_j$, for example $\atrans_{01} = (q_0, \rec{\exready}{2}{\enregact}, q_1)$. If $\atrans$ is a reception of $m\in \messages$, $\extlabel{\atrans}{v}$ corresponds to receiving message $(m,v)$; if $\atrans$ is a broadcast of $m \in \messages$, $\intlabel{\atrans}$ corresponds to broadcasting of $(m,\mathsf{id})$ where $\mathsf{id}$ is the value in the first register of the agent. Initial values of "reception-only" registers are irrevelant and written as $\quotemarks{\_}$. Colors correspond to message types.}
 	\label{fig:ex-unfolding-tree-signature}
 \end{figure}
-	\todo{relire cette légende}
+%	\todo{relire cette légende}
 %We say that an "unfolding tree" $\tau$ ""covers@ut"" a state $q_f$ if the "local run" labeling its root goes through $q_f$. 
 
 \begin{lemma}
@@ -244,13 +245,12 @@ In the general case, a new phenomenon appears: an agent may broadcast a value th
 
 % As before, a "boss specification" consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. A "follower specification" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that one must be able to broadcast $\followmessagespec$ with value $v$ after receiving the sequence $\followwordspec$ with value $v$. 
 
-We start with the following observation: if agent $a$ that did not have $v$ initially broadcasts some message $(m,v)$, then afterwards we can assume that we have an unlimited supply of messages $(m,v)$ by cloning $a$ using a "copycat" argument. \nico{todo: etoffer ce concept de copycat}
+A key intuition for this proof is that if an agent that did not have $v$ initially broadcasts some message $(m,v)$, then intuitively we can isolate a subset of agents that did not have $v$ initially but that are able to broadcast $(m,v)$ after receiving a sequence of messages with that value. We can then copy them many times in the spirit of the "copycat principle". Each copy receives the necessary sequence of messages in parallel, and they then provide us with an unbounded supply of messages $(m,v)$. In short, if an agent is able to broadcast $(m,v)$ while not having $v$ as an "initial value", then we can consider that we have an unlimited supply of messages $(m,v)$.
 
 \begin{example}
 
 \label{ex:decomposition}
 Assume that we have three agent $a_1,a_2$ and $a_3$ and let $v$ a value initially in $a_1$. Consider an execution where the following happens with value $v$: $a_1$ broadcasts $\textsf{a} \cdot \textsf{b}$, then $a_2$ broadcasts $\textsf{c}$, then $a_1$ broadcasts $\textsf{a}^3$ then $a_3$ broadcasts $\textsf{b}$. The "follower specification" corresponding to $a_2$'s task must be of the form $(w, \textsf{c})$ where $w \subword \textsf{a} \cdot \textsf{b}$. However, $a_3$'s "follower specification" may be of the form $(w \cdot w', \textsf{c})$ where $w \subword \textsf{a} \cdot \textsf{b}$ and $w' \in \set{\textsf{a},\textsf{c}}^*$ is a subword of $\textsf{a}^3$ enriched with as many $\textsf{c}$ as desired, because $a_2$ may be cloned at will (an arbitrary number of agents can mimick $a_2$'s execution with disjoints set of agents until the frist reception on $v$ $a_2$ performs, all new agents then perform the same reception and go on with their execution on a similar fashion until broadcasting $\textsf{c}$). For example, one could have $w= \textsf{b} $ and $w' = \textsf{c} \cdot \textsf{a} \cdot \textsf{c}^4 \cdot \textsf{a} \cdot \textsf{c}^2$. This idea is formalized in the appendix with the notion of "decomposition"; in this case, the previous condition becomes: $w \cdot w'$ \emph{"admits decomposition"} $(\textsf{a} \cdot \textsf{b}, \textsf{c}, \textsf{a}^3)$.   
-
 \end{example}
 % Therefore, if one later needs an agent to broadcast $(m',v)$ then this agent is allowed  hence from a finite set of message types which can be sent with value $v$, there is an infinite set of possible $\followwordspec$ to chose: if a message $(m, v)$ is sent from the agent with initial value $v$ then the "copycat principle" does not apply, however, if $(m, v)$ is sent from an agent without $v$ as initial value, message type $m$ can appear as many times as one wants in $\followwordspec$ once it has been sent once. 
 %For instance, in the protocol described in \cref{fig:ex1}, message ($m_6, )

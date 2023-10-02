@@ -3,7 +3,8 @@
 
 \subsection{Definitions of the Model}
 A ""Broadcast Network of Register Automata"" ("BNRA") \cite{DelzannoST13} is a model describing broadcast networks of agents with local registers. A finite transition system describes the behavior of an agent; an agent can broadcast and receive messages with integer values, store them in local registers and perform (dis)equality tests. 
-There are arbitrarily many agents. When an agent broadcasts a message, every other agent can receive it, but does not have to do so. \nico{ok formulation?}  
+There are arbitrarily many agents. When an agent broadcasts a message, every other agent may receive it, but does not have to do so. 
+%\nico{ok formulation?}  
 
 \begin{definition}
 	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""message types""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with operations $\operations =$
@@ -83,7 +84,8 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 \begin{remark}
 	\label{rem:copycat-principle}
 	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can build a run in which each agent of $\run$ has  a clone in the same state but with different register values. To obtain this, it suffices to add new agents that mimic $\run$ in parallel of the original agents, with which they will not share any register values.  This property is called ""copycat principle"": if state $q$ is coverable, then for all $n$ there exists an augmented "run" which puts $n$ agents on $q$.
-\nico{extend somewhre to non initial values}
+	
+	
 \end{remark}
 
 	
