@@ -172,45 +172,46 @@ If a "coverability witness" $\tau$ for $(\prot, q_f)$ of minimal size has two no
 Otherwise, replacing the subtree rooted in $\node$ with the one rooted in $\node'$ would contradict minimality of $\tree$.
 \end{proof}
 
-With the previous lemma, we would now like to use the "Length function theorem" to bound the size of $\tree$. However, to do that, we first need a bound on the "size@@treesg" of a node with respect to its parent's "size@@treesg". The following lemma essentially states that the local run of a node may be bounded by a primitive recursive function with respect to the "size@@sg" of its "specification@@sg".
+We would now like to use the "Length function theorem" to bound the height of $\tree$, using the previous lemma. To do so, we need a bound on the "size@@treesg" of a node with respect to its depth. The following lemma allows us to bound the "local run" of an agent between two local configurations: we argue that if the "local run" is long enough we can replace it with a shorter one that can be executed using the same input. This will in turn let us bound the "local run" of a node with respect to the "size@@sg" of its "specification@@sg", which is the first step towards our goal.
 
 \begin{lemma}
 \label{lem:towerbound_signature}
 There exists a primitive recursive function $\towerfun$ such that, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ with $\size{u'} <~\towerfun(\size{\prot},r)$ and for all value $v' \in \nats$, there exists $v \in \nats$ such that  $\vinput{v'}{u'} \subword \vinput{v}{u}$. 
 \end{lemma}
 \begin{proof}
-Let $\towerfun(n,0) = n+1$ and $\towerfun(n,k+1) = \towerfun(n,k) \cdot ({\size{\transitions}}^{\towerfun(n,k)}+1)$ for all $k$. Observe that $\towerfun(n,k)$ is a tower of exponentials of height $k$, which is primitive-recursive although non-elementary. Register $i \geq 2$ is ""active@@sg"" in $u$ if $u$ has some $\quotemarks{\enregact}$ action on register $i$. Let $u$ a "local run", $k$ the number of "active@@sg" registers in $\localrun$, $n := \size{\prot}$ and $M := \towerfun(n,k)$.
+Let $\towerfun(n,0) = n+1$ and $\towerfun(n,k+1) = \towerfun(n,k) \cdot ({\size{\transitions}}^{2\towerfun(n,k)}+1)$ for all $k$. Observe that $\towerfun(n,k)$ is a tower of exponentials of height $k$, which is primitive-recursive although non-elementary. Register $i \geq 2$ is ""active@@sg"" in $u$ if $u$ has some $\quotemarks{\enregact}$ action on register $i$. Let $u$ a "local run", $k$ the number of "active@@sg" registers in $\localrun$, $n := \size{\prot}$ and $M := \towerfun(n,k)$.
 We prove by induction on the number $k$ of "active@@sg" registers in $u$  that if $\size{u} >\towerfun(n,k)$ then $u$ can be shortened. 
  
 
-If $k=0$, any state repetition can be removed. Suppose that $\size{u} > \towerfun(n,k+1)$ and that the set $I \subseteq \nats$ of "active@@sg" registers of $u$ is such that $\size{I} = k+1$. If there exists an infix run of $u$ of length $M$ with only $k$ "active@@sg" registers, we shorten $u$ using the induction hypothesis. Otherwise, every sequence of $M$ steps in $u$ has a $\quotemarks{\enregact}$ on every register of $I$. Because there are $\size{\transitions}^M$ such sequences and $\size{\localrun} > M \cdot (\size{\transitions}^M +1)$, one sequence $s \in \transitions^M$ appears twice (disjointly) in $\localrun$: in infix run $u_1$ first, then in infix run $u_2$. We shorten $u$ by removing all steps between $u_1$ and $u_2$ and merging $u_1$ and $u_2$ (see \cref{fig:proof-pumping-signed}). However, $u_1$ and $u_2$ may differ in terms of values received. To merge them, for each $i \in I$, let $j$ the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$; we replace in $u_1$, from step $j$ onwards, the values of all receptions involving $i$ by the corresponding value $v$ in $u_2$. 
- This guarantees that all equality and disequality tests still pass. However, it could be that, by letting $u'$ the obtained run, we do not have $\vinput{v}{u'} \subword \vinput{v}{u}$ because $v$ appears in $u_1$ on register $i' \ne i$; we circumvent this problem by replacing all appearances of $v$ in $u'$ involving register $i$ by a fresh value $v'$. We then have $\vinput{v'}{u'} \subword \vinput{v}{u}$ and $\vinput{v}{u'} \subword \vinput{v}{u}$. Moreover, $u'$ is shorter than $u$; we conclude by iterating this shortening procedure.
+If $k=0$, any state repetition can be removed. Suppose that $\size{u} > \towerfun(n,k+1)$ and that the set $I$ of "active@@sg" registers of $u$ is such that $\size{I} = k+1$. If there exists an infix run of $u$ of length $M$ with only $k$ "active@@sg" registers, we shorten $u$ using the induction hypothesis. Otherwise, every sequence of $M$ steps in $u$ has a $\quotemarks{\enregact}$ on every register of $I$. Because there are $\size{\transitions}^M$ such sequences and $\size{\localrun} > M \cdot (\size{\transitions}^{2M} +1)$, one sequence $s \in \transitions^{2M}$ appears twice (disjointly) in $\localrun$: in infix run $u_1$ first, then in infix run $u_2$. Furthermore an action $\quotemarks{\enregact}$ is performed on each register in each half of $s$. We shorten $u$ by removing all steps between $u_1$ and $u_2$ and merging $u_1$ and $u_2$ (see \cref{fig:proof-pumping-signed}). To merge them, for each $i \in I$, let $j$ the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$; we replace in $u_1$, from step $j$ onwards, the values of all receptions involving $i$ by the corresponding value $v$ in $u_2$. 
+ This guarantees that all equality and disequality tests still pass. However, it could be that, by letting $u'$ the obtained run, we do not have $\vinput{v}{u'} \subword \vinput{v}{u}$ because $v$ appears in $u_1$ on several registers: observe that in \cref{fig:proof-pumping-signed}, if $v_1 = v_2$ then the shortening operation may interleave the receptions of messages with that value in the two run segments, then we may not have $\vinput{v_1}{u'} \subword \vinput{v_2}{u}$. This is why we made sure every register was renewed \textbf{twice}. We replace all values appearing between the first and last $\quotemarks{\enregact}$ with distinct fresh values. We then have $\vinput{v}{u'} \subword \vinput{v}{u}$ for every value that appeared in $u$ and for all fresh values $v'$ there is a $v$ such that $\vinput{v'}{u'} \subword \vinput{v}{u}$. Moreover, $u'$ is shorter than $u$; we conclude by iterating this shortening procedure.
 \end{proof}
 
 % \luin{if we have some place left, fig to explain proof of above lemma?}
 %peu probable qu'on ait la place :(
 \begin{figure}
 	\resizebox*{!}{4.5cm}{
-	\input{Figures/fig-illustration-signed-pumping}
+	\input{Figures/fig-illustration-signed-pumping-v2}
 	}
 	\caption{Illustration of the proof of \cref{lem:towerbound_signature}: $s \in \transitions^{M}$ corresponds to the repeating sequence of transitions of length $M$. We make sure that we shorten the run so the new $\quotemarks{\enregact}$ actions are made on fresh values. If it was not the case on $u_2$ (here for example value $v$ is not fresh as it appeared before in the run), we introduce a new value never seen before (here value $v'$).}\label{fig:proof-pumping-signed}
 \end{figure}
 
 
 
-Using the previous lemma, we may bound the size of a node in $\tree$.
+Using the previous lemma, we may bound the size of a node in $\tree$: we bound the "size@@localrun" of its "local run" with respect to the one of its "specification", and then bound its specification with respect to the size of its father, if it exists. Thanks to this lemma. we will be able to bound the size of a node with respect to its depth, by induction. We will then apply the "Length function theorem" to bound the height of the tree, and then its total size. 
 
 \begin{lemma}
 \label{lem:bounds_tree_sg}
-For every node $\node, \node'$ in $\tree$: \begin{enumerate}
-\item \label{item:bound_node_1_sg} $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}, r) (\size{\speclabel{\node}}+1)$,
-\item \label{item:bound_node_2_sg} if $\node$ is the child of $\node'$, $\size{\speclabel{\node}} \leq \towerfun(\size{\prot}, r) \, (\size{\speclabel{\node'}}+1)$,
-\item \label{item:bound_node_3_sg} if $\node$ is the child of $\node'$, $\size{\node} \leq (\size{\node'}+1) \, (\towerfun(\size{\prot},r)+1)$.
+For all nodes $\node, \node'$ in $\tree$: \begin{enumerate}
+\item \label{item:bound_node_1_sg} $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}, r)+1) \size{\speclabel{\node}}$,
+\item \label{item:bound_node_2_sg} if $\node$ is the child of $\node'$, $\size{\speclabel{\node}} \leq (\towerfun(\size{\prot}, r)+1) \, \size{\speclabel{\node'}}$,
+%\item \label{item:bound_node_3_sg} if $\node$ is the child of $\node'$, $\size{\node} \leq (\size{\node'}+1) \, (\towerfun(\size{\prot},r)+1)$.
 \end{enumerate} 
 \end{lemma}
 \begin{proof}
-For \ref{item:bound_node_1_sg}, if $\node$ is not at the root, we identify in $\localrunlabel{\node}$ the broadcasts witnessing $\speclabel{\node}$ and shorten the "local run" between these steps using Lemma~\ref{lem:towerbound_signature}. The node $\node_r$ at the root of $\tree$ has empty "specification" by minimality of $\tree$ but must cover $q_f$ hence $\size{\localrunlabel{\node_r}} \leq \towerfun(\size{\prot},r)$ thanks to Lemma~\ref{lem:towerbound_signature} and \ref{item:bound_node_1_sg} also holds.
-For \ref{item:bound_node_2_sg}, we observe that, by minimality of $\tree$, $\size{\speclabel{\node}} \leq \max_{v \in \nats} \size{\vinput{v}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}}$ and apply \ref{item:bound_node_1_sg}. For \ref{item:bound_node_3_sg}, we use $\size{\node} = \size{\speclabel{\node}} + \size{\localrunlabel{\node}}$ and combine \ref{item:bound_node_1_sg} and \ref{item:bound_node_2_sg}.  
+For \ref{item:bound_node_1_sg}, if $\node$ is not the root, we identify in $\localrunlabel{\node}$ the broadcasts witnessing $\speclabel{\node}$ and shorten the "local run" between these steps using Lemma~\ref{lem:towerbound_signature}. We can also remove the suffix after the last of these broadcasts. The node $\node_r$ at the root of $\tree$ has empty "specification" by minimality of $\tree$ but must cover $q_f$ hence $\size{\localrunlabel{\node_r}} \leq \towerfun(\size{\prot},r)$ thanks to Lemma~\ref{lem:towerbound_signature}, proving \ref{item:bound_node_1_sg}.
+For \ref{item:bound_node_2_sg}, we observe that, by minimality of $\tree$, $\size{\speclabel{\node}} \leq \max_{v \in \nats} \size{\vinput{v}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}}$ and apply \ref{item:bound_node_1_sg}. 
+%For \ref{item:bound_node_3_sg}, we use $\size{\node} = \size{\speclabel{\node}} + \size{\localrunlabel{\node}}$ and combine \ref{item:bound_node_1_sg} and \ref{item:bound_node_2_sg}.  
 \end{proof}
 
 
@@ -221,9 +222,9 @@ There exists a function $h$ of class $\Ffunction{\omega^{\size{\messages}-1}}$ s
 \begin{proof}
 Let $n := \size{\prot}$, let $r+1$ be the number of registers in $\prot$. Thanks to Lemma~\ref{lem:no_subword_in_branch_sg}, for all $\node \ne \node'$ in 
 $\tree$ with $\node$ ancestor of $\node'$, $\speclabel{\node}$ is not a subword of $\speclabel{\node'}$.  Let $\node_1, \dots, \node_m$ the node appearing in a branch of $\tree$, from root to leaf. The sequence $\speclabel{\node_1}, \dots, \speclabel{\node_m}$ is a "bad sequence".
-For all $i \in \nset{1}{m}$, $\size{\speclabel{\node_{i+1}}}  \leq \towerfun(n,r) \, (\size{\speclabel{\node_i}}+1)$ by Lemma~\ref{lem:bounds_tree_sg}. By direct induction, $\size{\speclabel{\node_i}}$ is bounded by $g^{(i)}(n)$ where $g: n \mapsto (n+1)  \, \towerfun(n,n)$ is a primitive-recursive function. Let $h$ of class $\Ffunction{\omega^{\size{\messages}-1}}$ the function obtained when applying the "Length function theorem" on $g$ and $\messages$; we have $m \leq h(n)$. 
+For all $i \in \nset{1}{m}$, $\size{\speclabel{\node_{i+1}}}  \leq (\towerfun(n,r)+1) \, \size{\speclabel{\node_i}}$ by Lemma~\ref{lem:bounds_tree_sg}. By direct induction, $\size{\speclabel{\node_i}}$ is bounded by $g^{(i)}(n)$ where $g: n \mapsto (n+1)  \, \towerfun(n,n)$ is a primitive-recursive function. Let $h$ of class $\Ffunction{\omega^{\size{\messages}-1}}$ the function obtained when applying the "Length function theorem" on $g$ and $\messages$; we have $m \leq h(n)$. 
 
-By immediate induction, thanks to Lemma~\ref{lem:bounds_tree_sg}, any node $\node$ at depth $d$ has size bounded by $(\towerfun(n,r)+2)^{d+1}$, which bounds the size of every node by $h'(n) = (\towerfun(n,n)+2)^{h(n) + 1}$. 
+By immediate induction, thanks to the second item of Lemma~\ref{lem:bounds_tree_sg}, any node $\node$ at depth $d$ is such that $\size{\speclabel{\node_i}} \leq (\towerfun(n,r)+1)^{d+1}$, which, using the first item of Lemma~\ref{lem:bounds_tree_sg}, bounds the size of every node by $h'(n) = (\towerfun(n,n)+1)^{h(n) + 2}$. 
 % (initialization thanks to Lemma~\ref{lem:towerbound_signature}). 
 By minimality of $\tree$, the number of children of a node is bounded by the number of values appearing in its "local run" hence by $h'(n)$, so the total number of nodes in $\tree$ is bounded by $h'(n)^{h(n)+1}$ and the "size@@treesg" of $\tree$ by $f(n) := h'(n)^{h(n)+2}$. Because $\Ffunction{\omega^{\size{\messages}-1}}$ contains all primitive-recursive functions and is closed under multiplication and exponentiation, $f$ is in $\Ffunction{\omega^{\size{\messages}-1}}$.
 \end{proof}

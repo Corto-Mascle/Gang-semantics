@@ -1,0 +1,147 @@
+
+\usetikzlibrary{calc,shapes.arrows,decorations.pathreplacing, patterns}
+
+\begin{tikzpicture}
+	
+	
+	
+	\node at (3.5,1) [align = center] {Original \\ local run};
+	
+	%	\draw[decorate,decoration={brace,raise=0.1cm}] (7,2.2) -- (10, 2.2) ;	
+	
+	
+	\node at (5,1.2) {reg $2$};
+	\node at (5,0.7) {reg $3$};
+	\node at (5,0.2) {reg $4$};
+	\draw (5.5,0) rectangle (10.9,0.5);
+	\draw (5.5,0.5) rectangle (10.3,1);
+	\draw (5.5,1) rectangle (10.3,1.5);
+	
+	
+	
+	\draw[white,fill=blue!20] (7,0) rectangle (10,1.5);
+	\draw[white,fill=green!20] (11.5,0) rectangle (14.5,1.5);
+	
+	\draw[white,fill=blue!30] (7,0) rectangle (7.5,0.5);
+	\draw[white,fill=blue!40] (7.5,0) rectangle (8.8,0.5);
+	%	\node at (8.15,0.2) {$v$};
+	\draw[white,fill=blue!45] (8.8,0) rectangle (10,0.5);
+	\draw (5.5,0) rectangle (6.5,0.5);
+	\draw (5.5,0) rectangle (7.5,0.5);
+	\draw (5.5,0) rectangle (8.8,0.5);
+	
+	\draw[white,fill=green!20] (11.5,0) rectangle (12,0.5);
+	\draw[white,fill=green!40] (12,0) rectangle (13.3,0.5);
+	\node at (12.65,0.2) {$v_2$};
+	\draw[white,fill=green!57] (13.3,0) rectangle (14.5,0.5);
+	\draw (5.5,0) rectangle (12,0.5);
+	\draw (5.5,0) rectangle (13.3,0.5);
+	
+	\draw[white,fill=blue!50] (7,0.5) rectangle (7.7,1);
+	\draw[white,fill=blue!20] (7.7,0.5) rectangle (9.4,1);
+	\draw[white,fill=blue!35] (9.4,0.5) rectangle (10,1);
+	\draw (5.5,0.5) rectangle (5.8,1);
+	\draw (5.8,0.5) rectangle (6.8,1);
+	\draw (5.5,0.5) rectangle (7.7,1);
+	\draw (5.5,0.5) rectangle (9.4,1);
+	
+	\draw[white,fill=green!70] (11.5,0.5) rectangle (12.2,1);
+	\draw[white,fill=green!20] (12.2,0.5) rectangle (13.9,1);
+	\draw[white,fill=green!40] (13.9,0.5) rectangle (14.5,1);
+	\draw (5.5,0.5) rectangle (12.2,1);
+	\draw (5.5,0.5) rectangle (13.9,1);
+	
+	\draw[white,fill=blue!35] (7,1) rectangle (8.1,1.5);
+	\draw[white,fill=blue!55] (8.1,1) rectangle (9.5,1.5);
+	\draw[white,fill=blue!25] (9.5,1) rectangle (10,1.5);
+	\draw (5.5,1) rectangle (6.7,1.5);
+	\draw (5.5,1) rectangle (8.1,1.5);
+	\draw (5.5,1) rectangle (9.5,1.5);
+	
+	\draw[white,fill=green!37] (11.5,1) rectangle (12.6,1.5);
+	\draw[white,fill=green!60] (12.6,1) rectangle (14,1.5);
+	\draw[white,fill=green!25] (14,1) rectangle (14.5,1.5);
+	\draw (5.5,1) rectangle (12.6,1.5);
+	\draw (5.5,1) rectangle (14,1.5);
+	\draw (5.5,1) rectangle (14.7,1.5);
+	\node at (7.4,1.2) {$v_1$};
+	
+	
+	\node at (7.3,2) [align = center] {$\quotemarks{\enregact}$ actions};
+	\draw[->] (6.7,1.8) -- (6.7,1.6);
+	\draw[->] (8.1,1.8) -- (8.1,1.6);
+	
+	
+	
+	%	\draw[<->] (8.5, 1.7) -- (13,1.7);
+	%	\node[align = center] at (10.75,1.9) {removed part};
+	%	
+	%	\draw[dashed] (8.5,0) -- (8.5,1.55);
+	%	\draw[dashed] (13,0) -- (13,1.55);
+	%	
+	
+	\begin{scope}[xshift = 2cm, yshift = 0.5cm]
+		
+		\node at (3.5, -2) [align = center] {Shortened \\ local run};
+		\node at (5,-1.8) {reg $2$};
+		\node at (5,-2.3) {reg $3$};
+		\node at (5,-2.8) {reg $4$};
+		\draw[<->] (7,-1.3) -- (10,-1.3);
+		\node at (8.5, -1.1) {$s$};
+		\draw[white,fill=blue!30] (7,-3) rectangle (7.5,-2.5);
+		\draw[white,pattern=north west lines, pattern color=green] (7.5,-3) rectangle (8.8,-2.5);
+		
+		\node at (8.15,-2.75) {$v_2'$};
+		\draw[white,fill=green!57] (8.8,-3) rectangle (10,-2.5);
+		
+		\draw[white,fill=blue!50] (7,-2.5) rectangle (7.7,-2);
+		\draw[white,,pattern=north west lines, pattern color=green!30!black] (7.7,-2.5) rectangle (9.4,-2);
+		\draw[white,fill=green!40] (9.4,-2.5) rectangle (10,-2);
+		
+		\draw[white,fill=blue!35] (7,-2) rectangle (8.1,-1.5);
+		\draw[white,fill=green!55,pattern=north west lines, pattern color=green!60!black] (8.1,-2) rectangle (9.5,-1.5);
+		\draw[white,fill=green!25] (9.5,-2) rectangle (10,-1.5);
+		
+		
+		\draw[white] (7, -1.5) rectangle (10.5, -1.5);
+		
+		\node at (8.5, -3.5) {fresh values};
+		\draw[->] (8.7,-3.3) -- (8.7,-1.75);
+		\draw[->] (8.6,-3.3) -- (8.6,-2.25);
+		\draw[->] (8.5,-3.3) -- (8.5,-2.75);
+		%		\draw[->] (8.4,-3.3) -- (8.4,-1.25);
+		%		\draw[dashed] (8.5,-3) -- (8.5,-1.4);
+		
+		\draw (5.5,-3) rectangle (10.5,-2.5);
+		\draw (5.5,-3) rectangle (10.5,-2);
+		\draw (5.5,-3) rectangle (10.5,-1.5);
+		%		\draw (6,-3) rectangle (10.5,-1);
+		
+		\draw (5.5,-3) rectangle (6.5,-2.5);
+		\draw (5.5,-3) rectangle (7.5,-2.5);
+		\draw (5.5,-3) rectangle (8.8,-2.5);
+		
+		\draw (5.5,-2.5) rectangle (7.7,-2);
+		\draw (5.5,-2.5) rectangle (9.4,-2);
+		
+		\draw (5.5,-2) rectangle (6.7,-1.5);
+		\draw (5.5,-2) rectangle (8.1,-1.5);
+		\draw (5.5,-2) rectangle (9.5,-1.5);
+		\draw (5.5,-2) rectangle (10.2,-1.5);
+		
+		\draw (5.8,-2.5) rectangle (6.8,-2);
+		\node at (7.4,-1.8) {$v_1$};
+		
+	\end{scope}
+	
+	\draw (5.5,0) rectangle (15,0.5);
+	\draw (5.5,0) rectangle (15,1);
+	\draw (5.5,0) rectangle (15,1.5);
+	\draw (5.5,0) rectangle (15,1.5);
+	
+	\draw[<->] (7,-0.2) -- (10,-0.2);
+	\draw[<->] (11.5,-0.2) -- (14.5,-0.2);
+	
+	\node (s1) at (8.5,-0.4) {$s$};
+	\node (s2) at (13,-0.4) {$s$};
+\end{tikzpicture}
