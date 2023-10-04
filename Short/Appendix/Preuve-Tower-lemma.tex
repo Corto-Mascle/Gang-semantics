@@ -1,10 +1,15 @@
 \section{Generalization of Lemma~\ref{lem:towerbound_signature}}
 \label{app:tower-lemma}
 		
-	The generalization of Lemma~\ref{lem:towerbound_signature} is the following: 
+%	The generalization of Lemma~\ref{lem:towerbound_signature} is the following: 
 	\begin{restatable}{lemma}{lemShortLocalRuns}
-		\label{lem:short-local-runs}
-		There exists a primitive recursive function $\towerfun(n,r)$ such that, for every "protocol" with $r$ registers, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ such that $\size{u'} < \towerfun(\size{\prot},r)$ and for all value $v \in \nats$,  $\vinput{v}{u'} \subword \vinput{v}{u}$. 
+	\label{lem:short-local-runs}
+		There exists a primitive recursive function $\towerfun$ such that, for every protocol $\prot$ with $r$ registers per agent, 
+		for every "local runs" $\localrun_0: (q_0, \localdata_0) \step{*} (q, \localdata)$, $\localrun: (q, \localdata) \step{*} (q', \localdata')$, $\localrun_f: (q', \localdata') \step{*} (q_f, \localdata_f)$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ with $\size{\localrun} \leq \towerfun(\size{\prot} ,r)$ and for all $\aval' \in \nats$: 
+		\begin{enumerate}
+			\item if $\aval'$ appears in $\localrun_0$, $\localrun$, or $\localrun_{f}$, $\vinput{\aval'}{\localrun'} \subword \vinput{\aval'}{\localrun}$,
+			\item  otherwise, there exists $\aval \in \nats$ such that $\aval$ is not "initial" in $u_0$ and $\vinput{\aval'}{\localrun'} \subword \vinput{\aval}{\localrun}$.
+		\end{enumerate}
 	\end{restatable}
 	The function $\towerfun$ is actually not the same as in Lemma~\ref{lem:towerbound_signature} although it is also a tower of exponentials.
 	
@@ -29,7 +34,7 @@
 
 %\lemShortLocalRuns*
 
-We actually prove a more general version of the lemma. The previous lemma can be obtained simply by applying the following one with $W$ the set of "initial" values of $\localrun_0$ ($W$ then contains $r$ values).
+We actually prove a more general version of the lemma. The previous lemma can be obtained simply by applying the following one with $W$ the set of "initial" values of $\localrun_0$ ($W$ then contains $r$ values) and $V$ the set of values appearing in $u_0$, $u$ or $u_f$.
 
 \begin{lemma}
 	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun'} \leq \towerfun(\size{\prot} -r + \size{\Vinit},r)$ and:
@@ -39,7 +44,7 @@ We actually prove a more general version of the lemma. The previous lemma can be
 	\end{enumerate}
 \end{lemma}
 
-Intuitively, the set $V$ represents values that are already used and therefore cannot be used as fresh values, and $\Vinit$ represents values that should not be copied (\emph{e.g.}, initial values of the run). However, stating the lemma only with $\Vinit$ equal to the initial values in $u$ would not allow us to apply the Lemma on $u$ an infix "local run" of a larger "local run" $u'$, because the initial values in $u$ would not correspond to the ones in $u'$. This is why we state the lemma for every $W \subseteq V$.  
+Intuitively, the set $V$ represents values that are already used and therefore cannot be used as fresh values, and $\Vinit$ represents values that should not be copied (\emph{e.g.}, initial values of the run). However, stating the lemma only with $\Vinit$ equal to the initial values in $u$ would not allow us to apply the lemma on $u$ an infix "local run" of a larger "local run" $u'$, because the initial values in $u$ would not correspond to the ones in $u'$. This is why we state the lemma for every $W \subseteq V$.  
 
 \begin{figure}[h]
 	\input{Figures/fig-illustration-pumping}
@@ -141,7 +146,7 @@ Intuitively, the set $V$ represents values that are already used and therefore c
 	
 	We build a "local run" of length less that $\towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup X$ where $X$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
 	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot}-r + \size{\Vinit},\regnum)$, which concludes the proof of the lemma. 
-	\nico{la longueur et la technicité de cette preuve me désespèrent (et risquent aussi de désespérer les reviewers zélés) mais je ne vois pas trop ce qu'on peut y faire}
+%	\nico{la longueur et la technicité de cette preuve me désespèrent (et risquent aussi de désespérer les reviewers zélés) mais je ne vois pas trop ce qu'on peut y faire}
 \end{proof}
 
 %We now prove the following, stronger version of Lemma~\ref{lem:short-run-for-output}.

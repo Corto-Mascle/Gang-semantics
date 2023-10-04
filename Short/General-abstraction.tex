@@ -49,7 +49,7 @@ In "signature BNRA", when some agent receives a message, it can compare the valu
 \end{observation}
 
 If we want to turn a "local run" $u$ of an agent $a$ into an actual "run", we must match $a$'s receptions with broadcasts. Because of Observation~\ref{obs:sg_reception}, what matters is not the actual values of the receptions in $u$ but which ones are equal to which.  Therefore, for a value $v$ received in $u$, if $m_1 \dots m_k \in \messages^*$ are the message types received in $u$ with value $v$ in this order, it means that to execute $u$, $a$ need another agent $a'$ to broadcast messages types $m_1$ to $m_k$, all with the same value.  
-We describe what an agent needs from other agents as a set of \emph{"specifications@@sg"} which are words of $\messages^*$. 
+We describe what an agent needs from other agents as a set of ""specifications@@sg"" which are words of $\messages^*$. 
 % A ""specification@@sg"" $m_1 \cdots m_k \in \messages^*$ is accomplished by an agent if it broadcasts message types $m_1, \dots, m_k$ in this order. 
 
 To represent runs, we consider "unfolding trees@@signature" that abstract runs by representing such specifications, dependencies between them and how they are carried out. In this tree, each node is assigned a "local run" and the "specification@@sg" that it carries out. 
@@ -157,16 +157,16 @@ Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{
 
 
 	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure.
-	 Observe that the "unfolding tree" $\tree$  is a "coverability witness" for $q_4$. However, one can find a smaller "coverability witness". 
-	Indeed, in the right branch of $\tree$, $\node_5$ and $\node_6$ have the same "specification@@sg", therefore $\node_5$ can be deleted and replaced with $\node_6$. In fact, we would have also been able to shorten the tree if we only had $\speclabel{\node_5} \subword \speclabel{\node_6}$; we will use this argument to bound the size of the smallest "coverability witness".   
+	 Observe that the "unfolding tree" $\tree$  is a "coverability witness@@sg" for $q_4$. However, one can find a smaller "coverability witness@@sg". 
+	Indeed, in the right branch of $\tree$, $\node_5$ and $\node_6$ have the same "specification@@sg", therefore $\node_5$ can be deleted and replaced with $\node_6$. In fact, we would have also been able to shorten the tree if we only had $\speclabel{\node_5} \subword \speclabel{\node_6}$; we will use this argument to bound the size of the smallest "coverability witness@@sg".   
 
 \subsubsection{Bounding the Size of the Unfolding Tree}
-In all the following, we fix a positive instance $(\prot,q_f)$ of \COVER with $r+1$ registers (\emph{i.e.}, $r$ registers used for reception) and a  "coverability witness" $\tree$ of minimal size.
-The following observation will be useful towards bounding the length of branches of a coverability witness:
+In all the following, we fix a positive instance $(\prot,q_f)$ of \COVER with $r+1$ registers (\emph{i.e.}, $r$ registers used for reception) and a  "coverability witness@@sg" $\tree$ of minimal size.
+The following observation will be useful towards bounding the length of branches of a "coverability witness@@sg":
 
 \begin{lemma}
 \label{lem:no_subword_in_branch_sg}
-If a "coverability witness" $\tau$ for $(\prot, q_f)$ of minimal size has two nodes $\node, \node'$ with $\node$ a strict ancestor of $\node'$ then  $\speclabel{\node}$ cannot be a subword of $\speclabel{\node'}$. 
+If a "coverability witness@@sg" $\tau$ for $(\prot, q_f)$ of minimal size has two nodes $\node, \node'$ with $\node$ a strict ancestor of $\node'$ then  $\speclabel{\node}$ cannot be a subword of $\speclabel{\node'}$. 
 \end{lemma}
 \begin{proof}
 Otherwise, replacing the subtree rooted in $\node$ with the one rooted in $\node'$ would contradict minimality of $\tree$.
@@ -226,7 +226,7 @@ For all $i \in \nset{1}{m}$, $\size{\speclabel{\node_{i+1}}}  \leq (\towerfun(n,
 
 By immediate induction, thanks to the second item of Lemma~\ref{lem:bounds_tree_sg}, any node $\node$ at depth $d$ is such that $\size{\speclabel{\node_i}} \leq (\towerfun(n,r)+1)^{d+1}$, which, using the first item of Lemma~\ref{lem:bounds_tree_sg}, bounds the size of every node by $h'(n) = (\towerfun(n,n)+1)^{h(n) + 2}$. 
 % (initialization thanks to Lemma~\ref{lem:towerbound_signature}). 
-By minimality of $\tree$, the number of children of a node is bounded by the number of values appearing in its "local run" hence by $h'(n)$, so the total number of nodes in $\tree$ is bounded by $h'(n)^{h(n)+1}$ and the "size@@treesg" of $\tree$ by $f(n) := h'(n)^{h(n)+2}$. Because $\Ffunction{\omega^{\size{\messages}-1}}$ contains all primitive-recursive functions and is closed under multiplication and exponentiation, $f$ is in $\Ffunction{\omega^{\size{\messages}-1}}$.
+By minimality of $\tree$, the number of children of a node is bounded by the number of values appearing in its "local run" hence by $h'(n)$, so the total number of nodes in $\tree$ is bounded by $h'(n)^{h(n)+1}$ and the "size@@treesg" of $\tree$ by $f(n) := h'(n)^{h(n)+2}$. Because $\Ffunction{\omega^{\size{\messages}-1}}$ is closed by composition with primitive-recursive functions, $f$ is in $\Ffunction{\omega^{\size{\messages}-1}}$.
 \end{proof}
 
 The previous argument shows that \COVER for "signature protocols" is decidable and lies in complexity class $\Fcomplexity{\omega^\omega}$. Because the hardness from Proposition~\ref{prop:reduction-LCS} holds for "signature protocols", \COVER is in fact complete for this complexity class.
@@ -398,19 +398,14 @@ This way the nodes of maximal "altitude" are the ones that do not need to send l
 	\label{fig:rearrange-tree}
 \end{figure}
 
-We bound the size of a node with respect to the size of its neighbors of higher altitude:
+We bound the size of a node with respect to the size of its neighbors of higher altitude. The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}, the size of the neighbors bounds the number of messages that this node needs to send, and then we can apply Lemma~\ref{lem:short-local-runs} (which generalizes Lemma~\ref{lem:towerbound_signature}) to bound the local run of the node.
+The proof of this lemma can be found in Appendix~\ref{app:proofs_bounds}.
 
 \begin{restatable}{lemma}{lemBoundSuccessorHeight}
 	\label{lem:bound-successor-height}
 	Let $\node$ be a node of $\tree$ such that all neighbors of $\node$ of higher altitude have size bounded by $K$.
-	Then $\size{\node} \leq \towerfun(\size{\prot}, r) \, (\size{\messages} \, r \, K + K + 1)$. 
+	Then $\size{\node} \leq (\towerfun(\size{\prot}, r)+2) \, (\size{\messages} \, r \, K + K)$, with $\psi$ the primitive-recursive function defined in Lemma~\ref{lem:short-local-runs}. 
 \end{restatable}
-\begin{proof}
-	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children, by definition of a "decomposition".
-	Because there are at most $r$ "initial" values, this makes at most $\size{\messages} \, r$ "follower" children and each one of them requires at most $K$ messages. If $\node$ is a "follower node" or the root, then the number of messages it must broadcast is then bounded by $\size{\messages} \, r \, K +1$. If $\node$ is a "boss node" and not the root, then its parent % if its exists, if root then empty spec
-	has higher altitude hence $\size{\bossspec(\node)} \leq K$ and $\node$ must broadcast at most $\size{\messages} \, r \, K + K$ messages in total.
-	This bounds by $\size{\messages} \, r \, K + K +1$ the number of messages $u$ needs to broadcast; as in Lemma~\ref{lem:bounds_tree_sg}, we bound the length of $u$ by $\towerfun(\size{\prot},r) \, (\size{\messages}\, r \, K + K + 1)$; the bound on $\size{\node}$ follows.
-\end{proof}
 
 The rest of the proof is sketched here and detailed in Appendix~\ref{app:proofs_bounds}. 
 By inductively applying the previous result, we obtain the existence of a primitive-recursive function $f_0$ (depending only on $\size{\prot}$ and not on $\tree$) such that, given a node $\node$ in $\tree$, $\size{\node} \leq f_0(\altmax - \altitude{\node})$ where $\altmax$ denotes the maximal altitude in $\tree$ (Lemma~\ref{lem:bound-length-at-height-h}).

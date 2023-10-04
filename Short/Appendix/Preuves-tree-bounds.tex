@@ -1,19 +1,32 @@
 \section{Bounding the Size of the Minimal Coverability Witness}
 \label{app:proofs_bounds}
 
-In this section, we prove that we can obtain a computable bound, in complexity class $\Fomegaomega$, of $\tree$. All bounds provided in this section are independent from $\tree$. 
+In this section, we prove that we can obtain a computable bound on $\tree$, and that the problem is decidable in complexity class $\Fcomplexity{\omega^\omega}$. All bounds provided in this section are independent from $\tree$. 
+We start by proving Lemma~\ref{lem:bound-successor-height}.
+
+\lemBoundSuccessorHeight*
+
+\begin{proof}
+	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children, by definition of a "decomposition".
+	Because there are at most $r$ "initial" values, this makes at most $\size{\messages} \, r$ "follower" children and each one of them requires at most $K$ messages. If $\node$ is a "follower node" or the root, then the number of messages it must broadcast is then bounded by $\size{\messages} \, r \, K +1$. If $\node$ is a "boss node" and not the root, then its parent
+	has higher altitude hence $\size{\bossspec(\node)} \leq K$ and $\node$ must broadcast at most $\size{\messages} \, r \, K + K$ messages in total.
+	This bounds by $\size{\messages} \, r \, K + K +1$ the number of messages $u$ needs to broadcast. Lemma~\ref{lem:short-local-runs} then lets us reduce the number of steps between those messages without breaking the "unfolding tree" conditions: the inputs of values that were already in the run can only decrease. For the other values, let $v$ be a value that was not in the run before, its input is a subword of the one of a previous value. Hence $\node$ has a "boss" child whose "specification" covers the "$v$-input" of the new local run. 
+	This bounds $\size{u}$ by $(\towerfun(\size{\prot},r)+1) \, (\size{\messages}\, r \, K + K)$, with $\psi$ the function described in Lemma~\ref{lem:short-local-runs}; the bound on $\size{\node}$ follows.
+\end{proof}
+
+
 
 \begin{restatable}{lemma}{lemBoundLengthHeightH}
 	\label{lem:bound-length-at-height-h}
 	Let $\altmax$ the maximal "altitude" in $\tree$. There is a primitive recursive function $f_0$ such that, for every node $\node$ of $\tree$, $\size{\node} \leq f_0(\size{\prot} + \altmax - \altitude{\node})$.
 \end{restatable}
 \begin{proof}
-Let $f_0: k \mapsto (\towerfun(k,k) (k^2 +2))^{k+1}$. Also, let $N := \size{\prot}$.
-First, if $\node$ has altitude $\altmax$, then it has no "follower child", hence applying Lemma~\ref{lem:bound-successor-height} with $K=0$ bounds $\size{\node}$ by $\towerfun(\size{\prot},r) \leq \towerfun(N,N) \leq f_0(N)$. Let $\node$ be a node, and suppose that the statement is true for altitudes greater than $\altitude{\node}$. ~
+Let $f_0: k \mapsto ((\towerfun(k,k)+2) (k^2 +2))^{k+1}$. Also, let $N := \size{\prot}$.
+First, if $\node$ has altitude $\altmax$, then it has no "follower" child, hence applying Lemma~\ref{lem:bound-successor-height} with $K=0$ bounds $\size{\node}$ by $\towerfun(\size{\prot},r) \leq \towerfun(N,N) \leq f_0(N)$. Let $\node$ be a node with $\altitude{\node} < \altmax$, and suppose that the statement is true for altitudes greater than $\altitude{\node}$. ~
 
-Let $d =~\altmax - ~\altitude{\node}$, $d\geq 1$. Applying Lemma~\ref{lem:bound-successor-height} with $K := f_0(N + d - 1)$ gives: 
+Let $d =~\altmax - ~\altitude{\node}$. We apply Lemma~\ref{lem:bound-successor-height} with $K := f_0(N + d - 1)$: 
 \begin{align*}
-\size{\node} \leq \towerfun(N,N) (N^2 K + K + 1) \leq & \towerfun(N+d,N+d) f_0(N+d-1) ((N+d)^2 +2)   \\ \leq & f_0(N+d) 
+\size{\node} \leq & (\towerfun(N,N)+2) (N^2 K + K)\\ \leq & (\towerfun(N+d,N+d)+2) f_0(N+d-1) ((N+d)^2 +2)   \\ \leq & f_0(N+d) 
 \end{align*}
 \end{proof}
 
@@ -82,7 +95,7 @@ The bound on the maximal altitude, along with Lemma~\ref{lem:bound-length-at-hei
 
 \begin{restatable}{lemma}{lemBoundMinHeight}
 	\label{lem:bound-min-height}
-	There exists a function $f_2 \in \Ffunction{\omega^{\size{\messages}}}$ such that $|\altmin| \leq f_2(\size{\prot})$.
+	There exists a function $f_2 \in \Ffunction{\omega^{\size{\messages}+1}}$ such that $|\altmin| \leq f_2(\size{\prot})$.
 \end{restatable}
 
 \begin{proof}
@@ -91,7 +104,7 @@ The bound on the maximal altitude, along with Lemma~\ref{lem:bound-length-at-hei
 	By Lemma~\ref{lem:shortening-branches}, $(w_i)_{i \in \nset{1}{\altmin}}$ is a "bad sequence".
 	By Lemmas~\ref{lem:bound-length-at-height-h} and \ref{lem:bound-max-height}, for all $i$, we have $\size{w_i} \leq f_0(\size{\prot}+f_1(\size{\prot}) +i)$. Let $N := \size{\prot}+f_1(\size{\prot})+1$; we have $\size{w_i} \leq f_0^{(i)}(N)$.  
 	
-	Because $f_0$ is primitive recursive, we can apply Theorem~\ref{thm:lengthfcttheorem}: we obtain $h \in \Ffunction{\omega^{\size{\messages}-1}}$ such that $\altmin \leq h(N)$. Let $f_2: n \mapsto h(n+ f_1(n) + 1)$; we have $\altmin \leq f_2(\size{\prot})$. Moreover, $f_2$ is a function of $\Ffunction{\omega^{\size{\messages}}}$ because $f_1, h \in \Ffunction{\omega^{\size{\messages}}}$ and $\Ffunction{\omega^{\size{\messages}}}$ is closed by composition.
+	Because $f_0$ is primitive recursive, we can apply Theorem~\ref{thm:lengthfcttheorem}: we obtain $h \in \Ffunction{\omega^{\size{\messages}-1}}$ such that $\altmin \leq h(N)$. Let $f_2: n \mapsto h(n+ f_1(n) + 1)$; we have $\altmin \leq f_2(\size{\prot})$. Moreover, $f_2$ is a function of $\Ffunction{\omega^{\size{\messages}+1}}$ because $f_1, h \in \Ffunction{\omega^{\size{\messages}}}$ and $\Ffunction{\omega^{\size{\messages}+1}}$ is closed under composition with functions of $\Ffunction{\omega^{\size{\messages}}}$.
 \end{proof}
 
 With the bounds on the maximal and minimal altitudes, Lemma~\ref{lem:bound-length-at-height-h} yields a bound on the size of all nodes in the tree.
@@ -99,17 +112,17 @@ With the bounds on the maximal and minimal altitudes, Lemma~\ref{lem:bound-lengt
 
 \begin{lemma}
 	\label{lem:bound-node-size}
-	There exists $f_3 \in \Ffunction{\omega^{\size{\messages}}}$ such that, for all $\node$ in $\tree$, $\size{\node} \leq f_3(\size{\prot})$. 
+	There exists $f_3 \in \Ffunction{\omega^{\size{\messages}+1}}$ such that, for all $\node$ in $\tree$, $\size{\node} \leq f_3(\size{\prot})$. 
 \end{lemma}
 \begin{proof}
-	Using Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height}, we obtain that, for every node $\node$, the value $\altmax - \altitude{\node}$ is at most $f_1(\size{\prot}) + f_2(\size{\prot})$. Applying Lemma~\ref{lem:bound-length-at-height-h} proves that, for all $\node$ in $\tree$, $\size{\node} \leq f_0(f_1(\size{\prot}) + f_2(\size{\prot})) \leq f_3(\size{\prot})$ where $f_3: n \mapsto f_0(f_1(n) + f_2(n))$; $f_3$ is in $\Ffunction{\omega^{\size{\messages}}}$ as $\Ffunction{\omega^{\size{\messages}}}$ is closed by composition. 
+	Using Lemmas~\ref{lem:bound-length-at-height-h}, \ref{lem:bound-max-height} and \ref{lem:bound-min-height}, we obtain that, for every node $\node$, the value $\altmax - \altitude{\node}$ is at most $f_1(\size{\prot}) + f_2(\size{\prot})$. Applying Lemma~\ref{lem:bound-length-at-height-h} proves that, for all $\node$ in $\tree$, $\size{\node} \leq f_0(f_1(\size{\prot}) + f_2(\size{\prot})) \leq f_3(\size{\prot})$ where $f_3: n \mapsto f_0(f_1(n) + f_2(n))$; $f_3$ is in $\Ffunction{\omega^{\size{\messages}+1}}$ as $\Ffunction{\omega^{\size{\messages}+1}}$ is closed under composition with functions of $\Ffunction{\omega^{\size{\messages}}}$. 
 \end{proof}
 
 Finally, as we now have a bound on all nodes, we can easily bound the length of branches and the number of children of all nodes to get abound on the total "size@@tree" of the tree.
 
 \begin{restatable}{proposition}{PropBoundTreeSize}
 	\label{prop:bound-tree-size}
-	There exists a function $f$ of class $\Ffunction{\omega^{\size{\messages}}}$ s.t. $\size{\tree} \leq f(\size{\prot})$.
+	There exists a function $f$ of class $\Ffunction{\omega^{\size{\messages}+1}}$ s.t. $\size{\tree} \leq f(\size{\prot})$.
 \end{restatable}
 	% There exists a function $f$ of the class $\Ffunction{\omega^{\size{\messages}+1}}$ such that for all "protocol" $\prot$, for all "unfolding tree" $\tree$ of minimal size labeled by $\prot$ satisfying a "boss specification" $w$, the size of $\tree$ is bounded by $f(\size{\prot} + \size{w})$.
 
@@ -117,6 +130,6 @@ Finally, as we now have a bound on all nodes, we can easily bound the length of 
 	Recall that the "size@@tree" of $\tree$ is defined as the sum of the sizes of its nodes. 
 
 	Let $N = \size{\prot}$. 
-	By Lemma~\ref{lem:bound-node-size}, for each $\node$ in $\tree$ we have $\size{\node} \leq f_3(N)$, hence the "local run" of $\node$ contains at most $f_3(N)$ values. By minimality of $\tree$, each value requires at most $1$ "boss child" and $\size{\messages}$ "follower children" hence $\node$ has at most $(\size{\messages}+1) f_3(N) \leq N f_3(N)$ children. Moreover, there are less than $f_4(N) := N^{f_3(N)}$ possible specifications in $\tree$ hence each branch of $\tree$ is of length less than $f_4(N)$ (by minimality, a branch does not have twice the same specification). This bounds the total number of nodes in $\tree$ by $f_5(N) := (N f_3(N))^{f_4(N) +1}$ hence we obtain $\size{\tree} \leq f(N)$ where $f: n \mapsto f_3(n) f_5(n)$. Because $\Ffunction{\omega^{\size{\messages}}}$ is stable by composition, exponentiation and product, we have $f \in \Ffunction{\omega^{\size{\messages}}}$.
+	By Lemma~\ref{lem:bound-node-size}, for each $\node$ in $\tree$ we have $\size{\node} \leq f_3(N)$, hence the "local run" of $\node$ contains at most $f_3(N)$ values. By minimality of $\tree$, each value requires at most $1$ "boss" child and $\size{\messages}$ "follower" children hence $\node$ has at most $(\size{\messages}+1) f_3(N) \leq N f_3(N)$ children. Moreover, there are less than $f_4(N) := N^{f_3(N)}$ possible specifications in $\tree$ hence each branch of $\tree$ is of length less than $f_4(N)$ (by minimality, a branch does not have twice the same specification). This bounds the total number of nodes in $\tree$ by $f_5(N) := (N f_3(N))^{f_4(N) +1}$ hence we obtain $\size{\tree} \leq f(N)$ where $f: n \mapsto f_3(n) f_5(n)$. Because $\Ffunction{\omega^{\size{\messages}+1}}$ is stable by composition with primitive recursive functions, we have $f \in \Ffunction{\omega^{\size{\messages}+1}}$.
 \end{proof}
 

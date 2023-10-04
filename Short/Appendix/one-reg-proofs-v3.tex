@@ -143,7 +143,7 @@ It remains to prove that our abstraction is sound and complete.
 \subsubsection{Completeness}
 \label{one-completeness}
 
-This subsection is devoted to proving the completeness (Lemma~\ref{lem:abstraction_complete}). To do so, we take a concrete "run" $\run$ in our model and any value $v$ appearing in the reached configuration. We prove that there exists an "abstract run" leading to the abstract configuration $(\statesin{\run}, \gangof{v}{\run})$. 
+In this subsection we prove Lemma~\ref{lem:abstraction_complete}. To do so, we take a concrete "run" $\run$ in our model and any value $v$ appearing in the reached configuration. We prove that there exists an "abstract run" leading to the abstract configuration $(\statesin{\run}, \gangof{v}{\run})$. 
 
 To construct the "abstract run", we will first show that for all $S$ such that $\statesin{\run} \subseteq S$, we can keep track of the set of agents carrying a value $v$: $(S, q_0, \emptyset) \step{\ast}(S, \bossof{\aval}{\run}, K)$ with $\cliqueof{\aval}{\run}\subseteq K$. 
 Then, it is left to show that for all concrete "run" $\run$ and for all value $v$, $\aconfiginit \step{\ast} (S, q_0, \emptyset)$ with $\statesin{\run} \subseteq S$. 
