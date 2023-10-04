@@ -311,7 +311,7 @@ Our aim is again to bound the "size@@tree" of a minimal "coverability witness". 
 
 \begin{restatable}{lemma}{lemShorteningBranches} 
 \label{lem:shortening-branches}
-	Let $\node \ne \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If any of the below holds, then $\tree$ can be shortened  (contradicting its minimality):
+	Let $\node \ne \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If one of those conditions holds, then $\tree$ can be shortened  (contradicting its minimality):
 	\begin{itemize}
 	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; 
 	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$.
