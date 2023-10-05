@@ -39,8 +39,9 @@ We actually prove a more general version of the lemma. The previous lemma can be
 \begin{lemma}
 	There exists a primitive recursive function $\towerfun(n,r)$ such that, for every protocol $\prot$ with $r$ registers per agent, for every "local run" $\localrun: (q, \localdata) \step{*} (q', \localdata')$ in $\prot$, for every $V \subseteq \nats$ finite such that $V$ contains all message values appearing in $\localrun$,  for every $\Vinit \subseteq V$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ such that we have $\length{\localrun'} \leq \towerfun(\size{\prot} -r + \size{\Vinit},r)$ and:
 	\begin{enumerate}
-		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'} \subword \vinput{\aval}{\localrun}$,
-		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$. 
+		\item \label{item:shorterrun_oldvalues} for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$,
+		
+		\item \label{item:shorterrun_anyvalue} for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus \Vinit$ such that $\vinput{\aval'}{\localrun'} \subword \vinput{\aval}{\localrun}$.
 	\end{enumerate}
 \end{lemma}
 
@@ -60,24 +61,25 @@ Intuitively, the set $V$ represents values that are already used and therefore c
 	% $n^{n^{{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle\cdot^{\scriptstyle n}}}}}}$ and $(4n^8+2)^{(4n^8+2)^{\scriptstyle {~\cdot^{\scriptstyle~\cdot^{\scriptstyle~\cdot^{\scriptstyle (4n^8+2)}}}}}}$  of height $k+1$.
 	
 	We prove the ""shortening property"": \\
-	Let $W$ a set a values and $n:=\size{\prot} -r + \size{\Vinit}$.
+	Let $W$ a finite set a values and $n:=\size{\prot} -r + \size{\Vinit}$.
 	Let a "local run" $\localrun: (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ "active registers" with $\length{\localrun} > \towerfun(n,k)$ and let $V \subseteq \nats$ finite that contains every message value appearing in $\localrun$ such that $W \subseteq V$. We claim that $\localrun$ can be shortened into a local run $\localrun': (q_i, \localdata_i) \step{*} (q_f, \localdata_f)$ with $k$ active registers such that $\length{\localrun'} < \length{\localrun}$ and:
 	\begin{itemize}
-		\item for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus W$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$,
-		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$. 
+		\item for all $\aval \in V$, $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$,
+		\item for all $\aval' \in \nats \setminus V$, there exists $\aval \in \nats \setminus W$ such that $\vinput{\aval'}{\localrun'}$ is a subword of $\vinput{\aval}{\localrun}$.
 	\end{itemize}
 	
 	We proceed by induction on the number $k$ of "active registers" in the "local run". If $k=0$, register values do not change in $\localrun$. As $\towerfun(n,0) = n+1 \geq \size{Q}+1$, $\localrun$ goes through the same state twice, hence all steps in between may be removed to get $\localrun'$. Then for all $v \in \nats$,  $\vinput{\aval}{\localrun'} \subword \vinput{\aval}{\localrun}$.
 	
-	Suppose that the property is true for any protocol with $\leq k$ "active registers", and consider a run $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(\size{\prot} -r + \size{\Vinit},k+1)$. 
+	Suppose that the property is true for any "local run" with $\leq k$ "active registers", and consider one $\localrun: (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ with $k+1$ "active registers" such that $\length{\localrun} > \towerfun(\size{\prot} -r + \size{\Vinit},k+1)$. 
 	
 	
 	First, if there exists an infix "local run" $\localrun_i$ of $\localrun$ of length $\towerfun(n,k)+1$ with only $k$ active registers, then it suffices to apply the induction hypothesis on $u_i$.
 	Suppose now that there exists no such infix "local run".
 	Let $I \subseteq \nset{1}{r}$ the set of "active registers" in $\localrun$, $|I| = k+1$. Let $M:= \towerfun(n,k){+}1$, we have $\towerfun(n,k+1) = 2M [((n+1)^2)^{2M}+1]$. 
 	In any sequence of $M$ "local steps" in a row in $\localrun$, 
-	there is a $\quotemarks{\enregact}$ transition on every register in $I$. Suppose that  no local configuration appears twice in $\localrun$ (otherwise $\localrun$ may easily be shortened). 
+	there is a $\quotemarks{\enregact}$ transition on every register in $I$. We can assume that  no local configuration appears twice in $\localrun$ (otherwise we can simply cut the steps between those two appearances to get $\localrun'$). 
 	
+	In what follows we will consider two infixes of $\localrun$ of length $2M$, following the same sequence of transitions and with the same values of $W$ appearing at the same times in the same registers. Their existence is guaranteed by the length of $\localrun$. As a $\quotemarks{\enregact}$ action is performed twice on each register in those two infixes, we will be able to reduce the run as in \cref{fig:pumping}.
 	
 	For every $i$, let $\atrans_i$ the $i$-th transition in $\localrun$, and let $\theta_i\in \Vinit \cup \set{\bot}$ be such that 
 	\[
@@ -120,8 +122,8 @@ Intuitively, the set $V$ represents values that are already used and therefore c
 
 	Let $\localdata_a, \localdata_b$ be the content of registers after the $l$-th step in $\localrun_a$ and $\localrun_b$ respectively. 
 	 If $i \notin I$ then $\alpha$ is either $\quotemarks{\dummyact}$ or a test, which is valid as  $\localdata(i) = \localdata_a(i) = \localdata_b(i)$ (value of register $i$ does not change in $u$).	
-	Suppose now that $i \in I$, the only problematic test is the one of tests, \emph{i.e.}, $\anact \in \set{\quotemarks{\diseqtestact},\quotemarks{\eqtestact}}$. 
-	In this case, we prove that $\binrel{\aval}{\anact}{\localdata(i)}$. First, because the corresponding step is valid in $\localrun_a$ and $\localrun_b$, we have $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ and $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. We distinguish cases depending on the value of $l+1$:
+	Suppose now that $i \in I$, the only problematic case is the one of tests, \emph{i.e.}, $\anact \in \set{\quotemarks{\diseqtestact},\quotemarks{\eqtestact}}$. 
+	In this case, we prove that $\binrel{\aval}{\anact}{\localdata(i)}$. First, because the corresponding step is valid in $\localrun_a$ and $\localrun_b$, we have $\binrel{\localdata_a(i)}{\anact}{\aval_a}$ and $\binrel{\localdata_b(i)}{\anact}{\aval_b}$. We distinguish cases depending on $l+1$:
 	\begin{itemize}
 		\item $l+1<e_i$: $\localdata(i)= \localdata_a(i)$, $\aval = \aval_a$ and $\binrel{\localdata_a(i)}{\anact}{\aval_a}$. 
 		\item $e_i \leq l+1 < f_i$: We have $\aval = \phi(\aval_a)$. 
@@ -131,7 +133,7 @@ Intuitively, the set $V$ represents values that are already used and therefore c
 	\end{itemize}
 	
 	This proves that $\locallabel$ is valid from $(q,\localdata)$ which concludes the induction. 
-	We have proven that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$; moreover $\atrace$ is of length $2M$ and there are at least $2M+1$ steps between $(q_1,\localdata_1)$ and $(q_4, \localdata_4)$ in $\localrun$. Therefore, replacing this part of $\localrun$ with $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ yields a "local run" $\localrun': (q_i, \localdata_i) \step{*} (q_f,\localdata_f)$ with strictly less steps that $\localrun$. 
+	We have proven that $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$; moreover $\atrace$ is of length $2M$ and there are at least $4M>2M+1$ steps between $(q_1,\localdata_1)$ and $(q_4, \localdata_4)$ in $\localrun$. Therefore, replacing this part of $\localrun$ with $(q_1,\localdata_1) \step{\atrace} (q_4, \localdata_4)$ yields a shorter "local run" $\localrun': (q_i, \localdata_i) \step{*} (q_f,\localdata_f)$. 
 	
 	It remains to prove the conditions on the $v$-"input" of $\localrun'$ for each $v$. If suffices to prove the condition for the part between $(q_1, \localdata_1)$ to $(q_4, \localdata_4)$,
 	because the rest of $\localrun$ is left untouched. 
@@ -142,7 +144,7 @@ Intuitively, the set $V$ represents values that are already used and therefore c
 	
 	Let $\aval' \in \nats \setminus V$; $\aval'$ does not appear in $\localrun$. Either $\aval'$ does not appear in $\localrun'$ in which case the desired property is true, or there exists $\aval \in V$ such that $\aval' = \phi(\aval)$. As $\phi$ is injective and $\phi(\Vinit) = \Vinit$ and $\aval'\notin \Vinit$, $\aval \notin \Vinit$. 
 	But then $\vinput{\aval'}{\localrun_{1}}$ is a subword of $\vinput{\aval}{\localrun_a}$ and $\vinput{\aval'}{\localrun_{2}}$ is a subword of $\vinput{\aval}{\localrun_b}$. Indeed, in $\localrun_1$, the "reception steps" with value $\phi(\aval)$ correspond to "reception steps" in $\localrun_a$ with value $\aval$, and similarly for $\localrun_2$ and $\localrun_b$. This proves condition \ref{item:shorterrun_anyvalue} for every $\aval' \in \nats \setminus V$.
-	Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies conditions \ref{item:shorterrun_anyvalue} and \ref{item:shorterrun_oldvalues} and that is strictly shorter that $\localrun$, which proves the "shortening property".
+	Overall, we have proven the existence of a "local run" $\localrun': (q_i,\localdata_i) \step{*} (q_f,\localdata_f)$ that satisfies conditions \ref{item:shorterrun_oldvalues} and \ref{item:shorterrun_anyvalue} and that is strictly shorter that $\localrun$, which proves the "shortening property".
 	
 	We build a "local run" of length less that $\towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup X$ where $X$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
 	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot}-r + \size{\Vinit},\regnum)$, which concludes the proof of the lemma. 
