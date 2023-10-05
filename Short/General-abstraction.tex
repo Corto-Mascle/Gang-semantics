@@ -221,7 +221,7 @@ For \ref{item:bound_node_2_sg}, we observe that, by minimality of $\tree$, $\siz
 
 \begin{proposition}
 \label{prop:bounded_witness_sg}
-There exists a function $h$ of class $\Ffunction{\omega^{\size{\messages}-1}}$ s.t. $\size{\tree} \leq h(\size{\prot})$. 
+There exists a function $f$ of class $\Ffunction{\omega^{\size{\messages}-1}}$ s.t. $\size{\tree} \leq f(\size{\prot})$. 
 \end{proposition}
 \begin{proof}
 Let $n := \size{\prot}$, let $r+1$ be the number of registers in $\prot$. Thanks to Lemma~\ref{lem:no_subword_in_branch_sg}, for all $\node \ne \node'$ in 
@@ -230,7 +230,7 @@ For all $i \in \nset{1}{m}$, $\size{\speclabel{\node_{i+1}}}  \leq (\towerfun(n,
 
 By immediate induction, thanks to the second item of Lemma~\ref{lem:bounds_tree_sg}, any node $\node$ at depth $d$ is such that $\size{\speclabel{\node_i}} \leq (\towerfun(n,r)+1)^{d+1}$, which, using the first item of Lemma~\ref{lem:bounds_tree_sg}, bounds the size of every node by $h'(n) = (\towerfun(n,n)+1)^{h(n) + 2}$. 
 % (initialization thanks to Lemma~\ref{lem:towerbound_signature}). 
-By minimality of $\tree$, the number of children of a node is bounded by the number of values appearing in its "local run" hence by $h'(n)$, so the total number of nodes in $\tree$ is bounded by $h'(n)^{h(n)+1}$ and the "size@@treesg" of $\tree$ by $f(n) := h'(n)^{h(n)+2}$. Because $\Ffunction{\omega^{\size{\messages}-1}}$ is closed by composition with primitive-recursive functions, $f$ is in $\Ffunction{\omega^{\size{\messages}-1}}$.
+By minimality of $\tree$, the number of children of a node is bounded by the number of values appearing in its "local run" hence by $h'(n)$, so the total number of nodes in $\tree$ is bounded by $h'(n)^{h(n)+1}$ and the "size@@treesg" of $\tree$ by $f(n) := h'(n)^{h(n)+2}$. Because $\Ffunction{\omega^{\size{\messages}-1}}$ is closed under composition with primitive-recursive functions, $f$ is in $\Ffunction{\omega^{\size{\messages}-1}}$.
 \end{proof}
 
 The previous argument shows that \COVER for "signature protocols" is decidable and lies in complexity class $\Fcomplexity{\omega^\omega}$. Because the hardness from Proposition~\ref{prop:reduction-LCS} holds for "signature protocols", \COVER is in fact complete for this complexity class.
@@ -402,14 +402,18 @@ This way the nodes of maximal "altitude" are the ones that do not need to send l
 	\label{fig:rearrange-tree}
 \end{figure}
 
-We bound the size of a node with respect to the size of its neighbors of higher altitude. The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}, the size of the neighbors bounds the number of messages that this node needs to send, and then we can apply Lemma~\ref{lem:short-local-runs} (which generalizes Lemma~\ref{lem:towerbound_signature}) to bound the local run of the node.
-The proof of this lemma can be found in Appendix~\ref{app:proofs_bounds}.
+We bound the size of a node with respect to the size of its neighbors of higher altitude.
 
 \begin{restatable}{lemma}{lemBoundSuccessorHeight}
 	\label{lem:bound-successor-height}
 	Let $\node$ be a node of $\tree$ such that all neighbors of $\node$ of higher altitude have size bounded by $K$.
 	Then $\size{\node} \leq (\towerfun(\size{\prot}, r)+2) \, (\size{\messages} \, r \, K + K)$, with $\psi$ the primitive-recursive function defined in Lemma~\ref{lem:short-local-runs}. 
 \end{restatable}
+
+\begin{proof}
+	The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}. The neighbors of higher "altitude" are the nodes which require sequences of messages from $\node$. Their size bounds the number of messages that this node needs to send, and then we can apply Lemma~\ref{lem:short-local-runs} (which generalizes Lemma~\ref{lem:towerbound_signature}) to bound the local run of the node.
+	The full proof can be found in Appendix~\ref{app:proofs_bounds}.
+\end{proof}
 
 The rest of the proof is sketched here and detailed in Appendix~\ref{app:proofs_bounds}. 
 By inductively applying the previous result, we obtain the existence of a primitive-recursive function $f_0$ (depending only on $\size{\prot}$ and not on $\tree$) such that, given a node $\node$ in $\tree$, $\size{\node} \leq f_0(\altmax - \altitude{\node})$ where $\altmax$ denotes the maximal altitude in $\tree$ (Lemma~\ref{lem:bound-length-at-height-h}).

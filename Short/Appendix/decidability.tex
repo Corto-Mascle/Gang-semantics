@@ -7,8 +7,8 @@ We now prove the main result of this paper:
 \begin{proof}
 	The lower bound is given by the reduction from "lossy channel system" reachability in Proposition~\ref{prop:reduction-LCS}.
 	
-	For the upper bound, let $(\prot,q_f)$ be an instance of \COVER. By Propositions~\ref{prop:trees-sound-complete} and \ref{prop:bound-tree-size}, $(\prot,q_f)$ is positive if and only if it has a "coverability witness" of size bounded by $f(\size{\prot})$ where $f \in \Ffunction{\omega^{\size{\messages}+1}}$. Up to renaming agents and values, we can moreover assume that all agents and values appearing in this "coverability witness" are bounded by $f(\size{\prot})$, which bounds the size of the description of such a "coverability witness" by a polynomial in $f(\size{\prot})$.
+	For the upper bound, let $(\prot,q_f)$ be an instance of \COVER. By Propositions~\ref{prop:trees-sound-complete} and \ref{prop:bound-tree-size}, $(\prot,q_f)$ is positive if and only if it has a "coverability witness" of size bounded by $f(\size{\prot})$ where $f \in \Ffunction{\omega^{\size{\messages}}}$. Up to renaming agents and values, we can moreover assume that all agents and values appearing in this "coverability witness" are bounded by $f(\size{\prot})$, which bounds the size of the description of such a "coverability witness" by a polynomial in $f(\size{\prot})$.
 	An algorithm for \COVER consists in enumerating all such descriptions and accepting if one finds a "coverability witness". 
-	This can all be done in time exponential in $f(\size{\prot})$, thus this algorithm terminates in time $f'(\size{\prot})$ where $f' \in \Ffunction{\omega^{\size{\messages}+1}}$. This proves that 
+	This can all be done in time exponential in $f(\size{\prot})$, thus this algorithm terminates in time $f'(\size{\prot})$ where $f' \in \Ffunction{\omega^{\size{\messages}}}$. This proves that 
 	\COVER lies in complexity class $\Fcomplexity{\omega^\omega}$.
 \end{proof}
