@@ -2,9 +2,13 @@
 \label{app:proofs_bounds}
 
 In this section, we prove that we can obtain a computable bound on $\tree$, and that the problem is decidable in complexity class $\Fcomplexity{\omega^\omega}$. All bounds provided in this section are independent from $\tree$. 
-We start by proving Lemma~\ref{lem:bound-successor-height}.
+We start by proving that one can bound the size of a node with respect to the size of its neighbors of higher altitude. 
 
-\lemBoundSuccessorHeight*
+\begin{restatable}{lemma}{lemBoundSuccessorHeight}
+	\label{lem:bound-successor-height}
+	Let $\node$ be a node of $\tree$ such that all neighbors of $\node$ of higher altitude have size bounded by $K$.
+	Then $\size{\node} \leq (\towerfun(\size{\prot}, r)+2) \, (\size{\messages} \, r \, K + K)$, with $\psi$ the primitive-recursive function defined in Lemma~\ref{lem:short-local-runs}. 
+\end{restatable}
 
 \begin{proof}
 	Let $u := \localrunlabel{\node}$. For each "initial" value $v$ in $u$, $\node$ has at most $\size{\messages}$ "follower" children, by definition of a "decomposition".
@@ -14,12 +18,9 @@ We start by proving Lemma~\ref{lem:bound-successor-height}.
 	This bounds $\size{u}$ by $(\towerfun(\size{\prot},r)+1) \, (\size{\messages}\, r \, K + K)$, with $\psi$ the function described in Lemma~\ref{lem:short-local-runs}; the bound on $\size{\node}$ follows.
 \end{proof}
 
+We now formally prove Lemma~\label{lem:bound-length-at-height-h}:
+\lemBoundLengthHeightH
 
-
-\begin{restatable}{lemma}{lemBoundLengthHeightH}
-	\label{lem:bound-length-at-height-h}
-	Let $\altmax$ the maximal "altitude" in $\tree$. There is a primitive recursive function $f_0$ such that, for every node $\node$ of $\tree$, $\size{\node} \leq f_0(\size{\prot} + \altmax - \altitude{\node})$.
-\end{restatable}
 \begin{proof}
 Let $f_0: k \mapsto ((\towerfun(k,k)+2) (k^2 +2))^{k+1}$. Also, let $N := \size{\prot}$.
 First, if $\node$ has altitude $\altmax$, then it has no "follower" child, hence applying Lemma~\ref{lem:bound-successor-height} with $K=0$ bounds $\size{\node}$ by $\towerfun(\size{\prot},r) \leq \towerfun(N,N) \leq f_0(N)$. Let $\node$ be a node with $\altitude{\node} < \altmax$, and suppose that the statement is true for altitudes greater than $\altitude{\node}$. ~
