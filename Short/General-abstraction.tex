@@ -49,7 +49,7 @@ In "signature BNRA", when some agent receives a message, it can compare the valu
 \end{observation}
 
 If we want to turn a "local run" $u$ of an agent $a$ into an actual "run", we must match $a$'s receptions with broadcasts. Because of Observation~\ref{obs:sg_reception}, what matters is not the actual values of the receptions in $u$ but which ones are equal to which.  Therefore, for a value $v$ received in $u$, if $m_1 \dots m_k \in \messages^*$ are the message types received in $u$ with value $v$ in this order, it means that to execute $u$, $a$ need another agent $a'$ to broadcast messages types $m_1$ to $m_k$, all with the same value.  
-We describe what an agent needs from other agents as a set of ""specifications@@sg"" which are words of $\messages^*$. 
+We describe what an agent needs from other agents as a set of "specifications@@sg" which are words of $\messages^*$. 
 % A ""specification@@sg"" $m_1 \cdots m_k \in \messages^*$ is accomplished by an agent if it broadcasts message types $m_1, \dots, m_k$ in this order. 
 
 To represent runs, we consider "unfolding trees@@signature" that abstract runs by representing such specifications, dependencies between them and how they are carried out. In this tree, each node is assigned a "local run" and the "specification@@sg" that it carries out. 
@@ -64,7 +64,7 @@ a finite tree where nodes $\node$ have three labels:
 	
 	\item a value in $\nats$, written $\intro*\valuelabel{\node}$;
 	
-	\item a "specification" $\intro*\speclabel{\node} \in \messages^*$.
+	\item a ""specification@@sg"" $\intro*\speclabel{\node} \in \messages^*$.
 \end{itemize} 
 Moreover, all nodes $\node$ in $\tree$ must satisfy the three following conditions:
 \begin{enumerate}[label= (\roman*), ref=(\roman*)]
@@ -141,7 +141,7 @@ Given a "signature protocol" $\prot$ with a state $q_f$, $q_f$ is coverable in $
 Given a "run" $\run$, agent $a$ \emph{satisfies a "specification@@sg"} $w \in \messages^*$ in $\run$ if the sequence of "message types" broadcast by $a$ admits $w$ as "subword".% if such an agent $a$ exists, we say that $\run$ satisfies "specification@@sg" $w$.   
 
 % Suppose that we have such an "covrability witness@@sg" $\tree$. 
-We prove the following property by strong induction on the depth of $\node$: for every $\node$ in $\tree$, there exists a "run" $\run$ with an agent $a$ satisfying the "specification@@sg" $\speclabel{\node}$ and whose "local run" in $\run$ is $\localrunlabel{\node}$. This is trivially true for leaves of $\tree$ because their "local runs" have no reception hence are actual "runs" by themselves. 
+We prove the following property by strong induction on the depth of $\node$: for every $\node$ in $\tree$, there exists a "run" $\run$ with an agent $a$ satisfying the "specification@@sg" $\speclabel{\node}$ and whose "local run" in $\run$ is $\localrunlabel{\node}$. This is trivially true for leaves of $\tree$ because their "local runs" have no reception (otherwise they would not be leaves by condition~\ref{item:condition2_non_initial_value_sg}) hence are actual "runs" by themselves. 
 Let $\node$ a node of $\tree$, $\localrun := \localrunlabel{\node}$ and $\aval_1, \dots, \aval_c$ the values received in $\localrun$. 
 These values are "non-initial" thanks to condition~\ref{item:condition1_initial_value_sg}; applying condition \ref{item:condition2_non_initial_value_sg} gives the existence of corresponding children $\node_1, \dots, \node_c$ in $\tree$. 
 We apply the induction hypothesis on the subtrees rooted in $\node_1, \dots, \node_c$ to obtain "runs" $\run_1, \dots, \run_c$ satisfying the "specifications@@sg" of the children of $\node$. 
@@ -415,9 +415,9 @@ We first bound the size of a node with respect to the difference between its alt
 	There is a primitive recursive function $f_0$ such that, for every node $\node$ of $\tree$, $\size{\node} \leq f_0(\size{\prot} + \altmax - \altitude{\node})$.
 \end{restatable}
 \begin{proof}[Proof sketch]
-	We proceed by induction, from high to low altitude. Let $\node$ be a node of $\tree$ whose neighbors of higher altitude have size bounded by $K$.
+	We proceed by induction, from high to low "altitude". Let $\node$ be a node of $\tree$ whose neighbors of higher altitude have size bounded by $K$.
 	We claim that $\size{\node} \leq (\towerfun(\size{\prot}, r)+2) \, (\size{\messages} \, r \, K + K)$, with $\psi$ the primitive-recursive function defined in Lemma~\ref{lem:short-local-runs}. 
-	The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}. The neighbors of higher "altitude" are the nodes which require sequences of messages from $\node$. Their size bounds the number of messages that $\node$ needs to send; we then apply Lemma~\ref{lem:short-local-runs} (which generalizes Lemma~\ref{lem:towerbound_signature}) to bound the local run of the node.
+	The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}. The neighbors of higher "altitude" are the nodes which require sequences of messages from $\node$. Their size bounds the number of messages that $\node$ needs to send; we then apply Lemma~\ref{lem:short-local-runs} (which generalizes Lemma~\ref{lem:towerbound_signature}) to bound the local run of the node. Lemma~\ref{lem:bound-successor-height} in the appendix details these ideas.
 We obtain $f_0$ by iteratively applying the inequality above.
 \end{proof}
 
@@ -426,8 +426,8 @@ We now bound $\altmax$ and $\altmin$:
 $\altmax$ and $|\altmin|$ are bounded by a function of class $\Ffunction{\omega^{\size{\messages}}}$. 
 \end{lemma}
 \begin{proof}[Proof sketch]
-We first bound $\altmax$. Consider a branch of $\tree$ with a node at "altitude" $\altmax$; we follow this branch from the root and, for every $j \in \nset{1}{\altmax}$, set $\node_{j}$ as the first node of the branch at altitude $j$ (Figure~\ref{fig:max-height-bound} in the appendix); all such nodes are necessarily "follower nodes" as they are above their parent. Sequence $\node_{\altmax}, \dots, \node_2, \node_1$ is so that the $i$th term is at altitude $\altmax-i$ hence its size is bounded by $f_0(i)$. With the observation of Lemma~\ref{lem:shortening-branches}, we retrieve from this sequence of nodes a "bad sequence" and we apply the "Length function theorem" to bound $\altmax$ (Lemma~\ref{lem:bound-max-height} in the appendix).
-This yields in turn a bound on the size of the root of $\tree$. In order to bound $\altmin$, we proceed similarly, applying the "Length function theorem" again, using "boss nodes" this time. While still going from high altitude ($0$ at the root) to low altitude ($\altmin$), the "bad sequence" now goes from root to leaf; because we consider "boss nodes", we can still apply Lemma~\ref{lem:shortening-branches}.  This allows us to bound $|\altmin|$ (Lemma~\ref{lem:bound-min-height}).
+We first bound $\altmax$. Consider a branch of $\tree$ with a node at "altitude" $\altmax$; we follow this branch from the root and, for every $j \in \nset{1}{\altmax}$, set $\node_{j}$ as the first node of the branch at altitude $j$ (Figure~\ref{fig:max-height-bound} in the appendix); all such nodes are necessarily "follower nodes" as they are above their parent. Sequence $\node_{\altmax}, \dots, \node_2, \node_1$ is so that the $i$th term is at altitude $\altmax-i$ hence its size is bounded by $f_0(i)$ (Lemma~\ref{lem:bound-length-at-height-h}). With the observation of Lemma~\ref{lem:shortening-branches}, we retrieve from the "specifications" of this sequence of nodes a "bad sequence" and we apply the "Length function theorem" to bound $\altmax$ (Lemma~\ref{lem:bound-max-height} in the appendix).
+This yields in turn a bound on the size of the root of $\tree$. In order to bound $\altmin$, we proceed similarly, using "boss nodes" this time. We follow a branch from the root to a node of "altitude" $\altmin$. The sequence of nodes that are lower than all previous ones yields a sequence of "boss specifications", which is a "bad sequence" by Lemma~\ref{lem:shortening-branches}, and whose growth can be bounded using Lemma~\ref{lem:bound-length-at-height-h} and the bound on $\altmax$. We can apply the "Length function theorem", which lets us bound $|\altmin|$ (Lemma~\ref{lem:bound-min-height}).
 \end{proof}
 
 Once we have bounded $\altmax$ and $\altmin$, we can infer a bound on the size of all nodes (Lemma~\ref{lem:bound-length-at-height-h} in the appendix), and then on the length of branches: by minimality, a branch cannot have two nodes with the same specification. 
