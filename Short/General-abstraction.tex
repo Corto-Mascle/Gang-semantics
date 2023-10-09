@@ -407,11 +407,12 @@ This way the nodes of maximal "altitude" are the ones that do not need to send l
 \end{figure}
 
 Let $\altmax \geq 0$ (resp. $\altmin \leq 0$) denote the maximum (resp. minimum) altitude in $\tree$.
-We first bound the size of a node with respect to the difference between its alttude and $\altmax$.\nico{pas mal de modifs dans la suite, à relire}
+We first bound the size of a node with respect to the difference between its altitude and $\altmax$.\nico{pas mal de modifs dans la suite, à relire}
 
 \begin{restatable}{lemma}{lemBoundLengthHeightH}
 	\label{lem:bound-length-at-height-h}
-	Let $\altmax$ the maximal "altitude" in $\tree$. There is a primitive recursive function $f_0$ such that, for every node $\node$ of $\tree$, $\size{\node} \leq f_0(\size{\prot} + \altmax - \altitude{\node})$.
+	%Let $\altmax$ the maximal "altitude" in $\tree$. 
+	There is a primitive recursive function $f_0$ such that, for every node $\node$ of $\tree$, $\size{\node} \leq f_0(\size{\prot} + \altmax - \altitude{\node})$.
 \end{restatable}
 \begin{proof}[Proof sketch]
 	We proceed by induction, from high to low altitude. Let $\node$ be a node of $\tree$ whose neighbors of higher altitude have size bounded by $K$.
