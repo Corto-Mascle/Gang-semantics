@@ -423,7 +423,7 @@ We obtain $f_0$ by iteratively applying the inequality above.
 
 We now bound $\altmax$ and $\altmin$:
 \begin{lemma}
-$\altmax$ and $\altmin$ are bounded by a function of class $\Ffunction{\omega^{\size{\messages}}}$. 
+$\altmax$ and $|\altmin|$ are bounded by a function of class $\Ffunction{\omega^{\size{\messages}}}$. 
 \end{lemma}
 \begin{proof}[Proof sketch]
 We first bound $\altmax$. Consider a branch of $\tree$ with a node at "altitude" $\altmax$; we follow this branch from the root and, for every $j \in \nset{1}{\altmax}$, set $\node_{j}$ as the first node of the branch at altitude $j$ (Figure~\ref{fig:max-height-bound} in the appendix); all such nodes are necessarily "follower nodes" as they are above their parent. Sequence $\node_{\altmax}, \dots, \node_2, \node_1$ is so that the $i$th term is at altitude $\altmax-i$ hence its size is bounded by $f_0(i)$ (Lemma~\ref{lem:bound-length-at-height-h}). With the observation of Lemma~\ref{lem:shortening-branches}, we retrieve from the "specifications" of this sequence of nodes a "bad sequence" and we apply the "Length function theorem" to bound $\altmax$ (Lemma~\ref{lem:bound-max-height} in the appendix).
