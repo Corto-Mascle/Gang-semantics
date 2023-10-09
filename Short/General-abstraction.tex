@@ -324,8 +324,18 @@ Our aim is again to bound the "size@@tree" of a minimal "coverability witness". 
 	\end{itemize} 
 \end{restatable}
 
-We can generalize \cref{lem:towerbound_signature} to bound the size of a node by the number of messages that it must broadcast times a primitive-recursive function $\towerfun(\size{\prot},r)$. The proof is more technical than the one of \cref{lem:towerbound_signature} but the idea is essentially the same. The formal statement and the proof can be found in Appendix~\ref{app:tower-lemma} (\cref{lem:short-local-runs}). 
+We can generalize \cref{lem:towerbound_signature} to bound the size of a node by the number of messages that it must broadcast times a primitive-recursive function $\towerfun(\size{\prot},r)$. The proof is more technical than the one of \cref{lem:towerbound_signature} but the idea is essentially the same. The formal statement is given below, and the proof can be found in Appendix~\ref{app:tower-lemma}. 
 One can therefore bound the size of a node with respect to the size of the nodes that it must broadcast to.
+
+	\begin{restatable}{lemma}{lemShortLocalRuns}
+	\label{lem:short-local-runs}
+	There exists a primitive recursive function $\towerfun$ such that, for every protocol $\prot$ with $r$ registers per agent, 
+	for every "local runs" $\localrun_0: (q_0, \localdata_0) \step{*} (q, \localdata)$, $\localrun: (q, \localdata) \step{*} (q', \localdata')$, $\localrun_f: (q', \localdata') \step{*} (q_f, \localdata_f)$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ with $\size{\localrun'} \leq \towerfun(\size{\prot} ,r)$ and for all $\aval' \in \nats$: 
+	\begin{enumerate}
+		\item if $\aval'$ appears in $\localrun_0$, $\localrun$, or $\localrun_{f}$, $\vinput{\aval'}{\localrun'} \subword \vinput{\aval'}{\localrun}$,
+		\item  otherwise, there exists $\aval \in \nats$, not "initial" in $\localrun_0$, such that $\vinput{\aval'}{\localrun'} \subword \vinput{\aval}{\localrun}$.
+	\end{enumerate}
+\end{restatable}
 
 It is however now much harder than in the "signature" case to bound the size of the "coverability witness". Indeed, the broadcasts no longer go only from children to parents in the "unfolding tree". If $\node$ is the parent of $\node'$, then $\node'$ broadcasts to $\node$ if $\node'$ is a "boss node", but $\node$ broadcasts to $\node'$ if $\node'$ is a "follower node", in which case $\node'$ only broadcasts one message to $\node$. Therefore, we cannot in general bound $\size{\node}$ with respect to $\size{\node'}$ nor $\size{\node'}$ with respect to $\size{\node}$, making us unable to apply the "Length function theorem" immediately. 
 

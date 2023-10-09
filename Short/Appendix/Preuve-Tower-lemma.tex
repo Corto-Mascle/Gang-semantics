@@ -2,15 +2,10 @@
 \label{app:tower-lemma}
 		
 %	The generalization of Lemma~\ref{lem:towerbound_signature} is the following: 
-	\begin{restatable}{lemma}{lemShortLocalRuns}
-	\label{lem:short-local-runs}
-		There exists a primitive recursive function $\towerfun$ such that, for every protocol $\prot$ with $r$ registers per agent, 
-		for every "local runs" $\localrun_0: (q_0, \localdata_0) \step{*} (q, \localdata)$, $\localrun: (q, \localdata) \step{*} (q', \localdata')$, $\localrun_f: (q', \localdata') \step{*} (q_f, \localdata_f)$, there exists a "local run" $\localrun': (q, \localdata) \step{*} (q', \localdata')$ with $\size{\localrun'} \leq \towerfun(\size{\prot} ,r)$ and for all $\aval' \in \nats$: 
-		\begin{enumerate}
-			\item if $\aval'$ appears in $\localrun_0$, $\localrun$, or $\localrun_{f}$, $\vinput{\aval'}{\localrun'} \subword \vinput{\aval'}{\localrun}$,
-			\item  otherwise, there exists $\aval \in \nats$ such that $\aval$ is not "initial" in $u_0$ and $\vinput{\aval'}{\localrun'} \subword \vinput{\aval}{\localrun}$.
-		\end{enumerate}
-	\end{restatable}
+
+	
+	\lemShortLocalRuns*
+
 	The function $\towerfun$ is actually not the same as in Lemma~\ref{lem:towerbound_signature} although it is also a tower of exponentials.
 	
 	We start by defining the notion of "trace". 
