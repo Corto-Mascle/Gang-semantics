@@ -415,7 +415,9 @@ We first bound the size of a node with respect to the difference between its alt
 	There is a primitive recursive function $f_0$ such that, for every node $\node$ of $\tree$, $\size{\node} \leq f_0(\size{\prot} + \altmax - \altitude{\node})$.
 \end{restatable}
 \begin{proof}[Proof sketch]
-	We proceed by induction, from high to low "altitude". Let $\node$ be a node of $\tree$ whose neighbors of higher altitude have size bounded by $K$.
+	We proceed by induction, from high to low "altitude". 
+	The node of higher "altitude"  has at most one message to broadcast (to its eventual parent), and so by the generalization of \cref{lem:towerbound_signature}, we get that its size is bounded by $\towerfun(\size{\prot},r)$.
+	Let $\node$ be a node of $\tree$ whose neighbors of higher altitude have size bounded by $K$.
 	We claim that $\size{\node} \leq (\towerfun(\size{\prot}, r)+2) \, (\size{\messages} \, r \, K + K)$, with $\psi$ the primitive-recursive function defined in Lemma~\ref{lem:short-local-runs}. 
 	The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}. The neighbors of higher "altitude" are the nodes which require sequences of messages from $\node$. Their size bounds the number of messages that $\node$ needs to send; we then apply Lemma~\ref{lem:short-local-runs} (which generalizes Lemma~\ref{lem:towerbound_signature}) to bound the local run of the node. Lemma~\ref{lem:bound-successor-height} in the appendix details these ideas.
 We obtain $f_0$ by iteratively applying the inequality above.
