@@ -190,7 +190,6 @@ If $k=0$, any state repetition can be removed. Suppose that $\size{u} > \towerfu
 \item after the last $\quotemarks{\enregact}$ of $i$ in $s$, we use values of $u_2$.
 \end{itemize}
 Doing so, all equality and disequality tests pass. Also, there is no interleaving of received values of $u_1$ and $u_2$ because, for every register in $I$, the first $\quotemarks{\enregact}$ takes place in the first half of $s$ and the last $\quotemarks{\enregact}$ takes place in the second half of $s$. For every value that appeared in $u$, we have $\vinput{v}{u'} \subword \vinput{v}{u}$:  For every fresh value $v'$ there is a $v$ such that $\vinput{v'}{u'} \subword \vinput{v}{u}$. Moreover, $u'$ is shorter than $u$; we conclude by iterating this shortening procedure. 
-\nico{preuve modifiee donc à relire, plus long qu'avant mais je trouvais que la construction était trop floue}
 \end{proof}
 % for each $i \in I$, let $j$ the index of the first $\quotemarks{\enregact}$ on register $i$ in $s$; we replace in $u_1$, from step $j$ onwards, the values of all receptions involving $i$ by the corresponding value $v$ in $u_2$. 
 %  This guarantees that all equality and disequality tests still pass. However, it could be that, by letting $u'$ the obtained run, we do not have $\vinput{v}{u'} \subword \vinput{v}{u}$ because $v$ appears in $u_1$ on several registers: observe that in \cref{fig:proof-pumping-signed}, if $v_1 = v_2$ then the shortening operation may interleave the receptions of messages with that value in the two run segments in which case we would not have $\vinput{v_1}{u'} \subword \vinput{v_2}{u}$. This is why we made sure every register was renewed \emph{twice}. In $s$ in the shortened run, for every register $i \in I$, between the first $\quotemarks{\enregact}$ of $i$ (included) and the last  $\quotemarks{\enregact}$ of $i$ (excluded), we replace all values appearing in receptions with register $i$ with fresh values (hatched blocks in \cref{fig:proof-pumping-signed}). We then have $\vinput{v}{u'} \subword \vinput{v}{u}$ for every value that appeared in $u$ and for every fresh value $v'$ there is a $v$ such that $\vinput{v'}{u'} \subword \vinput{v}{u}$. Moreover, $u'$ is shorter than $u$; we conclude by iterating this shortening procedure.
@@ -418,7 +417,8 @@ This way the nodes of maximal "altitude" are the ones that do not need to send l
 \end{figure}
 
 Let $\altmax \geq 0$ (resp. $\altmin \leq 0$) denote the maximum (resp. minimum) altitude in $\tree$.
-We first bound the size of a node with respect to the difference between its altitude and $\altmax$.\nico{pas mal de modifs dans la suite, à relire}
+We first bound the size of a node with respect to the difference between its altitude and $\altmax$.
+%\nico{pas mal de modifs dans la suite, à relire}
 
 \begin{restatable}{lemma}{lemBoundLengthHeightH}
 	\label{lem:bound-length-at-height-h}
@@ -426,13 +426,15 @@ We first bound the size of a node with respect to the difference between its alt
 	There is a primitive recursive function $f_0$ such that, for every node $\node$ of $\tree$, $\size{\node} \leq f_0(\size{\prot} + \altmax - \altitude{\node})$.
 \end{restatable}
 \begin{proof}[Proof sketch]
-	We proceed by induction, from high to low "altitude". 
-	The node of higher "altitude"  has at most one message to broadcast (to its eventual parent), and so by the generalization of \cref{lem:towerbound_signature}, we get that its size is bounded by $\towerfun(\size{\prot},r)$.
+	We proceed by induction on the altitude, from highest to lowest. 
+	A node of maximal "altitude"  has at most one message to broadcast (to its potential parent), and so by \cref{lem:short-local-runs}, we get that its size is bounded by $\towerfun(\size{\prot},r)$.
 	Let $\node$ be a node of $\tree$ whose neighbors of higher altitude have size bounded by $K$.
 	We claim that $\size{\node} \leq (\towerfun(\size{\prot}, r)+2) \, (\size{\messages} \, r \, K + K)$, with $\psi$ the primitive-recursive function defined in Lemma~\ref{lem:short-local-runs}. 
-	The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}. The neighbors of higher "altitude" are the nodes which require sequences of messages from $\node$. Their size bounds the number of messages that $\node$ needs to send; we then apply Lemma~\ref{lem:short-local-runs} (which generalizes Lemma~\ref{lem:towerbound_signature}) to bound the local run of the node. Lemma~\ref{lem:bound-successor-height} in the appendix details these ideas.
+	The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}. The neighbors of higher "altitude" are the nodes which require sequences of messages from $\node$. Their size bounds the number of messages that $\node$ needs to send; we then apply Lemma~\ref{lem:short-local-runs} to bound the local run of the node. Lemma~\ref{lem:bound-successor-height} in the appendix details these ideas.
 We obtain $f_0$ by iteratively applying the inequality above.
 \end{proof}
+
+
 
 We now bound $\altmax$ and $\altmin$:
 \begin{lemma}
