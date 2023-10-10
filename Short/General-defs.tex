@@ -4,7 +4,7 @@
 \subsection{Definitions of the Model}
 A ""Broadcast Network of Register Automata"" ("BNRA") \cite{DelzannoST13} is a model describing broadcast networks of agents with local registers. A finite transition system describes the behavior of an agent; an agent can broadcast and receive messages with integer values, store them in local registers and perform (dis)equality tests. 
 There are arbitrarily many agents. When an agent broadcasts a message, every other agent may receive it, but does not have to do so. 
-%\nico{ok formulation?}  
+
 
 \begin{definition}
 	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""message types""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with operations $\operations =$
@@ -28,7 +28,7 @@ We now define the semantics of those systems. Essentially, we have a finite set 
 	\AP An \intro{initial configuration} $\config$ is one where for all $a \in \agents$, $\st{\config}(a) = q_0$ and $\data{\config}(a, i) \neq \data{\config}(a', i')$ for all $(a,i) \neq (a', i')$.
 	
 	% Given a "configuration" $\config \in \allconfigs$, we denote by $\agentsof{\config}$ the set of agents of $\config$.	
-	\AP Given a finite set of agents $\agents$ and two "configurations" $\config, \config'$ over $\agents$, a ""step"" $\config \step{} \config'$ is defined when there exist $\amessage \in \messages$, $a_0 \in \agents$ and $i \in \nset{1}{r}$ such that \linebreak $(\st{\config}(a_0),\br{\amessage}{i}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and, for all $a \ne a_0$, either $\config'(a) = \config(a)$ or there exists $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a)) \in \transitions$
+	\AP Given a finite non-empty set of agents $\agents$ and two "configurations" $\config, \config'$ over $\agents$, a ""step"" $\config \step{} \config'$ is defined when there exist $\amessage \in \messages$, $a_0 \in \agents$ and $i \in \nset{1}{r}$ such that \linebreak $(\st{\config}(a_0),\br{\amessage}{i}, \st{\config'}(a_0)) \in \transitions$, $\data{\config}(a_0) = \data{\config'}(a_0)$ and, for all $a \ne a_0$, either $\config'(a) = \config(a)$ or there exists $(\st{\config}(a),\rec{m}{j}{\anact},\st{\config'}(a)) \in \transitions$
 		s.t. $\data{\config'}(a, j') = \data{\config}(a, j')$ for $j' \neq j$ and:
 		\begin{itemize}
 				\item if $\anact = \quotemarks{\dummyact}$ 
@@ -45,7 +45,7 @@ We now define the semantics of those systems. Essentially, we have a finite set 
 \end{definition}
 \begin{remark}
 \label{rem:several_values_per_message}
-In our model, agents may only send one value per message. Indeed, "coverability" is undecidable if agents can broadcast several values at once~\cite{DelzannoST13}.
+In our model, agents may only send one value per message. Indeed, "coverability" is undecidable if agents can broadcast several values at once~\cite{DelzannoST13}. \nico{modif: remarques numérotées comme le reste}
 \end{remark}
 
 \begin{example}\label{ex:example-1}
@@ -61,12 +61,12 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 
 
 	Figure \ref{fig:ex1} shows a "protocol" with 2 registers. 
-	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{(\st{\config}(a_1), \data{\config}(a_1)), (\st{\config}(a_2),\data{\config}(a_2))}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run":\vspace{-0.2cm}
+	Let $\agents = \{a_1, a_2\}$. We denote by $\tuple{\st{\config}(a_1), \data{\config}(a_1), \st{\config}(a_2),\data{\config}(a_2)}$ a "configuration" $\config$ over $\agents$. The following sequence is an "initial run":\vspace{-0.2cm}
 	\begin{multline*}
-		\tuple{(q_0, (1,2)), (q_0,(3,4))} \step{} \tuple{(q_1, (1,2)), (q_2,(1,4))} \step{} 
-		\tuple{(q_3, (1,4)), (q_3,(1,4))} \\ \step{} \tuple{(q_4, (1,4)), (q_3,(1,4))} \step{} \tuple{(q_4, (1,4)), (q_4,(1,4))}
+		\tuple{q_0, (1,2), q_0,(3,4)} \step{} \tuple{q_1, (1,2), q_2,(1,4)} \step{} 
+		\tuple{q_3, (1,4), q_3,(1,4)} \\ \step{} \tuple{q_4, (1,4), q_3,(1,4)} \step{} \tuple{q_4, (1,4), q_4,(1,4)}
 	\end{multline*}
-	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_3,4)$ by $a_2$, $(m_4,1)$ by $a_2$ and $(m_4,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent. 
+	The broadcast messages are, in this order: $(m_2,1)$ by $a_1$, $(m_3,4)$ by $a_2$, $(m_4,1)$ by $a_2$ and $(m_4,1)$ by $a_1$. In this "run", each broadcast message is received by the other agent; in general, however, this does not have to be true. \nico{changement} 
 \end{example}
 
 \begin{figure}[t]
@@ -83,7 +83,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 
 \begin{remark}
 	\label{rem:copycat-principle}
-	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can build a run in which each agent of $\run$ has  a clone in the same state but with different register values. To obtain this, it suffices to add new agents that mimic $\run$ in parallel of the original agents, with which they will not share any register values.  This property is called ""copycat principle"": if state $q$ is coverable, then for all $n$ there exists an augmented "run" which puts $n$ agents on $q$.
+	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can build a run in which each agent of $\run$ has  a clone in the same state but with different register values. To obtain this, it suffices to add new agents that mimic $\run$ in parallel of the original agents. The new agents will not share any register values with original agents because all agents sart with distinct values in "initial configurations". \nico{modif} This property is called ""copycat principle"": if state $q$ is coverable, then for all $n$ there exists an augmented "run" which puts $n$ agents on $q$.
 	
 	
 \end{remark}
@@ -105,7 +105,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 	In fact, this problem exponentially reduces to \COVER hence our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the query problem. In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
 \end{remark}
 
-\AP We finally introduce \intro{signature BNRA}, an interesting restriction of our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"", an example of such a protocol is displayed in \cref{fig:example-signature-protocol}. Said otherwise, the first register acts as a permanent identifier with which agents sign their messages. Under this restriction, a message is composed of a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will see that it falls into the same complexity class as the general case but makes the decidability procedure simpler. 
+\AP We finally introduce \intro{signature BNRA}, an interesting restriction of our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"". Said otherwise, the first register acts as a permanent identifier with which agents sign their messages. An example of such a protocol is displayed in \cref{fig:example-signature-protocol}. \nico{modif ordre phrases} Under this restriction, a message is composed of a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will see that it falls into the same complexity class as the general case but makes the decidability procedure simpler. 
 
 \begin{definition}[Signature protocols]
 A ""signature protocol"" with $\regnum$ registers is a "protocol" $\prot = (Q, \messages, \transitions, q_0)$ where register $1$ appears only in "broadcasts" in $\transitions$ and registers $i \geq 2$ appear only in "receptions" in $\transitions$. 

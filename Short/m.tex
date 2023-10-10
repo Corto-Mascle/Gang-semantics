@@ -68,7 +68,7 @@ IRISA, Universit\'e de Rennes}
 
 
 	\begin{abstract}
-	We consider the parameterized verification of networks of agents which communicate through (unreliable) broadcasts. In this model, agents have local registers whose values are unordered and initially distinct and may therefore be thought of as identifiers.
+	We consider the parameterized verification of networks of agents which communicate through unreliable broadcasts. In this model, agents have local registers whose values are unordered and initially distinct and may therefore be thought of as identifiers.
 	When an agent broadcasts a message, it appends to the message the value stored in one of its registers. 
 	Upon reception, an agent can store the received value or test it for equality against one of its own registers. 
 	We consider the coverability problem, where one asks whether a given state of the system may be reached by at least one agent. We establish that this problem is decidable, although non-primitive recursive. We contrast this with the undecidability of the closely related target problem where all agents must synchronize on a given state. 
@@ -92,8 +92,8 @@ IRISA, Universit\'e de Rennes}
 %\input{Figures/zoom-on-tree}
 	\section{Conclusion}
 	We established the decidability and $\Fcomplexity{\omega^\omega}$-completeness of the coverability problem for BNRA, as well as the \NP-completeness of the problem for 1-BNRA.
-	One may want to enrich the transition systems of our protocols, for instance with a stack. While this adds little difficulty in the general case (it suffices to extend Lemma~\ref{lem:short-local-runs} to pushdown protocols using a classical cut-hill argument), the case of one register may be trickier.
-	Finally, one may want to extend this model with inequality tests, as in classical related models such as data nets.
+	One may want to enrich the transition systems of our protocols, for instance with a stack. While this adds little difficulty in the general case (it suffices to extend Lemma~\ref{lem:short-local-runs} to pushdown protocols using a classical cut-hill argument), the case of one register may be trickier.\nico{modif derniere phrase}
+	Finally, another interesting extension would be the addition of inequality tests, as done in classical models such as data nets  \cite{datanetsinequalityfomegaomegaomega}. 
 	
 	\paragraph*{Acknowledgements.} We are grateful to Arnaud Sangnier for encouraging us to work on BNRA, for the discussions about his work in \cite{DelzannoST13} and for his valuable advice. We also thank Philippe Schnoebelen for the interesting discussion and Sylvain Schmitz for the exchange on complexity class $\Fcomplexity{\omega^{\omega}}$ and related topics.   
 	\bibliography{biblio}

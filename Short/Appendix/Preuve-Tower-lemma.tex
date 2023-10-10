@@ -143,7 +143,6 @@ Intuitively, the set $V$ represents values that are already used and therefore c
 	
 	We build a "local run" of length less that $\towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$ as follows. We start with $\localrun^{(0)} := \localrun$ and $V^{(0)}$ the set of values of messages appearing in $\localrun^{(0)}$. For every $k$ such that $\length{\localrun^{(0)}} > \towerfun(\size{\prot}-r+\size{\Vinit},\regnum)$, we apply the "shortening property" on $\localrun^{(k)}$ and $V^{(k)}$ to obtain $\localrun^{(k+1)}$ and define $V^{(k+1)}$ by $V^{(k)} \cup X$ where $X$ is the set of values of messages in $\localrun^{(k+1)}$, which is finite.
 	The construction stops when $\length{\localrun^{(k)}} \leq \towerfun(\size{\prot}-r + \size{\Vinit},\regnum)$, which concludes the proof of the lemma. 
-%	\nico{la longueur et la technicité de cette preuve me désespèrent (et risquent aussi de désespérer les reviewers zélés) mais je ne vois pas trop ce qu'on peut y faire}
 \end{proof}
 
 %We now prove the following, stronger version of Lemma~\ref{lem:short-run-for-output}.
