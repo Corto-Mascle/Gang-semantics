@@ -83,7 +83,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 
 \begin{remark}
 	\label{rem:copycat-principle}
-	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can build a run in which each agent of $\run$ has  a clone in the same state but with different register values. To obtain this, it suffices to add new agents that mimic $\run$ in parallel of the original agents. The new agents will not share any register values with original agents because all agents sart with distinct values in "initial configurations". \nico{modif} This property is called ""copycat principle"": if state $q$ is coverable, then for all $n$ there exists an augmented "run" which puts $n$ agents on $q$.
+	We make the following observation: from a "run" $\run : \config_0 \step{\ast} \config$, we can build a run in which each agent of $\run$ has  a clone in the same state but with different register values. To obtain this, it suffices to add new agents that mimic $\run$ in parallel of the original agents. The new agents will not share any register values with original agents because all agents start with distinct values in "initial configurations". \nico{modif} This property is called ""copycat principle"": if state $q$ is coverable, then for all $n$ there exists an augmented "run" which puts $n$ agents on $q$.
 	
 	
 \end{remark}
