@@ -78,9 +78,8 @@ Moreover, all nodes $\node$ in $\tree$ must satisfy the three following conditio
 % subword explaination
 
 We explain this definition. Condition \ref{item:condition1_initial_value_sg} enforces that the "local run" cannot cheat by receiving its "initial values". 
- Condition \ref{item:condition3_boss_node_sg} expresses that $\localrunlabel{\node}$ broadcasts (at least) the messages of $\speclabel{\node}$. We can use the subword relation $\subword$, and not equality, because of the lossiness: \nico{terme lossiness jamais utilisé pour BNRA avant; unreliability of messages?} if some unecessary messages are broadcast, simply consider that they are not received.
-Condition \ref{item:condition2_non_initial_value_sg} expresses that, for each value received, $\node$ has a child that broadcasts the right sequence of messages.
-
+ Condition \ref{item:condition3_boss_node_sg} expresses that $\localrunlabel{\node}$ broadcasts (at least) the messages of $\speclabel{\node}$. We can use the subword relation $\subword$ (instead of equality) because messages do not have to be received.  
+Condition \ref{item:condition2_non_initial_value_sg} expresses that, for each value $v$ received in the "local run" $\localrunlabel{\node}$, $\node$ has a child who is able to broadcast the sequence of messages that $\localrunlabel{\node}$ receives with value $v$. \nico{modif}
 \begin{figure}[t]
 	\centering
 	\resizebox*{!}{3.5cm}{
