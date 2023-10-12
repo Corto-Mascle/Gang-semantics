@@ -8,7 +8,7 @@
 
 	The function $\towerfun$ is actually not the same as in Lemma~\ref{lem:towerbound_signature} although it is also a tower of exponentials.
 	
-	We start by defining the notion of "trace". 
+	We start by defining the notion of "trace", which is a "local run" annotated with received values. 
 	\AP A ""trace"" is a sequence in $(\set{\extlabel{\atrans}{\aval} \mid \atrans \in \transitions, \aval \in \nats} \cup \set{\intlabel{\atrans} \mid \atrans \in \transitions})^*$. The "trace" of a "local run" $\localrun$ is the "trace" $\trace{\localrun}$ corresponding to the "local steps" performed in $\localrun$. Given a "trace" $\atrace$, we write $(q,\localdata) \step{\atrace} (q',\localdata')$ when there exists a "local run" of "trace" $\atrace$ from $(q,\localdata)$ to $(q',\localdata')$. 
 	
 	

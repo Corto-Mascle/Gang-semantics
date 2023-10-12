@@ -98,7 +98,7 @@ Let $\agents = \set{a_1, a_2,a_3}$. We denote a configuration $\config$ by $\tup
 \item $a_3$ broadcasts $\exgothree$, $a_1$ receives: $\tuple{q_4, (1,2,3), q_6, (2,\_,\_), q_7, (3,\_,\_)}$.
 \end{itemize}
 	
-Figure~\ref{fig:ex-unfolding-tree-signature} provides an unfolding tree derived from $\run$ by applying a procedure introduced later. Because agents $a_2$ and $a_3$ broadcast to several other agents, they each correspond to several nodes of the tree.  
+Figure~\ref{fig:ex-unfolding-tree-signature} provides an "unfolding tree@@sg" derived from $\run$ by applying a procedure introduced later. Because agents $a_2$ and $a_3$ broadcast to several other agents, they each correspond to several nodes of the tree.  
 % the following sequence is an initial run covering $q_4$:
 	% \begin{align*}
 	% 	&\tuple{(q_0, (\valsymb{1},2,3)), (q_0, (x_2,\_,\_)) , (q_0, (x_3,\_,\_))} \step{} \tuple{(q_1, (x_1,x_2,z_1)), (q_5,(x_2,\_,\_)) , (q_0, (x_3,\_,\_))} \step{} \\ 
@@ -124,7 +124,7 @@ Figure~\ref{fig:ex-unfolding-tree-signature} provides an unfolding tree derived 
 	\centering
 	\input{Figures/tree-example-sign}
 	\vspace{-0.5cm}
-	\caption{Example of an unfolding tree derived from $\run$. Grids correspond to "local runs", a column of a grid is a "local configuration". Transition $\atrans_{ij}$ is the transition between state $q_i$ and state $q_j$, for example $\atrans_{01} = (q_0, \rec{\exready}{2}{\enregact}, q_1)$. If $\atrans$ is a reception of $m\in \messages$, $\extlabel{\atrans}{v}$ corresponds to receiving message $(m,v)$; if $\atrans$ is a broadcast of $m \in \messages$, $\intlabel{\atrans}$ corresponds to broadcasting $(m,\mathsf{id})$ where $\mathsf{id}$ is the value in the first register of the agent. Initial values of "reception-only" registers are irrevelant and written as $\quotemarks{\_}$. Colors correspond to message types.}
+	\caption{Example of an "unfolding tree@@sg" derived from $\run$. Grids correspond to "local runs", a column of a grid is a "local configuration". Transition $\atrans_{ij}$ is the transition between state $q_i$ and state $q_j$, for example $\atrans_{01} = (q_0, \rec{\exready}{2}{\enregact}, q_1)$. If $\atrans$ is a reception of $m\in \messages$, $\extlabel{\atrans}{v}$ corresponds to receiving message $(m,v)$; if $\atrans$ is a broadcast of $m \in \messages$, $\intlabel{\atrans}$ corresponds to broadcasting $(m,\mathsf{id})$ where $\mathsf{id}$ is the value in the first register of the agent. Initial values of "reception-only" registers are irrevelant and written as $\quotemarks{\_}$. Colors correspond to message types.}
 	\label{fig:ex-unfolding-tree-signature}
 \end{figure}
 %	\todo{relire cette légende}
@@ -146,15 +146,15 @@ Up to renaming agents, we can assume the set of agents of these runs are disjoin
 We build an "initial run" $\run$ whose "agents" is the union of the "agents" of the $c$ runs along with a fresh agent $a$. In $\run$, we make $\run_1$ to $\run_c$ progress in parallel and make $a$ follow the "local run" $\localrun$, matching each reception with value $v_j$ in $\localrun$ with a broadcast in $\run_j$. 
 This is possible because, for all $j$, $\vinput{v_j}{\localrun} \subword \speclabel{\node_j} \subword \voutput{v_j}{\run_j}$ (by \ref{item:condition3_boss_node_sg}). 
 
-Conversely, we prove the following by induction on the length of $\run$: for every "initial run" $\run$, for every agent $a$ in $\run$ and for every $v \in \nats$, there exists an "unfolding tree" whose root has as "local run" the projection of $\run$ onto $a$ and as "specification@@sg" the $v$-"output" of $a$ in $\run$. If $\run$ is the empty run, consider the "unfolding tree" with a single node whose "local run" and "specification@@sg" are empty. Suppose now that $\run$ has non-zero length, let $a$ an agent in $\run$, $v \in \nats$ and let $\run_p$ the prefix run of $\run$ of length $\size{\run}-1$.
-Let $\tree_1$ the "unfolding tree" obtained by applying the induction hypothesis to $\run_p$, $a$ and $v$, and consider $\tree_2$ obtained by simply appending the last step of $a$ in $\run$ to the "local run" at the root of $\tree_1$. If this last step is a broadcast, we obtain an "unfolding tree"; if the broadcast value is $v$, we append the broadcast "message type" to the "specification@@sg" at the root of $\tree_2$ and we are done. 
+Conversely, we prove the following by induction on the length of $\run$: for every "initial run" $\run$, for every agent $a$ in $\run$ and for every $v \in \nats$, there exists an "unfolding tree@@sg" whose root has as "local run" the projection of $\run$ onto $a$ and as "specification@@sg" the $v$-"output" of $a$ in $\run$. If $\run$ is the empty run, consider the "unfolding tree" with a single node whose "local run" and "specification@@sg" are empty. Suppose now that $\run$ has non-zero length, let $a$ an agent in $\run$, $v \in \nats$ and let $\run_p$ the prefix run of $\run$ of length $\size{\run}-1$.
+Let $\tree_1$ the "unfolding tree@@sg" obtained by applying the induction hypothesis to $\run_p$, $a$ and $v$, and consider $\tree_2$ obtained by simply appending the last step of $a$ in $\run$ to the "local run" at the root of $\tree_1$. If this last step is a broadcast, we obtain an "unfolding tree@@sg"; if the broadcast value is $v$, we append the broadcast "message type" to the "specification@@sg" at the root of $\tree_2$ and we are done. 
 Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{i}{\anact},q')$ of a message $(m,\aval')$. We might need to adapt $\tree_2$ to respect condition \ref{item:condition2_non_initial_value_sg} at the root. Let $a'$ the agent broadcasting in the last step of $\run$. Let $\tree_3$ the "unfolding tree@@sg" obtained by applying the induction to $\run_p$, $a'$ and $v'$. Let $\tree_4$ the "unfolding tree@@sg" obtained by appending the last broadcast to the "local run" at the root of $\tree_3$ and the corresponding "message type" to the "specification@@sg" at the root of $\tree_3$. Attaching $\tree_4$ below the root of $\tree_2$ gives an "unfolding tree@@sg" satisfying the desired properties. 
 % Note that this construction may generate more children than needed at the root - maybe another child was already there to witness broadcasts of $a'$ in $\run_p$, in which case this child may be deleted. 
 \end{proof}
 
 
-	The "unfolding tree" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure.
-	 Observe that the "unfolding tree" $\tree$  is a "coverability witness@@sg" for $q_4$. However, one can find a smaller "coverability witness@@sg". 
+	The "unfolding tree@@sg" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure.
+	 Observe that the "unfolding tree@@sg" $\tree$  is a "coverability witness@@sg" for $q_4$. However, one can find a smaller "coverability witness@@sg". 
 	Indeed, in the right branch of $\tree$, $\node_5$ and $\node_6$ have the same "specification@@sg", therefore $\node_5$ can be deleted and replaced with $\node_6$. More generally, we would have also been able to shorten the tree if we had $\speclabel{\node_5} \subword \speclabel{\node_6}$. \nico{modif: une phrase enlevee}
 
 \subsection{Bounding the Size of a Coverability Witness}
@@ -206,7 +206,7 @@ Doing so, all equality and disequality tests pass. Also, there is no interleavin
 	\label{fig:proof-pumping-signed}
 \end{figure}
 
-Using the previous lemma, we will bound the size of a node in $\tree$ with respect to its "specification" therefore with respect to its parent's size. By induction, we will then obtain a bound depending on the depth, and apply the "Length function theorem" to bound the height of the tree. 
+Using the previous lemma, we will bound the size of a node in $\tree$ with respect to its "specification@@sg" therefore with respect to its parent's size. By induction, we will then obtain a bound depending on the depth, and apply the "Length function theorem" to bound the height of the tree. 
 
 \begin{lemma}
 \label{lem:bounds_tree_sg}
@@ -217,7 +217,7 @@ For all nodes $\node, \node'$ in $\tree$: \begin{enumerate}
 \end{enumerate} 
 \end{lemma}
 \begin{proof}
-For \ref{item:bound_node_1_sg}, if $\node$ is not the root then, by minimality of $\tree$, $\localrunlabel{\node}$ ends with the last broadcast required by $\speclabel{\node}$; we identify in $\localrunlabel{\node}$ the broadcast steps witnessing $\speclabel{\node}$ and shorten the "local run" between these steps using Lemma~\ref{lem:towerbound_signature}.  The node $\node_r$ at the root of $\tree$ has empty "specification" by minimality of $\tree$ but must cover $q_f$ hence $\size{\localrunlabel{\node_r}} \leq \towerfun(\size{\prot},r)$ by Lemma~\ref{lem:towerbound_signature}, proving \ref{item:bound_node_1_sg}.
+For \ref{item:bound_node_1_sg}, if $\node$ is not the root then, by minimality of $\tree$, $\localrunlabel{\node}$ ends with the last broadcast required by $\speclabel{\node}$; we identify in $\localrunlabel{\node}$ the broadcast steps witnessing $\speclabel{\node}$ and shorten the "local run" between these steps using Lemma~\ref{lem:towerbound_signature}.  The node $\node_r$ at the root of $\tree$ has empty "specification@@sg" by minimality of $\tree$ but must cover $q_f$ hence $\size{\localrunlabel{\node_r}} \leq \towerfun(\size{\prot},r)$ by Lemma~\ref{lem:towerbound_signature}, proving \ref{item:bound_node_1_sg}.
 For \ref{item:bound_node_2_sg}, by minimality of $\tree$, $\size{\speclabel{\node}} \leq \max_{v \in \nats} \size{\vinput{v}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}} \leq (\towerfun(\size{\prot}, r){+}1) \, \size{\speclabel{\node'}}$. 
 %For \ref{item:bound_node_3_sg}, we use $\size{\node} = \size{\speclabel{\node}} + \size{\localrunlabel{\node}}$ and combine \ref{item:bound_node_1_sg} and \ref{item:bound_node_2_sg}.  
 \end{proof}
