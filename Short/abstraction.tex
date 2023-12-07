@@ -42,13 +42,13 @@
 %We define formally this abstraction and show its soundness and completeness in Appendix~\ref{app:cover-one-reg}.
 %To bound the length of relevant abstract runs, we impose that $S$ should grow between two gang resets (otherwise they reset to the same abstract configuration) and that there may be at most $O(\size{Q}^2)$ "abstract steps" between two resets (as $K$ can only increase and there are only $\size{Q}+1$ possibilities for $b$). This means that if there is an abstract run covering a state, there is one of size $O(\size{Q}^3)$, proving the \NP upper bound. 
 
-The \NP lower bound follows from a reduction from 3SAT. An agent $a$ sends a sequence of messages representing a valuation, with its identifier, to other agents who play the role of an external memory by broadcasting back the valuation. This then allows $a$ to check the satisfaction of a 3SAT formula. \nico{petite modif, notamment plus de parenthese}
+The \NP lower bound follows from a reduction from 3SAT. An agent $a$ sends a sequence of messages representing a valuation, with its identifier, to other agents who play the role of an external memory by broadcasting back the valuation. This then allows $a$ to check the satisfaction of a 3SAT formula.
 %
 %These results yield the main theorem of this section:
 
 
 \begin{restatable}{theorem}{thmNPComplete}
 	\label{thm:np-complete-query-cover}
-	The "coverability problem" for 1-BNRA is \NP-complete. \nico{modif}
+	The "coverability problem" for 1-BNRA is \NP-complete. 
 \end{restatable}
 
