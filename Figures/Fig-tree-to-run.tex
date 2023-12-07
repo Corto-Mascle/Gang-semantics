@@ -1,12 +1,12 @@
 \begin{tikzpicture}[xscale=0.9]
 	
 	\draw[->] (-0.5,-1.8) -- (3.5,-1.8);
-	\draw[->] (5.5,-1.8) -- (7.5,-1.8);
-	\draw[->] (9.5,-1.8) -- (12.5,-1.8);
+	\draw[->] (5.2,-1.8) -- (7.2,-1.8);
+	\draw[->] (8.9,-1.8) -- (11.9,-1.8);
 	
 	\node (0) at (-1,-1.8) {$\localrunlabel{\node}$};
- 	\node (1) at (5,-1.8) {$\run_1$};
- 	\node (2) at (9,-1.8) {$\run_2$};
+ 	\node (1) at (4.7,-1.8) {$\run_1$};
+ 	\node (2) at (8.4,-1.8) {$\run_2$};
 
 
 	\node (b) at (0,-1.6) {$\brone{\color{blue}a\color{black}}$};
@@ -14,20 +14,20 @@
 	\node (b) at (2,-1.6) {$\brone{\color{blue}a\color{black}}$};
 	\node (b) at (3,-2.1) {$\recsymb({\color{blue}c\color{black}})$};
 	
-	\node (b) at (6,-2.1) {$\recsymb({\color{blue}a\color{black}})$};
-	\node (b) at (7,-1.6) {$\brone{\color{blue}b\color{black}}$};
+	\node (b) at (5.6,-2.1) {$\recsymb({\color{blue}a\color{black}})$};
+	\node (b) at (6.6,-1.6) {$\brone{\color{blue}b\color{black}}$};
 	
-	\node (b) at (10,-2.1) {$\recsymb({\color{blue}a\color{black}})$};
-	\node (b) at (11,-2.1) {$\recsymb({\color{blue}b\color{black}})$};
-	\node (b) at (12,-1.6) {$\brone{\color{blue}c\color{black}}$};
+	\node (b) at (9.4,-2.1) {$\recsymb({\color{blue}a\color{black}})$};
+	\node (b) at (10.4,-2.1) {$\recsymb({\color{blue}b\color{black}})$};
+	\node (b) at (11.4,-1.6) {$\brone{\color{blue}c\color{black}}$};
 
 	\node (1) at (1.5,-2.6) {$\bosslabel{\node}=aac$};
 	\node (1) at (6.5,-2.6) {$\run_1 \text{ satisfies } (a,b)$};
-	\node (1) at (11,-2.6) {$\run_2 \text{ satisfies } (ab,c)$};
+	\node (1) at (10.5,-2.6) {$\run_2 \text{ satisfies } (ab,c)$};
 
 	\node (1) at (1.5,-3) {$\decsymb = (a,b, a, c, \epsilon)$};
 	\node (1) at (6.5,-3) {$\decsymb_1 = (a)$};
-	\node (1) at (11,-3) {$\decsymb_2 = (a, b, a)$};
+	\node (1) at (10.5,-3) {$\decsymb_2 = (a, b, a)$};
 
 %	\draw[->] (-0.5,-3) -- (7.5,-3);
 	\draw[->] (-0.5,-4) -- (5.5,-4);
@@ -52,7 +52,7 @@
 	\node (0) at (-1,-5) {$\localrunlabel{\node}$};
 	
 	\draw (-1.7, -5.5) rectangle (7, -3.5);
-	\node[text width =4cm] (txt2) at (10, -4.3) {We compose $\localrunlabel{\node}$ with $\run_2$ to obtain a "partial run" $\run'$ which outputs the desired word $aac$};
+	\node[text width =4cm] (txt2) at (9.5, -4.3) {We compose $\localrunlabel{\node}$ with $\run_2$ to obtain a "partial run" $\run'$ which outputs the desired word $aac$};
 	
 	\draw[->] (-0.5,-6.5) -- (4.5,-6.5);
 	\draw[->] (-0.5,-7.5) -- (6.5,-7.5);
@@ -77,7 +77,7 @@
 	
 	\draw (-1.7, -8) rectangle (7, -5.9);
 %	\node (r') at (9.5, -7) {$\run''$};
-	\node[text width = 4cm] (txt1) at (10, -6.5) {We compose $\run'$ with $\run_2$ to match an "unmatched reception" $b$};
+	\node[text width = 4cm] (txt1) at (9.5, -6.5) {We compose $\run'$ with $\run_2$ to match an "unmatched reception" $b$};
 	
 %	\node (b) at (0,-9.8) {$\brone{\color{blue}a\color{black}}$};
 %	\node (b) at (1,-10.2) {$\recsymb({\color{blue}b\color{black}})$};
@@ -106,7 +106,7 @@
 %	\node (txt2) at (11.7, -9.5) {eliminate the last $b$ input};
 	
 	\node (d) at (5,-8.3) {\Huge \vdots};
- 	\node[text width=4cm] (d) at (10,-8.5) {... and iterate compositions with $\run_{1}$ and $\run_2$ until the "run" does not have any "unmatched reception".};
+ 	\node[text width=4cm] (d) at (9.5,-8.5) {... and iterate compositions with $\run_{1}$ and $\run_2$ until the "run" does not have any "unmatched reception".};
 %	\node (b1) at (0,0.6) {};
 %	\node (b2) at (1,0.6) {};
 %	\node (b3) at (3,0.6) {};
