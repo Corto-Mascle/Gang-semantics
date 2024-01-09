@@ -1,0 +1,443 @@
+% !TeX root = main.tex
+\documentclass{beamer}
+\usetheme{Copenhagen}
+%\usecolortheme{whale}
+\setbeamertemplate{itemize item}[triangle]
+\setbeamertemplate{itemize subitem}[square]
+\useoutertheme{infolines}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{comment}
+\usepackage{appendixnumberbeamer}
+\usetikzlibrary{arrows, arrows.meta,calc,automata,fit,shapes,positioning}
+\tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append,every state/.style={minimum size=20,inner sep=2}}}
+
+\definecolor{RealGreen}{HTML}{33bb33}
+\definecolor{DarkGreen}{HTML}{338833}
+
+\newcommand{\messages}{\mathcal{M}}
+\newcommand{\br}{\mathbf{br}}
+\newcommand{\rec}{\mathbf{rec}}
+\newcommand{\reg}{\hspace{-0.5mm}\square}
+%
+%\setbeamertemplate{section in toc}[square]
+\setbeamercolor{section number projected}{bg=black,fg=white}
+
+\begin{document}
+	
+	\title[]{Parameterized verification of Broadcast networks of Register automata}
+	\date[]{January 16th, 2024}
+	\author[Nicolas Waldburger]{Nicolas Waldburger\\ joint work with Lucie Guillou and Corto Mascle}
+	\institute[]{ANR PaVeDyS}
+	\setbeamertemplate{navigation symbols}{}
+	\addtobeamertemplate{title page}{}{\begin{center}{To be published at FoSSaCS'24}\end{center}}
+%	
+\begin{frame}
+	\titlepage
+\end{frame}	
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+\section{Broadcast networks}
+
+\subsection{Basic model}
+
+\begin{frame}
+	\tableofcontents[currentsection]
+\end{frame}
+
+
+\begin{frame}{Broadcast networks}
+	\centering
+	\input{Figures/RBN-protocol}
+\end{frame}
+
+
+\begin{frame}{Broadcast networks}
+	\centering
+	\input{Figures/RBN-example}
+\end{frame}
+
+\begin{frame}{Broadcast Networks}
+	\begin{block}{Definition$^1$}
+		(Reconfigurable) Broadcast Network = $(Q, M, \Delta, q_0)$ with $\Delta \subseteq Q\times \{\mathbf{br}(m), \mathbf{rec}(m) \mid m \in M\} \times Q$.
+	\end{block}
+	
+	\pause
+	
+	\begin{itemize}
+		\item Arbitrarily many agents at the start
+		
+		\item One step = an agent broadcasts a message $m$,\\ some (arbitrary subset of) other agents receive it.
+	\end{itemize}
+	
+	\pause 
+	
+	\begin{block}{Problems}
+%		\vspace{0.3cm}
+		{\sc{Cover}}: Is there a run in which \textbf{an} agent reaches \color{blue!60}$q_f$\color{black}?
+%		\vspace{0.3cm}
+		
+		{\sc{Target}}: Is there a run in which \textbf{all agents} reach \color{blue!60}$q_f~$\color{black} \textbf{simultaneously}?
+	\end{block}
+	
+	Both problems are decidable in PTIME\footnote{Delzanno, Sangnier, Zavattaro, CONCUR'10}\footnote{Delzanno, Sangnier, Traverso, Zavattaro, FSTTCS'12}.
+\end{frame}
+
+\subsection{With registers}
+
+\begin{frame}
+	\tableofcontents[currentsubsection]
+\end{frame}
+
+\begin{frame}{Registers}
+	
+	Each agent now has local registers $\reg_1, \ldots, \reg_r$, containing values in $\mathbb{N}$.\vspace{0.3cm}\pause
+	
+	\input{Figures/BNRA-protocol}
+\end{frame}
+
+\begin{frame}{Broadcast Networks of Register Automata (BNRA)\footnote{Delzanno, Sangnier, Traverso, RP'13}}
+	Each agent now has local \emph{registers} $\reg_1, \ldots, \reg_r$, containing values in $\mathbb{N}$.
+	\pause
+	\textbf{Initially, all registers of all agents contain distinct values.}
+	
+	\pause
+	\vspace{0.2cm}
+	Messages also contain values: $(m, v) \in M\times \mathbb{N}$.
+	An agent can:
+	\begin{itemize}
+		\item Broadcast a message with a register value $\mathbf{br}(m, r_i)$\vspace{0.3cm}\pause
+		
+%		\item Test equality between its registers $\mathbf{loc}(r_i, r_j, =), \mathbf{loc}(r_i, r_j, \neq)$\pause
+		
+		\item Receive messages $\mathbf{rec}(m, r_i, op)$, with $op$ either
+		\begin{itemize}
+			\item store the value $\downarrow$,
+			
+			\item test it for equality $=, \neq$
+			
+			\item or do nothing $*$.
+		\end{itemize}   
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Things we can do}
+	
+	We can check that a sequence of messages all come from the same agent.
+
+	\begin{center}
+	\input{Figures/Predecessor-protocol}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Things we can do}
+	We can check that a sequence of messages we sent was received.
+	
+	\centering
+		\input{Figures/Successor-protocol}
+\end{frame}
+
+\begin{frame}{Parameterized verification principles}
+	
+	\begin{itemize}
+		\item Unlimited supply of agents.
+		
+		\item For {\sc{Cover}}, we can add as many agents as we need at no cost. 
+	\end{itemize}
+	
+	\pause
+	
+	\begin{block}{Copycat principle}
+		Given a run $\rho$, we can construct a run made of many copies of $\rho$ running in parallel.
+	\end{block}
+	
+	\begin{block}{Main theorem}
+		{\sc{Cover}} is decidable for BNRA.
+	\end{block}
+
+
+\end{frame}
+
+
+
+
+
+
+
+\section{Signature BNRA}
+
+\begin{frame}
+	\tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Signature BNRA}
+	\begin{block}{Signature BNRA}
+		A agent never modifies its first register, and only broadcasts with the value of its first signature.
+		
+		Other registers are used to store and compare values received.
+	\end{block}
+	The first register acts as an identity with which agents sign their messages. 
+	
+	\vspace{-0.4cm}
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[red] (0.15,0.15) circle (0.3); 
+			%		\node at (-0.2, -0.2) {\scriptsize\color{red} id};
+			\node at (0.2, 1) {\scriptsize\color{red} br};
+			\draw[purple] (1.3,0.15) ellipse (0.8 and 0.4);
+			\node at (1.6, -0.4) {\scriptsize\color{purple} rec};
+			\node at (1.8, -0.7) {\scriptsize\color{purple} $\downarrow, =, \neq$};
+			
+			\draw (0,0) rectangle (0.3,0.3);
+			\draw (0.6,0) rectangle (0.9,0.3);
+			\node at (1.3,0.15) {$\cdots$};
+			\draw (1.6,0) rectangle (1.9,0.3);
+			
+			\draw[red, arrows = {-Stealth[length=5pt, inset=2pt]}] (0.15, 0.45) .. controls +(0,0.3) and +(0,-0.3) .. (0.5, 1); 
+			\draw[purple, arrows = {-Stealth[length=5pt, inset=2pt]}] (1.15, -1) .. controls +(0,0.3) and +(0,-0.3) .. (1.3, -0.25); 
+		\end{tikzpicture}
+	\end{center}
+	
+	\pause
+	\textbf{\small Messages received with the same value come from the same agent.}
+\end{frame}
+
+
+
+\subsection{Well quasi-orders}
+
+\begin{frame}
+	\tableofcontents[currentsubsection]
+\end{frame}
+
+
+\begin{frame}{Well quasi-orders}
+		 
+	
+		\input{Figures/Rectangle-wqo}
+		
+		\onslide<1-12>{\onslide<2->{$(4,3)$}\onslide<4>{$\to {\color{red}(6,3)}$}\onslide<5->{\hspace{-1.35cm}$\to (2,4)$}\onslide<6->{$\to (7,1)$}\onslide<7->{$\to (0,5)$}\onslide<8->{$\to (8,0)$}\onslide<9->{$\to (3,1)$}\onslide<10->{$\to (1,2)$}\onslide<11->{$\to (0,0)$}}
+
+\onslide<16->{König's lemma $\to$ this tree is finite. 
+
+In fact, there is a computable bound on the length of the longest branch.
+}
+
+
+\onslide<17>{\textbf{We can enumerate all possible such trees!}}
+
+%	
+%\onslide<13>{\input{Figures/Tree-wqo}}
+	
+%	\vspace{1cm}\onslide<2->{$(4,3)$}\onslide<4>{$\to (4,2)$}\onslide<5->{\hspace{-1.35cm}$\to (2,4)$}\onslide<6->{$\to (7,1)$}\onslide<7->{$\to (0,5)$}\onslide<8->{$\to (8,0)$}\onslide<9->{$\to (3,1)$}\onslide<10->{$\to (1,2)$}\onslide<11->{$\to (0,0)$}
+\end{frame}
+
+
+\begin{frame}{Well quasi-orders: Subwords}
+	
+	\begin{block}{Higman's lemma}
+		For all finite alphabet $\Sigma$, the subword order $\preceq$ is a well quasi-order over $\Sigma^*$.
+	\end{block}
+
+	\pause
+	$\Leftrightarrow$ Any sequence $w_0, w_1, w_2, \ldots$ of words over $\Sigma$ such that $w_i \npreceq w_j$ for all $i<j$ is \textbf{finite}.
+	
+	\vspace{1cm}
+	\pause
+	Given a finite alphabet $\Sigma$ and a computable function $B : \mathbb{N} \to \mathbb{N}$, the set of sequences $(w_i)_{i \in \mathbb{N}}$ over $\Sigma$ such that
+	\begin{itemize}
+		\item $w_i \npreceq w_j$ for all $i<j$ 
+		\item $|w_i| \leq B(i)$ for all $i$
+	\end{itemize}
+is finite and computable.
+\end{frame}
+
+\subsection{Decidability proof}
+
+\begin{frame}
+	\tableofcontents[currentsubsection]
+\end{frame}
+
+\begin{frame}{Towards a tree abstraction}
+Assume that there is a valid run $\rho$ for COVER. 
+\begin{block}{Observation 1}
+If agent $a$ broadcasts to agents $b$ and $c$, we can make copy agent $a$ so that $b$ and $c$ receive messages from distinct agents. 
+\end{block}
+We can modify $\rho$ so that each agent sends messages to one single agent.
+\pause
+
+\begin{block}{Observation 2}
+If $a$ broadcasts $m_1$ to $b$ then $b$ broadcasts $m_2$ to $a$, we can make a copy $a'$ of $a$ that broadcasts to $b$ and then stops; $a' \to b \to a$.
+\end{block}
+More generally, we can guarantee that the graph of ``who sends messages to whom'' has no cycle: it's a tree !
+\end{frame}
+	
+
+\begin{frame}{Tree unfoldings}
+	
+
+	\input{Figures/Tree-local-runs}
+	
+\end{frame}
+
+\begin{frame}{Tree unfoldings}
+	\input{Figures/Tree-local-runs-full}
+	
+\end{frame}
+
+\begin{frame}{Branch reduction}
+	
+	\begin{block}{Lemma}
+		If a node labelled $w$ has a descendant labelled $w'$ with $w$ a subword of $w'$ then the tree can be reduced.
+	\end{block}
+	
+	\input{Figures/Branch-reduction}
+\end{frame}
+
+\begin{frame}{Branch reduction}
+	\begin{itemize}
+		\item We can assume that a node labelled $w$ has no descendant labelled $w' \succeq w$.
+		\pause 
+		\item In order to bound the size of the tree, we need a bound on the growth of the size of the nodes.
+	\end{itemize}
+
+	\pause
+
+	\begin{block}{Shortening long local runs} There exists a primitive recursive function $\varphi: \mathbb{N} \rightarrow \mathbb{N}$ such that, if an agent must broadcast $k$ messages, its local run does not need to have more than $k \, \varphi(|\mathcal{P}|)$ steps. 
+	\end{block}
+	$|\mathcal{P}|$: size of the protocol \\
+	Proof by shortening arguments (a bit involved)
+\end{frame}
+
+\begin{frame}{Bounding the branches}
+	\centering
+	\input{Figures/Bound-signature-tree}
+
+\end{frame}
+
+
+\begin{frame}{Decidability}
+	\begin{block}{Bounds}
+	We use the previous argument to bound (in an irreducible tree):
+	\begin{itemize}
+	\item the length of all branches,
+	\item the size of every node,
+	\item the maximal degree of the tree.
+	\end{itemize}
+	This bounds the total space needed to store such a tree.
+	\end{block}
+	\pause 
+
+	We can enumerate all irreducible trees in finite time, therefore
+	
+	\begin{block}{Theorem}
+		The {\sc{Cover}} problem for \color{blue}signature \color{black} BNRA is decidable \onslide<3->{\color{red!70!black} and in $\mathbf{F}_{\omega^\omega}$.}
+	\end{block} 
+	\onslide<4->{Can be extended to the non-signature case.} 
+\end{frame}
+
+\section{Complexity bounds}
+
+
+
+% \begin{frame}{Complexity bounds}
+	
+	
+	
+% 	\begin{block}{Length function theorem}
+% 		For all finite $\Sigma$, for all $g : \mathbb{N} \to \mathbb{N}$ primitive recursive, there exists a function $F : \mathbb{N} \to \mathbb{N}$ of $\mathcal{F}_{\omega^{|\Sigma|-1}}$ such that for all $n \in \mathbb{N}$, every sequence $w_0, w_1, \ldots \in \Sigma^*$ such that $|w_i| \leq g^i(n)$ for all $i$ has at most $F(n)$ terms.\footnote{Cichon, Tahan Bittar, Theoretical Computer Science, '98}\footnote{Schmitz, Schnoebelen, ICALP'11}
+% 	\end{block}
+	
+% 	\begin{itemize}
+% 		\item We can bound the tree size by a function of $\mathcal{F}_{\omega^{\omega}}$.
+% 	\end{itemize}
+	
+% %	\begin{block}{Lemma (Lower bound)}
+% %		Reachability in Lossy channel systems is $\mathbf{F}_{\omega^\omega}$-complete.
+% %	\end{block}
+% %	
+% %	\begin{itemize}
+% %		\item We can encode LCS in BNRA by a PTIME reduction.
+% %	\end{itemize}
+% 	\pause
+% 	\begin{block}{Theorem}
+% 		{\sc{Cover}} in BNRA is $\mathbf{F}_{\omega^\omega}$-complete, even for a fixed number of registers $r\geq 2$.
+% 	\end{block}
+	
+% 	\pause
+	
+% 	\begin{block}{Theorem}
+% 		 {\sc{Cover}} in BNRA with one register is $\mathbf{NP}$-complete.
+% 	\end{block}
+% \end{frame}
+
+\begin{frame}{Conclusion}
+% \begin{itemize}
+% 	\item Add mustard! \begin{itemize}
+% 		\item Pushdown agents
+% 		\item Inequality tests $\leq$
+% 	\end{itemize} 
+		
+% 	\item Less permissive communication topology?
+	
+% 	\item Bounded number of alternations between broadcast and receive?
+% \end{itemize} 
+
+	\Huge \textbf{Thank you for your attention!}
+\end{frame}
+
+\appendix
+ \begin{frame}
+  
+ \end{frame}
+\begin{frame}{Complexity: encoding Lossy Channel Systems}
+	Lossy Channel System = Transition system with FIFO memory + unreliable writes.\vspace{1cm}
+	
+	\input{Figures/LCS-example}
+\end{frame}
+
+
+\begin{frame}{Complexity: encoding Lossy Channel Systems}
+	We simulate an LCS through a chain of agents that each apply a transition.
+	
+	Each agent stores:
+	\begin{itemize}
+		\item An identifier for itself
+		
+		\item Its predecessor's identifier
+	\end{itemize} 
+	
+	\input{Figures/LCS-reduction}
+	
+\end{frame}
+
+\begin{frame}{Complexity: encoding Lossy Channel Systems}
+	
+	\input{Figures/LCS-transitions}
+	
+\end{frame}
+
+\begin{frame}{Complexity results}
+	
+	$\mathbf{F}_{\omega^\omega}$ = Hyper-Ackermannian complexity class.
+	
+	\begin{block}{Theorem}
+		LCS reachability is $\mathbf{F}_{\omega^\omega}$-hard\footnote{Schnoebelen, Information agenting Letters '08}.
+	\end{block}
+	\pause 
+
+	\begin{block}{Theorem}
+		{\sc{Cover}} in BNRA is $\mathbf{F}_{\omega^\omega}$-complete, even for signature protocols with two registers.
+	\end{block}
+	\pause 
+
+	\begin{block}{Theorem}
+		 {\sc{Cover}} in BNRA with one register is $\mathbf{NP}$-complete.
+	\end{block}
+	
+\end{frame}
+
+\end{document}
