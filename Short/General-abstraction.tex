@@ -157,6 +157,10 @@ Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{
 	The "unfolding tree@@sg" $\tree$ of Figure~\ref{fig:ex-unfolding-tree-signature} is built from $\run$ of Example~\ref{ex:protocol-signature} using the previous procedure.
 	 Observe that the "unfolding tree@@sg" $\tree$  is a "coverability witness@@sg" for $q_4$. However, one can find a smaller "coverability witness@@sg". 
 	Indeed, in the right branch of $\tree$, $\node_5$ and $\node_6$ have the same "specification@@sg", therefore $\node_5$ can be deleted and replaced with $\node_6$. More generally, we would have also been able to shorten the tree if we had $\speclabel{\node_5} \subword \speclabel{\node_6}$.
+	
+	\begin{remark}\label{remark:tree-root-spec-1}\lu{new}
+	For some further proofs, it is sometimes convenient to consider coverability witnesses whose root has a non-empty specification. In order to define the root specification, one can do the following transformation of the protocol: from the state to cover, add a self loop broadcast transition of a fresh message (for instance, a fresh letter not already in $\messages$ together with register 1). Hence, in the rest of this paper, we consider coverability witnesses whose root specification is this fresh letter. 
+	\end{remark}
 
 \subsection{Bounding the Size of a Coverability Witness}
 In all the following, we fix a positive instance $(\prot,q_f)$ of \COVER with $r+1$ registers (\emph{i.e.}, $r$ registers used for reception) and a  "coverability witness@@sg" $\tree$ of minimal size.
@@ -214,7 +218,7 @@ For all nodes $\node, \node'$ in $\tree$: \begin{enumerate}
 \end{enumerate} 
 \end{lemma}
 \begin{proof}
-For \ref{item:bound_node_1_sg}, if $\node$ is not the root then, by minimality of $\tree$, $\localrunlabel{\node}$ ends with the last broadcast required by $\speclabel{\node}$; we identify in $\localrunlabel{\node}$ the broadcast steps witnessing $\speclabel{\node}$ and shorten the "local run" between these steps using Lemma~\ref{lem:towerbound_signature}.  The node $\node_r$ at the root of $\tree$ has empty "specification@@sg" by minimality of $\tree$ but must cover $q_f$ hence $\size{\localrunlabel{\node_r}} \leq \towerfun(\size{\prot},r)$ by Lemma~\ref{lem:towerbound_signature}, proving \ref{item:bound_node_1_sg}.
+For \ref{item:bound_node_1_sg}, if $\node$ is not the root then, by minimality of $\tree$, $\localrunlabel{\node}$ ends with the last broadcast required by $\speclabel{\node}$; we identify in $\localrunlabel{\node}$ the broadcast steps witnessing $\speclabel{\node}$ and shorten the "local run" between these steps using Lemma~\ref{lem:towerbound_signature}.  The node $\node_r$ at the root of $\tree$ has a "specification@@sg" of size 1 by  \cref{remark:tree-root-spec-1}\ \lu{small change here about the root spec}and minimality of $\tree$ but must cover $q_f$ hence $\size{\localrunlabel{\node_r}} \leq \towerfun(\size{\prot},r)$ by Lemma~\ref{lem:towerbound_signature}, proving \ref{item:bound_node_1_sg}.
 For \ref{item:bound_node_2_sg}, by minimality of $\tree$, $\size{\speclabel{\node}} \leq \max_{v \in \nats} \size{\vinput{v}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}} \leq (\towerfun(\size{\prot}, r){+}1) \, \size{\speclabel{\node'}}$. 
 %For \ref{item:bound_node_3_sg}, we use $\size{\node} = \size{\speclabel{\node}} + \size{\localrunlabel{\node}}$ and combine \ref{item:bound_node_1_sg} and \ref{item:bound_node_2_sg}.  
 \end{proof}
