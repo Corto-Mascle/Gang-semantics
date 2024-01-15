@@ -122,6 +122,10 @@
 			\item or do nothing $*$.
 		\end{itemize}   
 	\end{itemize}
+
+	\pause
+
+	\emph{Remark}: the model where one allows to send two messages per broadcast is undecidable$^3$.
 \end{frame}
 
 \begin{frame}{Things we can do}
@@ -272,7 +276,7 @@ We can modify $\rho$ so that each agent sends messages to one single agent.
 \begin{block}{Observation 2}
 If $a$ broadcasts $m_1$ to $b$ then $b$ broadcasts $m_2$ to $a$, we can make a copy $a'$ of $a$ that broadcasts to $b$ and then stops; $a' \to b \to a$.
 \end{block}
-More generally, we can guarantee that the graph of ``who sends messages to whom'' has no cycle: it's a tree !
+More generally, we can guarantee that the graph of ``who sends messages to whom'' has no cycle: it's a tree (or a forest) !
 \end{frame}
 	
 
@@ -319,7 +323,7 @@ More generally, we can guarantee that the graph of ``who sends messages to whom'
 \end{frame}
 
 
-\begin{frame}{Decidability}
+\begin{frame}{Decidability and complexity}
 	\begin{block}{Bounds}
 	We use the previous argument to bound (in an irreducible tree):
 	\begin{itemize}
@@ -339,7 +343,24 @@ More generally, we can guarantee that the graph of ``who sends messages to whom'
 	\onslide<4->{Can be extended to the non-signature case.} 
 \end{frame}
 
-\section{Complexity bounds}
+\begin{frame}{Complexity lower bounds}
+	\begin{block}{Lossy Channel Systems}
+	A \emph{Lossy Channel System} (LCS) is a transition system with a FIFO queue and unreliable writes.
+	\end{block}
+
+	\begin{block}{Theorem}
+	LCS reachability is $\mathbf{F}_{\omega^\omega}$-hard\footnote{Schnoebelen, Information agenting Letters '08}.
+	\end{block}
+
+	\pause 
+
+	\begin{block}{Theorem}
+	{\sc{Cover}} in BNRA is $\mathbf{F}_{\omega^\omega}$-complete, even for signature protocols with two registers.
+	\end{block}
+
+	\pause
+	It is however NP-complete when each agent has only one register.
+\end{frame}
 
 
 
