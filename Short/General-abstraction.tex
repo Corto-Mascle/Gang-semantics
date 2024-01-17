@@ -425,7 +425,7 @@ We first bound the size of a node with respect to the difference between its alt
 \end{restatable}
 \begin{proof}[Proof sketch]
 	We proceed by induction on the altitude, from highest to lowest. 
-	A node of maximal "altitude"  has at most one message to broadcast (a "follower node" must broadcast one message to its parent), so its size is bounded by $\towerfun(\size{\prot},r)$ by \cref{lem:short-local-runs}.
+	A node of maximal "altitude"  has at most one message to broadcast (a "follower node" must broadcast one message to its parent), so its size is bounded by $\towerfun(\size{\prot},r)$ by \cref{lem:short-local-runs} (applying the Lemma to its local run minus its final step, namely the broadcast to its parent).\lu{precision ici}
 	Let $\node$ be a node of $\tree$ whose neighbors of higher altitude have size bounded by $K$.
 	We claim that $\size{\node} \leq (\towerfun(\size{\prot}, r)+2) \, (\size{\messages} \, r \, K + K)$, with $\psi$ the primitive-recursive function defined in Lemma~\ref{lem:short-local-runs}. 
 	The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}. The neighbors of higher "altitude" are the nodes which require sequences of messages from $\node$. Their size bounds the number of messages that $\node$ needs to send; we then apply Lemma~\ref{lem:short-local-runs} to bound the size of the local run of $\node$. Lemma~\ref{lem:bound-successor-height} in the appendix details these ideas.
