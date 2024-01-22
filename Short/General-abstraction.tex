@@ -212,14 +212,16 @@ Using the previous lemma, we will bound the size of a node in $\tree$ with respe
 \begin{lemma}
 \label{lem:bounds_tree_sg}
 For all nodes $\node, \node'$ in $\tree$: \begin{enumerate}
-\item \label{item:bound_node_1_sg} $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}, r)+1) \max(\size{\speclabel{\node}},1)$,
-\item \label{item:bound_node_2_sg} if $\node$ is the child of $\node'$, $\size{\speclabel{\node}} \leq (\towerfun(\size{\prot}, r)+1) \, \max(\size{\speclabel{\node}},1)$.
+\item \label{item:bound_node_1_sg} $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}, r)+1) \size{\speclabel{\node}}$,
+\item \label{item:bound_node_2_sg} if $\node$ is the child of $\node'$, $\size{\speclabel{\node}} \leq (\towerfun(\size{\prot}, r)+1) \, \size{\speclabel{\node'}}$.
 %\item \label{item:bound_node_3_sg} if $\node$ is the child of $\node'$, $\size{\node} \leq (\size{\node'}+1) \, (\towerfun(\size{\prot},r)+1)$.
 \end{enumerate} 
 \end{lemma}
 \begin{proof}
-For \ref{item:bound_node_1_sg}, if $\node$ is not the root then, by minimality of $\tree$, $\localrunlabel{\node}$ ends with the last broadcast required by $\speclabel{\node}$; we identify in $\localrunlabel{\node}$ the broadcast steps witnessing $\speclabel{\node}$ and shorten the "local run" between these steps using Lemma~\ref{lem:towerbound_signature}.  The node $\node_r$ at the root of $\tree$ has a "specification@@sg" of size 1 by  \cref{remark:tree-root-spec-1}\ \lu{small change here about the root spec}and minimality of $\tree$ but must cover $q_f$ hence $\size{\localrunlabel{\node_r}} \leq \towerfun(\size{\prot},r)$ by Lemma~\ref{lem:towerbound_signature}, proving \ref{item:bound_node_1_sg}.
-For \ref{item:bound_node_2_sg}, by minimality of $\tree$, $\size{\speclabel{\node}} \leq \max_{v \in \nats} \size{\vinput{v}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}} \leq (\towerfun(\size{\prot}, r){+}1) \, \size{\speclabel{\node'}}$. 
+We apply \cref{remark:tree-root-spec-1}\ and assume that the specification of the root is of length $1$.	
+For the first item, by minimality of $\tree$, $\localrunlabel{\node}$ ends with the last broadcast required by $\speclabel{\node}$; we identify in $\localrunlabel{\node}$ the broadcast steps witnessing $\speclabel{\node}$ and shorten the "local run" between these steps using Lemma~\ref{lem:towerbound_signature}.  We thus obtain
+ $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r)+1)\size{\speclabel{\node}}$, proving \ref{item:bound_node_1_sg}.
+For the second item, by minimality of $\tree$, $\size{\speclabel{\node}} \leq \max_{v \in \nats} \size{\vinput{v}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}} \leq (\towerfun(\size{\prot}, r){+}1) \, \size{\speclabel{\node'}}$. 
 %For \ref{item:bound_node_3_sg}, we use $\size{\node} = \size{\speclabel{\node}} + \size{\localrunlabel{\node}}$ and combine \ref{item:bound_node_1_sg} and \ref{item:bound_node_2_sg}.  
 \end{proof}
 
@@ -288,7 +290,7 @@ The formal definition of "unfolding tree" is given in \cref{app:def-trees}.
 %	\vspace*{-0.5cm}
 \end{figure}
 
-A ""coverability witness"" is again an "unfolding tree" whose root covers $q_f$, with the extra condition that the root is a "boss node" (a "follower node" implicitely relies on its parent's ability to broadcast). 
+A ""coverability witness"" is again an "unfolding tree" whose root covers $q_f$ (or broadcasts a message $m_f$, see \cref{remark:tree-root-spec-1}), with the extra condition that the root is a "boss node" (a "follower node" implicitly relies on its parent's ability to broadcast). 
 
 \begin{restatable}{proposition}{treessoundcomplete}
 	\label{prop:trees-sound-complete}
