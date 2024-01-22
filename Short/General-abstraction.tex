@@ -159,7 +159,7 @@ Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{
 	Indeed, in the right branch of $\tree$, $\node_5$ and $\node_6$ have the same "specification@@sg", therefore $\node_5$ can be deleted and replaced with $\node_6$. More generally, we would have also been able to shorten the tree if we had $\speclabel{\node_5} \subword \speclabel{\node_6}$.
 	
 	\begin{remark}\label{remark:tree-root-spec-1}
-	It is sometimes convenient to consider coverability witnesses whose root has a non-empty specification. In order to define the root specification, one can do the following transformation of the protocol: from the state to cover, add a self loop broadcast transition of a fresh message (for instance, a fresh letter not already in $\messages$ together with register 1). Hence, in the rest of this paper, we consider coverability witnesses whose root specification is this fresh letter. 
+	With the previous notion of "coverability witness", the root has to cover $q_f$ but may have an empty specification. However, we will later need the length of the specification of a node to be equal to the number of tasks that it must carry out. For this reason, we will, in the rest of this paper, consider that the roots of "coverability witnesses" have a specification of length $1$. This can be formally achieved by introducing a new message type $m_f$ that may only be broadcast from $q_f$ and require that, at the root, $\spec = m_f$. 
 	\end{remark}
 
 \subsection{Bounding the Size of a Coverability Witness}
@@ -178,11 +178,11 @@ We would now like to use the "Length function theorem" to bound the height of $\
 
 \begin{lemma}
 \label{lem:towerbound_signature}
-There exists a primitive recursive function $\towerfun$ such that, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ with $\size{u'} \leq~\towerfun(\size{\prot},r)$ and for all value $v' \in \nats$, there exists $v \in \nats$ such that  $\vinput{v'}{u'} \subword \vinput{v}{u}$. 
+There exists a primitive recursive function $\towerfun$ such that, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ with $\size{u'} <~\towerfun(\size{\prot},r)$ and for all value $v' \in \nats$, there exists $v \in \nats$ such that  $\vinput{v'}{u'} \subword \vinput{v}{u}$. 
 \end{lemma}
 \begin{proof}
-Let $\towerfun(n,0) = n+1$ and $\towerfun(n,k+1) = 2 \, \towerfun(n,k) \cdot ({\size{\transitions}}^{2\,\towerfun(n,k)}+1)$ for all $k$. Observe that $\towerfun(n,k)$ is a tower of exponentials of height $k$, which is primitive-recursive although non-elementary. A register $i \geq 2$ is ""active@@sg"" in a "local run" $u$ if $u$ has some $\quotemarks{\enregact}$ action on register $i$. Let $u$ a "local run", $k$ the number of "active@@sg" registers in $\localrun$, $n := \size{\prot}$ and $M := \towerfun(n,k)$.
-We prove by induction on the number $k$ of "active@@sg" registers in $u$  that if $\size{u} >\towerfun(n,k)$ then $u$ can be shortened. 
+Let $\towerfun(n,0) = n+1$ and $\towerfun(n,k+1) = 2 \, \towerfun(n,k) \cdot ({\size{\transitions}}^{2\,\towerfun(n,k)}+1)+1$ for all $k$. Observe that $\towerfun(n,k)$ is a tower of exponentials of height $k$, which is primitive-recursive although non-elementary. A register $i \geq 2$ is ""active@@sg"" in a "local run" $u$ if $u$ has some $\quotemarks{\enregact}$ action on register $i$. Let $u$ a "local run", $k$ the number of "active@@sg" registers in $\localrun$, $n := \size{\prot}$ and $M := \towerfun(n,k)$.
+We prove by induction on the number $k$ of "active@@sg" registers in $u$  that if $\size{u} \geq \towerfun(n,k)$ then $u$ can be shortened. 
  
 
 If $k=0$, any state repetition can be removed. Suppose that $\size{u} > \towerfun(n,k+1)$ and that the set $I$ of "active@@sg" registers of $u$ is such that $\size{I} = k+1$. If there exists an infix run of $u$ of length $M$ with only $k$ "active@@sg" registers, we shorten $u$ using the induction hypothesis. Otherwise, every sequence of $M$ steps in $u$ has a $\quotemarks{\enregact}$ on every register of $I$. Because $\size{\localrun} > 2 M \, (\size{\transitions}^{2M} +1)$, $\localrun$ contains at least $\size{\transitions}^{2M}+1$ disjoint sequences of length $2M$ and some $s \in \transitions^{2M}$ appears twice: in infix run $u_1$ first, then in infix run $u_2$. We build a shorter run $u'$ by removing all steps between $u_1$ and $u_2$ and merging $u_1$ and $u_2$ (see \cref{fig:proof-pumping-signed}). 
@@ -212,16 +212,16 @@ Using the previous lemma, we will bound the size of a node in $\tree$ with respe
 \begin{lemma}
 \label{lem:bounds_tree_sg}
 For all nodes $\node, \node'$ in $\tree$: \begin{enumerate}
-\item \label{item:bound_node_1_sg} $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot}, r)+1) \size{\speclabel{\node}}$,
-\item \label{item:bound_node_2_sg} if $\node$ is the child of $\node'$, $\size{\speclabel{\node}} \leq (\towerfun(\size{\prot}, r)+1) \, \size{\speclabel{\node'}}$.
+\item \label{item:bound_node_1_sg} $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot}, r) \, \size{\speclabel{\node}}$,
+\item \label{item:bound_node_2_sg} if $\node$ is the child of $\node'$, $\size{\speclabel{\node}} \leq \towerfun(\size{\prot}, r) \, \size{\speclabel{\node'}}$.
 %\item \label{item:bound_node_3_sg} if $\node$ is the child of $\node'$, $\size{\node} \leq (\size{\node'}+1) \, (\towerfun(\size{\prot},r)+1)$.
 \end{enumerate} 
 \end{lemma}
 \begin{proof}
-We apply \cref{remark:tree-root-spec-1}\ and assume that the specification of the root is of length $1$.	
+Thanks to \cref{remark:tree-root-spec-1}, we assume that the specification at the root is of length $1$.	
 For the first item, by minimality of $\tree$, $\localrunlabel{\node}$ ends with the last broadcast required by $\speclabel{\node}$; we identify in $\localrunlabel{\node}$ the broadcast steps witnessing $\speclabel{\node}$ and shorten the "local run" between these steps using Lemma~\ref{lem:towerbound_signature}.  We thus obtain
- $\size{\localrunlabel{\node}} \leq (\towerfun(\size{\prot},r)+1)\size{\speclabel{\node}}$, proving \ref{item:bound_node_1_sg}.
-For the second item, by minimality of $\tree$, $\size{\speclabel{\node}} \leq \max_{v \in \nats} \size{\vinput{v}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}} \leq (\towerfun(\size{\prot}, r){+}1) \, \size{\speclabel{\node'}}$. 
+ $\size{\localrunlabel{\node}} \leq \towerfun(\size{\prot},r) \, \size{\speclabel{\node}}$, proving \ref{item:bound_node_1_sg}.
+For the second item, by minimality of $\tree$, $\size{\speclabel{\node}} \leq \max_{v \in \nats} \size{\vinput{v}{\localrunlabel{\node'}}} \leq \size{\localrunlabel{\node'}} \leq \towerfun(\size{\prot}, r) \, \size{\speclabel{\node'}}$. 
 %For \ref{item:bound_node_3_sg}, we use $\size{\node} = \size{\speclabel{\node}} + \size{\localrunlabel{\node}}$ and combine \ref{item:bound_node_1_sg} and \ref{item:bound_node_2_sg}.  
 \end{proof}
 
@@ -233,9 +233,9 @@ There exists a function $f$ of class $\Ffunction{\omega^{\size{\messages}-1}}$ s
 \begin{proof}
 Let $n := \size{\prot}$, let $r+1$ be the number of registers in $\prot$. Thanks to Lemma~\ref{lem:no_subword_in_branch_sg}, for all $\node \ne \node'$ in 
 $\tree$ with $\node$ ancestor of $\node'$, $\speclabel{\node}$ is not a subword of $\speclabel{\node'}$.  Let $\node_1, \dots, \node_m$ the node appearing in a branch of $\tree$, from root to leaf. The sequence $\speclabel{\node_1}, \dots, \speclabel{\node_m}$ is a "bad sequence".
-For all $i \in \nset{1}{m}$, $\size{\speclabel{\node_{i+1}}}  \leq (\towerfun(n,r)+1) \, \size{\speclabel{\node_i}}$ by Lemma~\ref{lem:bounds_tree_sg}. By direct induction, $\size{\speclabel{\node_i}}$ is bounded by $g^{(i)}(n)$ where $g: n \mapsto n  \, (\towerfun(n,n)+1)$ is a primitive recursive function. Let $h$ of class $\Ffunction{\omega^{\size{\messages}-1}}$ the function obtained when applying the "Length function theorem" on $g$ and $\messages$; we have $m \leq h(n)$. 
+For all $i \in \nset{1}{m}$, $\size{\speclabel{\node_{i+1}}}  \leq \towerfun(n,r) \, \size{\speclabel{\node_i}}$ by Lemma~\ref{lem:bounds_tree_sg}. By direct induction, $\size{\speclabel{\node_i}}$ is bounded by $g^{(i)}(n)$ where $g: n \mapsto n  \, \towerfun(n,n)$ is a primitive recursive function. Let $h$ of class $\Ffunction{\omega^{\size{\messages}-1}}$ the function obtained when applying the "Length function theorem" on $g$ and $\messages$; we have $m \leq h(n)$. 
 
-By immediate induction, thanks to Lemma~\ref{lem:bounds_tree_sg}.\ref{item:bound_node_2_sg}, for every node $\node$ at depth $d$, $\size{\speclabel{\node}} \leq (\towerfun(n,r)+1)^{d+1}$ which, by Lemma~\ref{lem:bounds_tree_sg}.\ref{item:bound_node_1_sg} and because $d \leq h(n)$, bounds the size of every node by $h'(n) = (\towerfun(n,n)+1)^{h(n) + 2}$. 
+By immediate induction, thanks to Lemma~\ref{lem:bounds_tree_sg}.\ref{item:bound_node_2_sg}, for every node $\node$ at depth $d$, $\size{\speclabel{\node}} \leq \towerfun(n,r)^{d+1}$ which, by Lemma~\ref{lem:bounds_tree_sg}.\ref{item:bound_node_1_sg} and because $d \leq h(n)$, bounds the size of every node by $h'(n) = \towerfun(n,n)^{h(n) + 2}$. 
 % (initialization thanks to Lemma~\ref{lem:towerbound_signature}). 
 By minimality of $\tree$, the number of children of a node is bounded by the number of values appearing in its "local run" hence by $h'(n)$, so the total number of nodes in $\tree$ is bounded by $h'(n)^{h(n)+1}$ and the "size@@treesg" of $\tree$ by $f(n) := h'(n)^{h(n)+2}$. Because $\Ffunction{\omega^{\size{\messages}-1}}$ is closed under composition with primitive-recursive functions, $f$ is in $\Ffunction{\omega^{\size{\messages}-1}}$.
 \end{proof}
