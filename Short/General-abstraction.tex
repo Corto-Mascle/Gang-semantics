@@ -5,7 +5,7 @@ This section and the next one are dedicated to the proof of our main result:
 
 \begin{restatable}{theorem}{decidablecover}
 \label{thm:decidable-cover}
-\COVER for BNRA is decidable and $\Fcomplexity{\omega^\omega}$-complete.
+\COVER\ for BNRA is decidable and $\Fcomplexity{\omega^\omega}$-complete.
 \end{restatable}
 
 For the sake of clarity, in this section, we will first focus on the case of "signature BNRA". 
@@ -17,19 +17,20 @@ As a preliminary, we start by defining a notion of "local run" meant to represen
 \AP An ""internal step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$, denoted $(q,\localdata) \intstep{\atrans} (q',\localdata')$, is defined when $\localdata = \localdata'$ and $\atrans =(q, \br{m}{i}, q')$ is a "broadcast".  
 \AP A ""reception step"" from $(q,\localdata)$ to $(q',\localdata')$ with transition $\atrans \in \transitions$ and value $\aval \in \nats$, denoted $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$, is defined when $\atrans$ is of the form $(q,\rec{m}{j}{\anact},q')$ with $\localdata(j') = \localdata'(j')$ for all $j' \neq j$ and:
 	
-	\begin{minipage}[t]{6cm}
+	\begin{minipage}[t]{5.6cm}
 		\begin{itemize}
 			\item if $\anact = \quotemarks{\dummyact}$ 
 			then $\localdata(j) = \localdata'(j)$,
 			\item if $\anact = \quotemarks{\enregact}$ then $\localdata'(j) = v$,
 		\end{itemize}
 	\end{minipage}
-	\begin{minipage}[t]{6cm}
+	\begin{minipage}[t]{5.6cm}
 		\begin{itemize}
 			\item if $\anact = \quotemarks{\eqtestact}$ then $\localdata(j) = \localdata'(j)= v$,
 			\item if $\anact = \quotemarks{\diseqtestact}$ then $\localdata(j) = \localdata'(j) \ne v$.
 		\end{itemize}
 	\end{minipage}
+
 	\AP Such a reception step corresponds to receiving message $(m,v)$; in a "local run", one does not specify the origin of a received message.
 	%Said otherwise, $(q,\localdata) \extbr{\atrans}{\aval} (q',\localdata')$ when an agent in $(q,\localdata)$ may perform $\atrans$ upon receiving a message of type $\amessage$ and of value $\aval$.
 	A ""local step"" $(q,\localdata) \step{} (q',\localdata')$ is either a "reception step" or an "internal step". A ""local run"" $\localrun$ is a sequence of "local steps" denoted $(q_0, \nu_0) \step{*} (q, \nu)$. Its ""length"" $\size{\localrun}$ is its number of steps. %where $\nu_0$ has distinct values.
@@ -42,7 +43,7 @@ As a preliminary, we start by defining a notion of "local run" meant to represen
 \subsection{Unfolding Trees}
 \label{sec:unfolding_tree_signature}
 
-We first prove decidability of \COVER for "signature BNRA". Note that, in "signature protocols", the initial values of "reception-only" registers are not relevant as they can never be shared with other agents. We deduce from this idea the following informal observation:
+We first prove decidability of \COVER\ for "signature BNRA". Note that, in "signature protocols", the initial values of "reception-only" registers are not relevant as they can never be shared with other agents. We deduce from this idea the following informal observation:
 \begin{observation}
 \label{obs:sg_reception} 
 In "signature BNRA", when some agent receives a message, it can compare the value of the message only with the ones of previously received messages, \emph{i.e.}, check whether the sender is the same.
@@ -147,7 +148,7 @@ Up to renaming agents, we can assume the set of agents of these runs are disjoin
 We build an "initial run" $\run$ whose "agents" is the union of the "agents" of the $c$ runs along with a fresh agent $a$. In $\run$, we make $\run_1$ to $\run_c$ progress in parallel and make $a$ follow the "local run" $\localrun$, matching each reception with value $v_j$ in $\localrun$ with a broadcast in $\run_j$. 
 This is possible because, for all $j$, $\vinput{v_j}{\localrun} \subword \speclabel{\node_j} \subword \voutput{v_j}{\run_j}$ (by \ref{item:condition3_boss_node_sg}). 
 
-Conversely, we prove the following by induction on the length of $\run$: for every "initial run" $\run$, for every agent $a$ in $\run$ and for every $v \in \nats$, there exists an "unfolding tree@@sg" whose root has as "local run" the projection of $\run$ onto $a$ and as "specification@@sg" the $v$-"output" of $a$ in $\run$. If $\run$ is the empty run, consider the "unfolding tree" with a single node whose "local run" and "specification@@sg" are empty. Suppose now that $\run$ has non-zero length, let $a$ an agent in $\run$, $v \in \nats$ and let $\run_p$ the prefix run of $\run$ of length $\size{\run}-1$.
+Conversely, we prove the following by induction on the length of $\run$: for every "initial run" $\run$, for every agent $a$ in $\run$ and for every $v \in \nats$, there exists an "unfolding tree@@sg" whose root has as "local run" the projection of $\run$ onto $a$ and as "specification@@sg" the $v$-"output" of $a$ in $\run$. If $\run$ is the empty run, consider the "unfolding tree@@sg" with a single node whose "local run" and "specification@@sg" are empty. Suppose now that $\run$ has non-zero length, let $a$ an agent in $\run$, $v \in \nats$ and let $\run_p$ the prefix run of $\run$ of length $\size{\run}-1$.
 Let $\tree_1$ the "unfolding tree@@sg" obtained by applying the induction hypothesis to $\run_p$, $a$ and $v$, and consider $\tree_2$ obtained by simply appending the last step of $a$ in $\run$ to the "local run" at the root of $\tree_1$. If this last step is a broadcast, we obtain an "unfolding tree@@sg"; if the broadcast value is $v$, we append the broadcast "message type" to the "specification@@sg" at the root of $\tree_2$ and we are done. 
 Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{i}{\anact},q')$ of a message $(m,\aval')$. We might need to adapt $\tree_2$ to respect condition \ref{item:condition2_non_initial_value_sg} at the root. Let $a'$ the agent broadcasting in the last step of $\run$. Let $\tree_3$ the "unfolding tree@@sg" obtained by applying the induction to $\run_p$, $a'$ and $v'$. Let $\tree_4$ the "unfolding tree@@sg" obtained by appending the last broadcast to the "local run" at the root of $\tree_3$ and the corresponding "message type" to the "specification@@sg" at the root of $\tree_3$. Attaching $\tree_4$ below the root of $\tree_2$ gives an "unfolding tree@@sg" satisfying the desired properties. 
 % Note that this construction may generate more children than needed at the root - maybe another child was already there to witness broadcasts of $a'$ in $\run_p$, in which case this child may be deleted. 
@@ -163,7 +164,7 @@ Suppose that, in the last step of $\run$, $a$ performs a reception $(q, \rec{m}{
 	\end{remark}
 
 \subsection{Bounding the Size of a Coverability Witness}
-In all the following, we fix a positive instance $(\prot,q_f)$ of \COVER with $r+1$ registers (\emph{i.e.}, $r$ registers used for reception) and a  "coverability witness@@sg" $\tree$ of minimal size.
+In all the following, we fix a positive instance $(\prot,q_f)$ of \COVER\ with $r+1$ registers (\emph{i.e.}, $r$ registers used for reception) and a  "coverability witness@@sg" $\tree$ of minimal size.
 We turn the observation above into an argument that will be useful towards bounding the length of branches of a "coverability witness@@sg":
 
 \begin{lemma}
@@ -178,7 +179,7 @@ We would now like to use the "Length function theorem" to bound the height of $\
 
 \begin{lemma}
 \label{lem:towerbound_signature}
-There exists a primitive recursive function $\towerfun$ such that, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ with $\size{u'} <~\towerfun(\size{\prot},r)$ and for all value $v' \in \nats$, there exists $v \in \nats$ such that  $\vinput{v'}{u'} \subword \vinput{v}{u}$. 
+There exists a primitive recursive function $\towerfun$ so that, for every local run $\localrun: (q,\localdata) \step{*} (q', \localdata')$, there exists $u' : (q,\localdata) \step{*} (q',\localdata')$ with $\size{u'} <~\towerfun(\size{\prot},r)$ and for all value $v' \in \nats$, there exists $v \in \nats$ such that  $\vinput{v'}{u'} \subword \vinput{v}{u}$. 
 \end{lemma}
 \begin{proof}
 Let $\towerfun(n,0) = n+1$ and $\towerfun(n,k+1) = 2 \, \towerfun(n,k) \cdot ({\size{\transitions}}^{2\,\towerfun(n,k)}+1)+1$ for all $k$. Observe that $\towerfun(n,k)$ is a tower of exponentials of height $k$, which is primitive-recursive although non-elementary. A register $i \geq 2$ is ""active@@sg"" in a "local run" $u$ if $u$ has some $\quotemarks{\enregact}$ action on register $i$. Let $u$ a "local run", $k$ the number of "active@@sg" registers in $\localrun$, $n := \size{\prot}$ and $M := \towerfun(n,k)$.
@@ -240,7 +241,7 @@ By immediate induction, thanks to Lemma~\ref{lem:bounds_tree_sg}.\ref{item:bound
 By minimality of $\tree$, the number of children of a node is bounded by the number of values appearing in its "local run" hence by $h'(n)$, so the total number of nodes in $\tree$ is bounded by $h'(n)^{h(n)+1}$ and the "size@@treesg" of $\tree$ by $f(n) := h'(n)^{h(n)+2}$. Because $\Ffunction{\omega^{\size{\messages}-1}}$ is closed under composition with primitive-recursive functions, $f$ is in $\Ffunction{\omega^{\size{\messages}-1}}$.
 \end{proof}
 
-The previous argument shows that \COVER for "signature protocols" is decidable and lies in complexity class $\Fcomplexity{\omega^\omega}$. Because the hardness from Proposition~\ref{prop:reduction-LCS} holds for "signature protocols", \COVER is in fact complete for this complexity class.
+The previous argument shows that \COVER\ for "signature protocols" is decidable and lies in complexity class $\Fcomplexity{\omega^\omega}$. Because the hardness from Proposition~\ref{prop:reduction-LCS} holds for "signature protocols", \COVER\ is in fact complete for this complexity class.
 
 We now extend this method to the general case. 
 
@@ -253,7 +254,7 @@ We now extend this method to the general case.
 \label{sec:unfolding-trees-general}
 In the general case, a new phenomenon appears: an agent may broadcast a value that it did not initially have but that it has received and stored. In particular, an agent starting with value $v$ could broadcast $v$ then require someone else to make a broadcast with value $v$ as well. For example, in the run described in \cref{ex:example-1}, $1$ is initially a value of $a_1$ that $a_2$ receives and rebroadcasts to $a_1$.
 
- We now have two types of specifications. \emph{"Boss specifications"} describe the task of broadcasting with one of its own initial values; this is the "specification@@sg" we had in "signature protocols" and, as before, it consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. \emph{"Follower specifications"} describe the task of broadcasting with a non-initial value received previously. More precisely, a "follower specification" is a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$ asking to broadcast a message $(\followmessagespec,v)$ under the condition of previously receiving the sequence of "message types" $\followwordspec$ with value $v$.
+ We now have two types of specifications. ""Boss specifications"" describe the task of broadcasting with one of its own initial values; this is the "specification@@sg" we had in "signature protocols" and, as before, it consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. ""Follower specifications"" describe the task of broadcasting with a non-initial value received previously. More precisely, a "follower specification" is a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$ asking to broadcast a message $(\followmessagespec,v)$ under the condition of previously receiving the sequence of "message types" $\followwordspec$ with value $v$.
 
 % As before, a "boss specification" consists of a word $\bossspec \in \messages^\ast$ describing a sequence of "message types" that should be all broadcast with the same value. A "follower specification" consists of a pair $(\followwordspec, \followmessagespec) \in \messages^*\times \messages$, meaning that one must be able to broadcast $\followmessagespec$ with value $v$ after receiving the sequence $\followwordspec$ with value $v$. 
 
@@ -264,15 +265,16 @@ A key idea is that, if an agent that had $v$ initially receives some message $(m
 \label{ex:decomposition}
 Assume that $\agents = \set{a_1,a_2,a_3}$ and let $v$ be initial for $a_1$. Consider an execution where the broadcasts with value $v$ are: $a_1$ broadcasts $\textsf{a} \cdot \textsf{b}$, then $a_2$ broadcasts $\textsf{c}$, then $a_1$ broadcasts $\textsf{a}^3$ then $a_3$ broadcasts $\textsf{b}$. The "follower specification" of $a_2$'s task would be of the form $(w, \textsf{c})$ where $w \subword \textsf{a} \cdot \textsf{b}$: $a_2$ must be able to broadcast $(c,v)$ once $\textsf{a} \cdot \textsf{b}$ has been broadcast with value $v$. By contrast, $a_3$'s "follower specification" would be of the form $(w \cdot w', \textsf{c})$ where $w \subword \textsf{a} \cdot \textsf{b}$ and $w' \in \set{\textsf{a},\textsf{c}}^*$ is a subword of $\textsf{a}^3$ enriched with as many $\textsf{c}$ as desired, because $a_2$ may be cloned at will.
 %(we may mimic $a_2$'s execution with disjoints set of agents until the first reception on $v$ $a_2$ performs, all new agents then perform the same reception and go on with their execution on a similar fashion until broadcasting $\textsf{c}$). 
-For example, one could have $w= \textsf{b} $ and $w' = \textsf{c} \cdot \textsf{a} \cdot \textsf{c}^4 \cdot \textsf{a} \cdot \textsf{c}^2$. This idea is formalized in the appendix with the notion of "decomposition". Using this notion, the previous condition becomes: $w \cdot w'$ \emph{"admits decomposition"} $(\textsf{a} \cdot \textsf{b}, \textsf{c}, \textsf{a}^3)$.   
+For example, one could have $w= \textsf{b} $ and $w' = \textsf{c} \cdot \textsf{a} \cdot \textsf{c}^4 \cdot \textsf{a} \cdot \textsf{c}^2$. This idea is formalized in the full version of the paper with the notion of \emph{decomposition}. Using this notion, the previous condition becomes: $w \cdot w'$ \emph{admits decomposition} $(\textsf{a} \cdot \textsf{b}, \textsf{c}, \textsf{a}^3)$.   
 \end{example}
 % Therefore, if one later needs an agent to broadcast $(m',v)$ then this agent is allowed  hence from a finite set of message types which can be sent with value $v$, there is an infinite set of possible $\followwordspec$ to chose: if a message $(m, v)$ is sent from the agent with initial value $v$ then the "copycat principle" does not apply, however, if $(m, v)$ is sent from an agent without $v$ as initial value, message type $m$ can appear as many times as one wants in $\followwordspec$ once it has been sent once. 
 %For instance, in the protocol described in \cref{fig:ex1}, message ($m_6, )
 
-In our new "unfolding trees", a node is either a "boss node" or a "follower node", depending on its type of specification. 
-A "follower node" $\node$ with "follower specification" $(\followwordspec, \followmessagespec)$ is allowed to receive sequence of messages $\followwordspec$ with value $\valuelabel{\node}$ (which must be "non-initial") without it being broadcast by its children. 
+\AP In our new ""unfolding trees"", a node is either a \emph{boss node} or a \emph{follower node}, depending on its type of specification. 
+A ""boss node"" with a "boss specification" $\bossspec$ must broadcast that sequence of "message types" with one of its "initial values". 
+A ""follower node"" $\node$ with "follower specification" $(\followwordspec, \followmessagespec)$ is allowed to receive sequence of messages $\followwordspec$ with value $\valuelabel{\node}$ (which must be "non-initial") without it being broadcast by its children. 
 Other conditions are similar to the ones for "signature protocols": if $\node$ is a node and $v \ne \valuelabel{\node}$ a "non-initial" value received in its "local run", $\node$ must have a "boss" child broadcasting this word. Moreover, for each $(m,v)$ received where $v$ is an "initial value" of the "local run", $\node$ must have a "follower" child that is able to broadcast $(m,v)$ after receiving messages sent previously with value $v$; the formal statement is more technical because it takes into account the observation of Example~\ref{ex:decomposition}. 
-The formal definition of "unfolding tree" is given in \cref{app:def-trees}.
+The formal definition of \emph{unfolding tree} is given in the full version.
 
 
 \begin{example}
@@ -294,12 +296,13 @@ A ""coverability witness"" is again an "unfolding tree" whose root covers $q_f$ 
 
 \begin{restatable}{proposition}{treessoundcomplete}
 	\label{prop:trees-sound-complete}
-	An instance of \COVER $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
+	An instance of \COVER\ $(\prot,q_f)$ is positive if and only if there exists a "coverability witness" for that instance.
 \end{restatable}
 \begin{proof}[Proof sketch]
 	The proof is quite similar to the one of Lemma~\ref{lem:coverability_witness_sg}, but is made more technical by the addition of "follower" nodes. 
-	When translating an "unfolding tree" to a "run", if the root of the tree is a "follower node" $\node$ of specification $(\followwordspec, \followmessagespec)$, then we actually obtain a "partial run", \emph{i.e.}, a "run" except that the receptions from $\followwordspec$ are not matched by broadcasts in the "run". We then combine this partial run with the run corresponding to the parent of $\node$ and with the runs of other children of $\node$ so that every reception is matched with a broadcast, as detailed in Lemma~\ref{lem:tree-to-run-technical}.
-	For the translation from "run" to tree, we inductively construct the tree by extracting from the run the agents and values responsible for satisfying the specifications of each node and analyzing the messages they receive to determine their set of children (as in Example~\ref{ex:decomposition}). See Appendix~\ref{app:trees-sound-complete} for the proof.
+	When translating an "unfolding tree" to a "run", if the root of the tree is a "follower node" $\node$ of specification $(\followwordspec, \followmessagespec)$, then we actually obtain a \emph{partial run}, \emph{i.e.}, a "run" except that the receptions from $\followwordspec$ are not matched by broadcasts in the "run". We then combine this partial run with the run corresponding to the parent of $\node$ and with the runs of other children of $\node$ so that every reception is matched with a broadcast.
+	For the translation from "run" to tree, we inductively construct the tree by extracting from the run the agents and values responsible for satisfying the specifications of each node and analyzing the messages they receive to determine their set of children (as in Example~\ref{ex:decomposition}). 
+%	See Appendix~\ref{app:trees-sound-complete} for the proof.
 	% % The translation from "run" to tree works by induction on the length of the "run". We first define in a natural way what it means for a "run" to satisfy a "specification". We consider a "run" $\run$ and isolate a well-chosen agent $a$, whose "local run" witnesses that the "specification" is satisfied. We call the induction hypothesis with the "specifications" expressing what $a$ needs to receive from other agents. Each such "specification" is satisfied by a strict prefix of $\run$ (the only exception being if $a$ satisfies a "boss specification" with value $v$ and the last step of $\run$ is a broadcast with $v$ by another agent; in this case, we use the induction hypothesis on $\run$ but with a follower specification, hence the induction is well-founded).
 	% We construct an "unfolding tree" by labeling the root with the "specification" and the "local run" of $a$, and attaching below it the subtrees obtained by induction hypothesis.
 	% The translation from tree to "run" consists in an induction on the tree. A key concept is the one of "partial run", which extends the notion of "local run" to a subset of agents: in a "partial run", some receptions called \emph{external} are not matched by a broadcast. This is meant to represent the behavior of a subtree of the "unfolding tree": if the root of an "unfolding tree" is a "follower node" with "specification" $(\followwordspec, \followmessagespec)$ then the corresponding "partial run" receives an external sequence $\followwordspec$. The inductive step applies the induction hypothesis to the children of the "root" to obtain partial runs and merges them with the "local run" of the root by branching broadcasts to the right external receptions. 
@@ -313,18 +316,19 @@ A ""coverability witness"" is again an "unfolding tree" whose root covers $q_f$ 
 \subsubsection{Bounding the Size of the Unfolding Tree.}
 \label{sec:tree-bounds}
 
-Our aim is again to bound the "size@@tree" of a minimal "coverability witness". In the following, we fix an instance $(\prot,q_f)$ with $r$ registers and a "coverability witness" of minimal size. We start by providing new conditions under which a branch can be shortened; for "boss specifications", it is the condition of Lemma~\ref{lem:no_subword_in_branch_sg} but for "follower specifications", the subword relation goes the opposite direction because the shorter the requirement $\followwordspec$, the better.
+Our aim is again to bound the size of a minimal "coverability witness". In the following, we fix an instance $(\prot,q_f)$ with $r$ registers and a "coverability witness" of minimal size. We start by providing new conditions under which a branch can be shortened; for "boss specifications", it is the condition of Lemma~\ref{lem:no_subword_in_branch_sg} but for "follower specifications", the subword relation goes the opposite direction because the shorter the requirement $\followwordspec$, the better.
 
 \begin{restatable}{lemma}{lemShorteningBranches} 
 \label{lem:shortening-branches}
 	Let $\node \ne \node'$ be two nodes of $\tree$ such that $\node$ is an ancestor of $\node'$. If one of those conditions holds, then $\tree$ can be shortened  (contradicting its minimality):
 	\begin{itemize}
-	\item $\node$ and $\node'$ are "boss nodes" and $\bosslabel{\node} \subword \bosslabel{\node'}$; 
-	\item $\node$ and $\node'$ are "follower nodes", $\followlabelword{\node'} \subword \followlabelword{\node}$ and $\followlabelmessage{\node'}=\followlabelmessage{\node}$.
+	\item $\node$ and $\node'$ are "boss nodes" with "boss specifications" respectively $\bossspec$ and $\bossspec'$, and $\bossspec \subword \bossspec'$; 
+	\item $\node$ and $\node'$ are "follower nodes" with "follower specifications" respectively $(\followwordspec, \followmessagespec)$ and $(\followwordspec', \followmessagespec')$, and $\followwordspec' \subword \followwordspec$ and $\followmessagespec'=\followmessagespec$.
 	\end{itemize} 
 \end{restatable}
 
-We can generalize \cref{lem:towerbound_signature} to bound the size of a node by the number of messages that it must broadcast times a primitive-recursive function $\towerfun(\size{\prot},r)$. The proof is more technical than the one of \cref{lem:towerbound_signature} but the idea is essentially the same. The formal statement is given below, and the proof can be found in Appendix~\ref{app:tower-lemma}. 
+We can generalize \cref{lem:towerbound_signature} to bound the size of a node by the number of messages that it must broadcast times a primitive-recursive function $\towerfun(\size{\prot},r)$. The proof is more technical than the one of \cref{lem:towerbound_signature} but the idea is essentially the same. The formal statement is given below.
+%, and the proof can be found in Appendix~\ref{app:tower-lemma}. 
 One can therefore bound the size of a node with respect to the size of the nodes that it must broadcast to.
 
 	\begin{restatable}{lemma}{lemShortLocalRuns}
@@ -342,7 +346,8 @@ It is however now much harder than in the "signature" case to bound the size of 
 This leads us to arrange the "unfolding tree" so that long broadcast sequences are sent upwards, using the notion of "altitude" depicted in Figure~\ref{fig:rearrange-tree}, formally defined as follows.
 The ""altitude"" of the root is $0$, the altitude of a "boss node" is the altitude of its parent minus one, and the altitude of a "follower node" is the altitude of its parent plus one.
 We denote the "altitude" of $\node$ by $\altitude{\node}$.
-This way the nodes of maximal "altitude" are the ones that do not need to send long sequences of messages. We will bound the size of nodes with respect to their "altitude", from the highest to the lowest, and then use the "Length function theorem" to bound the maximal and minimal "altitudes". We present here a sketch of the proof; details are postponed to Appendix~\ref{app:proofs_bounds}. 
+This way the nodes of maximal "altitude" are the ones that do not need to send long sequences of messages. We will bound the size of nodes with respect to their "altitude", from the highest to the lowest, and then use the "Length function theorem" to bound the maximal and minimal "altitudes". We present here a sketch of the proof.
+%; details are postponed to Appendix~\ref{app:proofs_bounds}. 
 
 
 % note that this time the bound is on the exact number of registers (and not the number of registers minus one). We shall refer to this lemma as the Tower Function Lemma as it bounds "local runs" length by a function $\psi(n,k)$ which is in fact a tower of exponentials of height $k$ where each floor is a polynomial in $n$.
@@ -430,7 +435,8 @@ We first bound the size of a node with respect to the difference between its alt
 	A node of maximal "altitude"  has at most one message to broadcast (a "follower node" must broadcast one message to its parent), so its size is bounded by $\towerfun(\size{\prot},r)$ by \cref{lem:short-local-runs} (applying the Lemma to its local run minus its final step, \emph{i.e.}, the step making the broadcast to its parent).
 	Let $\node$ be a node of $\tree$ whose neighbors of higher altitude have size bounded by $K$.
 	We claim that $\size{\node} \leq (\towerfun(\size{\prot}, r)+2) \, (\size{\messages} \, r \, K + K)$, with $\psi$ the primitive-recursive function defined in Lemma~\ref{lem:short-local-runs}. 
-	The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}. The neighbors of higher "altitude" are the nodes which require sequences of messages from $\node$. Their size bounds the number of messages that $\node$ needs to send; we then apply Lemma~\ref{lem:short-local-runs} to bound the size of the local run of $\node$. Lemma~\ref{lem:bound-successor-height} in the appendix details these ideas.
+	The idea is similar to the one for Lemma~\ref{lem:bounds_tree_sg}. The neighbors of higher "altitude" are the nodes which require sequences of messages from $\node$. Their size bounds the number of messages that $\node$ needs to send; we then apply Lemma~\ref{lem:short-local-runs} to bound the size of the local run of $\node$.
+%	Lemma~\ref{lem:bound-successor-height} in the appendix details these ideas.
 We finally obtain $f_0$ by iteratively applying the inequality above.
 \end{proof}
 
@@ -441,12 +447,12 @@ We now bound $\altmax$ and $\altmin$:
 $\altmax$ and $|\altmin|$ are bounded by a function of class $\Ffunction{\omega^{\size{\messages}}}$. 
 \end{lemma}
 \begin{proof}[Proof sketch]
-We first bound $\altmax$. Consider a branch of $\tree$ that has a node at "altitude" $\altmax$. We follow this branch from the root to a node of altitude $\altmax$: for every $j \in \nset{1}{\altmax}$, let $\node_{j}$ be the first node of the branch that has altitude $j$ (Figure~\ref{fig:max-height-bound} in the appendix). All such nodes are necessarily "follower nodes" as they are above their parent. Sequence $\node_{\altmax}, \dots, \node_2, \node_1$ is so that the $i$th term is at altitude $\altmax-i$ hence its size is bounded by $f_0(\size{\prot} + i)$ (Lemma~\ref{lem:bound-length-at-height-h}). With the observation of Lemma~\ref{lem:shortening-branches}, we retrieve from the "specifications" of this sequence of nodes a "bad sequence" and we apply the "Length function theorem" to bound $\altmax$ (Lemma~\ref{lem:bound-max-height} in the appendix).
-This yields in turn a bound on the size of the root of $\tree$. In order to bound $\altmin$, we proceed similarly, using "boss nodes" this time. We follow a branch from the root to a node of "altitude" $\altmin$. The sequence of nodes that are lower than all previous ones yields a sequence of "boss specifications", which is a "bad sequence" by Lemma~\ref{lem:shortening-branches}, and whose growth can be bounded using Lemma~\ref{lem:bound-length-at-height-h} and the bound on $\altmax$. We apply the "Length function theorem" to bound $|\altmin|$ (Lemma~\ref{lem:bound-min-height}).
+We first bound $\altmax$. Consider a branch of $\tree$ that has a node at "altitude" $\altmax$. We follow this branch from the root to a node of altitude $\altmax$: for every $j \in \nset{1}{\altmax}$, let $\node_{j}$ be the first node of the branch that has altitude $j$. All such nodes are necessarily "follower nodes" as they are above their parent. Sequence $\node_{\altmax}, \dots, \node_2, \node_1$ is so that the $i$th term is at altitude $\altmax-i$ hence its size is bounded by $f_0(\size{\prot} + i)$ (Lemma~\ref{lem:bound-length-at-height-h}). With the observation of Lemma~\ref{lem:shortening-branches}, we retrieve from the "follower specifications" of this sequence of nodes a "bad sequence" and we apply the "Length function theorem" to bound $\altmax$.
+This yields in turn a bound on the size of the root of $\tree$. In order to bound $\altmin$, we proceed similarly, using "boss nodes" this time. We follow a branch from the root to a node of "altitude" $\altmin$. The sequence of nodes that are lower than all previous ones yields a sequence of "boss specifications", which is a "bad sequence" by Lemma~\ref{lem:shortening-branches}, and whose growth can be bounded using Lemma~\ref{lem:bound-length-at-height-h} and the bound on $\altmax$. We apply the "Length function theorem" to bound $|\altmin|$.
 \end{proof}
 
-Once we have bounded $\altmax$ and $\altmin$, we can infer a bound on the size of all nodes (Lemma~\ref{lem:bound-length-at-height-h} in the appendix), and then on the length of branches: by minimality, a branch cannot have two nodes with the same specification. 
-The bound on the "size@@tree" of the tree then follows from the observation that bounding the size of nodes of $\tree$ also allows to bound their number of children.
+Once we have bounded $\altmax$ and $\altmin$, we can infer a bound on the size of all nodes (Lemma~\ref{lem:bound-length-at-height-h}), and then on the length of branches: by minimality, a branch cannot have two nodes with the same specification. 
+The bound on the size of the tree then follows from the observation that bounding the size of nodes of $\tree$ also allows to bound their number of children.
  
 
 % \begin{restatable}{proposition}{PropBoundTreeSize}
@@ -457,8 +463,8 @@ The bound on the "size@@tree" of the tree then follows from the observation that
 %\subsubsection{Decidability}
 %\label{sec:decidability-end}
 
-We obtain a computable bound (of the class $\Ffunction{\omega^\omega}$) on the "size@@tree" of a minimal "coverability witness" if it exists. 
-Our decidability procedure computes that bound, enumerates all trees of "size@@tree" below the bound and checks for each of them whether it is "coverability witness". This yields the main result of this paper:
+We obtain a computable bound (of the class $\Ffunction{\omega^\omega}$) on the size of a minimal "coverability witness" if it exists. 
+Our decidability procedure computes that bound, enumerates all trees of size below the bound and checks for each of them whether it is "coverability witness". This yields the main result of this paper:
 
 \decidablecover*
 

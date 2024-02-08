@@ -86,7 +86,7 @@
 \newcommand{\Fcomplexity}[1]{\mathbf{F}_{#1}} % the Falpha complexity class
 \newcommand{\Fomegaomega}{\Fcomplexity{\omega^{\omega}}}
 \newcommand{\Ffunction}[1]{\mathscr{F}_{#1}}
-\newcommand{\COVER}{\textsc{"Cover"}\xspace}
+\knowledgenewrobustcmd{\COVER}{\withkl{\kl[coverability problem]}{\cmdkl{\textsc{Cover}}}}
 
 %%% Genral definition
 \newcommand{\prot}{\mathcal{P}} %protocol
@@ -224,7 +224,7 @@
 
 
 %Target problem
-\newcommand{\TARGET}{\textsc{"Target"}\xspace}
+\knowledgenewrobustcmd{\TARGET}{\withkl{\kl[target problem]}{\cmdkl{\textsc{Target}}}}
 \newcommand{\Loc}{\text{Loc}}
 \newcommand{\cpt}{\ensuremath{\mathtt{x}}}
 \newcommand{\Cpt}{\ensuremath{\mathtt{X}}}
@@ -287,7 +287,7 @@
 % example of signature protocol
 \newcommand{\exready}{\textsf{rdy}}
 \newcommand{\exgotwo}{\textsf{go}}
-\newcommand{\exgothree}{\textsf{stop}}
+\newcommand{\exgothree}{\textsf{hlt}}
 %unfolding trees in tikz, with 3 registers
 \newcommand{\regbar}[2]{
 	\node (reg1) at (#1, #2+0.15-0.5) {reg $1$};

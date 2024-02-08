@@ -1,18 +1,18 @@
-\subsection{Undecidability of \TARGET}
+\subsection{Undecidability of the "target problem"}
 \label{sec:undec-target}
 
 A natural next problem, after \COVER, is the "target problem" (\TARGET).  
-Our \COVER procedure heavily relies on the ability to add agents at no cost. For \TARGET we need to guarantee that those agents can then reach the target state, which makes the problem harder. 
-In fact, \TARGET is undecidable, which indicates that our model lies at the frontier of decidability.
+Our \COVER\ procedure heavily relies on the ability to add agents at no cost. For \TARGET\ we need to guarantee that those agents can then reach the target state, which makes the problem harder. 
+In fact, \TARGET\ is undecidable, which indicates that our model lies at the frontier of decidability.
 
 \begin{restatable}{proposition}{propTargetUndecidable}
 \label{prop:target-undec}
-\TARGET is undecidable for "BNRA", even with two registers.
+\TARGET\ is undecidable for "BNRA", even with two registers.
 \end{restatable}
 
 \begin{proof}[Proof sketch]
 We simulate a Minsky machine with two counters. As in Proposition~\ref{prop:reduction-LCS},  each agent starts by storing some other agent's identifier, called its ``predecessor''. It then only accepts messages from its predecessor. As there are finitely many agents, there is a cycle in the predecessor graph. 
 
 In a cycle, we use the fact that \emph{all} agents must reach state $q_f$ to simulate faithfully a run of the machine: agents alternate between receptions and broadcasts so that, in the end, they have received and sent the same number of messages, implying that no message has been lost along the cycle.
-We then simulate the machine by having an agent (the leader) choose transitions and the other ones simulate the counter values by memorizing a counter ($1$ or $2$) and a binary value ($0$ or $1$). For instance, an increment of counter $1$ takes the form of a message propagated in the cycle from the leader until it finds an agent simulating counter $1$ and having bit $0$. This agent switches to $1$ and sends an acknowledgment that propagates back to the leader. See Appendix~\ref{app:target} for the full proof. 
+We then simulate the machine by having an agent (the leader) choose transitions and the other ones simulate the counter values by memorizing a counter ($1$ or $2$) and a binary value ($0$ or $1$). For instance, an increment of counter $1$ takes the form of a message propagated in the cycle from the leader until it finds an agent simulating counter $1$ and having bit $0$. This agent switches to $1$ and sends an acknowledgment that propagates back to the leader. 
 \end{proof}

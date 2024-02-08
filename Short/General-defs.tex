@@ -9,7 +9,7 @@ There are arbitrarily many agents. When an agent broadcasts a message, every oth
 \begin{definition}
 	A ""protocol"" with $\regnum$ registers is a tuple $\prot = (Q, \messages, \transitions, q_0)$  with $Q$ a finite set of states, $q_0 \in Q$ an initial state, $\messages$ a finite set of ""message types""  and $\transitions \subseteq Q \times \operations \times Q$ a finite set of transitions, with operations $\operations =$
 	\[
-	 \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \mid \amessage \in \messages, 1 \leq i \leq \regnum}.\]
+	 \set{\br{\amessage}{i}, \rec{\amessage}{i}{\dummyact}, \rec{\amessage}{i}{\enregact}, \rec{\amessage}{i}{\eqtestact}, \rec{\amessage}{i}{\diseqtestact} \hspace{-1.5pt}\mid\hspace{-1.5pt} \amessage \in \messages, 1 \leq i \leq \regnum}.\]
 	Label $\brsymb$ stands for ""broadcasts"" and $\recsymb$ for ""receptions"".
 	In a reception $\rec{\amessage}{i}{\anact}$, $\anact$ is its \emph{action}. 
 The set of actions is $\actions := \set{\eqtestact, \diseqtestact, \enregact, \dummyact}$, where 
@@ -88,9 +88,9 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 	
 \begin{definition}
 
-	\AP The ""coverability problem"" \COVER asks, given a "protocol" $\prot$ and a state $q_f$, whether there is a finite non-empty set of agents $\agents$, an "initial run" $\config_0 \step{*} \config_f$ over $\agents$ that ""covers"" $q_f$, \emph{i.e.}, there is $a \in \agents$  such that $\st{\config_f}(a)  = q_f$.
+	\AP The ""coverability problem"" \intro*\COVER\ asks, given a "protocol" $\prot$ and a state $q_f$, whether there is a finite non-empty set of agents $\agents$, an "initial run" $\config_0 \step{*} \config_f$ over $\agents$ that ""covers"" $q_f$, \emph{i.e.}, there is $a \in \agents$  such that $\st{\config_f}(a)  = q_f$.
 	
-	\AP The ""target problem"" \TARGET asks, given a "protocol" $\prot$ and a state $q_f$, whether there is there is a finite non-empty set of agents $\agents$ and an "initial run" $\config_0 \step{*} \config_f$ over $\agents$  such that, for every $a \in \agents$, $\st{\config_f}(a) = q_f$, \emph{i.e.}, all agents end on $q_f$.
+	\AP The ""target problem"" \intro*\TARGET\ asks, given a "protocol" $\prot$ and a state $q_f$, whether there is there is a finite non-empty set of agents $\agents$ and an "initial run" $\config_0 \step{*} \config_f$ over $\agents$  such that, for every $a \in \agents$, $\st{\config_f}(a) = q_f$, \emph{i.e.}, all agents end on $q_f$.
 \end{definition}
 
 \begin{example}\label{example-2}
@@ -99,7 +99,7 @@ In our model, agents may only send one value per message. Indeed, "coverability"
 
 \begin{remark}
 	In \cite{DelzannoST13}, the authors consider the \AP \emph{query problem} where one looks for a run reaching a "configuration" satisfying some \emph{queries}.	
-	In fact, this problem exponentially reduces to \COVER hence our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the query problem. In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
+	In fact, this problem exponentially reduces to \COVER\ hence our complexity result of $\Fcomplexity{\omega^\omega}$ also holds for the query problem. In the case with one register, one can even find a polynomial-time reduction hence our \NP result also holds with queries. 
 \end{remark}
 
 \AP We finally introduce \intro{signature BNRA}, an interesting restriction of our model where register $1$ is ""broadcast-only"" and all other registers are ""reception-only"". Said otherwise, the first register acts as a permanent identifier with which agents sign their messages. An example of such a protocol is displayed in \cref{fig:example-signature-protocol}. Under this restriction, a message is composed of a message type along with the identifier of the sender. This restriction is relevant for pedagogical purposes: we will see that it falls into the same complexity class as the general case but makes the decidability procedure simpler. 
@@ -140,7 +140,7 @@ By simulating LCS using BNRA, we obtain our $\Fcomplexity{\omega^{\omega}}$ lowe
 
 \begin{restatable}{proposition}{propReductionLCS}
 	\label{prop:reduction-LCS}
-	\COVER for "signature BNRA" is $\Fcomplexity{\omega^\omega}$-hard.
+	\COVER\ for "signature BNRA" is $\Fcomplexity{\omega^\omega}$-hard.
 \end{restatable}
 \begin{proof}[Proof sketch]
 Given an "LCS" $\los$, we build a "signature protocol" $\prot$ with two registers. 
@@ -148,8 +148,8 @@ Given an "LCS" $\los$, we build a "signature protocol" $\prot$ with two register
 Each agent starts by receiving a foreign identifier and storing it in its second register; using equality tests, it then only accepts messages with this identifier.
 Each agent has at most one predecessor, so the communication graph is a forest where messages propagate from roots to leaves.
  Each branch simulates an execution of $\los$. Each agent of the branch simulates a step of the execution: it receives from its predecessor a "configuration" of $\los$, chooses the next "configuration" of $\los$ and broadcasts it, sending first the location of $\los$ and then, letter by letter, the content of the channel. 
- It could be that some messages are not received, hence the lossiness. 
- The full proof can be found in Appendix~\ref{app:reduction-lcs}. 
+ It could be that some messages are not received, hence the lossiness.  
+%The full proof can be found in Appendix~\ref{app:reduction-lcs}. 
 \end{proof}
 % Note that one special agent has to start the execution, and send the initial configuration before receiving anything. The final state is the final state of the "LCS" and if one agent reaches it, one can argue that there is an execution of the "LCS" described by the sent messages in the chain of agent starting with an agent sending the initial configuration.
 
