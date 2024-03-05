@@ -1,0 +1,51 @@
+\begin{tikzpicture}
+	
+	\draw (1,0) ellipse (1 and 0.5);
+	\node (u1) at (1,0) {$u_0,\color{orange} v_0$};
+	
+	\draw (-1.5,-2) ellipse (1 and 0.5);
+	\node (u2) at (-1.5,-2) {$u_1, \color{purple} v_1$};
+	
+	\draw (1,-2) ellipse (1 and 0.5);
+	\node (u3) at (1,-2) {$u_2, \color{blue} v_2$};
+	
+	\draw (3.5,-2) ellipse (1 and 0.5);
+	\node (u4) at (3.5,-2) {$u_3, \color{pink} v_3$};
+	
+	\draw (2,-4) ellipse (1 and 0.5);
+	\node (u6) at (2,-4) {$u_5, \color{brown}v_5$};
+	
+	\draw (-1.5,-4) ellipse (1 and 0.5);
+	\node (u5) at (-1.5,-4) {$u_4, \color{blue}v_4$};
+	
+	\draw (5,-4) ellipse (1 and 0.5);
+	\node (u7) at (5,-4) {$u_6, \color{gray}v_6$};
+	
+	
+	\node (2) at (-1.8,-1.3) {\color{purple}$w_1$};
+	\node (3) at (0.7,-1.3) {\color{blue}$w_2$};
+	\node (4) at (3.2,-1.3) {\color{pink}$w_3$};
+	\node (5) at (-1.8,-3.3) {\color{blue}$w_4$};
+	\node (6) at (1.8,-3.3) {\color{brown}$w_5$};
+	\node (7) at (4.7,-3.3) {\color{gray}$w_6$};
+	\node (qf) at (3.8,0) {$q_f$};
+	\draw[-stealth, decorate, decoration = snake] (2,0) -- (3.41,0);	
+	
+
+	\draw[blue, arrows = {-Stealth[length=5pt, inset=2pt]}] (-1.5, -3.5) .. controls +(0,1) and +(0,-1) .. (-1.5, -2.5); 
+	
+	
+	\draw[brown, arrows = {-Stealth[length=5pt, inset=2pt]}] (2, -3.5) .. controls +(0,1) and +(0,-1) .. (3.5, -2.5);  
+	\draw[gray, arrows = {-Stealth[length=5pt, inset=2pt]}] (5, -3.5) .. controls +(0,1) and +(0,-1) .. (3.7, -2.5); 
+	
+	\draw[blue, arrows = {-Stealth[length=5pt, inset=2pt]}] (1, -1.5) .. controls +(0,1) and +(0,-1) .. (1, -0.5); 
+	\draw[purple, arrows = {-Stealth[length=5pt, inset=2pt]}] (-1.5, -1.5) .. controls +(0,1) and +(0,-1) .. (0.8, -0.5);  
+	\draw[pink, arrows = {-Stealth[length=5pt, inset=2pt]}] (3.5, -1.5) .. controls +(0,1) and +(0,-1) .. (1.2, -0.5); 
+	
+	\begin{scope}[yshift = -1cm]
+	\draw (7, 0.5) ellipse (1 and 0.5);
+	\node (legend) at (7,0.5) {\scriptsize local run, \color{blue} value};
+	\draw[blue, arrows = {-Stealth[length=5pt, inset=2pt]}] (7, 1) .. controls +(0,1) and +(0,-1) .. (7, 1.5); 
+	\node (8) at (6, 1.2) {\color{blue}\scriptsize word of $\messages^*$};
+	\end{scope}
+\end{tikzpicture}
