@@ -6,6 +6,7 @@
 \useoutertheme{infolines}
 \usepackage{xcolor}
 \usepackage{tikz}
+\usepackage{xspace}
 \usetikzlibrary{arrows, arrows.meta,calc,automata,fit,shapes,positioning, decorations.pathmorphing}
 \tikzset{AUT style/.style={>=angle 60,initial text= ,every edge/.append,every state/.style={minimum size=20,inner sep=2}}}
 
@@ -16,14 +17,14 @@
 \newcommand{\br}{\mathbf{br}}
 \newcommand{\rec}{\mathbf{rec}}
 \newcommand{\reg}{\hspace{-0.5mm}\square}
-\newcommand{\COVER}{\textsc{Cover}}
-\newcommand{\TARGET}{\textsc{Target}}
+\newcommand{\COVER}{\textsc{Cover}\xspace}
+\newcommand{\TARGET}{\textsc{Target}\xspace}
 %
 %\setbeamertemplate{section in toc}[square]
 \setbeamercolor{section number projected}{bg=black,fg=white}
 
 \begin{document}
-	\title[Parameterized verification of BNRA]{Parameterized verification of Broadcast networks of Register automata}
+	\title[Parameterized verification of BNRA]{Parameterized verification of Broadcast Networks of Register Automata}
 	\date[]{March 11th, 2024\vspace{-0.5cm}}
 	\author[Nicolas Waldburger]{\begin{tabular}{c} Nicolas Waldburger \\
 		 \begin{tabular}{ccc}
@@ -73,10 +74,10 @@
 	
 	\begin{block}{Problems}
 %		\vspace{0.3cm}
-		{\COVER{}}: Is there a run in which \textbf{an} agent reaches $q_f$?
+		{\COVER}: Is there a run in which \textbf{an} agent reaches $q_f$?
 %		\vspace{0.3cm}
 		
-		{\TARGET{}}: Is there a run in which \textbf{all agents} reach $q_f$ \textbf{simultaneously}?
+		{\TARGET}: Is there a run in which \textbf{all agents} reach $q_f$ \textbf{simultaneously}?
 	\end{block}
 	
 	\onslide<3->
@@ -107,27 +108,33 @@
 		
 		\item Receive a message of a given symbol $m$: $\mathbf{rec}(m, \mathsf{op})$, with $\mathsf{op}$ one of the following:
 		\begin{itemize}
-			\item store the value with register $\reg_i$: $\downarrow \reg_i$,
+			\item store the value in register $\reg_i$: $\downarrow \reg_i$,
 			
 			\item test it for equality with register $\reg_i$: $= \reg_i, \neq \reg_i$
 			
 			\item or discard the received value: $*$.
 		\end{itemize}   
 	\end{itemize}
+
+	\pause
+	This model was first defined in \footnotemark[3], where the authors prove that this model is undecidable if several values can be appended to the same message. They also wrongly claimed that, with one value per message (our model), coverability is decidable in \textsc{Pspace}.
 \end{frame}
 
 \begin{frame}{Things we can do}
 	
-	We can check that a sequence of messages all come from the same agent.
+	We can check that messages received come from the same agent.
+	Here a word in $a \, b \, a^* \, c$ must be received with all messages having the same value: 
 	\vspace{1cm}
+
 
 	\centering
 	\input{Figures/Predecessor-protocol}
 \end{frame}
 
 \begin{frame}{Things we can do}
-	We can check that a sequence of messages we sent was received.
-	\vspace{1cm}
+	We can check that a sequence of messages we sent was received. \\
+	Here the top branch sends $a \, b$, the bottom branch receives $a \, b$ and sends an acknowledgement. 
+	\vspace{0.5cm}
 
 		\centering
 		\input{Figures/Successor-protocol}
@@ -135,12 +142,12 @@
 
 \begin{frame}{Parameterized verification principles}
 	
-	\begin{block}{Our problems are parameterized !}
+	\begin{block}{Our parameterized problems}
 %		\vspace{0.3cm}
-		{\COVER{}}: Is there \emph{a number of agents} $n$, a run over $n$ agents in which \textbf{an} agent reaches \color{blue!60}$q_f$\color{black}?
+		{\COVER}: Is there \emph{a number of agents} $n$, a run over $n$ agents in which \textbf{an agent} reaches $q_f$?
 %		\vspace{0.3cm}
 		
-		{\TARGET{}}: Is there \emph{a number of agents} $n$, a run over $n$ agents in which \textbf{all agents} reach \color{blue!60}$q_f~$\color{black} \textbf{simultaneously}?
+		{\TARGET}: Is there \emph{a number of agents} $n$, a run over $n$ agents in which \textbf{all agents} reach $q_f$ \textbf{simultaneously}?
 	\end{block}
 	
 	\pause
@@ -148,7 +155,7 @@
 	\begin{itemize}
 		\item Unlimited supply of agents.
 		
-		\item For {\COVER{}}, we can add as many agents as we need at no cost. 
+		\item For {\COVER}, we can add as many agents as we need at no cost. 
 	\end{itemize}
 	
 	\pause
@@ -160,7 +167,7 @@
 	\pause 
 
 	\begin{block}{Main theorem}
-		{\COVER{}} is decidable for BNRA.
+		{\COVER} is decidable for BNRA.
 	\end{block}
 	
 \end{frame}
@@ -171,7 +178,7 @@
 
 
 
-\section{Decidability proof of \COVER{} for signature BNRA}
+\section{Decidability proof of \COVER for signature BNRA}
 
 
 \begin{frame}{Signature BNRA}
@@ -232,7 +239,7 @@ $\longrightarrow$
 \end{frame}
 
 % \begin{frame}{Towards a tree abstraction}
-% Assume that there is a valid run $\rho$ for \COVER{}. 
+% Assume that there is a valid run $\rho$ for \COVER. 
 % \begin{block}{Observation 1}
 % If agent $a$ broadcasts to agents $b$ and $c$, we can make copy agent $a$ so that $b$ and $c$ receive messages from distinct agents. 
 % \end{block}
@@ -246,14 +253,14 @@ $\longrightarrow$
 % \end{frame}
 	
 
-\begin{frame}{Tree witnesses for \COVER{}}
+\begin{frame}{Tree witnesses for \COVER}
 	
 	\centering
 	\input{Figures/Tree-local-runs}
 	
 \end{frame}
 
-\begin{frame}{Tree witnesses for \COVER{}}
+\begin{frame}{Tree witnesses for \COVER}
 	\centering
 	\input{Figures/Tree-local-runs-full}
 	
@@ -298,7 +305,7 @@ If $q_f$ can be covered, then there is a witness of the execution of the form:
 }
 \end{center}
 
-Every branch forms a bad sequence. Because $\succeq$ is a well quasi-order, we know that every branch of the tree is finite... 
+Every branch forms a bad sequence. Because $\preceq$ is a well quasi-order, we know that every branch of the tree is finite... 
 \pause Not useful ! \\ We need a bound on the size of the tree, so that we can iterate over every possible such tree in finite time. 
 \end{frame}
 
@@ -328,7 +335,7 @@ Consider a branch of a tree of minimal size: \vspace{0.2cm}
 \end{center}
 
 \onslide<2->{
-We need to bound the number of steps that an agent has to perform to perform a task: we need a function such that $|u_i| \leq \phi(|w_i|)$. }
+We need to bound the number of steps that an agent has to perform to perform a task: we need a function $f$ such that $|u_i| \leq f(|w_i|)$. }
 \end{frame}
 
 % \begin{frame}{Branch reduction}
@@ -380,14 +387,14 @@ We need to bound the number of steps that an agent has to perform to perform a t
 	\end{center}
 
 	\onslide<3->{
-	Length function theorem: we obtain a computable bound $B(|\Delta|, r)$ such that $n \leq B(|\Delta|, r)$: $B$ bounds the height of a witness tree for \COVER{} !
+	Length function theorem: we obtain a computable bound $B(|\Delta|, r)$ such that $n \leq B(|\Delta|, r)$: $B$ bounds the height of a witness tree for \COVER !
 	}
 \end{frame}
 
 
 \begin{frame}{Decidability and complexity}
 	\begin{block}{Bounds}
-	We use the previous argument to bound (in a well-chosen witness tree):
+	We use the previous argument to bound (in well-chosen witness trees):
 	\begin{itemize}
 	\item the length of all branches,
 	\item the size of every node,
@@ -400,7 +407,7 @@ We need to bound the number of steps that an agent has to perform to perform a t
 	We can enumerate all such trees in finite time, therefore
 	
 	\begin{block}{Theorem}
-		The {\COVER{}} problem for \color{blue}signature \color{black} BNRA is decidable \onslide<3->{\color{red!70!black} and in $\mathbf{F}_{\omega^\omega}$.}
+		The {\COVER} problem for \color{blue}signature \color{black} BNRA is decidable \onslide<3->{\color{red!70!black} and in $\mathbf{F}_{\omega^\omega}$.}
 	\end{block} 
 	\onslide<3->
 	The length function theorem in fact gives us a bound for the height of our trees that is a function in hyper-Ackermannian class $\mathcal{F}_{\omega^\omega}$ of $|\Delta|$ and $r$. 
@@ -408,7 +415,7 @@ We need to bound the number of steps that an agent has to perform to perform a t
 \end{frame}
 
 
-\section{Decidability of \COVER{} in the general case}
+\section{Decidability of \COVER in the general case}
 
 
 \begin{frame}{General case}
@@ -434,12 +441,12 @@ We need to bound the number of steps that an agent has to perform to perform a t
 	\begin{itemize}
 		\item A run that, after receiving $(a, v) (b, v)$, broadcasts $(c,v)$, and
 		
-		\item A run that, after receiving $(a,v) (c,v)$, broadcasts $(d,v)$.
+		\item A run that, after receiving $(a,v) (b,v) (c,v)$, broadcasts $(d,v)$.
 	\end{itemize}
 \vspace{0.5cm}
 
 	\pause
-	\textbf{We add nodes labelled \fbox{$w \to m$} that witness that there is a local run that, if it receives word $w$ with value $v$, can broadcast $(m,v)$.}
+	\textbf{We add \emph{contract} nodes labelled \fbox{$w \to m$} that witness a local run that, if it receives word $w$ with value $v$, can broadcast $(m,v)$.}
 \end{frame}
 
 \begin{frame}{Our new tree witnesses}
@@ -484,7 +491,7 @@ We need to bound the number of steps that an agent has to perform to perform a t
 			
 			\item its father's altitude $+1$ if it is labelled \fbox{$w \to m$}
 		
-			\item its father's altitude $-1$ if it is labelled \fbox{$w$}
+			\item its father's altitude $-1$ if it is labelled $w$
 		\end{itemize}
 	\end{definition}
 \end{frame}
@@ -545,7 +552,7 @@ We need to bound the number of steps that an agent has to perform to perform a t
 	We can simply enumerate witness trees, thus
 	
 	\begin{block}{Theorem}
-		{\COVER{}} is decidable for BNRA.
+		{\COVER} for BNRA is decidable (and in class $\mathbf{F}_{\omega^\omega}$).
 	\end{block}
 	
 	\pause
@@ -553,7 +560,7 @@ We need to bound the number of steps that an agent has to perform to perform a t
 	By contrast,
 	
 	\begin{block}{Theorem}
-		{\TARGET{}} is undecidable for BNRA.
+		{\TARGET} is undecidable for BNRA.
 	\end{block}
 \end{frame}
 
@@ -561,11 +568,11 @@ We need to bound the number of steps that an agent has to perform to perform a t
 
 \begin{frame}{A matching lower bound}
 		\begin{block}{Theorem}
-		{\COVER{}} in BNRA is $\mathbf{F}_{\omega^\omega}$-hard, even in signature protocols with two registers per agent.
+		{\COVER} in BNRA is $\mathbf{F}_{\omega^\omega}$-hard, even in signature protocols with two registers per agent.
 	\end{block}
 
 	\pause 
-	We proceed by reduction from \emph{Lossy Channel Systems}: 
+	We proceed by reduction from \emph{lossy channel systems}: 
 	
 	\begin{block}{Theorem\footnotemark}
 		Lossy channel system reachability is $\mathbf{F}_{\omega^\omega}$-hard.
@@ -618,12 +625,12 @@ We need to bound the number of steps that an agent has to perform to perform a t
 \begin{frame}{Summary of complexity results}
 
 	\begin{block}{Theorem}
-		{\COVER{}} in BNRA is $\mathbf{F}_{\omega^\omega}$-complete.
+		{\COVER} in BNRA is $\mathbf{F}_{\omega^\omega}$-complete.
 	\end{block}
 		
 	\pause
 	\begin{block}{Theorem}
-	\COVER{}{} for BNRA with one agent per register is NP-complete. 
+	\COVER{} for BNRA with one agent per register is NP-complete. 
 	\end{block}
 \end{frame}
 

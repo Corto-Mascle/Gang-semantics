@@ -4,12 +4,12 @@
 \begin{tikzpicture}
 \tikzstyle{agent} = [rectangle, draw, minimum size = 1cm]
 \tikzstyle{symbol} = [draw = none, color = black]
-\node[agent, fill = colorA!50] at (0,0) (A2) {$A$};
-\node[agent, fill = colorB!50] at (0,-2) (B1) {$B$};
-\node[agent, fill = colorA!50] at (-4,-4) (A3) {$A$};
-\node[agent, fill = colorC!50] at (-2,-4) (C2) {$C$};
-\node[agent, fill = colorA!50] at (0,-4) (A4) {$A$};
-\node[agent, fill = colorB!50] at (0,-6) (B2) {$B$};
+\node[agent, fill = colorA!50] at (0,0) (A2) {$X$};
+\node[agent, fill = colorB!50] at (0,-2) (B1) {$Y$};
+\node[agent, fill = colorA!50] at (-4,-4) (A3) {$X$};
+\node[agent, fill = colorC!50] at (-2,-4) (C2) {$Z$};
+\node[agent, fill = colorA!50] at (0,-4) (A4) {$X$};
+\node[agent, fill = colorB!50] at (0,-6) (B2) {$Y$};
 \node at (0,-7.5) (qf) {$q_f$};
 \draw[-latex] (A2) to node[right, symbol] {$\texttt{a}$} (B1); 
 \draw[-latex] (B1) to node[right, symbol] {$\texttt{c}$} (A4); 

@@ -25,14 +25,16 @@
     \node (w4bound) at (1.5,-5) {$|w_n| \leq |u_{n-1}|$};
 
     \onslide<2->
-    \tikzset{every node/.style = {text = red!70!black, align = left, text width = 3.5cm}}
+    \tikzset{every node/.style = {text = red!70!black, align = left, text width = 6cm}}
+    \begin{scope}[xshift = 1cm]
     \node at (5,2) {$|u_0| \leq \phi(|\Delta|, r)$};
     \node at (5,1) {$|w_1| \leq \phi(|\Delta|, r)$};
-    \node at (5,0) {$|u_1| \leq \phi(|\Delta|, r)^2$};
+    \node at (5,0) {$|u_1| \leq |w_1| \, \phi(|\Delta|, r) \leq \phi(|\Delta|, r)^2$};
     \node at (5,-1) {$|w_2| \leq \phi(|\Delta|, r)^2$};
-    \node at (5,-2) {$|u_2| \leq \phi(|\Delta|, r)^3$};
+    \node at (5,-2) {$|u_2| \leq  |w_2| \, \phi(|\Delta|, r) \leq \phi(|\Delta|, r)^3$};
     \node at (5,-3) {$|w_3| \leq \phi(|\Delta|, r)^3$};
     \node at (5,-4) {$\dots$};
     \node at (5,-5) {$|w_n| \leq \phi(|\Delta|, r)^n$};
+    \end{scope}
     % \node at (5,-6) {$|u_n| \leq \phi(|\Delta|, r)^{n+1}$};
 \end{tikzpicture}
