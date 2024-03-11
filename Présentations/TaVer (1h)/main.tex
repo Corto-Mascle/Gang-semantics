@@ -24,7 +24,7 @@
 \setbeamercolor{section number projected}{bg=black,fg=white}
 
 \begin{document}
-	\title[Parameterized verification of BNRA]{Parameterized verification of Broadcast Networks of Register Automata}
+	\title[Parameterized Verification of BNRA]{Parameterized Verification of Broadcast Networks of Register Automata}
 	\date[]{March 11th, 2024\vspace{-0.5cm}}
 	\author[Nicolas Waldburger]{\begin{tabular}{c} Nicolas Waldburger \\
 		 \begin{tabular}{ccc}
@@ -178,7 +178,7 @@
 
 
 
-\section{Decidability proof of \COVER for signature BNRA}
+\section{Decidability of \COVER for signature BNRA}
 
 
 \begin{frame}{Signature BNRA}
@@ -215,28 +215,6 @@
 
 
 
-\begin{frame}{Turning the communication graph into a tree}
-\centering
-\input{Figures/turning-into-tree.tex}
-\end{frame}
-
-\begin{frame}{Turning the communication graph into a tree}
-\begin{minipage}{0.55\linewidth}
-\centering
-\resizebox{6.5cm}{!}{
-\input{Figures/turning-into-tree-oneframe.tex}
-}
-\end{minipage}
-\begin{minipage}{0.1\linewidth}
-$\longrightarrow$
-\end{minipage}
-\begin{minipage}{0.25 \linewidth}
-\resizebox{!}{5cm}{
-\input{Figures/tree-rearragement.tex}
-}
-\end{minipage}
-\hfill
-\end{frame}
 
 % \begin{frame}{Towards a tree abstraction}
 % Assume that there is a valid run $\rho$ for \COVER. 
@@ -261,9 +239,17 @@ $\longrightarrow$
 \end{frame}
 
 \begin{frame}{Tree witnesses for \COVER}
-	\centering
+	\begin{center}
+	\resizebox{!}{4.5cm}{
 	\input{Figures/Tree-local-runs-full}
-	
+	}
+	\end{center}
+\pause
+
+\begin{block}{Lemma}
+There is a tree witness if and only if the instance of \COVER is positive.  
+\end{block}
+For decidability, we need to bound the size of well-chosen tree witnesses.
 \end{frame}
 
 \begin{frame}{Branch reduction}
@@ -317,7 +303,7 @@ Every branch forms a bad sequence. Because $\preceq$ is a well quasi-order, we k
 	\begin{block}{Length function theorem\footnotemark}
 	Given a finite alphabet $\Sigma$ and a computable function $F : \mathbb{N} \to \mathbb{N}$, there is a computable bound $B$ such that every sequence $(w_i)_{i \in \mathbb{N}}$ over $\Sigma$ such that
 	\begin{itemize}
-		\item $w_i \npreceq w_j$ for all $i<j$ and
+		\item $w_i \npreceq w_j$ for all $i<j$ (bad sequence) and
 		\item $|w_i| \leq F(i)$ for all $i$
 	\end{itemize}
 has length at most $B$.
@@ -369,13 +355,13 @@ We need to bound the number of steps that an agent has to perform to perform a t
 \begin{frame}{Bounding the tree}
 	
 	\begin{block}{Lemma}
-		There is a function $\varphi$ such that if an agent has a local run between two local configurations, then it has a ``cheaper'' one of length $\leq \varphi(|\Delta|,r)$. 
+		There is a function $\varphi$ such that if an agent has a local run between two local configurations, then it has one such local run of length $\leq \varphi(|\Delta|,r)$. 
 	\end{block}
 	
 	$\Delta$: set of transitions \hspace{1cm} $r$: number of registers.
 	
 	\begin{block}{Corollary}
-		If an agent has a local run between two local configurations broadcasting  $(m_1,v_1) \cdots (m_k, v_k)$, then it has a ``cheaper'' one of length $\leq k \, \varphi(|\Delta|,r)$. 
+		If an agent has a local run that broadcasts $w$, then it has one such local run of length $\leq |w| \, \varphi(|\Delta|,r)$. 
 	\end{block}
 \end{frame}
 
@@ -441,7 +427,7 @@ We need to bound the number of steps that an agent has to perform to perform a t
 	\begin{itemize}
 		\item A run that, after receiving $(a, v) (b, v)$, broadcasts $(c,v)$, and
 		
-		\item A run that, after receiving $(a,v) (b,v) (c,v)$, broadcasts $(d,v)$.
+		\item A run that, after receiving $(a,v) (b,v) (c,v)^*$, broadcasts $(d,v)$.
 	\end{itemize}
 \vspace{0.5cm}
 
@@ -630,7 +616,7 @@ We need to bound the number of steps that an agent has to perform to perform a t
 		
 	\pause
 	\begin{block}{Theorem}
-	\COVER{} for BNRA with one agent per register is NP-complete. 
+	\COVER{} for BNRA with one register per agent is NP-complete. 
 	\end{block}
 \end{frame}
 
@@ -638,6 +624,34 @@ We need to bound the number of steps that an agent has to perform to perform a t
 	
 	\Huge \textbf{Thank you for your attention!}
 	
+\end{frame}
+
+\appendix
+\begin{frame}
+\end{frame}
+
+
+\begin{frame}{Turning the communication graph into a tree}
+\centering
+\input{Figures/turning-into-tree.tex}
+\end{frame}
+
+\begin{frame}{Turning the communication graph into a tree}
+\begin{minipage}{0.55\linewidth}
+\centering
+\resizebox{6.5cm}{!}{
+\input{Figures/turning-into-tree-oneframe.tex}
+}
+\end{minipage}
+\begin{minipage}{0.1\linewidth}
+$\longrightarrow$
+\end{minipage}
+\begin{minipage}{0.25 \linewidth}
+\resizebox{!}{5cm}{
+\input{Figures/tree-rearragement.tex}
+}
+\end{minipage}
+\hfill
 \end{frame}
 
 \end{document}

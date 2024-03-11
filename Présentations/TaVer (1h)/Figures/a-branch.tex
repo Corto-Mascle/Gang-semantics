@@ -1,17 +1,17 @@
 \begin{tikzpicture}[yscale = 0.7]
 	\draw (0,2) ellipse (0.7 and 0.5);
-	\node (u0) at (0,2) {$u_0, v_0$};
+	\node (u0) at (0,2) {$u_0$};
 
 	\draw (0,0) ellipse (0.7 and 0.5);
-	\node (u1) at (0,0) {$u_1, v_1$};
+	\node (u1) at (0,0) {$u_1$};
 	
 	\draw (0,-2) ellipse (0.7 and 0.5);
-    \node (u2) at (0,-2) {$u_2, v_2$};
+    \node (u2) at (0,-2) {$u_2$};
 
     \node (u3) at (0,-4) {$\dots$};
 
     \draw (0,-6) ellipse (0.7 and 0.5);
-    \node (u4) at (0,-6) {$u_n, v_n$};
+    \node (u4) at (0,-6) {$u_n$};
 
     \draw[-stealth] ($(u1)+(0,0.5)$) -- node[left] {$w_1$} ($(u0)-(0,0.5)$);
     \draw[-stealth] ($(u2)+(0,0.5)$) -- node[left] {$w_2$} ($(u1)-(0,0.5)$);

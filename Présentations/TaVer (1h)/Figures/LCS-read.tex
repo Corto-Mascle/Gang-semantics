@@ -8,26 +8,26 @@
 	
 	\node[state, initial, minimum width=0.1pt] (0) at (0,0) {};
 	\node[state] [right of=0] (l1) {};
-	\node[state] [right of=l1] (l2) {};
+	% \node[state] [right of=l1] (l2) {};
 	\node[state] [below = 0.8 of 0] (t1) {};
 	\node[state] [below = 0.8 of t1] (t2) {};
 	\node[state] [below = 0.8 of t3] (echo) {};
 	\node[state] [right of=t2] (t3) {};
-	\node[state] [right of = t3] (t4) {};
-	\node[state] [below = 0.8 of t4] (t5) {};
+	% \node[state] [right of = t3] (t4) {};
+	% \node[state] [below = 0.8 of t4] (t5) {};
 	
 
 	\path[->] (0) edge node[above] {$\mathbf{br}(q_0, \reg_1)$} (l1);
-	\path[->] (l1) edge node[above] {$\mathbf{br}(\mathsf{end}, \reg_1)$} (l2);
+	% \path[->] (l1) edge node[above] {$\mathbf{br}(\mathsf{end}, \reg_1)$} (l2);
 	
 	\path[->] (0) edge node[left] {$\mathbf{rec}(q, \downarrow\reg_2)$} (t1);
 	\path[->] (t1) edge node[left] {$\mathbf{br}(q', \reg_1)$} (t2);
 	\path[->] (t2) edge node[above] {$\mathbf{rec}(\texttt{a}, =\reg_2)$} (t3);
 	\path[->, bend right=20] (t3) edge node[left] {$\mathbf{rec}(x, =\reg_2)$} (echo);
 	\path[->, bend right=20] (echo) edge node[right] {$\mathbf{br}(x, \reg_1)$} (t3);
-	\path[->] (t3) edge node[above] {$\mathbf{rec}(\mathsf{end}, =\reg_2)$} (t4);
-	\path[->] (t4) edge node[right] {$\mathbf{br}(\mathsf{end}, \reg_1)$} (t5);
+	% \path[->] (t3) edge node[above] {$\mathbf{rec}(\mathsf{end}, =\reg_2)$} (t4);
+	% \path[->] (t4) edge node[right] {$\mathbf{br}(\mathsf{end}, \reg_1)$} (t5);
 
-	\draw (-2.3,-5.2) rectangle (7.5, -0.45);
-	\node (d) at (2.6,-5.7) {Gadget for a transition $q \xrightarrow{\mathsf{read}(\texttt{a})} q'$ of the lossy channel system};
+	\draw (-2.3,-5.2) rectangle (5, -0.45);
+	\node[minimum width = 5cm] (d) at (1.5,-5.7) {Gadget for a transition $q \xrightarrow{\mathsf{read}(\texttt{a})} q'$ of the lossy channel system};
 \end{tikzpicture}
