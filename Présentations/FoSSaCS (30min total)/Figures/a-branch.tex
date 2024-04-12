@@ -1,0 +1,30 @@
+\begin{tikzpicture}[yscale = 0.7]
+	\draw (0,2) ellipse (0.7 and 0.5);
+	\node (u0) at (0,2) {$u_0$};
+
+	\draw (0,0) ellipse (0.7 and 0.5);
+	\node (u1) at (0,0) {$u_1$};
+	
+	\draw (0,-2) ellipse (0.7 and 0.5);
+    \node (u2) at (0,-2) {$u_2$};
+
+    \node (u3) at (0,-4) {$\dots$};
+
+    \draw (0,-6) ellipse (0.7 and 0.5);
+    \node (u4) at (0,-6) {$u_n$};
+
+    \draw[-stealth] ($(u1)+(0,0.5)$) -- node[left] {$w_1$} ($(u0)-(0,0.5)$);
+    \draw[-stealth] ($(u2)+(0,0.5)$) -- node[left] {$w_2$} ($(u1)-(0,0.5)$);
+    \draw[-stealth] ($(u3)+(0,0.5)$) -- node[left] {$w_3$} ($(u2)-(0,0.5)$);
+    \draw[-stealth] ($(u4)+(0,0.5)$) -- node[left] {$w_n$} ($(u3)-(0,0.5)$);
+    \draw[-stealth, decorate, decoration = snake] (0.7,2) -- (1.9,2);
+    \node (qf) at (2.3, 2) {$q_f$};
+
+    \onslide<2->
+    \node (w1bound) at (1.5,1) {$|w_1| \leq |u_0|$};
+    \node (w2bound) at (1.5,-1) {$|w_2| \leq |u_1|$};
+    \node (w3bound) at (1.5,-3) {$|w_3| \leq |u_2|$};
+    \node (w4bound) at (1.5,-5) {$|w_n| \leq |u_{n-1}|$};
+
+
+\end{tikzpicture}
