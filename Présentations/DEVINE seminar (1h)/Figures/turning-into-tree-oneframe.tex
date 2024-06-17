@@ -1,0 +1,30 @@
+ 	\definecolor{colorA}{rgb}{0.93, 0.53, 0.18}
+    \definecolor{colorB}{rgb}{0.54, 0.81, 0.94}
+    \definecolor{colorC}{rgb}{0.01, 0.75, 0.24}
+    \definecolor{stepcolor}{rgb}{0.8, 0.25, 0.33}
+\begin{tikzpicture}
+\tikzstyle{agent} = [rectangle, draw, minimum size = 1cm]
+\tikzstyle{symbol} = [draw = none, color = black]
+\tikzstyle{stepnumber} = [circle, draw = stepcolor, minimum size = 0.2cm, inner sep = 1pt, color = stepcolor]
+\tikzstyle{sendto} = [-latex]
+% \fill[colorA!50] (-3,1.5) .. controls (2.5,1.5) and (2.5,-1.5) .. (-3,-1.5) -- (-3,1.5);
+% \fill[colorB!50] (8,3.5) .. controls (2.5,3.5) and (2.5,0.5) .. (8,0.5) -- (8,3.5);
+% \fill[colorC!50] (8,-0.5) .. controls (2.5,-0.5) and (2.5,-3.5) .. (8,-3.5) -- (8,-0.5);
+
+\node[agent, fill = colorA!50] at (0,0) (A) {$X$};
+\node[agent, fill = colorB!50] at (5, 2) (B) {$Y$};
+\node[agent, fill = colorC!50] at (5, -2) (C) {$Z$};
+
+\node at (5,3.5) (qf) {$q_f$};
+\draw[sendto, bend left = 25] (A) to[bend left = 40] node[above, pos = 0.5, symbol] {\texttt{a}} node[below,  stepnumber, yshift = -0.1cm] {$1$} (B); 
+\draw[sendto] (A) to node[above, pos = 0.5, symbol] {\texttt{a}} node[below, stepnumber, yshift = -0.1cm] {$1$} (C); 
+\draw[sendto] (C) to[bend left = 40] node[above, pos = 0.5, symbol] {\texttt{b}} node[below, stepnumber] {$2$} (A); 
+\draw[sendto] (B) to node[above, pos = 0.5, symbol] {\texttt{c}} node[below, stepnumber, yshift = -0.1cm] {$3$} (A); 
+\draw[sendto] (A) to[bend right = 40] node[above, pos = 0.5, symbol] {\texttt{d}} node[below,  stepnumber] {$4$}  (B); 
+\draw[sendto, decorate, decoration = snake] (B) to node[right,  stepnumber, xshift = 0.1cm] {$5$} (qf);
+
+\node[align = center] at ($(A)-(1.5,0)$) {Tasks: \\ $\epsilon \mapsto \texttt{a}$ \\ $\texttt{b}, \texttt{c} \mapsto \texttt{a} \texttt{d}$};
+\node[align = center] at ($(B)+(1.5,0)$) {Tasks: \\ $\texttt{a} \mapsto \texttt{c}$ \\$\texttt{a} \texttt{d} \mapsto q_f$};
+\node[align = center] at ($(C)+(1.5,0)$) {Tasks: \\ $\texttt{a} \mapsto \texttt{b}$};
+
+\end{tikzpicture}
